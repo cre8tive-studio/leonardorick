@@ -1,0 +1,20 @@
+{
+  "root": true,
+  "extends": ["@nuxtjs/eslint-config-typescript"],
+  "rules": {
+    "semi": ["error", "always"],
+    "indent": ["error", 2],
+    "vue/html-indent": ["error", 2],
+
+    // delt by prettier
+    "comma-dangle": "off",
+    "arrow-parens": "off",
+    "vue/singleline-html-element-content-newline": "off",
+    "vue/html-self-closing": "off", // there's a hole filosify discussion on this one bruh: https://stackoverflow.com/questions/65105287/how-to-stop-prettier-from-using-the-old-self-closing-tag-syntax
+    // legacy
+    "space-before-function-paren": "off",
+    "vue/no-multiple-template-root": "off",
+
+    "require-await": "off"
+  }
+}

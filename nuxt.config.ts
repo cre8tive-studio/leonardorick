@@ -1,0 +1,38 @@
+// https://nuxt.com/docs/api/configuration/nuxt-config
+import { DEFAULT_HEAD } from './utils/analytics/head';
+const environment = process.env.VUE_APP_ENVIRONMENT;
+export default defineNuxtConfig({
+  devtools: { enabled: true },
+  css: ['~/assets/css/main.scss'],
+  routeRules: {
+    // redirects goes here
+    // '/': { redirect: '/home'}
+  },
+  runtimeConfig: {
+    // Private config that is only available on the server
+    VUE_APP_SANITY_PROJECT_ID: process.env.VUE_APP_SANITY_PROJECT_ID,
+    VUE_APP_SANITY_CLIENT_TOKEN: process.env.VUE_APP_SANITY_CLIENT_TOKEN,
+    VUE_APP_SANITY_GRAPHQL_URL: process.env.VUE_APP_SANITY_GRAPHQL_URL,
+    // Config within public will be also exposed to the client
+    public: {
+      VUE_APP_ENVIRONMENT: process.env.VUE_APP_ENVIRONMENT,
+      VUE_APP_BASE_URL: process.env.VUE_APP_BASE_URL,
+      environment,
+    },
+  },
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@pinia/nuxt',
+    '@nuxtjs/i18n',
+    '@vue-macros/nuxt',
+    '@nuxtjs/fontaine',
+  ],
+  pinia: {
+    // some imports that are commonly used to be included automatically as nuxt do with much others
+    autoImports: ['defineStore', ['defineStore', 'definePiniaStore']],
+  },
+  i18n: { vueI18n: './i18n.config.ts' },
+  app: {
+    head: DEFAULT_HEAD,
+  },
+});

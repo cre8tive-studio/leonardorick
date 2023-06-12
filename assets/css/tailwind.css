@@ -1,0 +1,16 @@
+/* this file is the default file where @nuxtjs/tailwindcss looks for configuration. If you want to create new stuff, do it here */
+/* it also works as a global css file, so you can add your own css here */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* example: remove below if not needed */
+@layer components {
+  .lr-button {
+    @apply bg-[#12b488] text-white font-bold py-2 px-4 rounded;
+  }
+}
+
+li {
+  background-color: none;
+}
