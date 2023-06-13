@@ -14,33 +14,41 @@
     <div
       v-for="(recommendation, index) in recommendations[lang]"
       :key="recommendation.id"
+      class="pb-6"
     >
       {{ $t(`recommendations[${index}].value`) }}
+    </div>
+    <div
+      v-for="(quote, index) in quotes[lang]"
+      :key="quote.id"
+      class="pb-6"
+    >
+      {{ $t(`quotes[${index}].value`) }}
     </div>
     <div></div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { LANGUAGES } from '../utils/constants/languages';
 import { useAppStore } from '~/store';
 
 const i18n = useI18n();
 const store = useAppStore();
-const { loaded, recommendations, lang } = toRefs(store);
+const { loaded, lang, recommendations, quotes } = toRefs(store);
 
 useLang();
 
-// todo:  deal better with loaded.value when calling other apis
-await store.initRecommendations().then((res) => {
-  if (res.value) {
-    Object.entries(res.value).forEach(([key, recommendations]) => {
-      i18n.setLocaleMessage(key, {
-        ...i18n.getLocaleMessage(key),
-        recommendations,
-      });
+await Promise.all([store.initRecommendations(), store.initQuotes()]).then(([rc, qt]) => {
+  LANGUAGES.forEach((language) => {
+    i18n.setLocaleMessage(language, {
+      ...i18n.getLocaleMessage(language),
+      recommendations: rc.value?.[language] || [],
+      quotes: qt.value?.[language] || [],
     });
-  }
+  });
 });
+
 loaded.value = true;
 </script>
 <style scoped></style>
