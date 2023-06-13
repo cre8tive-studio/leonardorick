@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { DEFAULT_HEAD } from './utils/analytics/head';
-const { NITROPACK_PRESET: preset } = process.env;
+const { VUE_APP_NITRO_PRESET: preset } = process.env;
 console.log('preset', preset);
 export default defineNuxtConfig({
   devtools: { enabled: true },
