@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { DEFAULT_HEAD } from './utils/analytics/head';
-const { VUE_APP_NITRO_PRESET: preset } = process.env;
-console.log('preset', preset);
+const { VUE_APP_NITRO_PRESET: preset, VUE_APP_BASE_URL: baseUrl } = process.env;
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/css/main.scss'],
@@ -35,7 +35,10 @@ export default defineNuxtConfig({
     // some imports that are commonly used to be included automatically as nuxt do with much others
     autoImports: ['defineStore', ['defineStore', 'definePiniaStore']],
   },
-  i18n: { vueI18n: './i18n.config.ts' },
+  i18n: {
+    vueI18n: './i18n.config.ts',
+    baseUrl,
+  },
   app: {
     head: DEFAULT_HEAD,
   },

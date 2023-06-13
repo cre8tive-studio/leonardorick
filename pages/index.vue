@@ -1,33 +1,46 @@
 <template>
-  <div>
+  <div v-if="loaded">
     <h2>Home</h2>
-    <span>loading: {{ loading }}</span>
+    <span>loaded: {{ loaded }}</span>
     <form>
-      <select v-model="locale">
-        <option value="en">en</option>
-        <option value="pt-BR">Portuguese</option>
+      <select v-model="lang">
+        <option value="en">{{ $t('english') }}</option>
+        <option value="pt-BR">{{ $t('portuguese') }}</option>
       </select>
       <p class="pb-5">
         {{ $t('welcome') }}
       </p>
     </form>
-    <div>
-      quotes:
-      <div>
-        {{ quotes }}
-      </div>
+    <div
+      v-for="(recommendation, index) in recommendations[lang]"
+      :key="recommendation.id"
+    >
+      {{ $t(`recommendations[${index}].value`) }}
     </div>
+    <div></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useAppStore } from '~/store';
-import useLang from '~/hooks/use-lang';
 
+const i18n = useI18n();
 const store = useAppStore();
-const { locale } = useLang(() => store.initQuotes());
-const { loading, quotes } = toRefs(store);
+const { loaded, recommendations, lang } = toRefs(store);
 
-await store.initQuotes();
+useLang();
+
+// todo:  deal better with loaded.value when calling other apis
+await store.initRecommendations().then((res) => {
+  if (res.value) {
+    Object.entries(res.value).forEach(([key, recommendations]) => {
+      i18n.setLocaleMessage(key, {
+        ...i18n.getLocaleMessage(key),
+        recommendations,
+      });
+    });
+  }
+});
+loaded.value = true;
 </script>
 <style scoped></style>

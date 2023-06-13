@@ -1,0 +1,26 @@
+import { useAppStore } from '~/store';
+import { LanguageOptions } from '~/utils/constants/languages';
+
+/**
+
+ */
+const useLang = () => {
+  const store = useAppStore();
+  const router = useRouter();
+  const route = useRoute();
+  const { locale } = useI18n();
+  const { lang } = toRefs(store);
+
+  watch(lang, () => {
+    locale.value = lang.value;
+    router.push({ query: { lang: lang.value } });
+  });
+
+  const queryLang = route.query.lang as LanguageOptions;
+  if (queryLang) {
+    lang.value = queryLang;
+    locale.value = lang.value;
+  }
+};
+
+export default useLang;

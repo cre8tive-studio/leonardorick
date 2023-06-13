@@ -4,9 +4,13 @@ export default defineI18nConfig(() => ({
   messages: {
     en: {
       welcome: 'Welcome',
+      english: 'English',
+      portuguese: 'Portuguese',
     },
     'pt-BR': {
       welcome: 'Bem Vindo',
+      english: 'Inglês',
+      portuguese: 'Português',
     },
   },
 }));

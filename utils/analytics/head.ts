@@ -4,7 +4,6 @@ const path = isClient ? window.location.origin : process.env.VUE_APP_BASE_URL;
 
 const defaultInfo = {
   title: 'Leonardo Rick - Software Engineer',
-
   description: 'Leonardo Rick Portfolio',
   url: 'https://leonardorick.com',
   ogImage: `${path}/og-image.png`,

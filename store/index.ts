@@ -1,28 +1,29 @@
-import { IdValueModel } from '~/types/id-value';
-import { StoreModel } from '~/types/store-model';
+import { RecommendationPerLangModel } from '~/types/recommendation.model';
+import { StoreModel } from '~/types/store.model';
+import { LanguageOptions } from '~/utils/constants/languages';
 
 export const useAppStore = defineStore('store', () => {
   const state = reactive<StoreModel>({
-    lang: computed(() => useI18n().locale),
-    loading: false,
-    quotes: [],
+    lang: useI18n().locale.value as LanguageOptions,
+    loaded: false,
+    recommendations: {} as RecommendationPerLangModel,
   });
 
   // actions
-  async function initQuotes() {
-    state.loading = true;
-    return useFetch<{ data: IdValueModel[] }>(`/api/quotes?lang=${state.lang.value}`)
-      .then(({ data }) => {
+  async function initRecommendations() {
+    return useFetch<RecommendationPerLangModel>(`/api/recommendations?lang=${state.lang}`).then(
+      ({ data }) => {
         if (data.value) {
-          state.quotes = data.value.data;
+          state.recommendations = data.value;
         }
-      })
-      .finally(() => (state.loading = false));
+        return data;
+      }
+    );
   }
 
   return {
     ...toRefs(state),
-    initQuotes,
+    initRecommendations,
   };
 });
 
