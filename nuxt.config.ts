@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { DEFAULT_HEAD } from './utils/analytics/head';
-const { VUE_APP_NITRO_PRESET: preset, VUE_APP_BASE_URL: baseUrl } = process.env;
+const { VUE_APP_NITRO_PRESET: preset, VUE_APP_BASE_URL } = process.env;
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -23,7 +23,7 @@ export default defineNuxtConfig({
     //  //todo:  and it's really important to know the environment on both client and server
     public: {
       VUE_APP_ENVIRONMENT: process.env.VUE_APP_ENVIRONMENT,
-      VUE_APP_BASE_URL: process.env.VUE_APP_BASE_URL,
+      VUE_APP_BASE_URL,
       VUE_APP_GOOGLE_ANALYTICS_ID: process.env.VUE_APP_GOOGLE_ANALYTICS_ID,
     },
   },
@@ -40,7 +40,7 @@ export default defineNuxtConfig({
   },
   i18n: {
     vueI18n: './i18n.config.ts',
-    baseUrl,
+    baseUrl: VUE_APP_BASE_URL,
   },
   app: {
     head: DEFAULT_HEAD,
