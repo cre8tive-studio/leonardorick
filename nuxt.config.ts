@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { DEFAULT_HEAD } from './utils/analytics/head';
-const { VUE_APP_NITRO_PRESET: preset, VUE_APP_BASE_URL: baseUrl } = process.env;
+const { VUE_APP_NITRO_PRESET: preset, baseUrl } = process.env;
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -17,14 +17,13 @@ export default defineNuxtConfig({
     //   // Private config that is only available on the server
     //   VUE_APP_SANITY_PROJECT_ID: process.env.VUE_APP_SANITY_PROJECT_ID,
     //   VUE_APP_SANITY_CLIENT_TOKEN: process.env.VUE_APP_SANITY_CLIENT_TOKEN,
-    VUE_APP_SANITY_GRAPHQL_URL: process.env.VUE_APP_SANITY_GRAPHQL_URL,
+    // VUE_APP_SANITY_GRAPHQL_URL: process.env.VUE_APP_SANITY_GRAPHQL_URL,
     //   // Config within public will be also exposed to the client
     //   //todo: this is critical, because the client doesnt' have access to the env variables
     //  //todo:  and it's really important to know the environment on both client and server
     public: {
-      VUE_APP_ENVIRONMENT: process.env.VUE_APP_ENVIRONMENT,
-      VUE_APP_BASE_URL: process.env.VUE_APP_BASE_URL,
-      VUE_APP_GOOGLE_ANALYTICS_ID: process.env.VUE_APP_GOOGLE_ANALYTICS_ID,
+      environment: process.env.VUE_APP_ENVIRONMENT,
+      baseUrl,
     },
   },
   modules: [
