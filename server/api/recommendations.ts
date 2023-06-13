@@ -3,8 +3,6 @@ import { AllRecommendationsQuery } from '../../types/graphql-queries/all-recomme
 export default defineEventHandler(async (_event) => {
   // todo don't use runtimeConfig until cloudflare allows
   // const { VUE_APP_SANITY_GRAPHQL_URL: graphQL } = useRuntimeConfig();
-  // https://github.com/unjs/nitro/issues/272
-  // https://nitro.unjs.io/deploy/providers/cloudflare
   const { VUE_APP_SANITY_GRAPHQL_URL: graphQL = '' } = process.env;
 
   const query = gql`

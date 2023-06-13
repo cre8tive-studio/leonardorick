@@ -17,6 +17,9 @@
     "vue/no-setup-props-destructure": "off", // legacy since vue 3.3
 
     // just don't make sense
-    "require-await": "off"
+    "require-await": "off",
+
+    // added-by-me
+    "no-shadow": ["error"]
   }
 }

@@ -12,18 +12,20 @@ export default defineNuxtConfig({
   // todo think about a better approach until cloudflare supports runtimeconfig
   // https://github.com/unjs/nitro/issues/272
   // https://nitro.unjs.io/deploy/providers/cloudflare
-  // runtimeConfig: {
-  //   // Private config that is only available on the server
-  //   VUE_APP_SANITY_PROJECT_ID: process.env.VUE_APP_SANITY_PROJECT_ID,
-  //   VUE_APP_SANITY_CLIENT_TOKEN: process.env.VUE_APP_SANITY_CLIENT_TOKEN,
-  //   VUE_APP_SANITY_GRAPHQL_URL: process.env.VUE_APP_SANITY_GRAPHQL_URL,
-  //   // Config within public will be also exposed to the client
-  //   public: {
-  //     VUE_APP_ENVIRONMENT: process.env.VUE_APP_ENVIRONMENT,
-  //     VUE_APP_BASE_URL: process.env.VUE_APP_BASE_URL,
-  //     environment,
-  //   },
-  // },
+  runtimeConfig: {
+    //   // Private config that is only available on the server
+    //   VUE_APP_SANITY_PROJECT_ID: process.env.VUE_APP_SANITY_PROJECT_ID,
+    //   VUE_APP_SANITY_CLIENT_TOKEN: process.env.VUE_APP_SANITY_CLIENT_TOKEN,
+    //   VUE_APP_SANITY_GRAPHQL_URL: process.env.VUE_APP_SANITY_GRAPHQL_URL,
+    //   // Config within public will be also exposed to the client
+    //   //todo: this is critical, because the client doesnt' have access to the env variables
+    //  //todo:  and it's really important to know the environment on both client and server
+    public: {
+      VUE_APP_ENVIRONMENT: process.env.VUE_APP_ENVIRONMENT,
+      VUE_APP_BASE_URL: process.env.VUE_APP_BASE_URL,
+      VUE_APP_GOOGLE_ANALYTICS_ID: process.env.VUE_APP_GOOGLE_ANALYTICS_ID,
+    },
+  },
   modules: [
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',

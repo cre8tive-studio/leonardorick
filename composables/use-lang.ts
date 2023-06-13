@@ -1,9 +1,7 @@
 import { useAppStore } from '~/store';
 import { LanguageOptions } from '~/utils/constants/languages';
 
-/**
-
- */
+// setup to control language chaneges
 const useLang = () => {
   const store = useAppStore();
   const router = useRouter();

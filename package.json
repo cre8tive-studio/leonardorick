@@ -23,7 +23,8 @@
     "prettier": "^2.8.8",
     "sanity-codegen": "^0.9.8",
     "sass": "^1.63.3",
-    "sass-loader": "^13.3.2"
+    "sass-loader": "^13.3.2",
+    "vue-gtag-next": "^1.14.0"
   },
   "dependencies": {
     "@nuxtjs/sanity": "^1.7.2",
