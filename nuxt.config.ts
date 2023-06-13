@@ -12,6 +12,7 @@ export default defineNuxtConfig({
   // todo think about a better approach until cloudflare supports runtimeconfig
   // https://github.com/unjs/nitro/issues/272
   // https://nitro.unjs.io/deploy/providers/cloudflare
+  // https://github.com/nuxt/nuxt/issues/14011
   runtimeConfig: {
     //   // Private config that is only available on the server
     //   VUE_APP_SANITY_PROJECT_ID: process.env.VUE_APP_SANITY_PROJECT_ID,
