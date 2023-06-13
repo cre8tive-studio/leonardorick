@@ -17,7 +17,7 @@ export default defineNuxtConfig({
     //   // Private config that is only available on the server
     //   VUE_APP_SANITY_PROJECT_ID: process.env.VUE_APP_SANITY_PROJECT_ID,
     //   VUE_APP_SANITY_CLIENT_TOKEN: process.env.VUE_APP_SANITY_CLIENT_TOKEN,
-    //   VUE_APP_SANITY_GRAPHQL_URL: process.env.VUE_APP_SANITY_GRAPHQL_URL,
+    VUE_APP_SANITY_GRAPHQL_URL: process.env.VUE_APP_SANITY_GRAPHQL_URL,
     //   // Config within public will be also exposed to the client
     //   //todo: this is critical, because the client doesnt' have access to the env variables
     //  //todo:  and it's really important to know the environment on both client and server

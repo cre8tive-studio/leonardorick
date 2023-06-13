@@ -23,7 +23,7 @@
       :key="quote.id"
       class="pb-6"
     >
-      {{ $t(`quotes[${index}].value`) }}
+      {{ $t(`quotes[${index}].value`) }} - {{ quote.author }}
     </div>
     <div></div>
   </div>

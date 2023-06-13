@@ -1,9 +1,8 @@
 import { request, gql } from 'graphql-request';
 import { AllRecommendationsQuery } from '../../types/graphql-queries/all-recommendations';
+import { getGraphQlUrl } from '../utils/get-graphql-url';
 export default defineEventHandler(async (_event) => {
-  // todo don't use runtimeConfig until cloudflare allows
-  // const { VUE_APP_SANITY_GRAPHQL_URL: graphQL } = useRuntimeConfig();
-  const { VUE_APP_SANITY_GRAPHQL_URL: graphQL = '' } = process.env;
+  const url = getGraphQlUrl();
 
   const query = gql`
     query {
@@ -20,7 +19,7 @@ export default defineEventHandler(async (_event) => {
     }
   `;
 
-  return request<AllRecommendationsQuery>(graphQL, query).then((res) =>
+  return request<AllRecommendationsQuery>(url, query).then((res) =>
     arrayObjToLangObj(res.allRecommendation)
   );
 });
