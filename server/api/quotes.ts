@@ -4,7 +4,12 @@ import { AllQuotesQuery } from '../../types/graphql-queries/all-quotes';
 import { LANGUAGES } from '../../utils/constants/languages';
 
 export default defineEventHandler(async (event) => {
-  const { VUE_APP_SANITY_GRAPHQL_URL: graphQL } = useRuntimeConfig();
+  // todo don't use runtimeConfig until cloudflare allows
+  // const { VUE_APP_SANITY_GRAPHQL_URL: graphQL } = useRuntimeConfig();
+  // https://github.com/unjs/nitro/issues/272
+  // https://nitro.unjs.io/deploy/providers/cloudflare
+  const { VUE_APP_SANITY_GRAPHQL_URL: graphQL = '' } = process.env;
+
   const lang = getLanguage(event);
   const query = gql`
     query {

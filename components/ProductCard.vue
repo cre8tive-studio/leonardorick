@@ -8,11 +8,8 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { Product } from '../types/product';
-
-// example on how to use definePropsRefs from vue-macros
-const { product } = definePropsRefs<{ product: Product }>();
+<script setup lang="ts" generic="T">
+const { product } = defineProps<{ product: { id: string; title: string } }>();
 </script>
 
 <style scoped></style>
