@@ -2,7 +2,7 @@ import { request, gql } from 'graphql-request';
 import { AllRecommendationsQuery } from '../../types/graphql-queries/all-recommendations';
 import { getGraphQlUrl } from '../utils/get-graphql-url';
 export default defineEventHandler(async (_event) => {
-  const url = getGraphQlUrl(useRuntimeConfig());
+  const url = getGraphQlUrl();
 
   const query = gql`
     query {
