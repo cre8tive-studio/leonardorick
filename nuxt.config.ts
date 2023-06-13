@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { DEFAULT_HEAD } from './utils/analytics/head';
-const environment = process.env.VUE_APP_ENVIRONMENT;
+const { VUE_APP_ENVIRONMENT: environment, NITROPACK_PRESET: preset } = process.env;
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -12,18 +12,18 @@ export default defineNuxtConfig({
   // todo think about a better approach until cloudflare supports runtimeconfig
   // https://github.com/unjs/nitro/issues/272
   // https://nitro.unjs.io/deploy/providers/cloudflare
-  // runtimeConfig: {
-  //   // Private config that is only available on the server
-  //   VUE_APP_SANITY_PROJECT_ID: process.env.VUE_APP_SANITY_PROJECT_ID,
-  //   VUE_APP_SANITY_CLIENT_TOKEN: process.env.VUE_APP_SANITY_CLIENT_TOKEN,
-  //   VUE_APP_SANITY_GRAPHQL_URL: process.env.VUE_APP_SANITY_GRAPHQL_URL,
-  //   // Config within public will be also exposed to the client
-  //   public: {
-  //     VUE_APP_ENVIRONMENT: process.env.VUE_APP_ENVIRONMENT,
-  //     VUE_APP_BASE_URL: process.env.VUE_APP_BASE_URL,
-  //     environment,
-  //   },
-  // },
+  runtimeConfig: {
+    // Private config that is only available on the server
+    VUE_APP_SANITY_PROJECT_ID: process.env.VUE_APP_SANITY_PROJECT_ID,
+    VUE_APP_SANITY_CLIENT_TOKEN: process.env.VUE_APP_SANITY_CLIENT_TOKEN,
+    VUE_APP_SANITY_GRAPHQL_URL: process.env.VUE_APP_SANITY_GRAPHQL_URL,
+    // Config within public will be also exposed to the client
+    public: {
+      VUE_APP_ENVIRONMENT: process.env.VUE_APP_ENVIRONMENT,
+      VUE_APP_BASE_URL: process.env.VUE_APP_BASE_URL,
+      environment,
+    },
+  },
   modules: [
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
@@ -41,7 +41,11 @@ export default defineNuxtConfig({
   },
   // pre generate other routes as well
   nitro: {
-    preset: process.env.VUE_APP_NITRO_PRESET,
+    ...(preset ? { preset } : {}),
+    output: {
+      serverDir: 'dist/server',
+      publicDir: 'dist/client',
+    },
     prerender: {
       crawlLinks: true, // use true when you want all routes to be pre-rendered
       // this two options might be still experimental so check the need of
