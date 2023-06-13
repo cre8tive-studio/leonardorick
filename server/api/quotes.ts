@@ -4,7 +4,7 @@ import { arrayObjToLangObj } from '../utils/array-obj-to-lang-obj';
 import { getGraphQlUrl } from '../utils/get-graphql-url';
 
 export default defineEventHandler(async (_event) => {
-  const url = getGraphQlUrl(useRuntimeConfig());
+  const url = getGraphQlUrl();
   const query = gql`
     query {
       allQuote {
