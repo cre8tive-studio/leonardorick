@@ -16,7 +16,7 @@
       :key="recommendation.id"
       class="pb-6"
     >
-      {{ $t(`recommendations[${index}].value`) }}
+      {{ $t(`recommendations[${index}].value`) }} - Recommendation: {{ recommendation.author }}
     </div>
     <div
       v-for="(quote, index) in quotes[lang]"
@@ -39,7 +39,7 @@ const { loaded, lang, recommendations, quotes } = toRefs(store);
 
 useLang();
 
-await Promise.all([store.initRecommendations(), store.initQuotes()]).then(([rc, qt]) => {
+await Promise.all([store.initRecommendations(), store.initQuotes()]).then(([qt, rc]) => {
   LANGUAGES.forEach((language) => {
     i18n.setLocaleMessage(language, {
       ...i18n.getLocaleMessage(language),

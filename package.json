@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
+    "clean-build": "rm -rf .nuxt dist .output .netlify server/dist && npm run build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "lint": "eslint --ext .ts,.js.vue --ignore-path .gitignore .",

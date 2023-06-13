@@ -12,14 +12,12 @@ export const useAppStore = defineStore('store', () => {
 
   // actions
   async function initRecommendations() {
-    return useFetch<QuotePerLangModel>(`/api/recommendations?lang=${state.lang}`).then(
-      ({ data }) => {
-        if (data.value) {
-          state.recommendations = data.value;
-        }
-        return data;
+    return useFetch<QuotePerLangModel>('/api/recommendations').then(({ data }) => {
+      if (data.value) {
+        state.recommendations = data.value;
       }
-    );
+      return data;
+    });
   }
 
   async function initQuotes() {
