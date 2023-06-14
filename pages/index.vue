@@ -39,7 +39,7 @@ const { loaded, lang, recommendations, quotes } = toRefs(store);
 
 useLang();
 
-await Promise.all([store.initRecommendations(), store.initQuotes()]).then(([qt, rc]) => {
+await Promise.all([store.initRecommendations(), store.initQuotes()]).then(([rc, qt]) => {
   LANGUAGES.forEach((language) => {
     i18n.setLocaleMessage(language, {
       ...i18n.getLocaleMessage(language),
