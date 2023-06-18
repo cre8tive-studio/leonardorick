@@ -25,30 +25,34 @@
     >
       {{ $t(`quotes[${index}].value`) }} - {{ quote.author }}
     </div>
-    <div></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { LANGUAGES } from '../utils/constants/languages';
+import { QuotePerLangModel } from '../types/quote-per-lang.model';
 import { useAppStore } from '~/store';
 
-const i18n = useI18n();
 const store = useAppStore();
+useLang();
+const i18n = useI18n();
+
 const { loaded, lang, recommendations, quotes } = toRefs(store);
 
-useLang();
+const { $recommendations, $quotes } = useNuxtApp() as {
+  $recommendations: Ref<QuotePerLangModel>;
+  $quotes: Ref<QuotePerLangModel>;
+};
+recommendations.value = $recommendations.value;
+quotes.value = $quotes.value;
 
-await Promise.all([store.initRecommendations(), store.initQuotes()]).then(([rc, qt]) => {
-  LANGUAGES.forEach((language) => {
-    i18n.setLocaleMessage(language, {
-      ...i18n.getLocaleMessage(language),
-      recommendations: rc.value?.[language] || [],
-      quotes: qt.value?.[language] || [],
-    });
+LANGUAGES.forEach((language) => {
+  i18n.setLocaleMessage(language, {
+    ...i18n.getLocaleMessage(language),
+    recommendations: recommendations.value?.[language] || [],
+    quotes: quotes.value?.[language] || [],
   });
 });
-
 loaded.value = true;
 </script>
 <style scoped></style>

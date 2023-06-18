@@ -1,5 +1,5 @@
-import { QuotePerLangModel } from './recommendation.model';
-import { LanguageOptions } from '~/utils/constants/languages';
+import { QuotePerLangModel } from './quote-per-lang.model';
+import type { LanguageOptions } from '~/utils/constants/languages';
 
 export interface StoreModel {
   recommendations: QuotePerLangModel;

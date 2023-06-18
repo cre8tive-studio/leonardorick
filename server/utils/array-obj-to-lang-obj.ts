@@ -12,8 +12,8 @@ interface RawGraphQlResponse {
 
 /**
  * basically converts:
-  [ { _id, author, text[en, pt]] } ] into
-  { en: [id, author, text], pt: [id, author, text] }
+  [ { _id, author, text[en, pt-BR]] } ] into
+  { en: [id, author, text], pt-BR: [id, author, text] }
  * @param all
  * @returns
  */

@@ -1,38 +1,18 @@
-import { QuotePerLangModel } from '~/types/recommendation.model';
 import { StoreModel } from '~/types/store.model';
-import { LanguageOptions } from '~/utils/constants/languages';
+import { EMPTY_PER_LANG } from '~/utils/constants/empty-per-lang';
+
+import type { LanguageOptions } from '~/utils/constants/languages';
 
 export const useAppStore = defineStore('store', () => {
   const state = reactive<StoreModel>({
     lang: useI18n().locale.value as LanguageOptions,
     loaded: false,
-    recommendations: {} as QuotePerLangModel,
-    quotes: {} as QuotePerLangModel,
+    recommendations: structuredClone(EMPTY_PER_LANG),
+    quotes: structuredClone(EMPTY_PER_LANG),
   });
-
-  // actions
-  async function initRecommendations() {
-    return useFetch<QuotePerLangModel>('/api/recommendations').then(({ data }) => {
-      if (data.value) {
-        state.recommendations = data.value;
-      }
-      return data;
-    });
-  }
-
-  async function initQuotes() {
-    return useFetch<QuotePerLangModel>('/api/quotes').then(({ data }) => {
-      if (data.value) {
-        state.quotes = data.value;
-      }
-      return data;
-    });
-  }
 
   return {
     ...toRefs(state),
-    initRecommendations,
-    initQuotes,
   };
 });
 
