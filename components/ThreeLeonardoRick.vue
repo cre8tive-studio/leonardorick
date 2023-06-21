@@ -15,8 +15,7 @@ onMounted(() => {
     return;
   }
 
-  const experience = useExperience(canvas.value);
-  window.LEONARDO_RICK = experience;
+  window.LEONARDO_RICK = useExperience(canvas.value);
 });
 </script>
 
