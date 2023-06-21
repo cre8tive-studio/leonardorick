@@ -3,13 +3,19 @@
     <nav>
       <ul class="pb-5">
         <li>
-          <NuxtLink :to="langRoute('/')"> Home </NuxtLink>
+          <NuxtLink :to="langRoute('/#debug')"> Home </NuxtLink>
         </li>
         <li>
           <NuxtLink :to="langRoute('/music')"> Music </NuxtLink>
         </li>
       </ul>
     </nav>
+    <ClientOnly
+      fallback-tag="span"
+      fallback="Loading Three.js model"
+    >
+      <ThreeLeonardoRick />
+    </ClientOnly>
   </header>
   <!-- output page content -->
   <div>
