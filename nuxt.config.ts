@@ -29,7 +29,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
-    '@nuxtjs/i18n',
+    // '@nuxtjs/i18n',
     '@vue-macros/nuxt',
     '@nuxtjs/fontaine',
   ],
@@ -37,10 +37,11 @@ export default defineNuxtConfig({
     // some imports that are commonly used to be included automatically as nuxt do with much others
     autoImports: ['defineStore', ['defineStore', 'definePiniaStore']],
   },
-  i18n: {
-    vueI18n: './i18n.config.ts',
-    baseUrl,
-  },
+  // todo: uncommend when i18n starts working again
+  // i18n: {
+  //   vueI18n: './i18n.config.ts',
+  //   baseUrl,
+  // },
   app: {
     head: DEFAULT_HEAD,
   },

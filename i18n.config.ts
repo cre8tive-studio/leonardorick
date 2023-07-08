@@ -1,16 +1,11 @@
+import EN from './utils/i18n/en.json';
+import PT_BR from './utils/i18n/pt-BR.json';
+
 export default defineI18nConfig(() => ({
   legacy: false,
   locale: 'en',
   messages: {
-    en: {
-      welcome: 'Welcome',
-      english: 'English',
-      portuguese: 'Portuguese',
-    },
-    'pt-BR': {
-      welcome: 'Bem Vindo',
-      english: 'Inglês',
-      portuguese: 'Português',
-    },
+    en: EN,
+    'pt-BR': PT_BR,
   },
 }));

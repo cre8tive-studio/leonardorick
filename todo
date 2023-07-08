@@ -1,7 +1,3 @@
-setup #debug route that allows us to control and test the 3d models
-
-maybe a useMesh???
-
 posible composible structure
 /client
 /three
@@ -11,3 +7,4 @@ use-mesh
 /three-leonardo-rick
 use-leonardo-rick (implements use-experience)
 use-<some-mesh-name> (implements use-mesh)
+

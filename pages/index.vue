@@ -1,5 +1,6 @@
 <template>
-  <div v-if="loaded">
+  <div></div>
+  <!-- <div v-if="loaded">
     <h2>Home</h2>
     <span>loaded: {{ loaded }}</span>
     <form>
@@ -25,34 +26,46 @@
     >
       {{ $t(`quotes[${index}].value`) }} - {{ quote.author }}
     </div>
+  </div> -->
+  <div>
+    <div
+      v-for="recommendation in recommendations"
+      :key="recommendation.id"
+    >
+      {{ recommendation }}
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { LANGUAGES } from '../utils/constants/languages';
-import { QuotePerLangModel } from '../types/quote-per-lang.model';
+// import { LANGUAGES } from '../utils/constants/languages';
+import type { QuotePerLangModel } from '../types/quote.model';
+import type { RecommendationModel } from '../types/recommendation-model';
 import { useAppStore } from '~/store';
 
 const store = useAppStore();
-useLang();
-const i18n = useI18n();
+// todo: uncommend when i18n is ready
+// useLang();
+// const i18n = useI18n();
 
-const { loaded, lang, recommendations, quotes } = toRefs(store);
+const { loaded, /* lang  */ recommendations /* quotes */ } = toRefs(store);
 
-const { $recommendations, $quotes } = useNuxtApp() as {
-  $recommendations: Ref<QuotePerLangModel>;
+const { $recommendations /* $quotes */ } = useNuxtApp() as {
+  $recommendations: Ref<RecommendationModel[]>;
   $quotes: Ref<QuotePerLangModel>;
 };
 recommendations.value = $recommendations.value;
-quotes.value = $quotes.value;
+// console.log(JSON.parse(JSON.stringify(recommendations.value)));
+// quotes.value = $quotes.value;
 
-LANGUAGES.forEach((language) => {
-  i18n.setLocaleMessage(language, {
-    ...i18n.getLocaleMessage(language),
-    recommendations: recommendations.value?.[language] || [],
-    quotes: quotes.value?.[language] || [],
-  });
-});
+// todo: see how deal with this when i18n is ready
+// LANGUAGES.forEach((language) => {
+//   i18n.setLocaleMessage(language, {
+//     ...i18n.getLocaleMessage(language),
+//     recommendations: recommendations.value?.[language] || [],
+//     quotes: quotes.value?.[language] || [],
+//   });
+// });
 loaded.value = true;
 </script>
 <style scoped></style>

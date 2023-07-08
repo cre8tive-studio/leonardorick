@@ -1,11 +1,13 @@
 import { StoreModel } from '~/types/store.model';
 import { EMPTY_PER_LANG } from '~/utils/constants/empty-per-lang';
 
-import type { LanguageOptions } from '~/utils/constants/languages';
+// import type { LanguageOptions } from '~/utils/constants/languages';
 
 export const useAppStore = defineStore('store', () => {
   const state = reactive<StoreModel>({
-    lang: useI18n().locale.value as LanguageOptions,
+    // todo: uncommend when i18n starts working again
+    // lang: useI18n().locale.value as LanguageOptions,
+    lang: 'en',
     loaded: false,
     recommendations: structuredClone(EMPTY_PER_LANG),
     quotes: structuredClone(EMPTY_PER_LANG),
