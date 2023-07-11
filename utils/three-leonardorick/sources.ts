@@ -1,4 +1,6 @@
-export default [
+import { SourceModel } from 'types/three-leonardorick/sources.model';
+
+const SOURCES = [
   {
     name: 'environmentMapTexture',
     loader: 'cubeTextureLoader',
@@ -26,4 +28,6 @@ export default [
     loader: 'gltfLoader',
     path: 'assets/models/Fox/Fox.gltf',
   },
-] as import('~/types/three-leonardorick/sources.model').SourceModel[];
+] as SourceModel[];
+
+export default SOURCES;

@@ -6,13 +6,13 @@ const defaultInfo = {
   title: 'Leonardo Rick - Software Engineer',
   description: 'Leonardo Rick Portfolio',
   url: 'https://leonardorick.com',
-  ogImage: `${path}/og-image.png`,
+  ogImage: `${path}/assets/meta/og-image.png`,
 };
 
 const musicInfo = {
   ...defaultInfo,
   url: 'https://leonardorick.com/music',
-  ogImage: `${path}/og-image-music.png`,
+  ogImage: `${path}/assets/meta/og-image-music.png`,
 };
 
 export const DEFAULT_HEAD = {

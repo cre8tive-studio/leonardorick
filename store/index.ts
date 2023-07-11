@@ -9,7 +9,7 @@ export const useAppStore = defineStore('store', () => {
     // lang: useI18n().locale.value as LanguageOptions,
     lang: 'en',
     loaded: false,
-    recommendations: structuredClone(EMPTY_PER_LANG),
+    recommendations: [],
     quotes: structuredClone(EMPTY_PER_LANG),
   });
 

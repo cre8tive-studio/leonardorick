@@ -45,6 +45,17 @@ export default defineNuxtConfig({
   app: {
     head: DEFAULT_HEAD,
   },
+  vite: {
+    assetsInclude: [
+      '**/*.svg',
+      '**/*.png',
+      '**/*.jpg',
+      '**/*.gif',
+      '**/*.ico',
+      '**/*.bin',
+      '**/*.gltf',
+    ],
+  },
   // pre generate other routes as well
   nitro: {
     ...(preset ? { preset } : {}),
