@@ -16,9 +16,7 @@ const useRenderer = (
 
     resize: () => {
       self.instance.setSize(self.sizes.width.value, self.sizes.height.value);
-      // self.instance.setPixelRatio(self.sizes.pixelRatio.value);
-      // fix blurry canvas on mobile
-      self.instance.setPixelRatio(window.devicePixelRatio);
+      self.instance.setPixelRatio(window.devicePixelRatio); // fix blurry canvas on mobile
     },
     update: () => {
       self.instance.render(self.scene, self.camera.instance);

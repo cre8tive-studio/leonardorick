@@ -34,7 +34,7 @@ const useCamera = (
   }
 
   function setInstance() {
-    self.instance = new PerspectiveCamera(35, sizes.pixelRatio.value, 0.1, 100);
+    self.instance = new PerspectiveCamera(35, window.devicePixelRatio, 0.1, 100);
     self.instance.position.set(6, 4, 8);
     scene.add(self.instance);
   }
