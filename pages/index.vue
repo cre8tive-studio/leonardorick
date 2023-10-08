@@ -12,19 +12,21 @@
         {{ $t('welcome') }}
       </p>
     </form>
-    <!-- <div
-      v-for="(quote, index) in quotes[lang]"
-      :key="quote.id"
-      class="pb-6"
-    >
-      {{ $t(`quotes[${index}].value`) }} - {{ quote.author }}
-    </div> -->
     <div>
       <div
         v-for="recommendation in recommendations"
         :key="recommendation.id"
       >
         {{ recommendation }}
+      </div>
+
+      <br />
+
+      <div
+        v-for="quote in quotes"
+        :key="quote.id"
+      >
+        {{ quote }}
       </div>
     </div>
   </div>
@@ -35,18 +37,20 @@ import type { UseNuxtAppInitModel } from '../types/use-nuxt-app-init.model';
 import { useAppStore } from '~/store';
 
 const store = useAppStore();
-const { loaded, lang, recommendations /* quotes */ } = toRefs(store);
-const { $recommendations /* $quotes */, $fetchInitialData } = useNuxtApp() as UseNuxtAppInitModel;
+const { loaded, lang, recommendations, quotes } = toRefs(store);
+const { $recommendations, $quotes, $fetchInitialData } = useNuxtApp() as UseNuxtAppInitModel;
 
 watch(lang, async () => {
   loaded.value = false;
   const res = await $fetchInitialData();
   recommendations.value = res.$recommendations.value;
+  quotes.value = res.$quotes.value;
   loaded.value = true;
 });
 
 useLang();
 recommendations.value = $recommendations.value;
+quotes.value = $quotes.value;
 loaded.value = true;
 </script>
 <style scoped></style>

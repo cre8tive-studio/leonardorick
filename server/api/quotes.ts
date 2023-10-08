@@ -1,22 +1,25 @@
 import { request, gql } from 'graphql-request';
-import { AllQuotesQuery } from '../../types/graphql-queries/all-quotes';
-import { arrayObjToLangObj } from '../utils/array-obj-to-lang-obj';
-import { getGraphQlUrl } from '../utils/get-graphql-url';
+import { getFormattedLocale } from '../utils/get-formatted-locale';
+import type { QuotesRequest } from '../../types/graphql-queries/quotes-request';
 
-export default defineEventHandler(async (_event) => {
-  const url = getGraphQlUrl();
+export default defineEventHandler(async (event) => {
+  const { locale } = getQuery(event);
+  const formatedLocale = getFormattedLocale(locale);
+
+  const url = process.env.VUE_APP_PAYLOAD_GRAPHQL_URL as string;
   const query = gql`
-    query {
-      allQuote {
-        _id
-        authorName
-        text {
-          value
-          _key
+    query ($locale: LocaleInputType!) {
+      Quotes(locale: $locale) {
+        docs {
+          id
+          quote
+          author
         }
       }
     }
   `;
 
-  return request<AllQuotesQuery>(url, query).then((res) => arrayObjToLangObj(res.allQuote));
+  return request<QuotesRequest>(url, query, { locale: formatedLocale }).then(
+    (res) => res.Quotes.docs
+  );
 });

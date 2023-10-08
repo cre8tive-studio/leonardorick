@@ -1,9 +1,5 @@
-import { IdValueModel } from './id-value';
-import { LanguageOptions } from '~/utils/constants/languages';
-
-export interface QuoteModel extends IdValueModel {
+export interface QuoteModel {
+  id: string;
   author: string;
-  lang: LanguageOptions;
+  quote: string;
 }
-
-export type QuotePerLangModel = Record<LanguageOptions, QuoteModel[]>;
