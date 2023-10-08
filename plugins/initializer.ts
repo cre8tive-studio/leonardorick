@@ -1,15 +1,33 @@
 import { defineNuxtPlugin } from 'nuxt/app';
+import { useAppStore } from '~/store';
+import { LanguageOptions } from '~/utils/constants/languages';
 export default defineNuxtPlugin(async (_nuxtApp) => {
-  const { query } = useRoute() as { query: { locale?: string } };
+  const fetchInitialData = async () => {
+    // we can't call this function at the first initialization
+    // because there the store is not yet initialized;
+    const store = useAppStore();
+    const { lang } = toRefs(store);
+    return await _fetchInitialData(lang.value);
+  };
 
-  const [{ data: recommendations }, { data: quotes }] = await Promise.all([
-    useFetch(localeRoute('/api/recommendations', query?.locale)),
-    useFetch(localeRoute('/api/quotes', query?.locale)),
-  ]);
+  const { query } = useRoute();
+  const { $recommendations: recommendations, $quotes: quotes } = await _fetchInitialData(
+    query?.locale as LanguageOptions
+  );
+
   return {
     provide: {
       recommendations,
       quotes,
+      fetchInitialData,
     },
   };
 });
+
+const _fetchInitialData = async (locale: LanguageOptions) => {
+  const [{ data: $recommendations }, { data: $quotes }] = await Promise.all([
+    useFetch(localeRoute('/api/recommendations', locale)),
+    useFetch(localeRoute('/api/quotes', locale)),
+  ]);
+  return { $recommendations, $quotes };
+};

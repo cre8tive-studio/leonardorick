@@ -11,10 +11,10 @@ const useLang = () => {
 
   watch(lang, () => {
     locale.value = lang.value;
-    router.push({ query: { lang: lang.value } });
+    router.push({ query: { locale: lang.value } });
   });
 
-  const queryLang = route.query.lang as LanguageOptions;
+  const queryLang = route.query.locale as LanguageOptions;
   if (queryLang) {
     lang.value = queryLang;
     locale.value = lang.value;

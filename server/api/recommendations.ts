@@ -3,10 +3,10 @@ import type { RecommendationsRequest } from '../../types/graphql-queries/recomme
 
 export default defineEventHandler(async (event) => {
   const { locale } = getQuery(event);
-  const formatedLocale = locale?.toString().replace('-', '_') || null;
+  const formatedLocale = locale?.toString().replace('-', '_') || 'en';
   const url = process.env.VUE_APP_PAYLOAD_GRAPHQL_URL as string;
   const query = gql`
-    query ($locale: LocaleInputType = en) {
+    query ($locale: LocaleInputType!) {
       Recommendations(locale: $locale) {
         docs {
           id

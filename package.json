@@ -9,19 +9,18 @@
     "generate": "nuxt generate",
     "lint": "eslint --ext .ts,.js.vue --ignore-path .gitignore .",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "ts-version": "ts -v"
+    "postinstall": "nuxt prepare"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@nuxtjs/eslint-config-typescript": "^12.0.0",
     "@nuxtjs/fontaine": "^0.4.0",
-    "@nuxtjs/i18n": "^8.0.0-beta.13",
+    "@nuxtjs/i18n": "^8.0.0-rc.5",
     "@nuxtjs/tailwindcss": "^6.7.0",
     "@types/node": "^18",
     "@types/three": "^0.152.1",
     "@vue-macros/nuxt": "^1.3.12",
-    "nuxt": "^3.6.2",
+    "nuxt": "^3.7.4",
     "prettier": "^2.8.8",
     "sass": "^1.63.3",
     "sass-loader": "^13.3.2"
