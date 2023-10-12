@@ -21,7 +21,7 @@ const { error } = definePropsRefs({
     required: true,
   },
 });
-// console.error(error);
+// console.error(error.value.stack);
 
 const handleClearError = () => clearError({ redirect: '/' });
 </script>

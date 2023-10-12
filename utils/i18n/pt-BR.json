@@ -1,5 +1,9 @@
 {
-    "welcome": "Bem Vindo",
     "english": "Inglês",
-    "portuguese": "Português"
+    "login": "Login",
+    "logout": "Sair",
+    "password": "Senha",
+    "portuguese": "Português",
+    "signup": "Cadastrar",
+    "welcome": "Bem vindo"
 }

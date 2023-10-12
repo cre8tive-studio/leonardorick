@@ -11,9 +11,11 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
   };
 
   const { query } = useRoute();
-  const { $recommendations: recommendations, $quotes: quotes } = await _fetchInitialData(
-    query?.locale as LanguageOptions
-  );
+  const locale = (query?.locale as LanguageOptions) || 'en';
+
+  const { $recommendations: recommendations, $quotes: quotes } = await _fetchInitialData(locale);
+
+  (_nuxtApp.$i18n as any).locale.value = locale;
 
   return {
     provide: {

@@ -1,5 +1,9 @@
 {
-    "welcome": "Welcome",
     "english": "English",
-    "portuguese": "Portuguese"
+    "login": "Login",
+    "logout": "Logout",
+    "password": "Password",
+    "portuguese": "Portuguese",
+    "signup": "Signup",
+    "welcome": "Welcome"
 }

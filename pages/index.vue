@@ -1,17 +1,11 @@
 <template>
-  <div></div>
   <div v-if="loaded">
     <h2>Home</h2>
     <span>loaded: {{ loaded }}</span>
-    <form>
-      <select v-model="lang">
-        <option value="en">{{ $t('english') }}</option>
-        <option value="pt-BR">{{ $t('portuguese') }}</option>
-      </select>
-      <p class="pb-5">
-        {{ $t('welcome') }}
-      </p>
-    </form>
+    <p class="pb-5">
+      {{ $t('welcome') }}
+    </p>
+
     <div>
       <div
         v-for="recommendation in recommendations"
@@ -48,7 +42,6 @@ watch(lang, async () => {
   loaded.value = true;
 });
 
-useLang();
 recommendations.value = $recommendations.value;
 quotes.value = $quotes.value;
 loaded.value = true;
