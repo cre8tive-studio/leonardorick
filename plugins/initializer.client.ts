@@ -1,10 +1,5 @@
-import { initClient } from '~/utils/auth';
-
 export default defineNuxtPlugin(async (_nuxtApp) => {
-  const { appwrite } = useRuntimeConfig().public;
-  initClient(appwrite.endpoint, appwrite.project);
-
-  const auth = getAuth();
+  const auth = useAuth();
   let sessionId = '';
   let initializerClientError = null;
   try {

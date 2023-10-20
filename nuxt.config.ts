@@ -15,10 +15,17 @@ export default defineNuxtConfig({
   // https://github.com/nuxt/nuxt/issues/14011
   runtimeConfig: {
     // Private env variables that is only available on the server
-
+    stripeSecretKey: process.env.VUE_APP_STRIPE_SECRET_KEY,
+    appwrite: {
+      apiKey: process.env.VUE_APP_APPWRITE_SECRET_KEY,
+      database: process.env.VUE_APP_APPWRITE_DATABASE,
+      collectionAllowedEmails: process.env.VUE_APP_APPWRITE_COLLECTION_ALLOWED_EMAILS,
+      collectionUsers: process.env.VUE_APP_APPWRITE_COLLECTION_USERS,
+    },
     // public env virables that are also available to client
     public: {
       environment: process.env.VUE_APP_ENVIRONMENT,
+      stripePaymentLink: process.env.VUE_APP_STRIPE_PAYMENT_LINK,
       appwrite: {
         endpoint: process.env.VUE_APP_APPWRITE_ENDPOINT,
         project: process.env.VUE_APP_APPWRITE_PROJECT,

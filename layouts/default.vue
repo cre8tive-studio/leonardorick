@@ -47,11 +47,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import { getAuth } from '../utils/auth';
 import { useAppStore } from '~/store';
+
 const store = useAppStore();
 const route = useRoute();
-const auth = getAuth();
+const auth = useAuth();
 
 const { lang, sessionId } = toRefs(store);
 const { $sessionId, $initializerClientError } = useNuxtApp();

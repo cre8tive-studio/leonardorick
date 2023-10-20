@@ -29,60 +29,67 @@
     </form>
     <div v-if="loginType === 'signup'">
       <h2>make sure you already have subscribed to enable signup</h2>
-      <p>stripe checkout button</p>
+      <button
+        class="p-4 bg-neutral-400"
+        @click="goToStripe"
+      >
+        go to stripe to pay
+      </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { getAuth, ID } from '../utils/auth';
 import { useAppStore } from '~/store';
 
 const store = useAppStore();
-const { sessionId } = toRefs(store);
+const auth = useAuth();
 const router = useRouter();
-const auth = getAuth();
+const { sessionId } = toRefs(store);
+
+if (sessionId.value) {
+  router.replace('/');
+}
 
 const email = ref('');
 const password = ref('');
-const loginType = ref<'login' | 'signup'>('login');
+const loginType = ref<'login' | 'signup'>('signup');
 
-const formDisabled = computed(() => !loginType.value || !email.value || !password.value);
-
-const loginTypeFunctionMap: Record<
-  'login' | 'signup',
-  {
-    method: 'createEmailSession' | 'create';
-    props: (string | Ref<string>)[];
-  }
-> = {
-  login: {
-    method: 'createEmailSession',
-    props: [email, password],
-  },
-  signup: {
-    method: 'create',
-    props: [ID.unique(), email, password],
-  },
-};
+const formDisabled = computed(() => !email.value || !password.value);
 
 const handleSubmit = async () => {
-  try {
-    const props = loginTypeFunctionMap[loginType.value].props.map((prop) =>
-      typeof prop === 'object' ? prop.value : prop
-    ) as [string, string, string]; // we need to convert to a tuple so we can spread later
-    const session = await auth[loginTypeFunctionMap[loginType.value].method](...props);
+  const session = await getSession();
+  if (session) {
     sessionId.value = session.$id;
-    router.replace('/');
-  } catch (error) {
-    // todo: setup modal error
-    console.error('error', error);
+  } else {
+    console.error('unable to login or signup, check your password and email');
   }
 };
-if (sessionId.value) {
-  // redirect to home page
-  router.replace('/');
-}
+
+const getSession = async () => {
+  try {
+    const { error } = await useFetch(`/api/${loginType.value}`, {
+      method: 'POST',
+      body: {
+        email: email.value,
+        password: password.value,
+      },
+    });
+
+    if (error.value) {
+      throw error.value;
+    }
+
+    return await auth.createEmailSession(email.value, password.value);
+  } catch (error) {
+    // todo: setup modal error
+    console.error(error);
+  }
+};
+
+const goToStripe = () => {
+  window.open(useRuntimeConfig().public.stripePaymentLink, '_blank');
+};
 </script>
 
 <style scoped></style>

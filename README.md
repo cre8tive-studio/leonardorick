@@ -40,3 +40,11 @@ npm run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+## Test
+
+```bash
+npm run test
+```
+
+Setup following [this amazing tutorial](https://dev.to/tao/adding-vitest-to-nuxt-3-2023-lpa)

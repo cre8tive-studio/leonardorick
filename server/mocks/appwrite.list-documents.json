@@ -1,0 +1,17 @@
+{
+    "total": 1,
+    "documents": [
+        {
+            "email": "leo@teste.com",
+            "stripeId": "__qqiewjqwoeq",
+            "verified": false,
+            "name": "Leonardo Rick",
+            "$id": "652b10db4ed49749180f",
+            "$createdAt": "2023-10-14T22:06:19.323+00:00",
+            "$updatedAt": "2023-10-14T22:06:19.323+00:00",
+            "$permissions": [],
+            "$databaseId": "652700825c8e8eea4a5f",
+            "$collectionId": "652a649fc0ba35993ed7"
+        }
+    ]
+}

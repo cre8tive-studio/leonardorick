@@ -1,0 +1,26 @@
+save how many payments the user has already executed so we can know how many songs we can show for him
+this can be done on the webhook by saving more information
+
+implement incrementAvailableSongs on both stripe webhook and on user creation
+create visualisation of songs only for users that are logged in
+test everything related to the user creation
+
+implement logic that allows user to like songs
+each month the user gains 2 upvotes that he can expend on the songs
+the user can see the total upvotes of a song and how many times he upvoted
+the user can remove upvotes from one song and add to another that he is seeing
+
+TODO README:
+:
+:
+Payment link setup
+
+- limit clients to 1 subscription (redirect to Stripe client portal)
+
+Database indexes
+
+Users:
+index_email: to find if user already exists before creating again
+allowedEmails:
+index_email: to check if user is on allowed-emails on both login and signup
+index_subscriptionId: to ch

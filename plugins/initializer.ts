@@ -1,6 +1,7 @@
 import { defineNuxtPlugin } from 'nuxt/app';
 import { useAppStore } from '~/store';
 import { LanguageOptions } from '~/utils/constants/languages';
+
 export default defineNuxtPlugin(async (_nuxtApp) => {
   const fetchInitialData = async () => {
     // we can't call this function at the first initialization
