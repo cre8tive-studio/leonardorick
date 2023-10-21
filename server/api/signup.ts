@@ -11,6 +11,7 @@ const {
   queryAllowedEmail,
   getAuthUserWithEmail,
   getUserWithEmail,
+  getSettings,
 } = useServerAppwrite();
 
 export default defineEventHandler(async (event) => {
@@ -34,7 +35,7 @@ export default defineEventHandler(async (event) => {
   const { stripeId, name, verified, availableSongs } = allowedEmail;
 
   try {
-    return await databases.createDocument(
+    await databases.createDocument(
       database,
       collections.users,
       uid,
@@ -51,6 +52,7 @@ export default defineEventHandler(async (event) => {
       // on the server side with the proper validations and the sdk api
       [Permission.read(Role.user(uid))]
     );
+    return getSettings();
   } catch (err: any) {
     await users.delete(uid).catch(bypass);
     throw create403Error(err.message);

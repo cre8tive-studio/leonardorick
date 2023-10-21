@@ -7,8 +7,9 @@ import useStripe from '~/composables/use-stripe';
 import { UserModel } from '~/types/user.model';
 import { incrementAvailableSongs } from '~/utils/music';
 
-const { databases, database, collections, queryAllowedEmail, getUserWithEmail } =
+const { databases, database, collections, queryAllowedEmail, getUserWithEmail, getSettings } =
   useServerAppwrite();
+
 const { stripe, getSubscription } = useStripe();
 
 // this webhook is called by stripe when a payment is made. It runs monthly
@@ -106,6 +107,7 @@ export default defineEventHandler(async (nuxtEvent) => {
 });
 
 const getAvailableSongs = async (subscription: string, creating: boolean, userId?: string) => {
+  const { availableSongsCount } = await getSettings();
   let limit = 3;
   let previous: number[] = [];
   if (!creating && userId) {
@@ -116,5 +118,5 @@ const getAvailableSongs = async (subscription: string, creating: boolean, userId
       userId
     ));
   }
-  return incrementAvailableSongs({ total: 40, previous, limit });
+  return incrementAvailableSongs({ total: availableSongsCount, previous, limit });
 };

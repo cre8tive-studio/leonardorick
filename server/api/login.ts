@@ -1,10 +1,10 @@
 import useServerAppwrite from '~/composables/use-server-appwrite';
 import { isDefinedAndNotEmpty } from '~/utils/js-utilities';
 
-const { users, queryAllowedEmail, getAuthUserWithEmail } = useServerAppwrite();
+const { users, queryAllowedEmail, getAuthUserWithEmail, getSettings } = useServerAppwrite();
 
 export default defineEventHandler(async (event) => {
-  const { email, password } = await readBody(event);
+  const { email } = await readBody(event);
 
   const allowedEmail = await queryAllowedEmail(email);
 
@@ -17,10 +17,5 @@ export default defineEventHandler(async (event) => {
     // if user is not on allowed emails but  also not on appwrite, we do nothing
     // and let the appwrrite client side trying to login to handle the error
   }
-  // return email and passoword sended by the client
-  // just for reference
-  return {
-    email,
-    password,
-  };
+  return getSettings();
 });

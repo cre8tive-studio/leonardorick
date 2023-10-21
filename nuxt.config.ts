@@ -21,11 +21,14 @@ export default defineNuxtConfig({
       database: process.env.VUE_APP_APPWRITE_DATABASE,
       collectionAllowedEmails: process.env.VUE_APP_APPWRITE_COLLECTION_ALLOWED_EMAILS,
       collectionUsers: process.env.VUE_APP_APPWRITE_COLLECTION_USERS,
+      collectionSettings: process.env.VUE_APP_APPWRITE_COLLECTION_SETTINGS,
+      documentSettings: process.env.VUE_APP_APPWRITE_DOCUMENT_SETTINGS,
     },
     // public env virables that are also available to client
     public: {
       environment: process.env.VUE_APP_ENVIRONMENT,
       stripePaymentLink: process.env.VUE_APP_STRIPE_PAYMENT_LINK,
+      sripeClientPortalLink: process.env.VUE_APP_STRIPE_CLIENT_PORTAL_LINK,
       appwrite: {
         endpoint: process.env.VUE_APP_APPWRITE_ENDPOINT,
         project: process.env.VUE_APP_APPWRITE_PROJECT,

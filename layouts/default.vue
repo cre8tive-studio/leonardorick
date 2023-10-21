@@ -51,7 +51,7 @@ import { useAppStore } from '~/store';
 
 const store = useAppStore();
 const route = useRoute();
-const auth = useAppwrite();
+const { auth } = useAppwrite();
 
 const { lang, sessionId } = toRefs(store);
 const { $sessionId, $initializerClientError } = useNuxtApp();

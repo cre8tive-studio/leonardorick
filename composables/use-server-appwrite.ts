@@ -1,6 +1,7 @@
 import { Databases, Users, Client as ServerClient, Query } from 'node-appwrite';
 
 import type { AllowedEmailModel } from '~/server/types/allowed-email.model';
+import type { SettingsModel } from '~/types/settings.model';
 import type { UserModel } from '~/types/user.model';
 
 let serverClient: ServerClient;
@@ -9,7 +10,13 @@ let databases: Databases;
 
 const useServerAppwrite = () => {
   const { appwrite, public: publicConfig } = useRuntimeConfig();
-  const { database, collectionUsers, collectionAllowedEmails } = appwrite;
+  const {
+    database,
+    collectionUsers,
+    collectionAllowedEmails,
+    collectionSettings,
+    documentSettings,
+  } = appwrite;
   const { appwrite: publicAppwrite } = publicConfig;
 
   if (!serverClient) {
@@ -37,6 +44,10 @@ const useServerAppwrite = () => {
       .then((res) => res.documents[0]);
   };
 
+  const getSettings = async () => {
+    return databases.getDocument<SettingsModel>(database, collectionSettings, documentSettings);
+  };
+
   const getAuthUserWithEmail = async (email: string) => {
     return users.list().then((res) => res.users.find((u) => u.email === email));
   };
@@ -52,6 +63,7 @@ const useServerAppwrite = () => {
     // functions
     queryAllowedEmail,
     getUserWithEmail,
+    getSettings,
     getAuthUserWithEmail,
   };
 };

@@ -40,10 +40,11 @@
 </template>
 
 <script setup lang="ts">
+import type { SettingsModel } from '../types/settings.model';
 import { useAppStore } from '~/store';
 
 const store = useAppStore();
-const auth = useAppwrite();
+const { auth, setSettings } = useAppwrite();
 const router = useRouter();
 const { sessionId } = toRefs(store);
 
@@ -62,13 +63,13 @@ const handleSubmit = async () => {
   if (session) {
     sessionId.value = session.$id;
   } else {
-    console.error('unable to login or signup, check your password and email');
+    // console.error('unable to login or signup, check your password and email');
   }
 };
 
 const getSession = async () => {
   try {
-    const { error } = await useFetch(`/api/${loginType.value}`, {
+    const { error, data } = await useFetch<SettingsModel>(`/api/${loginType.value}`, {
       method: 'POST',
       body: {
         email: email.value,
@@ -80,10 +81,12 @@ const getSession = async () => {
       throw error.value;
     }
 
+    setSettings(data.value);
+
     return await auth.createEmailSession(email.value, password.value);
   } catch (error) {
     // todo: setup modal error
-    console.error(error);
+    // console.error(error);
   }
 };
 

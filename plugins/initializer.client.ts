@@ -1,5 +1,5 @@
 export default defineNuxtPlugin(async (_nuxtApp) => {
-  const auth = useAppwrite();
+  const { auth } = useAppwrite();
   let sessionId = '';
   let initializerClientError = null;
   try {
