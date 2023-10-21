@@ -19,10 +19,10 @@ export default defineNuxtConfig({
     appwrite: {
       apiKey: process.env.VUE_APP_APPWRITE_SECRET_KEY,
       database: process.env.VUE_APP_APPWRITE_DATABASE,
-      collectionAllowedEmails: process.env.VUE_APP_APPWRITE_COLLECTION_ALLOWED_EMAILS,
-      collectionUsers: process.env.VUE_APP_APPWRITE_COLLECTION_USERS,
-      collectionSettings: process.env.VUE_APP_APPWRITE_COLLECTION_SETTINGS,
-      documentSettings: process.env.VUE_APP_APPWRITE_DOCUMENT_SETTINGS,
+      allowedEmailsCollection: process.env.VUE_APP_APPWRITE_ALLOWED_EMAILS_COLLECTION,
+      usersCollection: process.env.VUE_APP_APPWRITE_USERS_COLLECTION,
+      settingsCollection: process.env.VUE_APP_APPWRITE_SETTINGS_COLLECTION,
+      settingsDocument: process.env.VUE_APP_APPWRITE_SETTINGS_DOCUMENT,
     },
     // public env virables that are also available to client
     public: {

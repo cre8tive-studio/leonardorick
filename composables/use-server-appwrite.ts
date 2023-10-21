@@ -12,10 +12,10 @@ const useServerAppwrite = () => {
   const { appwrite, public: publicConfig } = useRuntimeConfig();
   const {
     database,
-    collectionUsers,
-    collectionAllowedEmails,
-    collectionSettings,
-    documentSettings,
+    usersCollection,
+    allowedEmailsCollection,
+    settingsCollection,
+    settingsDocument,
   } = appwrite;
   const { appwrite: publicAppwrite } = publicConfig;
 
@@ -32,7 +32,7 @@ const useServerAppwrite = () => {
 
   const queryAllowedEmail = async (email: string) => {
     return databases
-      .listDocuments<AllowedEmailModel>(database, collectionAllowedEmails, [
+      .listDocuments<AllowedEmailModel>(database, allowedEmailsCollection, [
         Query.equal('email', [email]),
       ])
       .then((res) => res.documents[0]);
@@ -40,12 +40,12 @@ const useServerAppwrite = () => {
 
   const getUserWithEmail = async (email: string) => {
     return databases
-      .listDocuments<UserModel>(database, collectionUsers, [Query.equal('email', [email])])
+      .listDocuments<UserModel>(database, usersCollection, [Query.equal('email', [email])])
       .then((res) => res.documents[0]);
   };
 
   const getSettings = async () => {
-    return databases.getDocument<SettingsModel>(database, collectionSettings, documentSettings);
+    return databases.getDocument<SettingsModel>(database, settingsCollection, settingsDocument);
   };
 
   const getAuthUserWithEmail = async (email: string) => {
@@ -57,8 +57,8 @@ const useServerAppwrite = () => {
     databases,
     database,
     collections: {
-      users: collectionUsers,
-      allowedEmails: collectionAllowedEmails,
+      users: usersCollection,
+      allowedEmails: allowedEmailsCollection,
     },
     // functions
     queryAllowedEmail,
