@@ -45,7 +45,11 @@ const useServerAppwrite = () => {
   };
 
   const getSettings = async () => {
-    return databases.getDocument<SettingsModel>(database, settingsCollection, settingsDocument);
+    return databases
+      .getDocument<SettingsModel>(database, settingsCollection, settingsDocument)
+      .then(({ availableSongsCount }) => ({
+        availableSongsCount,
+      }));
   };
 
   const getAuthUserWithEmail = async (email: string) => {

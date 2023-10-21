@@ -9,20 +9,21 @@
           <NuxtLink :to="localeRoute('/music')"> Music </NuxtLink>
         </li>
         <ClientOnly>
-          <li>
-            <NuxtLink
-              v-if="!sessionId"
-              :to="localeRoute('/login')"
-            >
+          <li v-if="!sessionId">
+            <NuxtLink :to="localeRoute('/login')">
               {{ $t('login') }}
             </NuxtLink>
-            <button
-              v-else
-              @click="logout"
-            >
-              {{ $t('logout') }}
-            </button>
           </li>
+          <template v-else>
+            <li>
+              <button @click="logout">
+                {{ $t('logout') }}
+              </button>
+            </li>
+            <li>
+              <NuxtLink :to="localeRoute('/profile')"> Profile </NuxtLink>
+            </li>
+          </template>
         </ClientOnly>
       </ul>
     </nav>

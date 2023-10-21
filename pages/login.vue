@@ -81,12 +81,13 @@ const getSession = async () => {
       throw error.value;
     }
 
+    console.log('data.value', data.value);
     setSettings(data.value);
 
     return await auth.createEmailSession(email.value, password.value);
   } catch (error) {
     // todo: setup modal error
-    // console.error(error);
+    console.error(error);
   }
 };
 
