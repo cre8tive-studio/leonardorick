@@ -7,7 +7,7 @@ let serverClient: ServerClient;
 let users: Users;
 let databases: Databases;
 
-const useServerAuth = () => {
+const useServerAppwrite = () => {
   const { appwrite, public: publicConfig } = useRuntimeConfig();
   const { database, collectionUsers, collectionAllowedEmails } = appwrite;
   const { appwrite: publicAppwrite } = publicConfig;
@@ -56,4 +56,4 @@ const useServerAuth = () => {
   };
 };
 
-export default useServerAuth;
+export default useServerAppwrite;

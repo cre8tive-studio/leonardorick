@@ -4,7 +4,7 @@ export { ID } from 'appwrite';
 let account: Account;
 const client = new Client();
 
-const useAuth = () => {
+const useAppwrite = () => {
   const { appwrite } = useRuntimeConfig().public;
   if (!account) {
     client.setEndpoint(appwrite.endpoint).setProject(appwrite.project);
@@ -14,4 +14,4 @@ const useAuth = () => {
   return account;
 };
 
-export default useAuth;
+export default useAppwrite;

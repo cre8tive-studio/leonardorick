@@ -43,7 +43,7 @@
 import { useAppStore } from '~/store';
 
 const store = useAppStore();
-const auth = useAuth();
+const auth = useAppwrite();
 const router = useRouter();
 const { sessionId } = toRefs(store);
 

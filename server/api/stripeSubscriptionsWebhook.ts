@@ -2,12 +2,13 @@ import Stripe from 'stripe';
 import { ID } from 'node-appwrite';
 
 import type { StripeInvoceObjectModel } from '../types/stripe-invoice-object.model';
-import useServerAuth from '~/composables/use-server-auth';
+import useServerAppwrite from '~/composables/use-server-appwrite';
 import useStripe from '~/composables/use-stripe';
 import { UserModel } from '~/types/user.model';
 import { incrementAvailableSongs } from '~/utils/music';
 
-const { databases, database, collections, queryAllowedEmail, getUserWithEmail } = useServerAuth();
+const { databases, database, collections, queryAllowedEmail, getUserWithEmail } =
+  useServerAppwrite();
 const { stripe, getSubscription } = useStripe();
 
 // this webhook is called by stripe when a payment is made. It runs monthly

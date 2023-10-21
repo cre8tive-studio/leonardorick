@@ -1,7 +1,7 @@
 import { ID, Permission, Role } from 'node-appwrite';
 import { create403Error } from '../utils/errors';
 import { bypass, isDefinedAndNotEmpty } from '~/utils/js-utilities';
-import useServerAuth from '~/composables/use-server-auth';
+import useServerAppwrite from '~/composables/use-server-appwrite';
 
 const {
   users,
@@ -11,7 +11,7 @@ const {
   queryAllowedEmail,
   getAuthUserWithEmail,
   getUserWithEmail,
-} = useServerAuth();
+} = useServerAppwrite();
 
 export default defineEventHandler(async (event) => {
   const { email, password } = await readBody(event);

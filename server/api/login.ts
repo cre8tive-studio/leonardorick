@@ -1,7 +1,7 @@
-import useServerAuth from '~/composables/use-server-auth';
+import useServerAppwrite from '~/composables/use-server-appwrite';
 import { isDefinedAndNotEmpty } from '~/utils/js-utilities';
 
-const { users, queryAllowedEmail, getAuthUserWithEmail } = useServerAuth();
+const { users, queryAllowedEmail, getAuthUserWithEmail } = useServerAppwrite();
 
 export default defineEventHandler(async (event) => {
   const { email, password } = await readBody(event);
