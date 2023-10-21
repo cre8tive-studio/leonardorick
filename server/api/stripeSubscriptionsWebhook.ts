@@ -4,6 +4,8 @@ import { ID } from 'node-appwrite';
 import type { StripeInvoceObjectModel } from '../types/stripe-invoice-object.model';
 import useServerAuth from '~/composables/use-server-auth';
 import useStripe from '~/composables/use-stripe';
+import { UserModel } from '~/types/user.model';
+import { incrementAvailableSongs } from '~/utils/music';
 
 const { databases, database, collections, queryAllowedEmail, getUserWithEmail } = useServerAuth();
 const { stripe, getSubscription } = useStripe();
@@ -68,23 +70,50 @@ export default defineEventHandler(async (nuxtEvent) => {
   }
 
   // *********** create allowed-emails reference if doesn't exists yet *************
-  const allowedEmail = await queryAllowedEmail(customerEmail);
-  if (!allowedEmail) {
-    return databases.createDocument(database, collections.allowedEmails, ID.unique(), {
-      email: customerEmail,
-      name: customerName,
-      stripeId: customer,
-      subscriptionId: subscription,
+
+  try {
+    const allowedEmail = await queryAllowedEmail(customerEmail);
+    // if allowed email don't exists we create this reference
+    // so we can allow user to signup later
+    if (!allowedEmail) {
+      return databases.createDocument(database, collections.allowedEmails, ID.unique(), {
+        email: customerEmail,
+        name: customerName,
+        stripeId: customer,
+        subscriptionId: subscription,
+        availableSongs: await getAvailableSongs(subscription, true),
+      });
+    }
+
+    // is allowed email already exists it means that i'ts a recurrent payment
+    // and we need to update the user with the new number of available songs
+    const { $id } = (await getUserWithEmail(customerEmail)) || {};
+
+    if ($id) {
+      return databases.updateDocument(database, collections.users, $id, {
+        stripeId: customer,
+        subscriptionId: subscription,
+        availableSongs: await getAvailableSongs(subscription, false, $id),
+      });
+    }
+  } catch (err: any) {
+    throw createError({
+      statusCode: err.statusCode,
+      statusMessage: err.message,
     });
   }
-
-  // todo: check if we need to update something on user when email is already there on allowed-emails
-  // const { $id } = await getUserWithEmail(customerEmail);
-  // if ($id) {
-  //   return databases.updateDocument(database, collections.users, $id, {
-  //     stripeId: customer,
-  //     subscriptionId: subscription,
-  //   });
-  // }
-  return allowedEmail;
 });
+
+const getAvailableSongs = async (subscription: string, creating: boolean, userId?: string) => {
+  let limit = 3;
+  let previous: number[] = [];
+  if (!creating && userId) {
+    limit += (await stripe.invoices.list({ status: 'paid', subscription })).data.length - 1;
+    ({ availableSongs: previous } = await databases.getDocument<UserModel>(
+      database,
+      collections.users,
+      userId
+    ));
+  }
+  return incrementAvailableSongs({ total: 40, previous, limit });
+};

@@ -2,12 +2,13 @@ import { getRandomInt } from './js-utilities';
 
 interface Params {
   total: number;
+  limit?: number;
   previous: number[];
 }
 
-export function incrementAvailableSongs({ total, previous }: Params) {
+export function incrementAvailableSongs({ total, previous, limit }: Params) {
   // if previoulsy we already had all songs (total), then, just return the same list
-  if (previous.length === total) {
+  if (previous.length === total || previous.length === limit) {
     return previous;
   }
 
@@ -24,6 +25,5 @@ export function incrementAvailableSongs({ total, previous }: Params) {
     const newNumber = available[index];
     newList.push(newNumber);
   }
-  newList.sort((a, b) => a - b);
-  return newList;
+  return newList.sort((a, b) => a - b).filter((_, i) => i < (limit || total));
 }

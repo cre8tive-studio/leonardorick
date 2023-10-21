@@ -1,0 +1,32 @@
+create visualisation of songs only for users that are logged in
+
+implement logic that allows user to like songs
+-- each month the user gains 2 upvotes that he can expend on the songs
+-- the user can see the total upvotes of a song and how many times he upvoted
+-- the user can remove upvotes from one song and add to another that he is seeing
+
+test everything related to the user creation
+
+|
+|
+|
+|
+|
+|
+|
+Add all of this information on a onenote about the project:
+Payment link setup
+
+- limit clients to 1 subscription (redirect to Stripe client portal)
+
+Database
+-- types
+---- there's no array type so you select the type you wwant and them select if you want this to be an array.
+---- if you create an array there's no functionalitty on enabling required because the default is always an empty array: https://discord.com/channels/564160730845151244/1090006380301275187
+
+-- indexes
+---- Users:
+------ index_email: to find if user already exists before creating again
+---- allowedEmails:
+------ index_email: to check if user is on allowed-emails on both login and signup
+------ index_subscriptionId: to ch
