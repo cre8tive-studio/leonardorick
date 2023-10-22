@@ -4,11 +4,17 @@ import { ID } from 'node-appwrite';
 import type { StripeInvoceObjectModel } from '../types/stripe-invoice-object.model';
 import useServerAppwrite from '~/composables/use-server-appwrite';
 import useStripe from '~/composables/use-stripe';
-import { UserModel } from '~/types/user.model';
 import { incrementAvailableSongs } from '~/utils/music';
 
-const { databases, database, collections, queryAllowedEmail, getUserWithEmail, getSettings } =
-  useServerAppwrite();
+const {
+  databases,
+  database,
+  collections,
+  queryAllowedEmail,
+  getUserWithEmail,
+  getSettings,
+  getUser,
+} = useServerAppwrite();
 
 const { stripe, getSubscription } = useStripe();
 
@@ -112,11 +118,7 @@ const getAvailableSongs = async (subscription: string, creating: boolean, userId
   let previous: number[] = [];
   if (!creating && userId) {
     limit += (await stripe.invoices.list({ status: 'paid', subscription })).data.length - 1;
-    ({ availableSongs: previous } = await databases.getDocument<UserModel>(
-      database,
-      collections.users,
-      userId
-    ));
+    ({ availableSongs: previous } = await getUser(userId));
   }
   return incrementAvailableSongs({ total: availableSongsCount, previous, limit });
 };

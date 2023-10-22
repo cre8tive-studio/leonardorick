@@ -1,16 +1,20 @@
+import { useAppStore } from '~/store';
+
 export default defineNuxtPlugin(async (_nuxtApp) => {
-  const { auth } = useAppwrite();
-  let sessionId = '';
+  const { getCurrentSession } = useAppwrite();
+  const { sessionId } = toRefs(useAppStore());
   let initializerClientError = null;
   try {
-    const session = await auth.getSession('current');
-    sessionId = session.$id;
+    const session = await getCurrentSession();
+    if (session) {
+      sessionId.value = session.$id;
+    }
   } catch (error) {
     initializerClientError = error;
   }
   return {
     provide: {
-      sessionId,
+      sessionId: sessionId.value,
       initializerClientError,
     },
   };

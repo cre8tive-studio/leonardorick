@@ -50,32 +50,25 @@
 <script setup lang="ts">
 import { useAppStore } from '~/store';
 
+// remember to implement this validation in all
+// layouts of the application
+const { $initializerClientError } = useNuxtApp();
+if ($initializerClientError) {
+  // todo setup modal error
+  // eslint-disable-next-line no-console
+  console.error($initializerClientError);
+}
+
 const store = useAppStore();
 const route = useRoute();
-const { auth } = useAppwrite();
+const { logout } = useAppwrite();
 
 const { lang, sessionId } = toRefs(store);
-const { $sessionId, $initializerClientError } = useNuxtApp();
-
 const showThreeJs = computed(
   () => (['/music'].includes(route.path) || route.path === '/') && false
 );
 const localeRoute = computed(
   () => (r: string) => lang.value === 'en' ? r : `${r}?locale=${lang.value}`
 );
-
-useLang();
-
-if ($initializerClientError) {
-  // todo setup modal error
-  //   console.error($initializerClientError);
-}
-sessionId.value = $sessionId;
-
-const logout = async () => {
-  const session = await auth.getSession('current');
-  await auth.deleteSession(session.$id);
-  sessionId.value = '';
-};
 </script>
 <style scoped></style>

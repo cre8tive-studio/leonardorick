@@ -54,7 +54,7 @@ if (sessionId.value) {
 
 const email = ref('');
 const password = ref('');
-const loginType = ref<'login' | 'signup'>('signup');
+const loginType = ref<'login' | 'signup'>('login');
 
 const formDisabled = computed(() => !email.value || !password.value);
 
@@ -81,7 +81,6 @@ const getSession = async () => {
       throw error.value;
     }
 
-    console.log('data.value', data.value);
     setSettings(data.value);
 
     return await auth.createEmailSession(email.value, password.value);

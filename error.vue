@@ -14,14 +14,17 @@
 
 <script setup lang="ts">
 import { NuxtError } from 'nuxt/app';
-
+const env = useRuntimeConfig().public.environment;
 const { error } = definePropsRefs({
   error: {
     type: Object as PropType<NuxtError>,
     required: true,
   },
 });
-// console.error(error.value.stack);
+if (env !== 'prodcution') {
+  // eslint-disable-next-line no-console
+  console.error(error.value.stack);
+}
 
 const handleClearError = () => clearError({ redirect: '/' });
 </script>

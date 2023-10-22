@@ -1,4 +1,10 @@
-import { Databases, Users, Client as ServerClient, Query } from 'node-appwrite';
+import {
+  Databases,
+  Users,
+  Client as ServerClient,
+  Account as ServerAccount,
+  Query,
+} from 'node-appwrite';
 
 import type { AllowedEmailModel } from '~/server/types/allowed-email.model';
 import type { SettingsModel } from '~/types/settings.model';
@@ -10,25 +16,29 @@ let databases: Databases;
 
 const useServerAppwrite = () => {
   const { appwrite, public: publicConfig } = useRuntimeConfig();
-  const {
-    database,
-    usersCollection,
-    allowedEmailsCollection,
-    settingsCollection,
-    settingsDocument,
-  } = appwrite;
+  const { allowedEmailsCollection, settingsCollection, settingsDocument } = appwrite;
   const { appwrite: publicAppwrite } = publicConfig;
+  const { endpoint, project, database, usersCollection } = publicAppwrite;
 
   if (!serverClient) {
     serverClient = new ServerClient();
-    serverClient
-      .setEndpoint(publicAppwrite.endpoint)
-      .setProject(publicAppwrite.project)
-      .setKey(appwrite.apiKey);
+    serverClient.setEndpoint(endpoint).setProject(project).setKey(appwrite.apiKey);
 
     users = new Users(serverClient);
     databases = new Databases(serverClient);
   }
+
+  /**
+   * used mainly to validate if requests are authenticated as exemplified in
+   * https://appwrite.io/docs/products/auth/jwt
+   * @param jwt string generated from the client with createJWT()
+   * @returns ServerAccount
+   */
+  const getLimitedAccount = (jwt: string) => {
+    const client = new ServerClient();
+    client.setEndpoint(endpoint).setProject(project).setJWT(jwt);
+    return new ServerAccount(client);
+  };
 
   const queryAllowedEmail = async (email: string) => {
     return databases
@@ -42,6 +52,10 @@ const useServerAppwrite = () => {
     return databases
       .listDocuments<UserModel>(database, usersCollection, [Query.equal('email', [email])])
       .then((res) => res.documents[0]);
+  };
+
+  const getUser = async (uid: string) => {
+    return databases.getDocument<UserModel>(database, usersCollection, uid);
   };
 
   const getSettings = async () => {
@@ -65,10 +79,13 @@ const useServerAppwrite = () => {
       allowedEmails: allowedEmailsCollection,
     },
     // functions
+    getLimitedAccount,
+
     queryAllowedEmail,
     getUserWithEmail,
     getSettings,
     getAuthUserWithEmail,
+    getUser,
   };
 };
 

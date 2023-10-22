@@ -18,9 +18,7 @@ export default defineNuxtConfig({
     stripeSecretKey: process.env.VUE_APP_STRIPE_SECRET_KEY,
     appwrite: {
       apiKey: process.env.VUE_APP_APPWRITE_SECRET_KEY,
-      database: process.env.VUE_APP_APPWRITE_DATABASE,
       allowedEmailsCollection: process.env.VUE_APP_APPWRITE_ALLOWED_EMAILS_COLLECTION,
-      usersCollection: process.env.VUE_APP_APPWRITE_USERS_COLLECTION,
       settingsCollection: process.env.VUE_APP_APPWRITE_SETTINGS_COLLECTION,
       settingsDocument: process.env.VUE_APP_APPWRITE_SETTINGS_DOCUMENT,
     },
@@ -32,6 +30,8 @@ export default defineNuxtConfig({
       appwrite: {
         endpoint: process.env.VUE_APP_APPWRITE_ENDPOINT,
         project: process.env.VUE_APP_APPWRITE_PROJECT,
+        usersCollection: process.env.VUE_APP_APPWRITE_USERS_COLLECTION,
+        database: process.env.VUE_APP_APPWRITE_DATABASE,
       },
       baseUrl,
     },
@@ -47,11 +47,10 @@ export default defineNuxtConfig({
     // some imports that are commonly used to be included automatically as nuxt do with much others
     autoImports: ['defineStore', ['defineStore', 'definePiniaStore']],
   },
-  // todo: uncommend when i18n starts working again
-  // i18n: {
-  //   vueI18n: './i18n.config.ts',
-  //   baseUrl,
-  // },
+  i18n: {
+    vueI18n: './i18n.config.ts',
+    baseUrl,
+  },
   app: {
     head: DEFAULT_HEAD,
   },
