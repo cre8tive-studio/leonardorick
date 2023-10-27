@@ -1,12 +1,12 @@
 import { ID, Permission, Role } from 'node-appwrite';
-import { create403Error } from '../utils/errors';
+import { createGenericError } from '../utils/errors';
 import { bypass, isDefinedAndNotEmpty } from '~/utils/js-utilities';
 import useServerAppwrite from '~/composables/use-server-appwrite';
 
 const {
   users,
   databases,
-  database,
+  databaseId,
   collections,
   queryAllowedEmail,
   getAuthUserWithEmail,
@@ -22,13 +22,13 @@ export default defineEventHandler(async (event) => {
   const userDoc = await getUserWithEmail(email);
 
   if (isDefinedAndNotEmpty(user) || isDefinedAndNotEmpty(userDoc)) {
-    throw create403Error('User already exists');
+    throw createGenericError('User already exists');
   }
 
   const allowedEmail = await queryAllowedEmail(email);
 
   if (!isDefinedAndNotEmpty(allowedEmail)) {
-    throw create403Error('User not allowed');
+    throw createGenericError('User not allowed');
   }
 
   const { $id: uid } = await createUser(email, password);
@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     await databases.createDocument(
-      database,
+      databaseId,
       collections.users,
       uid,
       {
@@ -56,7 +56,7 @@ export default defineEventHandler(async (event) => {
     return getSettings();
   } catch (err: any) {
     await users.delete(uid).catch(bypass);
-    throw create403Error(err.message);
+    throw createGenericError(err.message);
   }
 });
 
@@ -65,6 +65,6 @@ const createUser = async (email: string, password: string) => {
     // undefined so we don't need to send the phone number
     return await users.create(ID.unique(), email, undefined, password);
   } catch (err: any) {
-    throw create403Error(err.message);
+    throw createGenericError(err.message);
   }
 };

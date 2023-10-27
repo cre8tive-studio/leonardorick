@@ -16,7 +16,7 @@
           </li>
           <template v-else>
             <li>
-              <button @click="logout">
+              <button @click="handleLogout">
                 {{ $t('logout') }}
               </button>
             </li>
@@ -63,6 +63,11 @@ const store = useAppStore();
 const route = useRoute();
 const { logout } = useAppwrite();
 
+const handleLogout = async () => {
+  if (confirm('Are you sure you want to logout?')) {
+    await logout();
+  }
+};
 const { lang, sessionId } = toRefs(store);
 const showThreeJs = computed(
   () => (['/music'].includes(route.path) || route.path === '/') && false

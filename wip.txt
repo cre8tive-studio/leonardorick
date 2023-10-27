@@ -1,3 +1,5 @@
+// read all todos
+
 create client portal link access to stripe subscription management
 
 undo subsscription endpoint and create songs endpoint that only return songs if subscription is active
@@ -20,18 +22,21 @@ test everything related to the user creation
 |
 |
 Add all of this information on a onenote about the project:
-Payment link setup
+- Payment link setup
 
 - limit clients to 1 subscription (redirect to Stripe client portal)
 
-Database
+- Api Keys
+-- copy staging to production but basically all database permissions, read and write auth and storage.read
+- Database
 -- types
 ---- there's no array type so you select the type you wwant and them select if you want this to be an array.
 ---- if you create an array there's no functionalitty on enabling required because the default is always an empty array: https://discord.com/channels/564160730845151244/1090006380301275187
 
 -- indexes
----- Users:
+---- users:
 ------ index_email: to find if user already exists before creating again
----- allowedEmails:
+---- allowed-emails:
 ------ index_email: to check if user is on allowed-emails on both login and signup
------- index_subscriptionId: to ch
+---- demos:
+------ index_number: to query all documents on the list of the user available songs

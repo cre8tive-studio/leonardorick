@@ -1,4 +1,5 @@
 import { AUTHENTICATED_URLS } from '../utils/authenticated-urls';
+import { createGenericError } from '../utils/errors';
 import useServerAppwrite from '~/composables/use-server-appwrite';
 
 interface Auth {
@@ -25,7 +26,7 @@ export default defineEventHandler(async (event) => {
         .get()
         .then((res) => ({ authenticated: true, userId: res.$id, jwt }))
         .catch(() => {
-          throw create403Error('User unauthenticated');
+          throw createGenericError('User unauthenticated');
         });
     }
   }

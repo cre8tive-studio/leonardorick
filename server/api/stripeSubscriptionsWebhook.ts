@@ -8,7 +8,7 @@ import { incrementAvailableSongs } from '~/utils/music';
 
 const {
   databases,
-  database,
+  databaseId,
   collections,
   queryAllowedEmail,
   getUserWithEmail,
@@ -84,7 +84,7 @@ export default defineEventHandler(async (nuxtEvent) => {
     // if allowed email don't exists we create this reference
     // so we can allow user to signup later
     if (!allowedEmail) {
-      return databases.createDocument(database, collections.allowedEmails, ID.unique(), {
+      return databases.createDocument(databaseId, collections.allowedEmails, ID.unique(), {
         email: customerEmail,
         name: customerName,
         stripeId: customer,
@@ -98,7 +98,7 @@ export default defineEventHandler(async (nuxtEvent) => {
     const { $id } = (await getUserWithEmail(customerEmail)) || {};
 
     if ($id) {
-      return databases.updateDocument(database, collections.users, $id, {
+      return databases.updateDocument(databaseId, collections.users, $id, {
         stripeId: customer,
         subscriptionId: subscription,
         availableSongs: await getAvailableSongs(subscription, false, $id),

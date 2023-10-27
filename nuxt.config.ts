@@ -18,9 +18,13 @@ export default defineNuxtConfig({
     stripeSecretKey: process.env.VUE_APP_STRIPE_SECRET_KEY,
     appwrite: {
       apiKey: process.env.VUE_APP_APPWRITE_SECRET_KEY,
+
       allowedEmailsCollection: process.env.VUE_APP_APPWRITE_ALLOWED_EMAILS_COLLECTION,
+      demosCollection: process.env.VUE_APP_APPWRITE_DEMOS_COLLECTION,
       settingsCollection: process.env.VUE_APP_APPWRITE_SETTINGS_COLLECTION,
       settingsDocument: process.env.VUE_APP_APPWRITE_SETTINGS_DOCUMENT,
+
+      bucketId: process.env.VUE_APP_APPWRITE_STORAGE,
     },
     // public env virables that are also available to client
     public: {
@@ -31,7 +35,7 @@ export default defineNuxtConfig({
         endpoint: process.env.VUE_APP_APPWRITE_ENDPOINT,
         project: process.env.VUE_APP_APPWRITE_PROJECT,
         usersCollection: process.env.VUE_APP_APPWRITE_USERS_COLLECTION,
-        database: process.env.VUE_APP_APPWRITE_DATABASE,
+        databaseId: process.env.VUE_APP_APPWRITE_DATABASE,
       },
       baseUrl,
     },

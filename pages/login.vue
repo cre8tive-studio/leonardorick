@@ -45,6 +45,7 @@ import { useAppStore } from '~/store';
 
 const store = useAppStore();
 const { auth, setSettings } = useAppwrite();
+const { request } = useRequest();
 const router = useRouter();
 const { sessionId } = toRefs(store);
 
@@ -69,12 +70,9 @@ const handleSubmit = async () => {
 
 const getSession = async () => {
   try {
-    const { error, data } = await useFetch<SettingsModel>(`/api/${loginType.value}`, {
-      method: 'POST',
-      body: {
-        email: email.value,
-        password: password.value,
-      },
+    const { error, data } = await request<SettingsModel>(`/api/${loginType.value}`, {
+      email: email.value,
+      password: password.value,
     });
 
     if (error.value) {

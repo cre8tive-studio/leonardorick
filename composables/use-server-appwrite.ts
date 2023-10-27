@@ -4,6 +4,7 @@ import {
   Client as ServerClient,
   Account as ServerAccount,
   Query,
+  Storage,
 } from 'node-appwrite';
 
 import type { AllowedEmailModel } from '~/server/types/allowed-email.model';
@@ -13,12 +14,19 @@ import type { UserModel } from '~/types/user.model';
 let serverClient: ServerClient;
 let users: Users;
 let databases: Databases;
+let storage: Storage;
 
 const useServerAppwrite = () => {
   const { appwrite, public: publicConfig } = useRuntimeConfig();
-  const { allowedEmailsCollection, settingsCollection, settingsDocument } = appwrite;
+  const {
+    allowedEmailsCollection,
+    demosCollection,
+    settingsCollection,
+    settingsDocument,
+    bucketId,
+  } = appwrite;
   const { appwrite: publicAppwrite } = publicConfig;
-  const { endpoint, project, database, usersCollection } = publicAppwrite;
+  const { endpoint, project, databaseId, usersCollection } = publicAppwrite;
 
   if (!serverClient) {
     serverClient = new ServerClient();
@@ -26,6 +34,7 @@ const useServerAppwrite = () => {
 
     users = new Users(serverClient);
     databases = new Databases(serverClient);
+    storage = new Storage(serverClient);
   }
 
   /**
@@ -42,7 +51,7 @@ const useServerAppwrite = () => {
 
   const queryAllowedEmail = async (email: string) => {
     return databases
-      .listDocuments<AllowedEmailModel>(database, allowedEmailsCollection, [
+      .listDocuments<AllowedEmailModel>(databaseId, allowedEmailsCollection, [
         Query.equal('email', [email]),
       ])
       .then((res) => res.documents[0]);
@@ -50,19 +59,20 @@ const useServerAppwrite = () => {
 
   const getUserWithEmail = async (email: string) => {
     return databases
-      .listDocuments<UserModel>(database, usersCollection, [Query.equal('email', [email])])
+      .listDocuments<UserModel>(databaseId, usersCollection, [Query.equal('email', [email])])
       .then((res) => res.documents[0]);
   };
 
   const getUser = async (uid: string) => {
-    return databases.getDocument<UserModel>(database, usersCollection, uid);
+    return databases.getDocument<UserModel>(databaseId, usersCollection, uid);
   };
 
   const getSettings = async () => {
     return databases
-      .getDocument<SettingsModel>(database, settingsCollection, settingsDocument)
-      .then(({ availableSongsCount }) => ({
+      .getDocument<SettingsModel>(databaseId, settingsCollection, settingsDocument)
+      .then(({ availableSongsCount, songsReady }) => ({
         availableSongsCount,
+        songsReady,
       }));
   };
 
@@ -73,11 +83,16 @@ const useServerAppwrite = () => {
   return {
     users,
     databases,
-    database,
+    storage,
+
+    databaseId,
+    bucketId,
     collections: {
       users: usersCollection,
       allowedEmails: allowedEmailsCollection,
+      demos: demosCollection,
     },
+
     // functions
     getLimitedAccount,
 

@@ -1,7 +1,6 @@
 <template>
   <div v-if="loaded">
     <h2>Home</h2>
-    <span>loaded: {{ loaded }}</span>
     <p class="pb-5">
       {{ $t('welcome') }}
     </p>
@@ -24,6 +23,7 @@
       </div>
     </div>
   </div>
+  <div v-else>loading...</div>
 </template>
 
 <script setup lang="ts">
