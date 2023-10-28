@@ -10,6 +10,7 @@ import {
 import type { AllowedEmailModel } from '~/server/types/allowed-email.model';
 import type { SettingsModel } from '~/types/settings.model';
 import type { UserModel } from '~/types/user.model';
+import { parseSettings } from '~/utils/parsers';
 
 let serverClient: ServerClient;
 let users: Users;
@@ -18,15 +19,10 @@ let storage: Storage;
 
 const useServerAppwrite = () => {
   const { appwrite, public: publicConfig } = useRuntimeConfig();
-  const {
-    allowedEmailsCollection,
-    demosCollection,
-    settingsCollection,
-    settingsDocument,
-    bucketId,
-  } = appwrite;
+  const { allowedEmailsCollection, demosCollection, bucketId } = appwrite;
   const { appwrite: publicAppwrite } = publicConfig;
-  const { endpoint, project, databaseId, usersCollection } = publicAppwrite;
+  const { endpoint, project, databaseId, usersCollection, settingsCollection, settingsDocument } =
+    publicAppwrite;
 
   if (!serverClient) {
     serverClient = new ServerClient();
@@ -70,10 +66,7 @@ const useServerAppwrite = () => {
   const getSettings = async () => {
     return databases
       .getDocument<SettingsModel>(databaseId, settingsCollection, settingsDocument)
-      .then(({ availableSongsCount, songsReady }) => ({
-        availableSongsCount,
-        songsReady,
-      }));
+      .then(parseSettings);
   };
 
   const getAuthUserWithEmail = async (email: string) => {

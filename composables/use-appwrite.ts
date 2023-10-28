@@ -1,8 +1,9 @@
-import { ref } from 'vue';
 import { Account, Client, Databases } from 'appwrite';
 import { useAppStore } from '~/store';
 import type { SettingsModel } from '~/types/settings.model';
 import type { UserModel } from '~/types/user.model';
+import type { UpvotesModel, UpvotesClientModel } from '~/types/upvotes.model';
+import { parseUpvotes, parseSettings } from '~/utils/parsers';
 export { ID } from 'appwrite';
 
 let account: Account;
@@ -11,10 +12,17 @@ const client = new Client();
 
 const useAppwrite = () => {
   const { appwrite } = useRuntimeConfig().public;
-  const { endpoint, project, databaseId, usersCollection } = appwrite;
-  const settings = ref<SettingsModel | null>(null);
+  const {
+    endpoint,
+    project,
+    databaseId,
+    usersCollection,
+    upvotesCollection,
+    settingsCollection,
+    settingsDocument,
+  } = appwrite;
 
-  const { sessionId } = toRefs(useAppStore());
+  const { sessionId, settings } = toRefs(useAppStore());
 
   if (!account) {
     client.setEndpoint(endpoint).setProject(project);
@@ -29,9 +37,15 @@ const useAppwrite = () => {
     return account.getSession('current').catch(bypass);
   };
 
-  const setSettings = (st: SettingsModel | null) => {
-    if (!settings.value && st) {
-      settings.value = st;
+  const initSettings = async (st?: SettingsModel) => {
+    if (!settings.value) {
+      if (st) {
+        settings.value = st;
+        return;
+      }
+      settings.value = await databases
+        .getDocument<SettingsModel>(databaseId, settingsCollection, settingsDocument)
+        .then(parseSettings);
     }
   };
 
@@ -42,6 +56,16 @@ const useAppwrite = () => {
       return databases.getDocument<UserModel>(databaseId, usersCollection, uid);
     }
     return null;
+  };
+
+  const getUpvotes = async (): Promise<UpvotesClientModel> => {
+    return databases.listDocuments<UpvotesModel>(databaseId, upvotesCollection).then(parseUpvotes);
+  };
+
+  const updateVotes = async (songNumber: number, votes: string[]) => {
+    return databases.updateDocument(databaseId, upvotesCollection, songNumber.toString(), {
+      votes,
+    });
   };
 
   const logout = async () => {
@@ -66,8 +90,10 @@ const useAppwrite = () => {
     getCurrentSession,
     getJWT,
     getUser,
-    setSettings,
+    getUpvotes,
 
+    initSettings,
+    updateVotes,
     logout,
   };
 };

@@ -21,7 +21,7 @@ export default defineNuxtConfig({
 
       allowedEmailsCollection: process.env.VUE_APP_APPWRITE_ALLOWED_EMAILS_COLLECTION,
       demosCollection: process.env.VUE_APP_APPWRITE_DEMOS_COLLECTION,
-      settingsCollection: process.env.VUE_APP_APPWRITE_SETTINGS_COLLECTION,
+
       settingsDocument: process.env.VUE_APP_APPWRITE_SETTINGS_DOCUMENT,
 
       bucketId: process.env.VUE_APP_APPWRITE_STORAGE,
@@ -35,6 +35,9 @@ export default defineNuxtConfig({
         endpoint: process.env.VUE_APP_APPWRITE_ENDPOINT,
         project: process.env.VUE_APP_APPWRITE_PROJECT,
         usersCollection: process.env.VUE_APP_APPWRITE_USERS_COLLECTION,
+        upvotesCollection: process.env.VUE_APP_APPWRITE_UPVOTES_COLLECTION,
+        settingsCollection: process.env.VUE_APP_APPWRITE_SETTINGS_COLLECTION,
+        settingsDocument: process.env.VUE_APP_APPWRITE_SETTINGS_DOCUMENT,
         databaseId: process.env.VUE_APP_APPWRITE_DATABASE,
       },
       baseUrl,

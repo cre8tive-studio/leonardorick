@@ -7,7 +7,7 @@
   >
     go to stripe client portal to manage your subscriptions
   </button>
-  <p>your going to be redirected</p>
+  <p>your going to be redirected to an external link</p>
 </template>
 
 <script setup lang="ts">

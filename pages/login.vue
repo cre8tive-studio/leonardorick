@@ -44,7 +44,7 @@ import type { SettingsModel } from '../types/settings.model';
 import { useAppStore } from '~/store';
 
 const store = useAppStore();
-const { auth, setSettings } = useAppwrite();
+const { auth, initSettings } = useAppwrite();
 const { request } = useRequest();
 const router = useRouter();
 const { sessionId } = toRefs(store);
@@ -64,7 +64,8 @@ const handleSubmit = async () => {
   if (session) {
     sessionId.value = session.$id;
   } else {
-    // console.error('unable to login or signup, check your password and email');
+    // todo: setup modal error
+    console.error('unable to login or signup, check your password and email');
   }
 };
 
@@ -79,7 +80,7 @@ const getSession = async () => {
       throw error.value;
     }
 
-    setSettings(data.value);
+    initSettings(data.value);
 
     return await auth.createEmailSession(email.value, password.value);
   } catch (error) {

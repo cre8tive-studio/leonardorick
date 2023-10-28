@@ -113,8 +113,8 @@ export default defineEventHandler(async (nuxtEvent) => {
 });
 
 const getAvailableSongs = async (subscription: string, creating: boolean, userId?: string) => {
-  const { availableSongsCount } = await getSettings();
-  let limit = 3;
+  const { availableSongsCount, startSongsCount } = await getSettings();
+  let limit = startSongsCount;
   let previous: number[] = [];
   if (!creating && userId) {
     limit += (await stripe.invoices.list({ status: 'paid', subscription })).data.length - 1;

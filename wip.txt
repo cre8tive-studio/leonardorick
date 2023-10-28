@@ -1,16 +1,9 @@
 // read all todos
 
-create client portal link access to stripe subscription management
 
-undo subsscription endpoint and create songs endpoint that only return songs if subscription is active
-
-create visualisation of songs only for users that are logged in
-
-
+normalize names and convert everyplace that calls 'song' to 'demo'
 implement logic that allows user to like songs
--- each month the user gains 2 upvotes that he can expend on the songs
--- the user can see the total upvotes of a song and how many times he upvoted
--- the user can remove upvotes from one song and add to another that he is seeing
+
 
 test everything related to the user creation
 
@@ -40,3 +33,6 @@ Add all of this information on a onenote about the project:
 ------ index_email: to check if user is on allowed-emails on both login and signup
 ---- demos:
 ------ index_number: to query all documents on the list of the user available songs
+
+
+if for some reason I disable the song, I need to remove the upvotes from the this song
