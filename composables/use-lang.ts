@@ -1,14 +1,14 @@
 import { useAppStore } from '~/store';
-import { LanguageOptions } from '~/utils/constants/languages';
+import type { LanguageOptions } from '~/utils/constants/languages';
 
-// setup to control language chaneges
-const useLang = () => {
+// setup to control language changes. If outside of a setup function
+// (e.g. plugin) you'll need to provide the i18n instance
+const useLang = (i18n?: ReturnType<typeof useI18n>) => {
   const store = useAppStore();
   const router = useRouter();
   const route = useRoute();
-  const { locale } = useI18n();
+  const { locale } = i18n || useI18n();
   const { lang } = toRefs(store);
-
   watch(lang, () => {
     locale.value = lang.value;
     router.push({ query: { locale: lang.value } });

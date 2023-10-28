@@ -5,6 +5,8 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
   const { sessionId } = toRefs(useAppStore());
   let initializerClientError = null;
   try {
+    useLang(_nuxtApp.$i18n);
+
     const session = await getCurrentSession(true);
     if (session) {
       sessionId.value = session.$id;
