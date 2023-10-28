@@ -8,6 +8,10 @@ export const useAppStore = defineStore('store', () => {
     settings: null,
     recommendations: [],
     quotes: [],
+    lastJWT: {
+      jwt: '',
+      createdAt: 0,
+    },
   });
 
   return {

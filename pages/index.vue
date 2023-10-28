@@ -27,23 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import type { UseNuxtAppInitModel } from '../types/use-nuxt-app-init.model';
 import { useAppStore } from '~/store';
 
-const store = useAppStore();
-const { loaded, lang, recommendations, quotes } = toRefs(store);
-const { $recommendations, $quotes, $fetchInitialData } = useNuxtApp() as UseNuxtAppInitModel;
-
-watch(lang, async () => {
-  loaded.value = false;
-  const res = await $fetchInitialData();
-  recommendations.value = res.$recommendations.value;
-  quotes.value = res.$quotes.value;
-  loaded.value = true;
-});
-
-recommendations.value = $recommendations.value;
-quotes.value = $quotes.value;
-loaded.value = true;
+const { loaded, recommendations, quotes } = toRefs(useAppStore());
 </script>
 <style scoped></style>

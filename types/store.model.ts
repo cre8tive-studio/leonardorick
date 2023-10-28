@@ -9,4 +9,8 @@ export interface StoreModel {
   settings: SettingsClientModel | null;
   sessionId: string;
   loaded: boolean;
+  lastJWT: {
+    jwt: string;
+    createdAt: number;
+  };
 }

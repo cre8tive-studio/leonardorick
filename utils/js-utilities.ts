@@ -22,3 +22,7 @@ export function isDefinedAndNotEmpty(value: any) {
 export function getRandomInt(max: number, startNumber = 0) {
   return Math.floor(Math.random() * max) + startNumber;
 }
+
+export function isNotExpired(time: number, minutes = 14) {
+  return time > new Date().getTime() - minutes * 60 * 1000;
+}

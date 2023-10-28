@@ -42,14 +42,16 @@
 <script lang="ts" setup>
 import type { DemoClientModel } from '../types/demo-client.model';
 import type { UpvotesClientModel } from '../types/upvotes.model';
+import { useAppStore } from '../store/index';
 
+const nuxtApp = useNuxtApp();
+const { loaded } = toRefs(useAppStore());
 const { settings, getCurrentSession, getJWT, getUpvotes, updateVotes } = useAppwrite();
 const { request } = useRequest();
 const songs = ref<DemoClientModel[]>([]);
 const upvotes = ref<UpvotesClientModel>({});
 const songsLoadedCount = ref(0);
 const upvotesAvailable = ref(0);
-const loaded = ref(false);
 const userId = ref('');
 
 const filesLoading = computed(() => songsLoadedCount.value < songs.value.length);
@@ -104,8 +106,9 @@ async function setLoggedInformation() {
       songs.value = data.value;
       loaded.value = true;
       setUpvotesAvailable();
+
       songs.value.forEach(async (model) => {
-        const { error } = await useFetch('/api/getSongFile', {
+        const { data: songFile, error } = await useFetch('/api/getSongFile', {
           method: 'post',
           body: {
             number: model.number,
@@ -114,20 +117,40 @@ async function setLoggedInformation() {
             Authorization: await getJWT(),
           },
           responseType: 'blob',
-          onResponse({ response }) {
-            const url = URL.createObjectURL(response._data);
-            model.songUrl = url;
-            songsLoadedCount.value += 1;
+          transform(input: Blob) {
+            // transform don't run on cached data so we can be sure that
+            // this createdAt date iw always the last date that really
+            // called the API, and can use this value inside getChachedData
+            // to refresh the cahed song file
+            return {
+              blob: input,
+              createdAt: new Date().getTime(),
+            };
           },
-          onResponseError() {
-            model.songUrl = null;
+          getCachedData(key: string) {
+            // documented way to access cached data:
+            // https://github.com/nuxt/nuxt/issues/15445#issuecomment-1779361265
+            const cached = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+            if (!cached) {
+              return;
+            }
+
+            if (isNotExpired(cached.createdAt)) {
+              return cached;
+            }
+            // if you return nullish here --> refetch data
+            // if you return anything here, this will be used as the value
+            // reaching here is like returning undefined
           },
         });
 
-        // sometime the request is cached and just return the error. In this case
-        // we don't pass through the interceptors and need to handle the error here
         if (error.value) {
           model.songUrl = null;
+          songsLoadedCount.value += 1;
+        }
+
+        if (songFile.value) {
+          model.songUrl = URL.createObjectURL(songFile.value.blob);
           songsLoadedCount.value += 1;
         }
       });

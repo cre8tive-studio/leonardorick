@@ -4,6 +4,7 @@ import type { SettingsModel } from '~/types/settings.model';
 import type { UserModel } from '~/types/user.model';
 import type { UpvotesModel, UpvotesClientModel } from '~/types/upvotes.model';
 import { parseUpvotes, parseSettings } from '~/utils/parsers';
+import { isNotExpired } from '~/utils/js-utilities';
 export { ID } from 'appwrite';
 
 let account: Account;
@@ -22,7 +23,7 @@ const useAppwrite = () => {
     settingsDocument,
   } = appwrite;
 
-  const { sessionId, settings } = toRefs(useAppStore());
+  const { sessionId, settings, lastJWT } = toRefs(useAppStore());
 
   if (!account) {
     client.setEndpoint(endpoint).setProject(project);
@@ -79,7 +80,16 @@ const useAppwrite = () => {
   const getJWT = async () => {
     const session = await getCurrentSession();
     if (session) {
-      return account.createJWT().then((res) => res.jwt);
+      if (lastJWT.value.jwt && isNotExpired(lastJWT.value.createdAt)) {
+        return lastJWT.value.jwt;
+      }
+      return account.createJWT().then((res) => {
+        lastJWT.value = {
+          jwt: res.jwt,
+          createdAt: new Date().getTime(),
+        };
+        return res.jwt;
+      });
     }
     return '';
   };
