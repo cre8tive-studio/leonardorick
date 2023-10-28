@@ -1,9 +1,10 @@
 import { useAppStore } from '~/store';
+import type { i18nModel } from '~/types/i18n.model';
 import type { LanguageOptions } from '~/utils/constants/languages';
 
 // setup to control language changes. If outside of a setup function
 // (e.g. plugin) you'll need to provide the i18n instance
-const useLang = (i18n?: ReturnType<typeof useI18n>) => {
+const useLang = (i18n?: i18nModel) => {
   const store = useAppStore();
   const router = useRouter();
   const route = useRoute();

@@ -6,7 +6,7 @@
           <NuxtLink :to="localeRoute('/')"> Home </NuxtLink>
         </li>
         <li>
-          <NuxtLink :to="localeRoute('/music')"> Music </NuxtLink>
+          <NuxtLink :to="localeRoute('/music')"> {{ $t('music') }} </NuxtLink>
         </li>
         <ClientOnly>
           <li v-if="!sessionId">

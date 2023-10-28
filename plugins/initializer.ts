@@ -1,6 +1,7 @@
 import { defineNuxtPlugin } from 'nuxt/app';
 import { useAppStore } from '~/store';
-import { LanguageOptions } from '~/utils/constants/languages';
+import type { i18nModel } from '~/types/i18n.model';
+import type { LanguageOptions } from '~/utils/constants/languages';
 
 export default defineNuxtPlugin(async (_nuxtApp) => {
   const fetchInitialData = async () => {
@@ -16,7 +17,7 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
 
   const { $recommendations: recommendations, $quotes: quotes } = await _fetchInitialData(locale);
 
-  (_nuxtApp.$i18n as any).locale.value = locale;
+  (_nuxtApp.$i18n as i18nModel).locale.value = locale;
 
   return {
     provide: {

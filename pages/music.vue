@@ -1,6 +1,5 @@
 <template>
-  <h1>Music page</h1>
-
+  <h1>{{ $t('music_page') }}</h1>
   <ClientOnly>
     <div v-if="loaded">
       <p>votes available: {{ upvotesAvailable }}</p>

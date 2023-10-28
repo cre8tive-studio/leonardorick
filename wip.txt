@@ -1,6 +1,11 @@
 // read all todos
 
+fix error on home when changing language on another page.
+    I need to find a way to call this initial data on a page that is always available and listeining to lang changes so when this value changes I call the API again.
+    Im currently doing this on index.vue but it's not entirely right. I could also do that on default.vue but it's not the perfect place because if I in the future
+    use a different layout for the app and change the language there, I'll not update the data with the new value
 
+implement renew of jwt after 10 minutes (since it endures 15, just to be safe)
 normalize names and convert everyplace that calls 'song' to 'demo'
 implement logic that allows user to like songs
 
@@ -15,6 +20,11 @@ test everything related to the user creation
 |
 |
 Add all of this information on a onenote about the project:
+
+NUXT:::::::::::::
+- the cache on initial data is only happening because I'm using the initializer that doenst' run again when accessing home again.
+
+APPWRITE:::::::::
 - Payment link setup
 
 - limit clients to 1 subscription (redirect to Stripe client portal)
@@ -35,4 +45,4 @@ Add all of this information on a onenote about the project:
 ------ index_number: to query all documents on the list of the user available songs
 
 
-if for some reason I disable the song, I need to remove the upvotes from the this song
+- if for some reason I disable the song, I need to remove the upvotes from the this song 

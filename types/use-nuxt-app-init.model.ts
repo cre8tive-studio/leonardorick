@@ -8,5 +8,4 @@ interface DtoModel {
 
 export interface UseNuxtAppInitModel extends DtoModel {
   $fetchInitialData: () => Promise<DtoModel>;
-  $sessionId: string;
 }
