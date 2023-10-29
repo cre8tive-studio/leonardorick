@@ -3,14 +3,14 @@ import type { StoreModel } from '~/types/store.model';
 export const useAppStore = defineStore('store', () => {
   const state = reactive<StoreModel>({
     lang: 'en',
-    sessionId: '',
+    session: null,
     loaded: false,
     settings: null,
     recommendations: [],
     quotes: [],
     lastJWT: {
       jwt: '',
-      createdAt: 0,
+      expire: 0,
     },
   });
 

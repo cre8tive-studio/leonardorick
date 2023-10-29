@@ -9,7 +9,7 @@
           <NuxtLink :to="localeRoute('/music')"> {{ $t('music') }} </NuxtLink>
         </li>
         <ClientOnly>
-          <li v-if="!sessionId">
+          <li v-if="!session">
             <NuxtLink :to="localeRoute('/login')">
               {{ $t('login') }}
             </NuxtLink>
@@ -52,7 +52,7 @@ import { useAppStore } from '~/store';
 
 const route = useRoute();
 const { logout } = useAppwrite();
-const { lang, sessionId } = toRefs(useAppStore());
+const { lang, session } = toRefs(useAppStore());
 
 const showThreeJs = computed(
   () => (['/music'].includes(route.path) || route.path === '/') && false

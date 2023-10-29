@@ -1,22 +1,32 @@
 import { describe, expect, it } from 'vitest';
-import { isNotExpired } from '../../utils/js-utilities';
+import { getExpireTime, isNotExpired } from '../../utils/js-utilities';
 
 describe('js-utilities :: isNotExpired', () => {
   it('should return true if the date is not expired', () => {
-    // current time -----------> 20:20 (just for example)
-    // createdAt --------------> 20:10
-    // expire time ------------> 20:34
-    // function:
-    // 20:10 > 20:20 - 14 -----> 20:06 (true, not expired)
-    expect(isNotExpired(new Date().getTime() - 10 * 60 * 1000)).toEqual(true);
+    expect(isNotExpired(new Date().getTime() - 10)).toEqual(false);
   });
 
   it('should return false if the date is expired', () => {
-    // current time -----------> 20:20 (just for example)
-    // createdAt --------------> 20:05
-    // expire time ------------> 20:34
-    // function:
-    // 20:05 > 20:20 - 14 -----> 20:06 (false, expired)
-    expect(isNotExpired(new Date().getTime() - 15 * 60 * 1000)).toEqual(false);
+    expect(isNotExpired(new Date().getTime() + 10)).toEqual(true);
+  });
+
+  it('should return false if time is 0', () => {
+    expect(isNotExpired(0)).toEqual(false);
+  });
+});
+
+describe('js-utilities :: getExpTime', () => {
+  it('should return 15 minutes in the future from now if calling without parameters', () => {
+    expect(getExpireTime()).toEqual(new Date().getTime() + 15 * 60 * 1000);
+  });
+
+  it('should return 15 minutes in the future related to sent time if time sent', () => {
+    const date = new Date().getTime();
+    // sending 14 minutes because theres some delay on the function execution
+    expect(getExpireTime(date)).toEqual(date + 15 * 60 * 1000);
+  });
+
+  it('should convert string to date if string sent', () => {
+    expect(getExpireTime('2024-10-23T09:50:50.734+00:00', 0)).toEqual(1729677050734);
   });
 });

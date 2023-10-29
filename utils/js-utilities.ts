@@ -23,6 +23,21 @@ export function getRandomInt(max: number, startNumber = 0) {
   return Math.floor(Math.random() * max) + startNumber;
 }
 
-export function isNotExpired(time: number, minutes = 14) {
-  return time > new Date().getTime() - minutes * 60 * 1000;
+export function isNotExpired(time: number) {
+  return !!time && time > new Date().getTime();
+}
+
+export function getExpireTime(time?: number | string | Date, minutes = 15) {
+  const t = time ? getNumberTime(time) : new Date().getTime();
+  return t + minutes * 60 * 1000;
+}
+
+function getNumberTime(time?: number | string | Date): number {
+  let finalTime = time as number;
+  if (typeof time === 'string') {
+    finalTime = new Date(time).getTime();
+  } else if (time instanceof Date) {
+    finalTime = time.getTime();
+  }
+  return finalTime;
 }

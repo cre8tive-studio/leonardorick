@@ -43,6 +43,7 @@
 import type { DemoClientModel } from '../types/demo-client.model';
 import type { UpvotesClientModel } from '../types/upvotes.model';
 import { useAppStore } from '../store/index';
+import { getExpireTime } from '../utils/js-utilities';
 
 const nuxtApp = useNuxtApp();
 const { loaded } = toRefs(useAppStore());
@@ -119,12 +120,12 @@ async function setLoggedInformation() {
           responseType: 'blob',
           transform(input: Blob) {
             // transform don't run on cached data so we can be sure that
-            // this createdAt date iw always the last date that really
+            // this expire date iw always the last date that really
             // called the API, and can use this value inside getChachedData
             // to refresh the cahed song file
             return {
               blob: input,
-              createdAt: new Date().getTime(),
+              expire: getExpireTime(),
             };
           },
           getCachedData(key: string) {
@@ -132,10 +133,10 @@ async function setLoggedInformation() {
             // https://github.com/nuxt/nuxt/issues/15445#issuecomment-1779361265
             const cached = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
             if (!cached) {
-              return;
+              return null;
             }
 
-            if (isNotExpired(cached.createdAt)) {
+            if (isNotExpired(cached.expire)) {
               return cached;
             }
             // if you return nullish here --> refetch data

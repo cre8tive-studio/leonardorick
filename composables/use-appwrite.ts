@@ -23,7 +23,7 @@ const useAppwrite = () => {
     settingsDocument,
   } = appwrite;
 
-  const { sessionId, settings, lastJWT } = toRefs(useAppStore());
+  const { session: storedSession, settings, lastJWT } = toRefs(useAppStore());
 
   if (!account) {
     client.setEndpoint(endpoint).setProject(project);
@@ -31,11 +31,26 @@ const useAppwrite = () => {
     databases = new Databases(client);
   }
 
-  const getCurrentSession = async (firstTime = false) => {
-    if (!sessionId.value && !firstTime) {
+  const getCurrentSession = async (fresh = false) => {
+    if (!storedSession.value && !fresh) {
       return null;
     }
-    return account.getSession('current').catch(bypass);
+
+    if (
+      !fresh &&
+      storedSession.value &&
+      isNotExpired(getExpireTime(storedSession.value.expire, 0))
+    ) {
+      return storedSession.value;
+    }
+
+    return account
+      .getSession('current')
+      .then((session) => {
+        storedSession.value = session;
+        return session;
+      })
+      .catch(bypass);
   };
 
   const initSettings = async (st?: SettingsModel) => {
@@ -74,19 +89,19 @@ const useAppwrite = () => {
     if (session) {
       await account.deleteSession(session.$id);
     }
-    sessionId.value = '';
+    storedSession.value = null;
   };
 
   const getJWT = async () => {
     const session = await getCurrentSession();
     if (session) {
-      if (lastJWT.value.jwt && isNotExpired(lastJWT.value.createdAt)) {
+      if (lastJWT.value.jwt && isNotExpired(lastJWT.value.expire)) {
         return lastJWT.value.jwt;
       }
       return account.createJWT().then((res) => {
         lastJWT.value = {
           jwt: res.jwt,
-          createdAt: new Date().getTime(),
+          expire: getExpireTime(),
         };
         return res.jwt;
       });

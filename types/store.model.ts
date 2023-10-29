@@ -1,3 +1,4 @@
+import type { Models } from 'appwrite';
 import type { QuoteModel } from './quote.model';
 import type { RecommendationModel } from './recommendation-model';
 import type { SettingsClientModel } from './settings.model';
@@ -7,10 +8,10 @@ export interface StoreModel {
   quotes: QuoteModel[];
   lang: LanguageOptions;
   settings: SettingsClientModel | null;
-  sessionId: string;
+  session: Models.Session | null;
   loaded: boolean;
   lastJWT: {
     jwt: string;
-    createdAt: number;
+    expire: number;
   };
 }

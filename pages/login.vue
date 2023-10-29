@@ -47,9 +47,9 @@ const store = useAppStore();
 const { auth, initSettings } = useAppwrite();
 const { request } = useRequest();
 const router = useRouter();
-const { sessionId } = toRefs(store);
+const { session: storedSession } = toRefs(store);
 
-if (sessionId.value) {
+if (storedSession.value) {
   router.replace('/');
 }
 
@@ -62,7 +62,7 @@ const formDisabled = computed(() => !email.value || !password.value);
 const handleSubmit = async () => {
   const session = await getSession();
   if (session) {
-    sessionId.value = session.$id;
+    storedSession.value = session;
   } else {
     // todo: setup modal error
     console.error('unable to login or signup, check your password and email');
