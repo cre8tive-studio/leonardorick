@@ -27,7 +27,7 @@ export function isNotExpired(time: number) {
   return !!time && time > new Date().getTime();
 }
 
-export function getExpireTime(time?: number | string | Date, minutes = 15) {
+export function getExpireTime(minutes = 15, time?: number | string | Date) {
   const t = time ? getNumberTime(time) : new Date().getTime();
   return t + minutes * 60 * 1000;
 }

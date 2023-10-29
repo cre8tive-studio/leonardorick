@@ -103,7 +103,7 @@ async function setLoggedInformation() {
     userId.value = session.userId;
     upvotes.value = await getUpvotes();
 
-    request<DemoClientModel[]>('/api/getSongsMetadata').then(({ data }) => {
+    request<DemoClientModel[]>('/api/getSongsMetadata', undefined, true).then(({ data }) => {
       songs.value = data.value;
       loaded.value = true;
       setUpvotesAvailable();
@@ -125,7 +125,7 @@ async function setLoggedInformation() {
             // to refresh the cahed song file
             return {
               blob: input,
-              expire: getExpireTime(),
+              expire: getExpireTime(60),
             };
           },
           getCachedData(key: string) {
