@@ -1,4 +1,4 @@
-import { AUTHENTICATED_URLS } from '../utils/authenticated-urls';
+import { AUTHENTICATED_URLS, DYNAMIC_AUTHENTICATED_URLS } from '../utils/authenticated-urls';
 import { createGenericError } from '../utils/errors';
 import useServerAppwrite from '~/composables/use-server-appwrite';
 
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
     jwt: '',
   };
 
-  if (url && AUTHENTICATED_URLS.has(url)) {
+  if (url && urlShouldBeAuthenticated(url)) {
     const jwt = event.node.req.headers.authorization;
     if (jwt) {
       const account = getLimitedAccount(jwt);
@@ -32,3 +32,16 @@ export default defineEventHandler(async (event) => {
   }
   event.context.auth = auth;
 });
+
+function urlShouldBeAuthenticated(url: string) {
+  return (
+    AUTHENTICATED_URLS.has(url) ||
+    // url will be dynamic if it contains a slash after removing the /api/ prefix. If it is dynamic
+    // check if the url contains the constand part of some dynamic url predefined as authenticated
+    (url.replace('/api/', '').includes('/') &&
+      DYNAMIC_AUTHENTICATED_URLS.some((u) => {
+        const path = u as string;
+        return url.includes(path.replace(/:.+/g, ''));
+      }))
+  );
+}

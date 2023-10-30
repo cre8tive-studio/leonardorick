@@ -1,11 +1,15 @@
 import { Query } from 'node-appwrite';
-import { createGenericError } from '../utils/errors';
+import { createGenericError } from '../../utils/errors';
 import useServerAppwrite from '~/composables/use-server-appwrite';
 import type { DemoModel } from '~/types/demo.model';
 
 const { databases, databaseId, collections, storage, bucketId, getUser, getSettings } =
   useServerAppwrite();
 
+// we use a dynamic url just for the purpose of separating the calls. If we keep the same path
+// for all songs, when we try to cache this call, all requests will be cahed as the same and it will
+// return the same song file for all of them. Once we call getDemoFile/1 and getDemoFile/2, the cache
+// will be stored separatedly by nuxt
 export default defineEventHandler(async (event) => {
   const { userId } = event.context.auth;
   const { number } = await readBody(event);

@@ -4,7 +4,7 @@
     <div v-if="loaded">
       <p>votes available: {{ upvotesAvailable }}</p>
       <div
-        v-for="demo in demos"
+        v-for="(demo, demoIndex) in demos"
         :key="demo.number"
         class="border border-gray-300 p-4 m-4"
       >
@@ -29,8 +29,10 @@
         </div>
         <audio
           v-if="demo.demoUrl"
+          ref="demoAudioRefs"
           :src="demo.demoUrl"
           controls
+          @play="playAudio(demoIndex)"
         ></audio>
         <div v-else-if="filesLoading">Loading demo player...</div>
         <div v-else>Unable to load demo player for this demo. Try again latter</div>
@@ -50,6 +52,7 @@ const { loaded } = toRefs(useAppStore());
 const { settings, getCurrentSession, getJWT, getUpvotes, updateVotes } = useAppwrite();
 const { request } = useRequest();
 const demos = ref<DemoClientModel[]>([]);
+const demoAudioRefs = ref<HTMLAudioElement[]>([]);
 const upvotes = ref<UpvotesClientModel>({});
 const demosLoadedCount = ref(0);
 const upvotesAvailable = ref(0);
@@ -61,6 +64,14 @@ const demosMaxVotes = computed(() =>
 );
 
 setLoggedInformation();
+
+function playAudio(index: number) {
+  demoAudioRefs.value.forEach((audio, i) => {
+    if (index !== i) {
+      audio.pause();
+    }
+  });
+}
 
 function setUpvotesAvailable() {
   upvotesAvailable.value = demosMaxVotes.value;
@@ -109,7 +120,7 @@ async function setLoggedInformation() {
       setUpvotesAvailable();
 
       demos.value.forEach(async (model) => {
-        const { data: demoFile, error } = await useFetch('/api/getDemoFile', {
+        const { data: demoFile, error } = await useFetch(`/api/getDemoFile/${model.number}`, {
           method: 'post',
           body: {
             number: model.number,
