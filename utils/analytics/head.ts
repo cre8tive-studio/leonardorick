@@ -11,6 +11,7 @@ const defaultInfo = {
 
 const musicInfo = {
   ...defaultInfo,
+  title: 'Leonardo Rick - Singer & Songwriter',
   url: 'https://leonardorick.com/music',
   ogImage: `${path}/assets/meta/og-image-music.png`,
 };
