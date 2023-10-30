@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const { $id: uid } = await createUser(email, password);
-  const { stripeId, name, verified, availableSongs, subscriptionId } = allowedEmail;
+  const { stripeId, name, verified, availableDemos, subscriptionId } = allowedEmail;
 
   try {
     await databases.createDocument(
@@ -45,7 +45,7 @@ export default defineEventHandler(async (event) => {
         stripeId,
         name,
         verified,
-        availableSongs,
+        availableDemos,
         subscriptionId,
       },
       // while appwrite don't allow custom permissions per attribute

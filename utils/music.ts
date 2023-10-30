@@ -6,8 +6,8 @@ interface Params {
   previous: number[];
 }
 
-export function incrementAvailableSongs({ total, previous, limit }: Params) {
-  // if previoulsy we already had all songs (total), then, just return the same list
+export function incrementAvailableDemos({ total, previous, limit }: Params) {
+  // if previoulsy we already had all demos (total), then, just return the same list
   if (previous.length === total || previous.length === limit) {
     return previous;
   }

@@ -13,19 +13,19 @@ export default defineEventHandler(async (event) => {
     throw createGenericError('User not allowed');
   }
 
-  const { songsReady } = await getSettings();
+  const { demosReady } = await getSettings();
 
-  if (!songsReady.includes(number)) {
+  if (!demosReady.includes(number)) {
     return null;
   }
 
   if (!number) {
-    throw createGenericError('Missing number of song on request', 422);
+    throw createGenericError('Missing number of demo on request', 422);
   }
 
-  const { availableSongs } = await getUser(userId);
-  if (!availableSongs || availableSongs.length === 0 || !songsReady.includes(number)) {
-    throw createGenericError(`User not allowed to listen to requested song ${number}`);
+  const { availableDemos } = await getUser(userId);
+  if (!availableDemos || availableDemos.length === 0 || !demosReady.includes(number)) {
+    throw createGenericError(`User not allowed to listen to requested demo ${number}`);
   }
 
   try {

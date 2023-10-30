@@ -1,10 +1,7 @@
 // read all todos
 
+try to see if cache works on multiple useFetch calls for the same endpoint
 try to set generic type of useFetch using transform
-try to not get await session.current session all the time
-normalize names and convert everyplace that calls 'song' to 'demo'
-
-
 
 test everything related to the user creation
 
@@ -38,7 +35,7 @@ APPWRITE:::::::::
 ---- allowed-emails:
 ------ index_email: to check if user is on allowed-emails on both login and signup
 ---- demos:
------- index_number: to query all documents on the list of the user available songs
+------ index_number: to query all documents on the list of the user available demos
 
 
-- if for some reason I disable the song, I need to remove the upvotes from the this song 
+- if for some reason I disable the demo, I need to remove the upvotes from the this demo

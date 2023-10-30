@@ -4,39 +4,39 @@
     <div v-if="loaded">
       <p>votes available: {{ upvotesAvailable }}</p>
       <div
-        v-for="song in songs"
-        :key="song.number"
+        v-for="demo in demos"
+        :key="demo.number"
         class="border border-gray-300 p-4 m-4"
       >
-        <h2>{{ song.title }}</h2>
-        <p>votes: {{ upvotes[song.number].length }}</p>
+        <h2>{{ demo.title }}</h2>
+        <p>votes: {{ upvotes[demo.number].length }}</p>
         <div class="flex gap-4">
           <button
             :disabled="upvotesAvailable < 1"
             class="bg-neutral-400 [&:not(:disabled)]:hover:bg-neutral-500 p-2 disabled:cursor-not-allowed"
-            @click="addVote(song.number)"
+            @click="addVote(demo.number)"
           >
             vote
           </button>
 
           <button
-            :disabled="upvotesAvailable === songsMaxVotes"
+            :disabled="upvotesAvailable === demosMaxVotes"
             class="bg-neutral-400 [&:not(:disabled)]:hover:bg-neutral-500 p-2 disabled:cursor-not-allowed"
-            @click="removeVote(song.number)"
+            @click="removeVote(demo.number)"
           >
             remove vote
           </button>
         </div>
         <audio
-          v-if="song.songUrl"
-          :src="song.songUrl"
+          v-if="demo.demoUrl"
+          :src="demo.demoUrl"
           controls
         ></audio>
-        <div v-else-if="filesLoading">Loading song player...</div>
-        <div v-else>Unable to load song player for this song. Try again latter</div>
+        <div v-else-if="filesLoading">Loading demo player...</div>
+        <div v-else>Unable to load demo player for this demo. Try again latter</div>
       </div>
     </div>
-    <div v-else>Loading songs metadata...</div>
+    <div v-else>Loading demos metadata...</div>
   </ClientOnly>
 </template>
 <script lang="ts" setup>
@@ -49,23 +49,23 @@ const nuxtApp = useNuxtApp();
 const { loaded } = toRefs(useAppStore());
 const { settings, getCurrentSession, getJWT, getUpvotes, updateVotes } = useAppwrite();
 const { request } = useRequest();
-const songs = ref<DemoClientModel[]>([]);
+const demos = ref<DemoClientModel[]>([]);
 const upvotes = ref<UpvotesClientModel>({});
-const songsLoadedCount = ref(0);
+const demosLoadedCount = ref(0);
 const upvotesAvailable = ref(0);
 const userId = ref('');
 
-const filesLoading = computed(() => songsLoadedCount.value < songs.value.length);
-const songsMaxVotes = computed(() =>
-  settings.value ? songs.value.length * settings.value.upvotesMultiplier : 0
+const filesLoading = computed(() => demosLoadedCount.value < demos.value.length);
+const demosMaxVotes = computed(() =>
+  settings.value ? demos.value.length * settings.value.upvotesMultiplier : 0
 );
 
 setLoggedInformation();
 
 function setUpvotesAvailable() {
-  upvotesAvailable.value = songsMaxVotes.value;
-  songs.value.forEach((song) => {
-    songVotes(song.number).forEach((voteId) => {
+  upvotesAvailable.value = demosMaxVotes.value;
+  demos.value.forEach((demo) => {
+    demoVotes(demo.number).forEach((voteId) => {
       if (voteId === userId.value && upvotesAvailable.value > 0) {
         upvotesAvailable.value -= 1;
       }
@@ -73,23 +73,23 @@ function setUpvotesAvailable() {
   });
 }
 
-function songVotes(songNumber: number) {
-  return upvotes.value[songNumber.toString()];
+function demoVotes(demoNumber: number) {
+  return upvotes.value[demoNumber.toString()];
 }
 
-function removeVote(songNumber: number) {
-  const votes = songVotes(songNumber);
+function removeVote(demoNumber: number) {
+  const votes = demoVotes(demoNumber);
   const index = votes.findIndex((voteId) => voteId === userId.value);
   votes.splice(index, 1);
   setUpvotesAvailable();
-  updateVotes(songNumber, votes).then(updateVotesCallback);
+  updateVotes(demoNumber, votes).then(updateVotesCallback);
 }
 
-function addVote(songNumber: number) {
-  const votes = songVotes(songNumber);
+function addVote(demoNumber: number) {
+  const votes = demoVotes(demoNumber);
   votes.push(userId.value);
   setUpvotesAvailable();
-  updateVotes(songNumber, votes).then(updateVotesCallback);
+  updateVotes(demoNumber, votes).then(updateVotesCallback);
 }
 
 async function updateVotesCallback() {
@@ -103,13 +103,13 @@ async function setLoggedInformation() {
     userId.value = session.userId;
     upvotes.value = await getUpvotes();
 
-    request<DemoClientModel[]>('/api/getSongsMetadata', undefined, true).then(({ data }) => {
-      songs.value = data.value;
+    request<DemoClientModel[]>('/api/getDemosMetadata', undefined, true).then(({ data }) => {
+      demos.value = data.value;
       loaded.value = true;
       setUpvotesAvailable();
 
-      songs.value.forEach(async (model) => {
-        const { data: songFile, error } = await useFetch('/api/getSongFile', {
+      demos.value.forEach(async (model) => {
+        const { data: demoFile, error } = await useFetch('/api/getDemoFile', {
           method: 'post',
           body: {
             number: model.number,
@@ -122,7 +122,7 @@ async function setLoggedInformation() {
             // transform don't run on cached data so we can be sure that
             // this expire date iw always the last date that really
             // called the API, and can use this value inside getChachedData
-            // to refresh the cahed song file
+            // to refresh the cahed demo file
             return {
               blob: input,
               expire: getExpireTime(60),
@@ -146,13 +146,13 @@ async function setLoggedInformation() {
         });
 
         if (error.value) {
-          model.songUrl = null;
-          songsLoadedCount.value += 1;
+          model.demoUrl = null;
+          demosLoadedCount.value += 1;
         }
 
-        if (songFile.value) {
-          model.songUrl = URL.createObjectURL(songFile.value.blob);
-          songsLoadedCount.value += 1;
+        if (demoFile.value) {
+          model.demoUrl = URL.createObjectURL(demoFile.value.blob);
+          demosLoadedCount.value += 1;
         }
       });
     });

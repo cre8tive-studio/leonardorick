@@ -12,16 +12,16 @@ export default defineEventHandler(async (event) => {
     throw createGenericError('User not allowed');
   }
 
-  const { songsReady } = await getSettings();
-  const { availableSongs } = await getUser(userId);
-  const availableSongsReady = availableSongs.filter((song) => songsReady.includes(song));
+  const { demosReady } = await getSettings();
+  const { availableDemos } = await getUser(userId);
+  const availableDemosReady = availableDemos.filter((demo) => demosReady.includes(demo));
 
   try {
     const query = await databases.listDocuments<DemoModel>(databaseId, collections.demos, [
-      Query.equal('number', availableSongsReady),
+      Query.equal('number', availableDemosReady),
     ]);
     return query.documents.map((demo) => ({
-      // todo in the future return the image cover of the song if it exists
+      // todo in the future return the image cover of the demo if it exists
       coverImg: null,
       title: demo.title,
       description: demo.description,

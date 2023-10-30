@@ -4,7 +4,7 @@ import { ID } from 'node-appwrite';
 import type { StripeInvoceObjectModel } from '../types/stripe-invoice-object.model';
 import useServerAppwrite from '~/composables/use-server-appwrite';
 import useStripe from '~/composables/use-stripe';
-import { incrementAvailableSongs } from '~/utils/music';
+import { incrementAvailableDemos } from '~/utils/music';
 
 const {
   databases,
@@ -89,19 +89,19 @@ export default defineEventHandler(async (nuxtEvent) => {
         name: customerName,
         stripeId: customer,
         subscriptionId: subscription,
-        availableSongs: await getAvailableSongs(subscription, true),
+        availableDemos: await getAvailableDemos(subscription, true),
       });
     }
 
     // is allowed email already exists it means that i'ts a recurrent payment
-    // and we need to update the user with the new number of available songs
+    // and we need to update the user with the new number of available demos
     const { $id } = (await getUserWithEmail(customerEmail)) || {};
 
     if ($id) {
       return databases.updateDocument(databaseId, collections.users, $id, {
         stripeId: customer,
         subscriptionId: subscription,
-        availableSongs: await getAvailableSongs(subscription, false, $id),
+        availableDemos: await getAvailableDemos(subscription, false, $id),
       });
     }
   } catch (err: any) {
@@ -112,13 +112,13 @@ export default defineEventHandler(async (nuxtEvent) => {
   }
 });
 
-const getAvailableSongs = async (subscription: string, creating: boolean, userId?: string) => {
-  const { availableSongsCount, startSongsCount } = await getSettings();
-  let limit = startSongsCount;
+const getAvailableDemos = async (subscription: string, creating: boolean, userId?: string) => {
+  const { availableDemosCount, startDemosCount } = await getSettings();
+  let limit = startDemosCount;
   let previous: number[] = [];
   if (!creating && userId) {
     limit += (await stripe.invoices.list({ status: 'paid', subscription })).data.length - 1;
-    ({ availableSongs: previous } = await getUser(userId));
+    ({ availableDemos: previous } = await getUser(userId));
   }
-  return incrementAvailableSongs({ total: availableSongsCount, previous, limit });
+  return incrementAvailableDemos({ total: availableDemosCount, previous, limit });
 };

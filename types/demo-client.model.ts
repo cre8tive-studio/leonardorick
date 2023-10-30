@@ -3,5 +3,5 @@ export interface DemoClientModel {
   title: string;
   description?: string;
   number: number;
-  songUrl: string | null;
+  demoUrl: string | null;
 }

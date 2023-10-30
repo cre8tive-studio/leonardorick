@@ -4,7 +4,7 @@ import type { SettingsModel } from '~/types/settings.model';
 import type { UserModel } from '~/types/user.model';
 import type { UpvotesModel, UpvotesClientModel } from '~/types/upvotes.model';
 import { parseUpvotes, parseSettings } from '~/utils/parsers';
-import { isNotExpired } from '~/utils/js-utilities';
+import { isNotExpired, getExpireTime } from '~/utils/js-utilities';
 export { ID } from 'appwrite';
 
 let account: Account;
@@ -39,7 +39,7 @@ const useAppwrite = () => {
     if (
       !fresh &&
       storedSession.value &&
-      isNotExpired(getExpireTime(storedSession.value.expire, 0))
+      isNotExpired(getExpireTime(0, storedSession.value.expire))
     ) {
       return storedSession.value;
     }
@@ -78,8 +78,8 @@ const useAppwrite = () => {
     return databases.listDocuments<UpvotesModel>(databaseId, upvotesCollection).then(parseUpvotes);
   };
 
-  const updateVotes = async (songNumber: number, votes: string[]) => {
-    return databases.updateDocument(databaseId, upvotesCollection, songNumber.toString(), {
+  const updateVotes = async (demoNumber: number, votes: string[]) => {
+    return databases.updateDocument(databaseId, upvotesCollection, demoNumber.toString(), {
       votes,
     });
   };

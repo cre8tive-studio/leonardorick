@@ -4,6 +4,6 @@ export interface AllowedEmailModel extends Models.Document {
   email: string;
   name: string;
   stripeId: string;
-  availableSongs: number[];
+  availableDemos: number[];
   subscriptionId: string;
 }

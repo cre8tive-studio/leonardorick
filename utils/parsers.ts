@@ -2,15 +2,15 @@ import type { SettingsClientModel, SettingsModel } from '~/types/settings.model'
 import type { UpvotesClientModel, UpvotesModel } from '~/types/upvotes.model';
 
 export function parseSettings({
-  availableSongsCount,
-  songsReady,
-  startSongsCount,
+  availableDemosCount,
+  demosReady,
+  startDemosCount,
   upvotesMultiplier,
 }: SettingsModel): SettingsClientModel {
   return {
-    availableSongsCount,
-    songsReady,
-    startSongsCount,
+    availableDemosCount,
+    demosReady,
+    startDemosCount,
     upvotesMultiplier,
   };
 }

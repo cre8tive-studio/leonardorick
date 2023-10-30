@@ -6,5 +6,5 @@ export interface UserModel extends Models.Document {
   name: string;
   uid: string;
   verified: boolean;
-  availableSongs: number[];
+  availableDemos: number[];
 }
