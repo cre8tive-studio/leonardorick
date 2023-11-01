@@ -16,12 +16,12 @@
           </li>
           <template v-else>
             <li>
+              <NuxtLink :to="localeRoute('/profile')"> Profile </NuxtLink>
+            </li>
+            <li>
               <button @click="handleLogout">
                 {{ $t('logout') }}
               </button>
-            </li>
-            <li>
-              <NuxtLink :to="localeRoute('/profile')"> Profile </NuxtLink>
             </li>
           </template>
         </ClientOnly>
