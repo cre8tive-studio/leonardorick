@@ -1,4 +1,5 @@
-// todo think about a better approach to deal with meta tags and page titles
+import type { LanguageOptions } from '../constants/languages';
+
 const isClient = process.client;
 const path = isClient ? window.location.origin : process.env.VUE_APP_BASE_URL;
 
@@ -10,13 +11,27 @@ const defaultInfo = {
 };
 
 const musicInfo = {
-  ...defaultInfo,
   title: 'Leonardo Rick - Singer & Songwriter',
+  description: 'Leonardo Rick Music Portifolio',
   url: 'https://leonardorick.com/music',
   ogImage: `${path}/assets/meta/og-image-music.png`,
 };
 
-export const DEFAULT_HEAD = {
+const defaultBrInfo = {
+  title: 'Leonardo Rick - Engenheiro de Software',
+  description: 'Portifólio de Leonardo Rick',
+  url: 'https://leonardorick.com',
+  ogImage: `${path}/assets/meta/og-image.png`,
+};
+
+const musicBrInfo = {
+  title: 'Leonardo Rick - Cantor e Compositor',
+  description: 'Portifólio Musical de Leonardo Rick',
+  url: 'https://leonardorick.com/music',
+  ogImage: `${path}/assets/meta/og-image-music.png`,
+};
+
+const _DEFAULT_HEAD = {
   title: defaultInfo.title,
   meta: [
     { name: 'description', content: defaultInfo.description },
@@ -32,12 +47,31 @@ export const DEFAULT_HEAD = {
     { hid: 'twitter:description', name: 'twitter:description', content: defaultInfo.description },
     { hid: 'twitter:image', name: 'twitter:image', content: defaultInfo.ogImage },
   ],
-  link: [{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }],
   chartset: 'utf-8',
+  link: [{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }],
 };
 
-export const MUSIC_HEAD = {
-  ...DEFAULT_HEAD,
+const _BR_HEAD = {
+  title: defaultBrInfo.title,
+  meta: [
+    { name: 'description', content: defaultBrInfo.description },
+
+    { hid: 'og:title', property: 'og:title', content: defaultBrInfo.title },
+    { hid: 'og:url', property: 'og:url', content: defaultBrInfo.url },
+    { hid: 'og:description', property: 'og:description', content: defaultBrInfo.description },
+    { hid: 'og:image', property: 'og:image', content: defaultBrInfo.ogImage },
+
+    // twitter card
+    { hid: 'twitter:title', name: 'twitter:title', content: defaultBrInfo.title },
+    { hid: 'twitter:url', name: 'twitter:url', content: defaultBrInfo.url },
+    { hid: 'twitter:description', name: 'twitter:description', content: defaultBrInfo.description },
+    { hid: 'twitter:image', name: 'twitter:image', content: defaultBrInfo.ogImage },
+  ],
+  chartset: 'utf-8',
+  link: [{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }],
+};
+
+const MUSIC_HEAD = {
   title: musicInfo.title,
   meta: [
     { name: 'description', content: musicInfo.description },
@@ -53,4 +87,54 @@ export const MUSIC_HEAD = {
     { hid: 'twitter:description', name: 'twitter:description', content: musicInfo.description },
     { hid: 'twitter:image', name: 'twitter:image', content: musicInfo.ogImage },
   ],
+  chartset: 'utf-8',
+  link: [{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }],
+};
+
+const BR_MUSIC_HEAD = {
+  title: musicBrInfo.title,
+  meta: [
+    { name: 'description', content: musicBrInfo.description },
+
+    { hid: 'og:title', property: 'og:title', content: musicBrInfo.title },
+    { hid: 'og:url', property: 'og:url', content: musicBrInfo.url },
+    { hid: 'og:description', property: 'og:description', content: musicBrInfo.description },
+    { hid: 'og:image', property: 'og:image', content: musicBrInfo.ogImage },
+
+    // twitter card
+    { hid: 'twitter:title', name: 'twitter:title', content: musicBrInfo.title },
+    { hid: 'twitter:url', name: 'twitter:url', content: musicBrInfo.url },
+    { hid: 'twitter:description', name: 'twitter:description', content: musicBrInfo.description },
+    { hid: 'twitter:image', name: 'twitter:image', content: musicBrInfo.ogImage },
+  ],
+  chartset: 'utf-8',
+  link: [{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }],
+};
+
+const DEFAULT_HEAD = {
+  default: _DEFAULT_HEAD,
+  music: MUSIC_HEAD,
+};
+
+const BR_HEAD = {
+  default: _BR_HEAD,
+  music: BR_MUSIC_HEAD,
+};
+
+export const ROUTES_HEAD_OPTIONS = ['music', 'default'] as const;
+export type RoutesHeadOptions = (typeof ROUTES_HEAD_OPTIONS)[number];
+type HeadOptions = {
+  [key in LanguageOptions]: {
+    [route in RoutesHeadOptions]: {
+      title: string;
+      meta: { hid?: string; name?: string; property?: string; content: string }[];
+      chartset: string;
+      link: { rel: string; href: string }[];
+    };
+  };
+};
+
+export const HEAD: HeadOptions = {
+  en: DEFAULT_HEAD,
+  'pt-BR': BR_HEAD,
 };

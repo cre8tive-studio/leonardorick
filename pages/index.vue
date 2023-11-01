@@ -27,10 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import { DEFAULT_HEAD } from '../utils/analytics/head';
 import { useAppStore } from '~/store';
 
 const { loaded, recommendations, quotes } = toRefs(useAppStore());
-useHead(DEFAULT_HEAD);
 </script>
 <style scoped></style>

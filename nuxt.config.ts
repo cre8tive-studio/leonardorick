@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { DEFAULT_HEAD } from './utils/analytics/head';
+import { HEAD } from './utils/analytics/head';
 const { VUE_APP_NITRO_PRESET: preset, baseUrl } = process.env;
 
 export default defineNuxtConfig({
@@ -59,7 +59,7 @@ export default defineNuxtConfig({
     baseUrl,
   },
   app: {
-    head: DEFAULT_HEAD,
+    head: HEAD.en.default,
   },
   vite: {
     assetsInclude: [

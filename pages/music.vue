@@ -46,8 +46,6 @@ import type { DemoClientModel } from '../types/demo-client.model';
 import type { UpvotesClientModel } from '../types/upvotes.model';
 import { useAppStore } from '../store/index';
 import { getExpireTime } from '../utils/js-utilities';
-import { MUSIC_HEAD } from '../utils/analytics/head';
-
 const nuxtApp = useNuxtApp();
 const { loaded } = toRefs(useAppStore());
 const { settings, getCurrentSession, getJWT, getUpvotes, updateVotes } = useAppwrite();
@@ -63,8 +61,6 @@ const filesLoading = computed(() => demosLoadedCount.value < demos.value.length)
 const demosMaxVotes = computed(() =>
   settings.value ? demos.value.length * settings.value.upvotesMultiplier : 0
 );
-
-useHead(MUSIC_HEAD);
 
 setLoggedInformation();
 

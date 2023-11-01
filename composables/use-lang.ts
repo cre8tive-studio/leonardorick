@@ -10,6 +10,9 @@ const useLang = (i18n?: i18nModel) => {
   const route = useRoute();
   const { locale } = i18n || useI18n();
   const { lang } = toRefs(store);
+
+  // be careful when calling this composable more than once because usually
+  // we just want this watch to be settle one time.
   watch(lang, () => {
     locale.value = lang.value;
     router.push({ query: { locale: lang.value } });
