@@ -15,6 +15,11 @@ export default defineEventHandler(async (event) => {
           author {
             name
             description
+            image {
+              cloudinary {
+                secure_url
+              }
+            }
           }
         }
       }

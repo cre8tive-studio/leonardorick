@@ -4,4 +4,5 @@ export interface RecommendationModel {
   id: string;
   author: Person;
   recommendation: string;
+  authorImage?: string;
 }

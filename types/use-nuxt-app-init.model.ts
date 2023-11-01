@@ -9,4 +9,7 @@ interface DtoModel {
 export interface UseNuxtAppInitModel extends DtoModel {
   $fetchInitialData: () => Promise<DtoModel>;
   $initializerClientError: (error: Error) => void;
+  // used to control cache on useFetch
+  payload: any;
+  static: any;
 }

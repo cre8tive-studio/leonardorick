@@ -119,8 +119,10 @@ async function setLoggedInformation() {
       setUpvotesAvailable();
 
       demos.value.forEach(async (model) => {
-        const { data: demoFile, error } = await useFetch(`/api/getDemoFile/${model.number}`, {
+        const { data: demoFile, error } = await useFetch('/api/getDemoFile', {
           method: 'post',
+          // unique key to ensure that data fetching can be properly de-duplicated and not cached wrongly
+          key: model.number.toString(),
           body: {
             number: model.number,
           },

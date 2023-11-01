@@ -7,7 +7,7 @@ const useHeadConfig = () => {
   const route = useRoute();
   const lastKey = ref<RoutesHeadOptions | ''>('');
 
-  useHead(HEAD[lang.value][getKey()]);
+  setHead();
 
   watch(
     () => route.path,
@@ -21,9 +21,7 @@ const useHeadConfig = () => {
     }
   );
 
-  watch(lang, () => {
-    setHead();
-  });
+  watch(lang, setHead);
 
   function getKey() {
     const k = route.path.replace('/', '') as RoutesHeadOptions;

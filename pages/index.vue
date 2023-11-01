@@ -9,8 +9,23 @@
       <div
         v-for="recommendation in recommendations"
         :key="recommendation.id"
+        class="border border-gray-300 p-4 m-4"
       >
-        {{ recommendation }}
+        <p>
+          {{ recommendation.id }} -=- {{ recommendation.author?.name }} -=-
+          {{ recommendation.author.description }}
+        </p>
+        <div>
+          <ClientOnly>
+            <NuxtImg
+              v-if="recommendation.authorImage"
+              :width="100"
+              :height="100"
+              :src="recommendation.authorImage"
+            />
+          </ClientOnly>
+          <p>{{ recommendation.recommendation }}</p>
+        </div>
       </div>
 
       <br />
