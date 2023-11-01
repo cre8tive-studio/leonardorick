@@ -1,7 +1,9 @@
 // read all todos
 
-try to see if cache works on multiple useFetch calls for the same endpoint
 try to set generic type of useFetch using transform
+setup mixpanel, sentry, datadog or anything like to handle site availability
+setup colormode (https://color-mode.nuxtjs.org/)
+study stripe background or nuxt braground that moves with the mouse
 
 test everything related to the user creation
 
