@@ -13,8 +13,9 @@ export interface Config {
     tags: Tag;
     users: User;
     media: Media;
-    persons: Person;
     recommendations: Recommendation;
+    quotes: Quote;
+    people: Person;
   };
   globals: {};
 }
@@ -90,6 +91,13 @@ export interface Media {
     };
   };
 }
+export interface Recommendation {
+  id: string;
+  recommendation?: string;
+  author?: string | Person;
+  updatedAt: string;
+  createdAt: string;
+}
 export interface Person {
   id: string;
   name: string;
@@ -98,10 +106,10 @@ export interface Person {
   updatedAt: string;
   createdAt: string;
 }
-export interface Recommendation {
+export interface Quote {
   id: string;
-  recommendation?: string;
-  author?: string | Person;
+  quote?: string;
+  author?: string;
   updatedAt: string;
   createdAt: string;
 }

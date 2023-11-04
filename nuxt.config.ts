@@ -49,6 +49,7 @@ export default defineNuxtConfig({
     '@vue-macros/nuxt',
     '@nuxtjs/fontaine',
     '@nuxtjs/tailwindcss',
+    '@nuxt/image',
   ],
   pinia: {
     // some imports that are commonly used to be included automatically as nuxt do with much others
@@ -57,6 +58,11 @@ export default defineNuxtConfig({
   i18n: {
     vueI18n: './i18n.config.ts',
     baseUrl,
+  },
+  image: {
+    quality: 100,
+    formats: ['webp'],
+    domains: ['https://res.cloudinary.com/'],
   },
   app: {
     head: HEAD.en.default,

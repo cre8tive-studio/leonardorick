@@ -29,10 +29,11 @@
         </div>
         <audio
           v-if="demo.demoUrl"
+          :id="'demo-' + demo.number"
           ref="demoAudioRefs"
           :src="demo.demoUrl"
           controls
-          @play="playAudio(demoIndex)"
+          @play="playAudio(demo.number)"
         ></audio>
         <div v-else-if="filesLoading">Loading demo player...</div>
         <div v-else>Unable to load demo player for this demo. Try again latter</div>
@@ -64,12 +65,10 @@ const demosMaxVotes = computed(() =>
 
 setLoggedInformation();
 
-function playAudio(index: number) {
-  demoAudioRefs.value.forEach((audio, i) => {
-    if (index !== i) {
-      audio.pause();
-    }
-  });
+function playAudio(demoNumber: number) {
+  demoAudioRefs.value
+    .filter((ref) => ref.id !== `demo-${demoNumber}`)
+    .forEach((audio) => audio.pause());
 }
 
 function setUpvotesAvailable() {
@@ -118,11 +117,13 @@ async function setLoggedInformation() {
       loaded.value = true;
       setUpvotesAvailable();
 
-      demos.value.forEach(async (model) => {
-        const { data: demoFile, error } = await useFetch(`/api/getDemoFile/${model.number}`, {
+      demos.value.forEach(async (demo) => {
+        useFetch('/api/getDemoFile', {
           method: 'post',
+          // unique key to ensure that data fetching can be properly de-duplicated and not cached wrongly
+          key: demo.number.toString(),
           body: {
-            number: model.number,
+            number: demo.number,
           },
           headers: {
             Authorization: await getJWT(),
@@ -153,17 +154,22 @@ async function setLoggedInformation() {
             // if you return anything here, this will be used as the value
             // reaching here is like returning undefined
           },
-        });
+        })
+          .then(({ data: demoFile, error }) => {
+            if (demoFile.value) {
+              demo.demoUrl = URL.createObjectURL(demoFile.value.blob);
+              demosLoadedCount.value += 1;
+            }
 
-        if (error.value) {
-          model.demoUrl = null;
-          demosLoadedCount.value += 1;
-        }
-
-        if (demoFile.value) {
-          model.demoUrl = URL.createObjectURL(demoFile.value.blob);
-          demosLoadedCount.value += 1;
-        }
+            if (error.value) {
+              demo.demoUrl = null;
+              demosLoadedCount.value += 1;
+            }
+          })
+          .catch(() => {
+            demo.demoUrl = null;
+            demosLoadedCount.value += 1;
+          });
       });
     });
   }
