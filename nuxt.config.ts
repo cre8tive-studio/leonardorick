@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { HEAD } from './utils/analytics/head';
-const { VUE_APP_NITRO_PRESET: preset, baseUrl } = process.env;
+const { VUE_APP_NITRO_PRESET: preset, VUE_APP_BASE_URL: baseUrl } = process.env;
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -39,6 +39,9 @@ export default defineNuxtConfig({
         settingsCollection: process.env.VUE_APP_APPWRITE_SETTINGS_COLLECTION,
         settingsDocument: process.env.VUE_APP_APPWRITE_SETTINGS_DOCUMENT,
         databaseId: process.env.VUE_APP_APPWRITE_DATABASE,
+      },
+      sentry: {
+        dsn: process.env.VUE_APP_SENTRY_DSN,
       },
       baseUrl,
     },

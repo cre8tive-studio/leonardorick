@@ -41,3 +41,7 @@ function getNumberTime(time?: number | string | Date): number {
   }
   return finalTime;
 }
+
+export function isProduction(env?: string) {
+  return (env || process.env.NODE_ENV) === 'production';
+}

@@ -11,11 +11,12 @@ const { databases, databaseId, collections, storage, bucketId, getUser, getSetti
 // return the same song file for all of them. Once we call getDemoFile/1 and getDemoFile/2, the cache
 // will be stored separatedly by nuxt
 export default defineEventHandler(async (event) => {
-  const { userId } = event.context.auth;
-  const { number } = await readBody(event);
-  if (!userId) {
+  if (!event.context.auth?.userId) {
     throw createGenericError('User not allowed');
   }
+
+  const { userId } = event.context.auth;
+  const { number } = await readBody(event);
 
   const { demosReady } = await getSettings();
 

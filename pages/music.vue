@@ -4,7 +4,7 @@
     <div v-if="loaded">
       <p>votes available: {{ upvotesAvailable }}</p>
       <div
-        v-for="(demo, demoIndex) in demos"
+        v-for="demo in demos"
         :key="demo.number"
         class="border border-gray-300 p-4 m-4"
       >

@@ -1,12 +1,7 @@
 import { AUTHENTICATED_URLS, DYNAMIC_AUTHENTICATED_URLS } from '../utils/authenticated-urls';
 import { createGenericError } from '../utils/errors';
+import type { Auth } from '~/types/auth.model';
 import useServerAppwrite from '~/composables/use-server-appwrite';
-
-interface Auth {
-  authenticated: boolean;
-  userId: string;
-  jwt: string;
-}
 
 const { getLimitedAccount } = useServerAppwrite();
 export default defineEventHandler(async (event) => {

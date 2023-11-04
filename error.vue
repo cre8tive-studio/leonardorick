@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import type { NuxtError } from 'nuxt/app';
+import { isProduction } from './utils/js-utilities';
 const env = useRuntimeConfig().public.environment;
 const { error } = definePropsRefs({
   error: {
@@ -21,7 +22,7 @@ const { error } = definePropsRefs({
     required: true,
   },
 });
-if (env !== 'prodcution') {
+if (!isProduction(env)) {
   // eslint-disable-next-line no-console
   console.error(error.value.stack);
 }
