@@ -12,6 +12,10 @@ import type { Media } from './types/payload-types';
 import { getExpireTime } from './utils/js-utilities';
 import { useAppStore } from '~/store';
 
+setInterval(() => {
+  console.log(new Date());
+}, 5000);
+
 useHeadConfig();
 const { loaded, lang, recommendations, quotes } = toRefs(useAppStore());
 const nuxtApp = useNuxtApp() as UseNuxtAppInitModel;
