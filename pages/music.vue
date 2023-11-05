@@ -1,7 +1,7 @@
 <template>
   <h1>{{ $t('music_page') }}</h1>
   <ClientOnly>
-    <div v-if="loaded">
+    <div v-if="session && loaded">
       <p>votes available: {{ upvotesAvailable }}</p>
       <div
         v-for="demo in demos"
@@ -48,8 +48,8 @@ import type { UpvotesClientModel } from '../types/upvotes.model';
 import { useAppStore } from '../store/index';
 import { getExpireTime } from '../utils/js-utilities';
 const nuxtApp = useNuxtApp();
-const { loaded } = toRefs(useAppStore());
-const { settings, getCurrentSession, getJWT, getUpvotes, updateVotes } = useAppwrite();
+const { loaded, session } = toRefs(useAppStore());
+const { settings, getJWT, getUpvotes, updateVotes } = useAppwrite();
 const { request } = useRequest();
 const demos = ref<DemoClientModel[]>([]);
 const demoAudioRefs = ref<HTMLAudioElement[]>([]);
@@ -107,9 +107,8 @@ async function updateVotesCallback() {
 }
 
 async function setLoggedInformation() {
-  const session = await getCurrentSession();
-  if (session) {
-    userId.value = session.userId;
+  if (session.value) {
+    userId.value = session.value.userId;
     upvotes.value = await getUpvotes();
 
     request<DemoClientModel[]>('/api/getDemosMetadata', undefined, true).then(({ data }) => {

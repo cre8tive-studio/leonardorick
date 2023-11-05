@@ -1,7 +1,11 @@
+create some sort of object that tells wich apis should be instantaneously called when loading the page depending on what page I'm fisrt accessing
+and call all the other apis without await just to retrieve and store the data. (for example, if calling /music as first route, call recommendations and quotes endpoints
+but don't await for the response)
 // read all todos
 
 try to set generic type of useFetch using transform
 setup mixpanel, sentry, datadog or anything like to handle site availability
+automate the process of blocking a ip that is making too much requests
 setup colormode (https://color-mode.nuxtjs.org/)
 study stripe background or nuxt braground that moves with the mouse
 
