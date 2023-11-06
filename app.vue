@@ -4,7 +4,6 @@
   </NuxtLayout>
 </template>
 <script setup lang="ts">
-import type { UseNuxtAppInitModel } from './types/use-nuxt-app-init.model';
 import useHeadConfig from './composables/use-head-config';
 import type { RecommendationModel } from './types/recommendation-model';
 import type { QuoteModel } from './types/quote.model';
@@ -14,7 +13,7 @@ import { useAppStore } from '~/store';
 
 useHeadConfig();
 const { loaded, lang, recommendations, quotes } = toRefs(useAppStore());
-const nuxtApp = useNuxtApp() as UseNuxtAppInitModel;
+const nuxtApp = useNuxtApp();
 const { $recommendations, $quotes, $fetchInitialData, $initializerClientError } = nuxtApp;
 
 if ($initializerClientError) {
@@ -22,12 +21,16 @@ if ($initializerClientError) {
   console.error($initializerClientError);
 }
 
-await setHomeView($recommendations.value, $quotes.value);
+if ($recommendations.value && $quotes.value) {
+  await setHomeView($recommendations.value, $quotes.value);
+}
 
 watch(lang, async () => {
   loaded.value = false;
   const res = await $fetchInitialData();
-  setHomeView(res.$recommendations.value, res.$quotes.value);
+  if (res.$recommendations.value && res.$quotes.value) {
+    setHomeView(res.$recommendations.value, res.$quotes.value);
+  }
 });
 
 async function setHomeView(rcs: RecommendationModel[], qts: QuoteModel[]) {

@@ -43,6 +43,10 @@ export default defineNuxtConfig({
       sentry: {
         dsn: process.env.VUE_APP_SENTRY_DSN,
       },
+      posthog: {
+        publicKey: process.env.VUE_APP_POSTHOG_PUBLIC_KEY,
+        host: process.env.VUE_APP_POSTHOG_HOST,
+      },
       baseUrl,
     },
   },

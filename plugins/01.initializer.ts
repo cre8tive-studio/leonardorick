@@ -1,6 +1,8 @@
 import { defineNuxtPlugin } from 'nuxt/app';
 import { useAppStore } from '~/store';
 import type { i18nModel } from '~/types/i18n.model';
+import type { QuoteModel } from '~/types/quote.model';
+import type { RecommendationModel } from '~/types/recommendation-model';
 import type { LanguageOptions } from '~/utils/constants/languages';
 
 export default defineNuxtPlugin(async (_nuxtApp) => {
@@ -32,8 +34,8 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
 
 const _fetchInitialData = async (locale: LanguageOptions) => {
   const [{ data: $recommendations }, { data: $quotes }] = await Promise.all([
-    useFetch(localeRoute('/api/recommendations', locale)),
-    useFetch(localeRoute('/api/quotes', locale)),
+    useFetch<RecommendationModel[]>(localeRoute('/api/recommendations', locale)),
+    useFetch<QuoteModel[]>(localeRoute('/api/quotes', locale)),
   ]);
   return { $recommendations, $quotes };
 };
