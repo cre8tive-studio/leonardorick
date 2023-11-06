@@ -1,45 +1,47 @@
 <template>
   <h1>{{ $t('music_page') }}</h1>
   <ClientOnly>
-    <div v-if="session && loaded">
-      <p>votes available: {{ upvotesAvailable }}</p>
-      <div
-        v-for="demo in demos"
-        :key="demo.number"
-        class="border border-gray-300 p-4 m-4"
-      >
-        <h2>{{ demo.title }}</h2>
-        <p>votes: {{ upvotes[demo.number].length }}</p>
-        <div class="flex gap-4">
-          <button
-            :disabled="upvotesAvailable < 1"
-            class="bg-neutral-400 [&:not(:disabled)]:hover:bg-neutral-500 p-2 disabled:cursor-not-allowed"
-            @click="addVote(demo.number)"
-          >
-            vote
-          </button>
+    <div v-if="session">
+      <div v-if="loaded">
+        <p>votes available: {{ upvotesAvailable }}</p>
+        <div
+          v-for="demo in demos"
+          :key="demo.number"
+          class="border border-gray-300 p-4 m-4"
+        >
+          <h2>{{ demo.title }}</h2>
+          <p>votes: {{ upvotes[demo.number].length }}</p>
+          <div class="flex gap-4">
+            <button
+              :disabled="upvotesAvailable < 1"
+              class="bg-neutral-400 [&:not(:disabled)]:hover:bg-neutral-500 p-2 disabled:cursor-not-allowed"
+              @click="addVote(demo.number)"
+            >
+              vote
+            </button>
 
-          <button
-            :disabled="upvotesAvailable === demosMaxVotes"
-            class="bg-neutral-400 [&:not(:disabled)]:hover:bg-neutral-500 p-2 disabled:cursor-not-allowed"
-            @click="removeVote(demo.number)"
-          >
-            remove vote
-          </button>
+            <button
+              :disabled="upvotesAvailable === demosMaxVotes"
+              class="bg-neutral-400 [&:not(:disabled)]:hover:bg-neutral-500 p-2 disabled:cursor-not-allowed"
+              @click="removeVote(demo.number)"
+            >
+              remove vote
+            </button>
+          </div>
+          <audio
+            v-if="demo.demoUrl"
+            :id="'demo-' + demo.number"
+            ref="demoAudioRefs"
+            :src="demo.demoUrl"
+            controls
+            @play="playAudio(demo.number)"
+          ></audio>
+          <div v-else-if="filesLoading">Loading demo player...</div>
+          <div v-else>Unable to load demo player for this demo. Try again latter</div>
         </div>
-        <audio
-          v-if="demo.demoUrl"
-          :id="'demo-' + demo.number"
-          ref="demoAudioRefs"
-          :src="demo.demoUrl"
-          controls
-          @play="playAudio(demo.number)"
-        ></audio>
-        <div v-else-if="filesLoading">Loading demo player...</div>
-        <div v-else>Unable to load demo player for this demo. Try again latter</div>
       </div>
+      <div v-else>Loading demos metadata...</div>
     </div>
-    <div v-else>Loading demos metadata...</div>
   </ClientOnly>
 </template>
 <script lang="ts" setup>

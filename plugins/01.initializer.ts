@@ -5,8 +5,10 @@ import type { LanguageOptions } from '~/utils/constants/languages';
 
 export default defineNuxtPlugin(async (_nuxtApp) => {
   const fetchInitialData = async () => {
-    // we can't call this function at the first initialization
-    // because there the store is not yet initialized;
+    // we can't use lang from store the first time this function is called
+    // because there the client plugin hasn't run yet on server. Which means
+    // that the lang will always be 'en'. So the first time we check the route
+    // lang, and the next times we use the store lang.
     const store = useAppStore();
     const { lang } = toRefs(store);
     return await _fetchInitialData(lang.value);

@@ -1,3 +1,5 @@
+setup posthog
+
 create some sort of object that tells wich apis should be instantaneously called when loading the page depending on what page I'm fisrt accessing
 and call all the other apis without await just to retrieve and store the data. (for example, if calling /music as first route, call recommendations and quotes endpoints
 but don't await for the response)

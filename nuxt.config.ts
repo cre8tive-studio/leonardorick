@@ -60,6 +60,12 @@ export default defineNuxtConfig({
   },
   i18n: {
     vueI18n: './i18n.config.ts',
+    locales: ['en', 'pt-BR'],
+    strategy: 'no_prefix',
+    // we disable it because it generates hydration errors. The server can't know the user language previously
+    // so it's better to always load this as english to maintain consistency and then, if the user wants, he
+    // will change the language to his preferred one
+    detectBrowserLanguage: false,
     baseUrl,
   },
   image: {
@@ -80,7 +86,19 @@ export default defineNuxtConfig({
       '**/*.bin',
       '**/*.gltf',
     ],
+    // todo: try to remove console.log from production deployment
+    // esbuild: {
+    //   drop: ['console', 'debugger'],
+    //   pure: ['console.log', 'console.error', 'console.warn', 'console.debug', 'console.trace'],
+    // },
   },
+  // todo: try to generate multiple routes with same route but differnt query params
+  // generate: {
+  //   routes() {
+  // return [{ route: '/', payload: { locale: 'pt-BR' } }];
+  // return []
+  //   },
+  // },
   // pre generate other routes as well
   nitro: {
     ...(preset ? { preset } : {}),

@@ -11,18 +11,17 @@ const useLang = (i18n?: i18nModel) => {
   const { locale } = i18n || useI18n();
   const { lang } = toRefs(store);
 
+  const queryLang = route.query.locale as LanguageOptions;
+  if (queryLang) {
+    lang.value = queryLang;
+    locale.value = lang.value;
+  }
   // be careful when calling this composable more than once because usually
   // we just want this watch to be settle one time.
   watch(lang, () => {
     locale.value = lang.value;
     router.push({ query: { locale: lang.value } });
   });
-
-  const queryLang = route.query.locale as LanguageOptions;
-  if (queryLang) {
-    lang.value = queryLang;
-    locale.value = lang.value;
-  }
 };
 
 export default useLang;
