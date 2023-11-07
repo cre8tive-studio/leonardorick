@@ -5,6 +5,7 @@ export default defineNuxtPlugin(() => {
   const posthogClient = posthog.init(publicKey, {
     api_host: host,
     loaded: (_pthog) => {
+      _pthog.debug(false);
       if (import.meta.env.MODE === 'development') {
         // uncomment to see logs in dev
         // _pthog.debug();
