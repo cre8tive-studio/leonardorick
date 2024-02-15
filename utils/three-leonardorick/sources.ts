@@ -1,4 +1,4 @@
-import { SourceModel } from 'types/three-leonardorick/sources.model';
+import type { SourceModel } from '~/types/three-leonardorick/sources.model';
 
 const SOURCES = [
   {

@@ -22,9 +22,9 @@ const { error } = definePropsRefs({
     required: true,
   },
 });
-if (!isProduction(env)) {
+if (!isProduction(env) && error.value) {
   // eslint-disable-next-line no-console
-  console.error(error.value.stack);
+  console.error(JSON.parse(JSON.stringify(error.value)));
 }
 
 const handleClearError = () => clearError({ redirect: '/' });

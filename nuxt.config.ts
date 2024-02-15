@@ -89,6 +89,7 @@ export default defineNuxtConfig({
       '**/*.ico',
       '**/*.bin',
       '**/*.gltf',
+      '**/*.glb',
     ],
     // todo: try to remove console.log from production deployment
     // esbuild: {

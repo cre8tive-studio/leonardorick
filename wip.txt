@@ -1,5 +1,5 @@
 // read all todos
-
+try to genrate dynamic routes based on a query param. It seems that the nuxt SSR configuration is not generating duplicated pages for / and /locale=pt-BR, what should definetly happen
 create some sort of object that tells wich apis should be instantaneously called when loading the page depending on what page I'm fisrt accessing
 and call all the other apis without await just to retrieve and store the data. (for example, if calling /music as first route, call recommendations and quotes endpoints
 but don't await for the response)
