@@ -5,10 +5,13 @@ const { VUE_APP_NITRO_PRESET: preset, VUE_APP_BASE_URL: baseUrl } = process.env;
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/css/main.scss'],
+
   routeRules: {
     // redirects goes here
     // '/': { redirect: '/home'}
+    '/test': { ssr: false },
   },
+
   // todo think about a better approach until cloudflare supports runtimeconfig
   // https://github.com/unjs/nitro/issues/272
   // https://nitro.unjs.io/deploy/providers/cloudflare
@@ -50,6 +53,7 @@ export default defineNuxtConfig({
       baseUrl,
     },
   },
+
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/i18n',
@@ -58,10 +62,12 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxt/image',
   ],
+
   pinia: {
     // some imports that are commonly used to be included automatically as nuxt do with much others
     autoImports: ['defineStore', ['defineStore', 'definePiniaStore']],
   },
+
   i18n: {
     vueI18n: './i18n.config.ts',
     locales: ['en', 'pt-BR'],
@@ -72,14 +78,17 @@ export default defineNuxtConfig({
     detectBrowserLanguage: false,
     baseUrl,
   },
+
   image: {
     quality: 100,
     formats: ['webp'],
     domains: ['https://res.cloudinary.com/'],
   },
+
   app: {
     head: HEAD.en.default,
   },
+
   vite: {
     assetsInclude: [
       '**/*.svg',
@@ -97,6 +106,7 @@ export default defineNuxtConfig({
     //   pure: ['console.log', 'console.error', 'console.warn', 'console.debug', 'console.trace'],
     // },
   },
+
   // todo: try to generate multiple routes with same route but differnt query params
   // generate: {
   //   routes() {
@@ -115,4 +125,6 @@ export default defineNuxtConfig({
       // ignore: ['/stupid-route'], // ignore routes to be pre-rendered
     },
   },
+
+  compatibilityDate: '2024-07-18',
 });

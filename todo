@@ -8,3 +8,11 @@ use-mesh
 use-leonardo-rick (implements use-experience)
 use-<some-mesh-name> (implements use-mesh)
 
+
+cleanup old experience already migrated to new project
+finish creating the logo component
+add floor that reflects my logo
+add camera movement
+add slow movement on the parts closing and opening
+increase and decrease the strength of the side lights
+test if other materials are better than MeshStandardMaterial
