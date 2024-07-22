@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@leonardorick/three-lavalamp-background':
-    specifier: ^0.0.42
-    version: 0.0.42
+    specifier: ^0.0.43
+    version: 0.0.43
   '@leonardorick/utils':
     specifier: ^0.0.27
     version: 0.0.27
@@ -26,9 +26,6 @@ dependencies:
   graphql-request:
     specifier: ^6.1.0
     version: 6.1.0(graphql@16.9.0)
-  lil-gui:
-    specifier: ^0.19.2
-    version: 0.19.2
   node-appwrite:
     specifier: ^11.0.0
     version: 11.1.1
@@ -1420,18 +1417,18 @@ packages:
     resolution: {integrity: sha512-GaHYm+c0O9MjZRu0ongGBRbinu8gVAMd2UZjji6jVmqKtZluZnptXGWhz1E8j8D2HJ3f/yMxKAUC0b+57wncIw==}
     dev: true
 
-  /@leonardorick/three-lavalamp-background@0.0.42:
-    resolution: {integrity: sha512-+Qa1qptADdBAj0UH+3Nf1c08GHhpn+fkrg/AihLXBDOBhJCnd14aWf+9TSOtpn0DDcwzNwltiMbD+OduW/iR5A==}
+  /@leonardorick/three-lavalamp-background@0.0.43:
+    resolution: {integrity: sha512-ZHtt7O0eBfwpWHR2axJy3/BKS9vnjSdlOPlCNpFQP41ep7kGFXVoGpgF7Tfqic0+dxsOM6Hn+KR2a+fzMhQ84g==}
     dependencies:
-      '@leonardorick/three': 1.0.61(@leonardorick/utils@0.0.27)(three@0.166.1)
+      '@leonardorick/three': 1.0.62(@leonardorick/utils@0.0.27)(three@0.166.1)
       '@leonardorick/utils': 0.0.27
       nice-color-palettes: 3.0.0
       three: 0.166.1
       tweakpane: 4.0.4
     dev: false
 
-  /@leonardorick/three@1.0.61(@leonardorick/utils@0.0.27)(three@0.166.1):
-    resolution: {integrity: sha512-AHrUeYi2KZiv3BtgVNI/GgNNILlfqDZHvdvRzmV9aRzf7b5pjGxoNxjq3mHLMAOZCm0rUIiobGV8/uOn5Hlsfg==}
+  /@leonardorick/three@1.0.62(@leonardorick/utils@0.0.27)(three@0.166.1):
+    resolution: {integrity: sha512-5IQuDlAYonNAqh7stJOl4aDhvfoZRdUgVv816ONBVTNIKai/hR/ZEVPOglJDHsgyZXQ8Ee3JROTDZZ3VXhEPFA==}
     peerDependencies:
       '@leonardorick/utils': '>=0.0.27'
       three: '>=0.166.1'
@@ -7090,10 +7087,6 @@ packages:
     dependencies:
       immediate: 3.0.6
     dev: true
-
-  /lil-gui@0.19.2:
-    resolution: {integrity: sha512-nU8j4ND702ouGfQZoaTN4dfXxacvGOAVK0DtmZBVcUYUAeYQXLQAjAN50igMHiba3T5jZyKEjXZU+Ntm1Qs6ZQ==}
-    dev: false
 
   /lilconfig@2.1.0:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}

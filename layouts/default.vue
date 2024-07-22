@@ -1,4 +1,11 @@
 <template>
+  <ClientOnly
+    v-if="showThreeJs"
+    fallback-tag="span"
+    fallback="Loading Three.js model"
+  >
+    <ThreeLeonardoRick />
+  </ClientOnly>
   <header>
     <nav>
       <ul class="pb-5">
@@ -34,14 +41,6 @@
         <option value="pt-BR">{{ $t('portuguese') }}</option>
       </select>
     </form>
-
-    <ClientOnly
-      v-if="showThreeJs"
-      fallback-tag="span"
-      fallback="Loading Three.js model"
-    >
-      <ThreeLeonardoRick />
-    </ClientOnly>
   </header>
   <div>
     <slot />
@@ -54,9 +53,7 @@ const route = useRoute();
 const { logout } = useAppwrite();
 const { lang, session } = toRefs(useAppStore());
 
-const showThreeJs = computed(
-  () => (['/music'].includes(route.path) || route.path === '/') && false
-);
+const showThreeJs = computed(() => ['/music'].includes(route.path) || route.path === '/');
 const localeRoute = computed(
   () => (r: string) => lang.value === 'en' ? r : `${r}?locale=${lang.value}`
 );
