@@ -1,11 +1,14 @@
 <template>
-  <div v-if="loaded">
-    <h2>Home</h2>
-    <p class="pb-5">
-      {{ $t('welcome') }}
-    </p>
+  <template v-if="loaded">
+    <div class="main">
+      <h2>Home</h2>
+      main page container
+      <p class="pb-5">
+        {{ $t('welcome') }}
+      </p>
+    </div>
 
-    <div>
+    <div class="recommendations">
       <div
         v-for="recommendation in recommendations"
         :key="recommendation.id"
@@ -28,8 +31,6 @@
         </div>
       </div>
 
-      <br />
-
       <div
         v-for="quote in quotes"
         :key="quote.id"
@@ -37,7 +38,7 @@
         {{ quote }}
       </div>
     </div>
-  </div>
+  </template>
   <div v-else>loading...</div>
 </template>
 
@@ -46,4 +47,8 @@ import { useAppStore } from '~/store';
 
 const { loaded, recommendations, quotes } = toRefs(useAppStore());
 </script>
-<style scoped></style>
+<style scoped lang="scss">
+.main {
+  height: calc(100vh - $header-opened-height);
+}
+</style>

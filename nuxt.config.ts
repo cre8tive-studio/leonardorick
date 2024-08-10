@@ -62,7 +62,6 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxt/image',
   ],
-
   pinia: {
     // some imports that are commonly used to be included automatically as nuxt do with much others
     autoImports: ['defineStore', ['defineStore', 'definePiniaStore']],
@@ -100,6 +99,13 @@ export default defineNuxtConfig({
       '**/*.gltf',
       '**/*.glb',
     ],
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: "@import '@/assets/css/global.scss';",
+        },
+      },
+    },
     // todo: try to remove console.log from production deployment
     // esbuild: {
     //   drop: ['console', 'debugger'],

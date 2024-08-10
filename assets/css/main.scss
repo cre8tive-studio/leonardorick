@@ -1,7 +1,18 @@
 // this file store global scss
-html {
+@import './global.scss';
+
+html,
+body,
+#__nuxt {
   height: 100%;
-  background: #060615;
+  margin: 0;
+}
+
+html {
   color: white;
-  overflow: hidden;
+}
+
+body {
+  background: $main-dark-bg;
+  overflow-y: hidden;
 }

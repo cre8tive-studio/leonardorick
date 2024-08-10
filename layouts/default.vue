@@ -1,49 +1,49 @@
 <template>
-  <ClientOnly
-    v-if="showThreeJs"
-    fallback-tag="span"
-    fallback="Loading Three.js model"
-  >
-    <ThreeLeonardoRick />
-  </ClientOnly>
-  <header>
-    <nav>
-      <ul class="pb-5">
-        <li>
-          <NuxtLink :to="localeRoute('/')"> Home </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink :to="localeRoute('/music')"> {{ $t('music') }} </NuxtLink>
-        </li>
-        <ClientOnly>
-          <li v-if="!session">
-            <NuxtLink :to="localeRoute('/login')">
-              {{ $t('login') }}
-            </NuxtLink>
+  <div class="l-default w-screen flex flex-col">
+    <header class="l-default__header flex-shrink-0 flex gap-4">
+      <nav>
+        <ul class="pb-5 flex gap-4">
+          <li>
+            <NuxtLink :to="localeRoute('/')"> Home </NuxtLink>
           </li>
-          <template v-else>
-            <li>
-              <NuxtLink :to="localeRoute('/profile')"> Profile </NuxtLink>
+          <li>
+            <NuxtLink :to="localeRoute('/music')"> {{ $t('music') }} </NuxtLink>
+          </li>
+          <ClientOnly>
+            <li v-if="!session">
+              <NuxtLink :to="localeRoute('/login')">
+                {{ $t('login') }}
+              </NuxtLink>
             </li>
-            <li>
-              <button @click="handleLogout">
-                {{ $t('logout') }}
-              </button>
-            </li>
-          </template>
-        </ClientOnly>
-      </ul>
-    </nav>
+            <template v-else>
+              <li>
+                <NuxtLink :to="localeRoute('/profile')"> Profile </NuxtLink>
+              </li>
+              <li>
+                <button @click="handleLogout">
+                  {{ $t('logout') }}
+                </button>
+              </li>
+            </template>
+          </ClientOnly>
+        </ul>
+      </nav>
 
-    <form>
-      <select v-model="lang">
-        <option value="en">{{ $t('english') }}</option>
-        <option value="pt-BR">{{ $t('portuguese') }}</option>
-      </select>
-    </form>
-  </header>
-  <div>
-    <slot />
+      <form>
+        <select v-model="lang">
+          <option value="en">{{ $t('english') }}</option>
+          <option value="pt-BR">{{ $t('portuguese') }}</option>
+        </select>
+      </form>
+    </header>
+    <div class="default-slot flex-grow overflow-y-auto">
+      <ClientOnly v-if="showThreeJs">
+        <div class="l-default__background-positioner relative">
+          <ThreeLeonardoRick />
+        </div>
+      </ClientOnly>
+      <slot />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -64,4 +64,25 @@ const handleLogout = async () => {
   }
 };
 </script>
-<style scoped></style>
+<style scoped lang="scss">
+.l-default {
+  &__header {
+    height: $header-opened-height;
+  }
+
+  .default-slot {
+    height: calc(100vh - $header-opened-height);
+    /* HIDE SCROLLBAR */
+    /* Internet Explorer 10+ */
+    -ms-overflow-style: none;
+    /* Firefox */
+    scrollbar-width: none;
+  }
+
+  /* HIDE SCROLLBAR */
+  .default-slot::-webkit-scrollbar {
+    /* Safari and Chrome */
+    display: none;
+  }
+}
+</style>

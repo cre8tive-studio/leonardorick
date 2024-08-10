@@ -9,9 +9,6 @@ use-leonardo-rick (implements use-experience)
 use-<some-mesh-name> (implements use-mesh)
 
 
-increase the focus light intenisty smoothly
-add floor that reflects my logo
-add camera movement
 add slow movement on the parts closing and opening
 increase and decrease the strength of the side lights
 test if other materials are better than MeshStandardMaterial
