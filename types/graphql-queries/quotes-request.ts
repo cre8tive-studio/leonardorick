@@ -1,4 +1,4 @@
-import { QuoteModel } from '../quote.model';
+import type { QuoteModel } from '../quote.model';
 
 export interface QuotesRequest {
   Quotes: {

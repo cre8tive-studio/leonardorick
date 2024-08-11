@@ -20,8 +20,12 @@
     // just don't make sense
     "require-await": "off",
 
-    // added-by-me
-    "no-shadow": ["error"],
+    /**
+     * added by me
+     */
+    //  https://github.com/typescript-eslint/typescript-eslint/issues/2483
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": "error",
 
     "@typescript-eslint/no-unused-vars": [
       "error",

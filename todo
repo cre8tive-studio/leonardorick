@@ -8,9 +8,4 @@ use-mesh
 use-leonardo-rick (implements use-experience)
 use-<some-mesh-name> (implements use-mesh)
 
-
-add slow movement on the parts closing and opening
-increase and decrease the strength of the side lights
-test if other materials are better than MeshStandardMaterial
-
 add color mode

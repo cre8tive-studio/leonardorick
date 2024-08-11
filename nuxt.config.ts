@@ -53,7 +53,15 @@ export default defineNuxtConfig({
       baseUrl,
     },
   },
-
+  components: [
+    {
+      path: '~/components',
+      // allow nested folders on components folder wihtout needing to
+      //  rename components. The import will remain the component name only
+      // and not consider the folders name
+      pathPrefix: false,
+    },
+  ],
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/i18n',
@@ -89,16 +97,7 @@ export default defineNuxtConfig({
   },
 
   vite: {
-    assetsInclude: [
-      '**/*.svg',
-      '**/*.png',
-      '**/*.jpg',
-      '**/*.gif',
-      '**/*.ico',
-      '**/*.bin',
-      '**/*.gltf',
-      '**/*.glb',
-    ],
+    assetsInclude: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.gif', '**/*.ico', '**/*.bin', '**/*.gltf', '**/*.glb'],
     css: {
       preprocessorOptions: {
         scss: {
