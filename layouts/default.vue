@@ -39,6 +39,7 @@
     <div class="default-slot flex-grow overflow-y-auto">
       <ClientOnly v-if="showThreeJs">
         <div class="l-default__background-positioner relative">
+          <FluidBackground />
           <ThreeLeonardoRick />
         </div>
       </ClientOnly>
@@ -54,9 +55,7 @@ const { logout } = useAppwrite();
 const { lang, session } = toRefs(useAppStore());
 
 const showThreeJs = computed(() => ['/music'].includes(route.path) || route.path === '/');
-const localeRoute = computed(
-  () => (r: string) => lang.value === 'en' ? r : `${r}?locale=${lang.value}`
-);
+const localeRoute = computed(() => (r: string) => lang.value === 'en' ? r : `${r}?locale=${lang.value}`);
 
 const handleLogout = async () => {
   if (confirm('Are you sure you want to logout?')) {
