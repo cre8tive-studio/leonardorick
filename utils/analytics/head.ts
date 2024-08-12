@@ -31,7 +31,16 @@ const musicBrInfo = {
   ogImage: `${path}/assets/meta/og-image-music.png`,
 };
 
+/**
+ * add external scripts here. if it's inside public folder just add it like
+ * /imports/some.js considering a /imports folder inside public/ folder
+ */
+const SCRIPTS = {
+  // script: [{ src: '' }],
+};
+
 const _DEFAULT_HEAD = {
+  ...SCRIPTS,
   title: defaultInfo.title,
   meta: [
     { name: 'description', content: defaultInfo.description },
@@ -52,6 +61,7 @@ const _DEFAULT_HEAD = {
 };
 
 const _BR_HEAD = {
+  ...SCRIPTS,
   title: defaultBrInfo.title,
   meta: [
     { name: 'description', content: defaultBrInfo.description },
@@ -72,6 +82,7 @@ const _BR_HEAD = {
 };
 
 const MUSIC_HEAD = {
+  ...SCRIPTS,
   title: musicInfo.title,
   meta: [
     { name: 'description', content: musicInfo.description },
@@ -92,6 +103,7 @@ const MUSIC_HEAD = {
 };
 
 const BR_MUSIC_HEAD = {
+  ...SCRIPTS,
   title: musicBrInfo.title,
   meta: [
     { name: 'description', content: musicBrInfo.description },

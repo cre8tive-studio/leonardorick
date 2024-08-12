@@ -1,5 +1,5 @@
-import { defineNuxtPlugin } from '#app';
 import { posthog } from 'posthog-js';
+import { defineNuxtPlugin } from '#app';
 export default defineNuxtPlugin(() => {
   const { publicKey, host } = useRuntimeConfig().public.posthog;
   const posthogClient = posthog.init(publicKey, {

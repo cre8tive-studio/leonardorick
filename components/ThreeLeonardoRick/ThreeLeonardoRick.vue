@@ -433,6 +433,7 @@ function setupGsapModelMotionAnimation() {
     center.mesh &&
     center.finalScale &&
     floor.self.mesh &&
+    floor.self.finalPosition &&
     floor.mat
   ) {
     const OSCILLATING_PROPS = {
