@@ -35,6 +35,24 @@ export let behavior = {
   /* Background */
   background_color: { r: 15, g: 15, b: 15 },
   transparent: false,
+
+  /* my custom params */
+  color_change_time_adder: 100,
+  /**
+   * @type {'hover' | 'click'}
+   */
+  effect_trigger: 'hover', // can be 'click' or 'hover'
+  hover_new_color_generator_timeout_if_multi_color_false: 300, // miliseconds
+  saturation: 1,
+  brightness: 1,
+  redFactor: 0.15,
+  greenFactor: 0.15,
+  blueFactor: 0.15,
+
+  rgb: {
+    multiplier: [0.15, 0.15, 0.15],
+    adder: [0, 0, 0.3],
+  },
 };
 
 export const DRAWING_PARAMS = {

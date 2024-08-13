@@ -289,7 +289,9 @@ export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers) {
 
   /* Initialize Fluid */
   init();
-  multipleSplats(Math.random() * 20 + 5);
+
+  // uncomment next line if you want the default red circle appearing at the beginning
+  // multipleSplats(Math.random() * 20 + 5);
 
   /* Game Loop */
   let lastColorChangeTime = Date.now();
@@ -516,7 +518,7 @@ export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers) {
       return;
     }
 
-    if (lastColorChangeTime + 100 < Date.now()) {
+    if (lastColorChangeTime + PARAMS.color_change_time_adder < Date.now()) {
       lastColorChangeTime = Date.now();
       for (let i = 0; i < pointers.length; i++) {
         const p = pointers[i];
@@ -738,10 +740,15 @@ export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers) {
   }
 
   function generateColor() {
-    const c = HSVtoRGB(Math.random(), 1.0, 1.0);
-    c.r *= 0.15;
-    c.g *= 0.15;
-    c.b *= 0.15;
+    const c = HSVtoRGB(Math.random(), PARAMS.saturation, PARAMS.brightness);
+    const [mr, mg, mb] = PARAMS.rgb.multiplier;
+    const [ar, ag, ab] = PARAMS.rgb.adder;
+    c.r += ar;
+    c.r *= mr;
+    c.g += ag;
+    c.g *= mg;
+    c.b += ab;
+    c.b *= mb;
     return c;
   }
 
@@ -816,21 +823,58 @@ export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers) {
     };
   }
 
-  canvas.addEventListener('mousemove', (e) => {
-    pointers[0].moved = pointers[0].down;
-    pointers[0].dx = (e.offsetX - pointers[0].x) * 5.0;
-    pointers[0].dy = (e.offsetY - pointers[0].y) * 5.0;
-    pointers[0].x = e.offsetX;
-    pointers[0].y = e.offsetY;
+  let timeoutId;
+  let shouldGenerateColorAgain = true;
+  document.addEventListener('mousemove', (e) => {
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const x = e.clientX + scrollX;
+    const y = e.clientY + scrollY;
+
+    pointers[0].dx = (x - pointers[0].x) * 5.0;
+    pointers[0].dy = (y - pointers[0].y) * 5.0;
+    pointers[0].x = x;
+    pointers[0].y = y;
+
+    if (PARAMS.effect_trigger === 'click') {
+      pointers[0].moved = pointers[0].down;
+      return;
+    }
+
+    pointers[0].moved = true;
+    pointers[0].down = true; // Keep the pointer as "down" during movement to simulate the drawing behavior
+
+    if (PARAMS.multi_color) {
+      pointers[0].color = generateColor();
+      return;
+    }
+
+    if (shouldGenerateColorAgain) {
+      pointers[0].color = generateColor();
+      shouldGenerateColorAgain = false;
+    }
+
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    // Start timeout to regenerate color every 2 seconds
+    timeoutId = setTimeout(() => {
+      shouldGenerateColorAgain = true;
+    }, PARAMS.hover_new_color_generator_timeout_if_multi_color_false);
   });
 
-  canvas.addEventListener('mousedown', () => {
-    pointers[0].down = true;
-    pointers[0].color = generateColor();
+  document.addEventListener('mousedown', () => {
+    if (PARAMS.effect_trigger === 'click') {
+      pointers[0].down = true;
+      pointers[0].color = generateColor();
+    }
   });
 
   window.addEventListener('mouseup', () => {
-    pointers[0].down = false;
+    if (PARAMS.effect_trigger === 'click') {
+      pointers[0].down = false;
+    }
   });
 
   window.addEventListener('keydown', (e) => {

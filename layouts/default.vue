@@ -1,4 +1,7 @@
 <template>
+  <ClientOnly>
+    <FluidBackground />
+  </ClientOnly>
   <div class="l-default w-screen flex flex-col">
     <header class="l-default__header flex-shrink-0 flex gap-4">
       <nav>
@@ -39,7 +42,6 @@
     <div class="default-slot flex-grow overflow-y-auto">
       <ClientOnly v-if="showThreeJs">
         <div class="l-default__background-positioner relative">
-          <FluidBackground />
           <ThreeLeonardoRick />
         </div>
       </ClientOnly>

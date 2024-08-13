@@ -223,6 +223,7 @@ async function loadModel(scene: Scene, camera: Camera) {
 
   const loader = new GLTFLoader(getLoadingManager());
   const gltf = await loader.loadAsync(lr);
+
   gltf.scene.traverse((child) => {
     if (isMesh(child) && child.isMesh) {
       const piece = gltfModel[child.name as GLTFModelKeys];
@@ -252,14 +253,14 @@ async function loadModel(scene: Scene, camera: Camera) {
   /**
    * setup floor
    */
-  const plane = new PlaneGeometry(40, 20);
-  const Z_POSITION = -5;
+  const plane = new PlaneGeometry(1.9, 6.5);
+  const Z_POSITION = 3;
   const X_ROTATION = -Math.PI / 2 + 0.1;
   floor.self.mesh = new Reflector(plane, {
     textureWidth: window.innerWidth * window.devicePixelRatio,
     textureHeight: window.innerHeight * window.devicePixelRatio,
   });
-  floor.self.mesh.position.set(0, 0.08, Z_POSITION);
+  floor.self.mesh.position.set(0, -0.7, Z_POSITION);
   floor.self.mesh.rotateX(X_ROTATION);
   floor.self.finalPosition = structuredClone(floor.self.mesh.position);
   scene.add(floor.self.mesh);
@@ -278,6 +279,33 @@ async function loadModel(scene: Scene, camera: Camera) {
   floor.mat.position.set(0, floor.self.mesh.position.y + 0.001, Z_POSITION);
   floor.mat.rotateX(X_ROTATION);
   scene.add(floor.mat);
+
+  /**
+   * alternative to reflector (clone gltf and place as mirror)
+   */
+  // const gltfReflection = gltf.scene.clone();
+  // const basicReflectionMaterial = new MeshBasicMaterial({
+  //   // color: '#08081c',
+  //   color: '#080817',
+
+  //   transparent: true,
+  //   // opacity: FLOOR_MAT_FINAL_OPACITY,
+  //   opacity: 1,
+  //   // preserve real color and block tone mapping that mess with it
+  //   // https://github.com/mrdoob/three.js/issues/9603
+  //   toneMapped: false,
+  // });
+  // gltfReflection.traverse((child) => {
+  //   if (isMesh(child) && child.isMesh) {
+  //     child.material = basicReflectionMaterial;
+  //   }
+  // });
+  // gltfReflection.rotation.x = -Math.PI / 2 + -0.2;
+  // // gltfReflection.position.x = 0.025;
+  // gltfReflection.position.y = -1.15;
+  // gltfReflection.position.z = 0.17;
+  // gltfReflection.scale.set(1, 0.9, 0.9);
+  // console.log(gltfReflection.scale);
 
   setupGsapModelMotionAnimation();
 }
@@ -386,7 +414,6 @@ function setupGsapLogoLoadingAnimation() {
   gsap.to(logoOverlay.value, {
     duration: fadeInDuration,
     opacity: 0,
-    // delay: 0.6,
     onComplete: () => {
       if (logoOverlay.value) {
         // Once the animation is complete, set the display to 'none'
@@ -406,7 +433,6 @@ function setupGsapLogoLoadingAnimation() {
   tl.to(lights.mouseLight.light, {
     duration: fadeInDuration,
     intensity: 30,
-    // delay: 0.6,
   });
 
   tl.to(lights.mouseLight.light, { duration: 3, intensity: 10 });
@@ -419,9 +445,6 @@ function setupGsapLogoLoadingAnimation() {
 function setupGsapModelMotionAnimation() {
   const tl = gsap.timeline();
 
-  // if (floor.mat) {
-  //   tl.set(floor.self)
-  // }
   const bottom = gltfModel[GLTFModelKeys.bottom];
   const center = gltfModel[GLTFModelKeys.center];
   const top = gltfModel[GLTFModelKeys.top];
@@ -449,8 +472,9 @@ function setupGsapModelMotionAnimation() {
     tl.set(bottom.mesh.position, { x: -10 });
     tl.set(bottom.mesh.position, { z: 10 });
 
-    tl.set(floor.self.mesh.position, { y: -25 });
-    tl.set(floor.mat.material, { opacity: 0 });
+    // give space to the bottom part enter without being cutted
+    tl.set(floor.self.mesh.position, { x: 0.6 });
+    tl.set(floor.mat.position, { x: 0.6 });
 
     tl.set(top.mesh.position, { x: 10 });
     tl.set(top.mesh.position, { z: -10 });
@@ -468,15 +492,14 @@ function setupGsapModelMotionAnimation() {
       .to(bottom.mesh.position, { duration: 2, ease: 'back.out(0.4)', x: bottom.finalPosition.x }, '-=1.7')
       .to(bottom.mesh.position, { duration: 2, ease: 'back.out(0.4)', z: bottom.finalPosition.z }, '<')
 
+      // put floor (reflection) on the right place smootly
+      .to(floor.self.mesh.position, { x: floor.self.finalPosition.x }, '-=0.68')
+      .to(floor.mat.position, { x: floor.self.finalPosition.x }, '<')
+
       // Slow Oscillating Movement for top mesh
       .to(top.mesh.position, { x: '-=0.04', z: '+=0.04', ...OSCILLATING_PROPS })
       .to(bottom.mesh.position, { x: '+=0.04', z: '-=0.04', ...OSCILLATING_PROPS }, '<')
       .to(center.mesh.scale, { x: '-=0.004', z: '-=0.004', ...OSCILLATING_PROPS }, '<')
-
-      // put floor (reflection) on the right place smootly
-      .to(floor.mat.material, { opacity: 1 }, `-=${OSCILLATING_PROPS.duration}`)
-      .to(floor.self.mesh.position, { y: floor.self.finalPosition.y }, '-=0.25')
-      .to(floor.mat.material, { duration: 2, opacity: FLOOR_MAT_FINAL_OPACITY })
 
       // lights animation
       // .to(lights.dLight2.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 })
@@ -489,7 +512,7 @@ function setupGsapModelMotionAnimation() {
 
 <style scoped lang="scss">
 #logo {
-  z-index: -1;
+  z-index: -3;
 }
 
 #logoOverlay {

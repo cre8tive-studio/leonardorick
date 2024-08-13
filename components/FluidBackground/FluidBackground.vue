@@ -5,9 +5,7 @@
 import { Fluid } from './fluid.js';
 onMounted(() => {
   const canvas2 = document.getElementById('renderSurface');
-  // console.log(canvas2);
   const fluid = new Fluid(canvas2);
-  // console.log(myFluid);
   fluid.mapBehaviors({
     sim_resolution: 128,
     dye_resolution: 512,
@@ -24,8 +22,7 @@ onMounted(() => {
 
     render_shaders: true,
 
-    multi_color: true,
-    // multi_color: false,
+    multi_color: false,
 
     render_bloom: false,
     bloom_iterations: 8,
@@ -36,6 +33,13 @@ onMounted(() => {
 
     background_color: { r: 15, g: 15, b: 15 },
     transparent: true,
+    saturation: 1,
+    brightness: 1,
+    effect_trigger: 'hover',
+    rgb: {
+      multiplier: [0.15, 0.15, 0.15],
+      adder: [-0.1, 0, 0.4],
+    },
   });
   fluid.activate();
 });
@@ -45,6 +49,7 @@ canvas {
   width: 100vw;
   height: 100vh;
   background-color: transparent;
-  position: absolute;
+  position: fixed;
+  z-index: -2;
 }
 </style>
