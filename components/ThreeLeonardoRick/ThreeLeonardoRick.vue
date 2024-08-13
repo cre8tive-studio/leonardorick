@@ -8,7 +8,11 @@
     ref="logoOverlay"
     class="fixed h-full w-full"
   >
-    <div class="loading-bar"></div>
+    <LoadingBar
+      ref="loadingBarComponent"
+      :progress="loadingProgress"
+      :total="loadingTotal"
+    />
   </div>
 </template>
 <script setup lang="ts">
@@ -39,6 +43,7 @@ import { gsap } from 'gsap';
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
 import type { LightsModel, ThreeGltfModel, FloorModel } from './models.ts';
 import { GLTFModelKeys } from './models';
+import LoadingBar from './LoadingBar.vue';
 import lr from '~/assets/models/lr.glb';
 import galaxyTexture from '~/assets/textures/environmentMaps/galaxy.jpg';
 
@@ -46,7 +51,7 @@ import galaxyTexture from '~/assets/textures/environmentMaps/galaxy.jpg';
  * data
  */
 const MODEL_POSITION_Y_CORRECTION = 0.5;
-const FLOOR_MAT_FINAL_OPACITY = 0.984;
+const FLOOR_MAT_FINAL_OPACITY = 0.983;
 
 const lights: LightsModel = {
   dLight1: {
@@ -112,7 +117,6 @@ const floor: FloorModel = {
 };
 
 const lightTarget = new Object3D();
-const logoOverlay = ref();
 let localScene: Scene;
 let pane: Pane;
 
@@ -125,6 +129,14 @@ const AMPLITUDE_X = 1;
 const AMPLITUDE_Y = 0.5;
 const FRACTION = 3;
 let previousTime = 0;
+
+/**
+ * loading
+ */
+const loadingProgress = ref(0);
+const loadingTotal = ref(0);
+const logoOverlay = ref();
+const loadingBarComponent = ref();
 
 onMounted(async () => {
   const { renderer, scene, camera, controls } = minimalSetup({
@@ -139,14 +151,13 @@ onMounted(async () => {
       position: 'absolute',
     },
     animationCallback: ({ camera: c }) => {
+      /**
+       * PARALAX EFFECT APPLICATION
+       */
       const elapsedTime = clock.getElapsedTime();
 
       const deltaTime = elapsedTime - previousTime;
       previousTime = elapsedTime;
-
-      /**
-       * PARALAX EFFECT APPLICATION
-       */
       const parallaxX = cursor.x * AMPLITUDE_X;
       const parallaxY = (-cursor.y + MODEL_POSITION_Y_CORRECTION) * AMPLITUDE_Y;
       c.position.x += (parallaxX - c.position.x) * FRACTION * deltaTime;
@@ -207,6 +218,39 @@ onUnmounted(() => {
  * methods
  */
 async function loadModel(scene: Scene, camera: Camera) {
+  /**
+   * setup floor
+   */
+  const plane = new PlaneGeometry(1.9, 6.5);
+  const Z_POSITION = 3;
+  const X_ROTATION = -Math.PI / 2 + 0.1;
+  floor.self.mesh = new Reflector(plane, {
+    textureWidth: window.innerWidth * window.devicePixelRatio,
+    textureHeight: window.innerHeight * window.devicePixelRatio,
+  });
+  floor.self.mesh.position.set(0, -0.7, Z_POSITION);
+  floor.self.mesh.rotateX(X_ROTATION);
+  floor.self.finalPosition = structuredClone(floor.self.mesh.position);
+  scene.add(floor.self.mesh);
+
+  floor.mat = new Mesh(
+    plane,
+    new MeshBasicMaterial({
+      color: '#060615',
+      transparent: true,
+      opacity: FLOOR_MAT_FINAL_OPACITY,
+      // preserve real color and block tone mapping that mess with it
+      // https://github.com/mrdoob/three.js/issues/9603
+      toneMapped: false,
+    })
+  );
+  floor.mat.position.set(0, floor.self.mesh.position.y + 0.001, Z_POSITION);
+  floor.mat.rotateX(X_ROTATION);
+  scene.add(floor.mat);
+
+  /**
+   * load model
+   */
   const textureLoader = new TextureLoader();
   const environmentMapTexture = textureLoader.load(galaxyTexture);
   environmentMapTexture.mapping = EquirectangularReflectionMapping;
@@ -251,36 +295,6 @@ async function loadModel(scene: Scene, camera: Camera) {
   scene.add(gltf.scene);
 
   /**
-   * setup floor
-   */
-  const plane = new PlaneGeometry(1.9, 6.5);
-  const Z_POSITION = 3;
-  const X_ROTATION = -Math.PI / 2 + 0.1;
-  floor.self.mesh = new Reflector(plane, {
-    textureWidth: window.innerWidth * window.devicePixelRatio,
-    textureHeight: window.innerHeight * window.devicePixelRatio,
-  });
-  floor.self.mesh.position.set(0, -0.7, Z_POSITION);
-  floor.self.mesh.rotateX(X_ROTATION);
-  floor.self.finalPosition = structuredClone(floor.self.mesh.position);
-  scene.add(floor.self.mesh);
-
-  floor.mat = new Mesh(
-    plane,
-    new MeshBasicMaterial({
-      color: '#060615',
-      transparent: true,
-      opacity: FLOOR_MAT_FINAL_OPACITY,
-      // preserve real color and block tone mapping that mess with it
-      // https://github.com/mrdoob/three.js/issues/9603
-      toneMapped: false,
-    })
-  );
-  floor.mat.position.set(0, floor.self.mesh.position.y + 0.001, Z_POSITION);
-  floor.mat.rotateX(X_ROTATION);
-  scene.add(floor.mat);
-
-  /**
    * alternative to reflector (clone gltf and place as mirror)
    */
   // const gltfReflection = gltf.scene.clone();
@@ -305,7 +319,6 @@ async function loadModel(scene: Scene, camera: Camera) {
   // gltfReflection.position.y = -1.15;
   // gltfReflection.position.z = 0.17;
   // gltfReflection.scale.set(1, 0.9, 0.9);
-  // console.log(gltfReflection.scale);
 
   setupGsapModelMotionAnimation();
 }
@@ -318,9 +331,9 @@ function getLoadingManager() {
   };
 
   // calls during loading
-  manager.onProgress = (_url, _itemsLoaded, _itemsTotal) => {
-    // console.log(itemsLoaded, itemsTotal);
-    // todo: setup loader
+  manager.onProgress = (_url, itemsLoaded, itemsTotal) => {
+    loadingProgress.value = itemsLoaded;
+    loadingTotal.value = itemsTotal;
   };
   return manager;
 }
@@ -338,18 +351,18 @@ function getDirectionalLight(): DirectionalLight {
 const isDebug = !!Object.prototype.hasOwnProperty.call(useRoute().query, 'debug');
 
 function documentMousemoveHandler($event: any) {
+  const y = normalize($event.clientY, window.innerHeight, { min: -1, max: 1 });
+  cursor.x = normalize($event.clientX, window.innerWidth, { min: -1, max: 1 });
+  cursor.y = y;
+
   if (lights.mouseLight.light && document.hasFocus()) {
     // don't ask me why it's inverted on x and not on y but it's working like this
-    const y = normalize($event.clientY, window.innerHeight, { min: -1, max: 1 });
     const lightCursorCoord = {
       x: normalize($event.clientX, window.innerWidth, { min: -1, max: 1, inverted: true }),
       y,
     };
     lightTarget.position.set(lightCursorCoord.x, lightCursorCoord.y, 0);
     lights.mouseLight.light.target.updateMatrixWorld();
-
-    cursor.x = normalize($event.clientX, window.innerWidth, { min: -1, max: 1 });
-    cursor.y = y;
   }
 }
 
@@ -379,12 +392,14 @@ function setupPane(): Pane {
           label: `${lightInfo.label}: ${position as string}`,
         });
       }
+
       _pane.addBinding(lightInfo.light, 'intensity', {
         min: 0,
         max: 2000,
         step: 5,
         label: `${lightInfo.label} intensity`,
       });
+
       const button = _pane.addButton({ title: `Toggle camera helper on light ${index + 1}` });
       button.on('click', () => {
         if (localScene && lightInfo.light) {
@@ -409,18 +424,7 @@ function setupPane(): Pane {
  * this is the animation that happesn to fade in the logo on the screen
  */
 function setupGsapLogoLoadingAnimation() {
-  const fadeInDuration = 2;
-
-  gsap.to(logoOverlay.value, {
-    duration: fadeInDuration,
-    opacity: 0,
-    onComplete: () => {
-      if (logoOverlay.value) {
-        // Once the animation is complete, set the display to 'none'
-        logoOverlay.value.style.display = 'none';
-      }
-    },
-  });
+  const FADE_IN_DURATION = 2;
 
   const tl = gsap.timeline({
     onComplete: () => {
@@ -429,13 +433,31 @@ function setupGsapLogoLoadingAnimation() {
       }
     },
   });
-  tl.set(lights.mouseLight.light, { intensity: 0 });
-  tl.to(lights.mouseLight.light, {
-    duration: fadeInDuration,
-    intensity: 30,
-  });
 
-  tl.to(lights.mouseLight.light, { duration: 3, intensity: 10 });
+  tl.set(lights.mouseLight.light, { intensity: 0 });
+
+  tl.to(loadingBarComponent.value.loadingBar, {
+    delay: 0.5,
+    duration: 0.3,
+    opacity: 0,
+  })
+
+    .to(logoOverlay.value, {
+      duration: FADE_IN_DURATION,
+      opacity: 0,
+      onComplete: () => {
+        if (logoOverlay.value) {
+          // Once the animation is complete, set the display to 'none'
+          logoOverlay.value.style.display = 'none';
+        }
+      },
+    })
+
+    .to(lights.mouseLight.light, {
+      duration: FADE_IN_DURATION,
+      intensity: 30,
+    })
+    .to(lights.mouseLight.light, { duration: 3, intensity: 10 });
 }
 
 /**
@@ -516,6 +538,10 @@ function setupGsapModelMotionAnimation() {
 }
 
 #logoOverlay {
+  // z-index: -2;
+  // position: absolute;
+  top: 0;
+  left: 0;
   background-color: $main-dark-bg;
 }
 </style>

@@ -1,0 +1,33 @@
+<template>
+  <div
+    ref="loadingBar"
+    class="c-LoadingBar"
+    :style="{ width }"
+  >
+    <!-- {{ width }} -->
+  </div>
+</template>
+
+<script setup lang="ts">
+interface Props {
+  progress: number;
+  total: number;
+}
+const props = defineProps<Props>();
+const loadingBar = ref();
+// onMounted(() => {
+//   console.log(loadingBar.value);
+//   console.log(props);
+// });
+const width = computed(() => `${(props.progress / props.total) * 100}%`);
+defineExpose({ loadingBar });
+</script>
+
+<style lang="scss" scoped>
+.c-LoadingBar {
+  height: 8px;
+  width: 0;
+  background-color: $secoundary-dark-bg;
+  transition: width 0.5s ease-in-out;
+}
+</style>
