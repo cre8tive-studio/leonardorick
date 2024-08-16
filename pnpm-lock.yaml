@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@leonardorick/three-lavalamp-background':
-        specifier: ^0.0.53
-        version: 0.0.53
+        specifier: ^0.0.54
+        version: 0.0.54
       '@leonardorick/utils':
         specifier: ^0.0.27
         version: 0.0.27
@@ -876,11 +876,11 @@ packages:
   '@kwsites/promise-deferred@1.1.1':
     resolution: {integrity: sha512-GaHYm+c0O9MjZRu0ongGBRbinu8gVAMd2UZjji6jVmqKtZluZnptXGWhz1E8j8D2HJ3f/yMxKAUC0b+57wncIw==}
 
-  '@leonardorick/three-lavalamp-background@0.0.53':
-    resolution: {integrity: sha512-o8pHJykQB51iIj0OL+4mCgVg03AvLQfr/VYK8blQwLrOOapYz1ZG1IyXQK59pAFIbgj5lO73S+DG7ZY4UC9ABA==}
+  '@leonardorick/three-lavalamp-background@0.0.54':
+    resolution: {integrity: sha512-G4SOEl6wW8L7RKpJQUWLs/nVAnM8nti9bPpys06f/Zl1sRIp5mo5tAIHCTYEXjEYgFC5lU3E6xAu4O4QRHCgBA==}
 
-  '@leonardorick/three@1.0.73':
-    resolution: {integrity: sha512-2w4ngzaLsR9RMi00r8uazKw4aKb0uEDhKpe3u+kqvGVbjBwjnJ1RW9GyxqDiXm8VXMk0Aa2zpgqGlcslnYFuPg==}
+  '@leonardorick/three@1.0.74':
+    resolution: {integrity: sha512-KC35Vc6GFReYuAiGVyU2OwWCUBaYtT4038pS/90BDoIomCT4ZbuU61EuEd2VGay7gJdz9rEPvfMnial81pChrg==}
     peerDependencies:
       '@leonardorick/utils': '>=0.0.27'
       three: '>=0.166.1'
@@ -6372,15 +6372,15 @@ snapshots:
 
   '@kwsites/promise-deferred@1.1.1': {}
 
-  '@leonardorick/three-lavalamp-background@0.0.53':
+  '@leonardorick/three-lavalamp-background@0.0.54':
     dependencies:
-      '@leonardorick/three': 1.0.73(@leonardorick/utils@0.0.27)(three@0.166.1)
+      '@leonardorick/three': 1.0.74(@leonardorick/utils@0.0.27)(three@0.166.1)
       '@leonardorick/utils': 0.0.27
       nice-color-palettes: 3.0.0
       three: 0.166.1
       tweakpane: 4.0.4
 
-  '@leonardorick/three@1.0.73(@leonardorick/utils@0.0.27)(three@0.166.1)':
+  '@leonardorick/three@1.0.74(@leonardorick/utils@0.0.27)(three@0.166.1)':
     dependencies:
       '@leonardorick/utils': 0.0.27
       three: 0.166.1

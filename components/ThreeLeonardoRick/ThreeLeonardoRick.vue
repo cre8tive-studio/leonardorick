@@ -38,6 +38,7 @@ import {
   Euler,
   Group,
   DoubleSide,
+  Clock,
 } from 'three';
 import { minimalSetup, isMesh, isDirectionalLight } from '@leonardorick/three';
 import { Pane } from 'tweakpane';
@@ -175,10 +176,12 @@ let thisPane: Pane;
 /**
  * ~ paralax
  */
+const clock = new Clock();
 const cursor = { x: 0, y: 0 };
-const AMPLITUDE_X = 0.7;
+const AMPLITUDE_X = 0.8;
 const AMPLITUDE_Y = 0.5;
-const FRACTION = 4;
+const FRACTION = 2;
+let previousTime = 0;
 
 /**
  * ~ loading
@@ -191,7 +194,7 @@ const loadingBarComponent = ref();
 /**
  * ˜scrolling
  */
-const ENTERING_ANIMATION_SCROLL_POSITION = 180;
+const ENTERING_ANIMATION_SCROLL_POSITION = 190;
 const MOUSE_LIGHT_INTENSITY_AFTER_ENTERING = 0.13;
 const isAnimatingEntering = ref(false);
 const shouldBlockScroll = ref(false);
@@ -232,6 +235,20 @@ onMounted(async () => {
     //   position: 'absolute',
     // },
     animationCallback: ({ camera: c }) => {
+      const elapsedTime = clock.getElapsedTime();
+
+      const deltaTime = elapsedTime - previousTime;
+      previousTime = elapsedTime;
+      const parallaxX = cursor.x * AMPLITUDE_X;
+      const parallaxY = (-cursor.y + MODEL_POSITION_Y_CORRECTION) * AMPLITUDE_Y;
+      c.position.x += (parallaxX - c.position.x) * FRACTION * deltaTime;
+      c.position.y += (parallaxY - c.position.y) * FRACTION * deltaTime;
+
+      const center = gltfModel.instances[GLTFModelKeys.center].mesh;
+      if (center && !isAnimatingEntering.value) {
+        camera.lookAt(getCenterToLookAt(center.position));
+      }
+
       // after entering we don't want to scroll anymore, so anything that should happnen
       // only before entering, should go before this controller flag
       if (shouldBlockScroll.value) {
@@ -247,19 +264,15 @@ onMounted(async () => {
         animateEntering();
       }
 
-      const scrollTop = getScrollTop();
       /**
        * Scroll behaviour
        */
-      const center = gltfModel.instances[GLTFModelKeys.center].mesh;
+      const scrollTop = getScrollTop();
 
       if (scrollTop) {
         c.position.z = -scrollTop * 0.01 + baseCameraPosition?.z || INITIAL_CAMERA_POSITION?.z || 3;
         // center look needs to happen before camera rotation,
         // if not the rotation will not happen
-        if (center && !isAnimatingEntering.value) {
-          camera.lookAt(getCenterToLookAt(center.position));
-        }
         c.rotation.z = -scrollTop * 0.001;
       }
     },
@@ -321,7 +334,7 @@ async function loadModel(scene: Scene, camera: Camera) {
     textureWidth: window.innerWidth * window.devicePixelRatio,
     textureHeight: window.innerHeight * window.devicePixelRatio,
   });
-  floor.self.mesh.position.set(0, -1, Z_POSITION);
+  floor.self.mesh.position.set(0, -0.95, Z_POSITION);
   floor.self.mesh.rotateX(X_ROTATION);
   floor.self.finalPosition = floor.self.mesh.position.clone();
   floor.self.finalScale = floor.self.mesh.scale.clone();
@@ -509,23 +522,6 @@ function documentMousemoveHandler($event: any) {
       const clampedIntensity = Math.max(0, Math.min(intensity, MOUSE_LIGHT_INTENSITY_AFTER_ENTERING));
       mouseLight.intensity = clampedIntensity;
     }
-  }
-
-  /**
-   * PARALAX EFFECT APPLICATION
-   */
-
-  const parallaxX = cursor.x * AMPLITUDE_X;
-  const parallaxY = (-cursor.y + MODEL_POSITION_Y_CORRECTION) * AMPLITUDE_Y;
-  thisCamera.position.x += (parallaxX - thisCamera.position.x) * FRACTION * 0.007;
-  thisCamera.position.y += (parallaxY - thisCamera.position.y) * FRACTION * 0.007;
-
-  /**
-   * look to the center
-   */
-  const center = gltfModel.instances[GLTFModelKeys.center].mesh;
-  if (center && thisCamera) {
-    thisCamera.lookAt(getCenterToLookAt(center.position));
   }
 }
 
