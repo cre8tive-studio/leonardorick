@@ -52,6 +52,7 @@ import { GLTFModelKeys } from './models';
 import LoadingBar from './LoadingBar.vue';
 import lr from '~/assets/models/lr.glb';
 import galaxyTexture from '~/assets/textures/environmentMaps/galaxy.jpg';
+import { useThreeStore } from '~/store/three';
 
 interface Props {
   scrollEl?: HTMLElement;
@@ -61,10 +62,13 @@ const { scrollEl } = defineProps<Props>();
 /**
  * data
  */
+const threeStore = useThreeStore();
+const { isEnteringAnimationFinished } = toRefs(threeStore);
+const { fluidExplosion } = threeStore;
+
 const MODEL_POSITION_Y_CORRECTION = 0.3;
 const FLOOR_MAT_FINAL_OPACITY = 0.983;
 const AMBIENT_LIGHT_GENERAL_INTENSITY = 310;
-
 const logoCanvas = ref<HTMLCanvasElement>();
 
 const lights: LightsModel = {
@@ -190,7 +194,6 @@ const loadingBarComponent = ref();
 const ENTERING_ANIMATION_SCROLL_POSITION = 180;
 const MOUSE_LIGHT_INTENSITY_AFTER_ENTERING = 0.13;
 const isAnimatingEntering = ref(false);
-const isEnteringAnimationFinished = ref(false);
 const shouldBlockScroll = ref(false);
 let INITIAL_CAMERA_POSITION: Vector3;
 let INITIAL_CAMERA_ROTATION: Euler;
@@ -673,6 +676,7 @@ function animateEntering() {
     onComplete: () => {
       isAnimatingEntering.value = false;
       isEnteringAnimationFinished.value = true;
+
       if (thisPane) {
         thisPane.refresh();
       }
@@ -698,7 +702,17 @@ function animateEntering() {
 
     tl
       // hide main model
-      .to(gltfModel.initialMaterial, { opacity: 0, onComplete: () => turnOffLights() })
+      .to(gltfModel.initialMaterial, {
+        duration: 0.4,
+        opacity: 0,
+        onComplete: () => {
+          fluidExplosion();
+          turnOffLights();
+          if (logoCanvas.value) {
+            logoCanvas.value.style.zIndex = '-1';
+          }
+        },
+      })
       // zoom camera to continue animation
       .to(baseCameraPosition, { z: '-=1' }, '<')
       // hide floor
@@ -717,9 +731,6 @@ function animateEntering() {
               all.mesh.scale.set(0, 0, 0);
             }
             changeElOverflow('');
-            if (logoCanvas.value) {
-              logoCanvas.value.style.zIndex = '-1';
-            }
           },
         },
         '<'
@@ -735,8 +746,20 @@ function animateEntering() {
         '<'
       )
       // show clone scaling it and adding opacity to it material
-      .to(clone.mesh.scale, { x: clone.finalScale.x, y: clone.finalScale.y, z: clone.finalScale.z }, '<')
-      .to(gltfModel.backgroundMaterial, { opacity: 1 });
+      .to(
+        clone.mesh.scale,
+        {
+          x: clone.finalScale.x,
+          y: clone.finalScale.y,
+          z: clone.finalScale.z,
+          onComplete: () => {
+            if (gltfModel.backgroundMaterial) {
+              gltfModel.backgroundMaterial.opacity = 1;
+            }
+          },
+        },
+        '<'
+      );
   }
 }
 

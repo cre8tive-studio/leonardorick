@@ -291,7 +291,7 @@ export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers) {
   init();
 
   // uncomment next line if you want the default red circle appearing at the beginning
-  // multipleSplats(Math.random() * 20 + 5);
+  // multipleSplats(getRandomMultipleSplatsArgs());
 
   /* Game Loop */
   let lastColorChangeTime = Date.now();
@@ -721,14 +721,31 @@ export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers) {
     density.swap();
   }
 
-  function multipleSplats(_amount) {
-    const color = {
-      r: 255,
-      b: 0,
-      g: 0,
+  function getRandomMultipleSplatsArgs() {
+    // max natural values for r g b is 255 but
+    // we can pass hihger values for brighness
+    return {
+      r: Math.round(Math.random() * 6),
+      g: Math.round(Math.random() * 6),
+      b: Math.round(Math.random() * 6),
+      x: Math.round(Math.random() * canvas.clientWidth),
+      y: Math.round(Math.random() * canvas.clientHeight),
+      sizeX: Math.round(Math.random() * 200),
+      sizeY: Math.round(Math.random() * 100),
     };
+  }
 
-    splat(500, 500, 100, 0, color);
+  function multipleSplats({
+    r = 255,
+    g = 0,
+    b = 0,
+    x = canvas.clientWidth / 2,
+    y = canvas.clientHeight / 2,
+    sizeX = 100,
+    sizeY = 100,
+  } = {}) {
+    const color = { r, g, b };
+    splat(x, y, sizeX, sizeY, color);
   }
 
   function resizeCanvas() {
@@ -858,7 +875,7 @@ export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers) {
       clearTimeout(timeoutId);
     }
 
-    // Start timeout to regenerate color every 2 seconds
+    // Start timeout to regenerate color every x seconds
     timeoutId = setTimeout(() => {
       shouldGenerateColorAgain = true;
     }, PARAMS.hover_new_color_generator_timeout_if_multi_color_false);
@@ -882,9 +899,14 @@ export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers) {
       PARAMS.paused = !PARAMS.paused;
     }
     if (e.key === ' ') {
-      splatStack.push(parseInt(Math.random() * 20) + 5);
+      splatStack.push({ ...getRandomMultipleSplatsArgs(), sizeX: 1000, sizeY: 500 });
     }
   });
+
+  return {
+    getRandomMultipleSplatsArgs,
+    multipleSplats,
+  };
 }
 
 /**

@@ -21,6 +21,12 @@ export class Fluid {
     this.webGL = webGL;
     this.colorFormats = colorFormats;
     this.pointers = pointers;
+
+    /**
+     * custom exported methods
+     */
+    this.multipleSplats = null;
+    this.getRandomMultipleSplatsArgs = null;
   }
 
   /**
@@ -31,7 +37,10 @@ export class Fluid {
    *
    */
   activate() {
-    activator(this.canvas, this.webGL, this.colorFormats, this.programs, this.pointers);
+    const res = activator(this.canvas, this.webGL, this.colorFormats, this.programs, this.pointers);
+    this.multipleSplats = res.multipleSplats;
+    this.getRandomMultipleSplatsArgs = res.getRandomMultipleSplatsArgs;
+    return res;
   }
 
   /**

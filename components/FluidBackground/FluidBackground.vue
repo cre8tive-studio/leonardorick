@@ -1,12 +1,19 @@
 <template>
-  <canvas id="renderSurface"></canvas>
+  <canvas
+    id="fluidCanvas"
+    ref="fluidCanvas"
+  ></canvas>
 </template>
-<script setup>
+<script setup lang="ts">
 import { Fluid } from './fluid.js';
+import { useThreeStore } from '~/store/three';
+
 onMounted(() => {
-  const canvas2 = document.getElementById('renderSurface');
-  const fluid = new Fluid(canvas2);
-  fluid.mapBehaviors({
+  const { fluid, fluidCanvas } = toRefs(useThreeStore());
+  fluidCanvas.value = document.getElementById('fluidCanvas') as HTMLCanvasElement;
+
+  fluid.value = new Fluid(fluidCanvas.value);
+  fluid.value.mapBehaviors({
     sim_resolution: 128,
     dye_resolution: 512,
 
@@ -41,7 +48,9 @@ onMounted(() => {
       adder: [-0.1, 0, 0.4],
     },
   });
-  fluid.activate();
+
+  const { multipleSplats, getRandomMultipleSplatsArgs } = fluid.value.activate();
+  multipleSplats(getRandomMultipleSplatsArgs());
 });
 </script>
 <style scoped lang="scss">
