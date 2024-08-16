@@ -32,26 +32,40 @@ import {
   Vector3,
   LoadingManager,
   PlaneGeometry,
-  Clock,
   MeshBasicMaterial,
+  MeshPhysicalMaterial,
+  AmbientLight,
+  Euler,
+  Group,
+  DoubleSide,
 } from 'three';
-import { minimalSetup, isMesh } from '@leonardorick/three';
+import { minimalSetup, isMesh, isDirectionalLight } from '@leonardorick/three';
 import { Pane } from 'tweakpane';
-import { normalize } from '@leonardorick/utils';
+import { normalize, isDefined } from '@leonardorick/utils';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { gsap } from 'gsap';
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
-import type { LightsModel, ThreeGltfModel, FloorModel } from './models.ts';
+import type { Object3DEventMap } from 'three';
+import type { LightsModel, ThreeGltfModel, FloorModel, GsapAnimationsModel } from './models';
 import { GLTFModelKeys } from './models';
+
 import LoadingBar from './LoadingBar.vue';
 import lr from '~/assets/models/lr.glb';
 import galaxyTexture from '~/assets/textures/environmentMaps/galaxy.jpg';
 
+interface Props {
+  scrollEl?: HTMLElement;
+}
+const { scrollEl } = defineProps<Props>();
+
 /**
  * data
  */
-const MODEL_POSITION_Y_CORRECTION = 0.5;
+const MODEL_POSITION_Y_CORRECTION = 0.3;
 const FLOOR_MAT_FINAL_OPACITY = 0.983;
+const AMBIENT_LIGHT_GENERAL_INTENSITY = 310;
+
+const logoCanvas = ref<HTMLCanvasElement>();
 
 const lights: LightsModel = {
   dLight1: {
@@ -59,9 +73,11 @@ const lights: LightsModel = {
     helper: null,
     label: 'Light 1',
     initial: {
-      x: 4.5,
-      y: 4.5,
-      z: 1,
+      position: {
+        x: 4.5,
+        y: 4.5,
+        z: 1,
+      },
       intensity: 300,
     },
   },
@@ -70,9 +86,11 @@ const lights: LightsModel = {
     helper: null,
     label: 'Light 2',
     initial: {
-      x: -4.5,
-      y: 4.5,
-      z: 0.8,
+      position: {
+        x: -4.5,
+        y: 4.5,
+        z: 0.8,
+      },
       intensity: 600,
     },
   },
@@ -81,62 +99,122 @@ const lights: LightsModel = {
     helper: null,
     label: 'Mouse',
     initial: {
-      x: 0,
-      y: 0.5,
-      z: 3,
+      position: {
+        x: 0,
+        y: 0.5,
+        z: 3,
+      },
+      intensity: 0,
+    },
+  },
+  ambientLight: {
+    light: new AmbientLight(),
+    helper: null,
+    label: 'Ambient light',
+    initial: {
       intensity: 0,
     },
   },
 };
 
-const gltfModel: Record<GLTFModelKeys, ThreeGltfModel> = {
-  [GLTFModelKeys.top]: {
-    name: GLTFModelKeys.top,
-    mesh: null,
-    finalPosition: null,
-  },
-  [GLTFModelKeys.center]: {
-    name: GLTFModelKeys.center,
-    mesh: null,
-    finalPosition: null,
-    finalScale: null,
-  },
-  [GLTFModelKeys.bottom]: {
-    name: GLTFModelKeys.bottom,
-    mesh: null,
-    finalPosition: null,
+const gltfModel: ThreeGltfModel = {
+  initialMaterial: null,
+  backgroundMaterial: null,
+  instances: {
+    [GLTFModelKeys.top]: {
+      name: GLTFModelKeys.top,
+      mesh: null,
+      finalPosition: null,
+    },
+    [GLTFModelKeys.center]: {
+      name: GLTFModelKeys.center,
+      mesh: null,
+      finalPosition: null,
+      finalScale: null,
+    },
+    [GLTFModelKeys.bottom]: {
+      name: GLTFModelKeys.bottom,
+      mesh: null,
+      finalPosition: null,
+    },
+    [GLTFModelKeys.all]: {
+      name: GLTFModelKeys.all,
+      mesh: null,
+      finalPosition: null,
+      finalRotation: null,
+    },
+    [GLTFModelKeys.clone]: {
+      name: GLTFModelKeys.clone,
+      mesh: null,
+      finalPosition: null,
+    },
   },
 };
 
+const gsapAnimations: GsapAnimationsModel = {
+  motion: null,
+  overlay: null,
+};
 const floor: FloorModel = {
   self: {
     mesh: null,
     finalPosition: null,
+    finalScale: null,
   },
   mat: null,
 };
 
 const lightTarget = new Object3D();
-let localScene: Scene;
-let pane: Pane;
-
+let thisScene: Scene;
+let thisCamera: Camera;
+let thisPane: Pane;
 /**
- * PARALAX
+ * ~ paralax
  */
 const cursor = { x: 0, y: 0 };
-const clock = new Clock();
-const AMPLITUDE_X = 1;
+const AMPLITUDE_X = 0.7;
 const AMPLITUDE_Y = 0.5;
-const FRACTION = 3;
-let previousTime = 0;
+const FRACTION = 4;
 
 /**
- * loading
+ * ~ loading
  */
 const loadingProgress = ref(0);
 const loadingTotal = ref(0);
 const logoOverlay = ref();
 const loadingBarComponent = ref();
+
+/**
+ * ˜scrolling
+ */
+const ENTERING_ANIMATION_SCROLL_POSITION = 180;
+const MOUSE_LIGHT_INTENSITY_AFTER_ENTERING = 0.13;
+const isAnimatingEntering = ref(false);
+const isEnteringAnimationFinished = ref(false);
+const shouldBlockScroll = ref(false);
+let INITIAL_CAMERA_POSITION: Vector3;
+let INITIAL_CAMERA_ROTATION: Euler;
+let baseCameraPosition: Vector3;
+
+const changeElOverflow = (overflow: '' | 'hidden') => {
+  if (scrollEl) {
+    // eslint-disable-next-line vue/no-mutating-props
+    scrollEl.style.overflow = overflow;
+  }
+};
+const getRealScrollTop = () => scrollEl?.scrollTop || 0;
+const getScrollTop = () => {
+  const realScrollTop = getRealScrollTop();
+  return realScrollTop > ENTERING_ANIMATION_SCROLL_POSITION
+    ? realScrollTop - ENTERING_ANIMATION_SCROLL_POSITION
+    : realScrollTop;
+};
+const isDebug = !!Object.prototype.hasOwnProperty.call(useRoute().query, 'debug');
+
+const getCenterToLookAt = (center: Vector3) => {
+  const position = center.clone();
+  return position;
+};
 
 onMounted(async () => {
   const { renderer, scene, camera, controls } = minimalSetup({
@@ -147,30 +225,46 @@ onMounted(async () => {
     enableOrbitControl: isDebug,
     orbitControlHandleOnlyCanvasEvents: true,
     allowFullScreen: isDebug,
-    styles: {
-      position: 'absolute',
-    },
+    // styles: {
+    //   position: 'absolute',
+    // },
     animationCallback: ({ camera: c }) => {
+      // after entering we don't want to scroll anymore, so anything that should happnen
+      // only before entering, should go before this controller flag
+      if (shouldBlockScroll.value) {
+        return;
+      }
+
+      if (
+        getRealScrollTop() > ENTERING_ANIMATION_SCROLL_POSITION - 50 &&
+        !isAnimatingEntering.value &&
+        !isEnteringAnimationFinished.value
+      ) {
+        isAnimatingEntering.value = true;
+        animateEntering();
+      }
+
+      const scrollTop = getScrollTop();
       /**
-       * PARALAX EFFECT APPLICATION
+       * Scroll behaviour
        */
-      const elapsedTime = clock.getElapsedTime();
+      const center = gltfModel.instances[GLTFModelKeys.center].mesh;
 
-      const deltaTime = elapsedTime - previousTime;
-      previousTime = elapsedTime;
-      const parallaxX = cursor.x * AMPLITUDE_X;
-      const parallaxY = (-cursor.y + MODEL_POSITION_Y_CORRECTION) * AMPLITUDE_Y;
-      c.position.x += (parallaxX - c.position.x) * FRACTION * deltaTime;
-      c.position.y += (parallaxY - c.position.y) * FRACTION * deltaTime;
-
-      const center = gltfModel[GLTFModelKeys.center].mesh;
-      if (center) {
-        c.lookAt(center.position);
+      if (scrollTop) {
+        c.position.z = -scrollTop * 0.01 + baseCameraPosition?.z || INITIAL_CAMERA_POSITION?.z || 3;
+        // center look needs to happen before camera rotation,
+        // if not the rotation will not happen
+        if (center && !isAnimatingEntering.value) {
+          camera.lookAt(getCenterToLookAt(center.position));
+        }
+        c.rotation.z = -scrollTop * 0.001;
       }
     },
   });
 
-  localScene = scene;
+  thisScene = scene;
+  thisCamera = camera;
+
   if (controls) {
     controls.enableZoom = false;
   }
@@ -197,17 +291,13 @@ onMounted(async () => {
    * MODEL
    */
 
-  loadModel(scene, camera);
-  pane = setupPane();
-  // listen the mouse on the hole document so we can track the mouse position
-  // and change the mouseLight position based on that even if other div is
-  // overlaying it
+  await loadModel(scene, camera);
+  thisPane = setupPane();
+  INITIAL_CAMERA_POSITION = camera.position.clone();
+  INITIAL_CAMERA_ROTATION = camera.rotation.clone();
+  baseCameraPosition = INITIAL_CAMERA_POSITION.clone();
+
   document.addEventListener('mousemove', documentMousemoveHandler);
-  // setup global variable so we can debug on web
-  window.LEONARDO_RICK = {
-    pane,
-    scene,
-  };
 });
 
 onUnmounted(() => {
@@ -228,9 +318,10 @@ async function loadModel(scene: Scene, camera: Camera) {
     textureWidth: window.innerWidth * window.devicePixelRatio,
     textureHeight: window.innerHeight * window.devicePixelRatio,
   });
-  floor.self.mesh.position.set(0, -0.7, Z_POSITION);
+  floor.self.mesh.position.set(0, -1, Z_POSITION);
   floor.self.mesh.rotateX(X_ROTATION);
-  floor.self.finalPosition = structuredClone(floor.self.mesh.position);
+  floor.self.finalPosition = floor.self.mesh.position.clone();
+  floor.self.finalScale = floor.self.mesh.scale.clone();
   scene.add(floor.self.mesh);
 
   floor.mat = new Mesh(
@@ -263,25 +354,22 @@ async function loadModel(scene: Scene, camera: Camera) {
     envMap: environmentMapTexture,
     emissive: 0x000000, // Add some emissive color if needed
     emissiveIntensity: 0.6, // Increase for more brightness
+    transparent: true,
+    side: DoubleSide,
   });
+
+  gltfModel.initialMaterial = standardMaterial;
 
   const loader = new GLTFLoader(getLoadingManager());
   const gltf = await loader.loadAsync(lr);
 
   gltf.scene.traverse((child) => {
     if (isMesh(child) && child.isMesh) {
-      const piece = gltfModel[child.name as GLTFModelKeys];
-      piece.mesh = child;
-      piece.finalPosition = structuredClone(child.position);
+      const piece = gltfModel.instances[child.name as GLTFModelKeys];
 
-      if (child.name === GLTFModelKeys.center) {
-        piece.finalScale = child.scale;
-        if (piece.mesh) {
-          camera.lookAt(piece.mesh.position);
-          lights.dLight1.light?.lookAt(piece.mesh.position);
-          lights.dLight2.light?.lookAt(piece.mesh.position);
-        }
-      }
+      piece.mesh = child;
+      piece.finalPosition = child.position.clone();
+      piece.finalScale = child.scale;
 
       child.material = standardMaterial;
       child.castShadow = true;
@@ -290,9 +378,24 @@ async function loadModel(scene: Scene, camera: Camera) {
     }
   });
 
+  const all = gltfModel.instances[GLTFModelKeys.all];
+  all.mesh = gltf.scene;
+  all.finalPosition = gltf.scene.position.clone();
+  all.finalRotation = gltf.scene.rotation.clone();
+  all.finalScale = gltf.scene.scale.clone();
+
   gltf.scene.rotation.x = Math.PI / 2;
   gltf.scene.position.y = MODEL_POSITION_Y_CORRECTION;
+
+  const center = gltfModel.instances[GLTFModelKeys.center].mesh;
+  if (center) {
+    camera.lookAt(getCenterToLookAt(center.position));
+    lights.dLight1.light?.lookAt(center.position);
+    lights.dLight2.light?.lookAt(center.position);
+  }
+
   scene.add(gltf.scene);
+  createClone(gltf.scene);
 
   /**
    * alternative to reflector (clone gltf and place as mirror)
@@ -323,11 +426,39 @@ async function loadModel(scene: Scene, camera: Camera) {
   setupGsapModelMotionAnimation();
 }
 
+function createClone(scene: Group<Object3DEventMap>) {
+  const physicalMaterial = new MeshPhysicalMaterial({
+    color: '#060615',
+    metalness: 0.99,
+    roughness: 0.36,
+    // wireframe: true,
+    // preserve real color and block tone mapping that mess with it
+    // https://github.com/mrdoob/three.js/issues/9603
+    toneMapped: false,
+    transparent: true,
+    opacity: 0,
+  });
+
+  gltfModel.backgroundMaterial = physicalMaterial;
+  const clone = gltfModel.instances[GLTFModelKeys.clone];
+  clone.mesh = scene.clone();
+  clone.mesh.traverse((child) => {
+    if (isMesh(child) && child.isMesh) {
+      child.material = physicalMaterial;
+    }
+  });
+  clone.finalScale = clone.mesh.scale.clone();
+  clone.mesh.position.y -= MODEL_POSITION_Y_CORRECTION - 0.3;
+  clone.finalScale.set(1.4, 1.4, 1.4);
+  clone.mesh.scale.set(0, 0, 0);
+  thisScene.add(clone.mesh);
+}
+
 function getLoadingManager() {
   const manager = new LoadingManager();
   // calls when finish loading
   manager.onLoad = () => {
-    setupGsapLogoLoadingAnimation();
+    setupGsapLoadingAnimation();
   };
 
   // calls during loading
@@ -348,8 +479,6 @@ function getDirectionalLight(): DirectionalLight {
   return light;
 }
 
-const isDebug = !!Object.prototype.hasOwnProperty.call(useRoute().query, 'debug');
-
 function documentMousemoveHandler($event: any) {
   const y = normalize($event.clientY, window.innerHeight, { min: -1, max: 1 });
   cursor.x = normalize($event.clientX, window.innerWidth, { min: -1, max: 1 });
@@ -362,74 +491,74 @@ function documentMousemoveHandler($event: any) {
       y,
     };
     lightTarget.position.set(lightCursorCoord.x, lightCursorCoord.y, 0);
-    lights.mouseLight.light.target.updateMatrixWorld();
+    const mouseLight = lights.mouseLight.light as DirectionalLight;
+    mouseLight.updateMatrixWorld();
+    // after entering, if mouse is not on center we dont want to show
+    // the mouse light, so the background logo really don't appear
+    if (isEnteringAnimationFinished.value) {
+      // calculate the Euclidean distance from the center (0, 0)
+      const distanceFromCenter = Math.sqrt(lightCursorCoord.x ** 2 + lightCursorCoord.y ** 2);
+      // square of 2 is the max distance from center to any coorder in the given coordinate system, which is
+      // the maximum diagonal distance across the square from one corner to the diagonally opposite corner
+      const maxDistance = Math.sqrt(2);
+      const normalizedDistance = distanceFromCenter / maxDistance;
+      const intensity = MOUSE_LIGHT_INTENSITY_AFTER_ENTERING * (1 - normalizedDistance);
+      const clampedIntensity = Math.max(0, Math.min(intensity, MOUSE_LIGHT_INTENSITY_AFTER_ENTERING));
+      mouseLight.intensity = clampedIntensity;
+    }
+  }
+
+  /**
+   * PARALAX EFFECT APPLICATION
+   */
+
+  const parallaxX = cursor.x * AMPLITUDE_X;
+  const parallaxY = (-cursor.y + MODEL_POSITION_Y_CORRECTION) * AMPLITUDE_Y;
+  thisCamera.position.x += (parallaxX - thisCamera.position.x) * FRACTION * 0.007;
+  thisCamera.position.y += (parallaxY - thisCamera.position.y) * FRACTION * 0.007;
+
+  /**
+   * look to the center
+   */
+  const center = gltfModel.instances[GLTFModelKeys.center].mesh;
+  if (center && thisCamera) {
+    thisCamera.lookAt(getCenterToLookAt(center.position));
   }
 }
 
 function setupLights(scene: Scene) {
   for (const { light, initial } of Object.values(lights)) {
-    light.position.set(initial.x, initial.y, initial.z);
+    if (initial.position) {
+      const { x, y, z } = initial.position;
+      light.position.set(x, y, z);
+    }
     light.intensity = initial.intensity;
     scene.add(light);
   }
   // seutup target for mouseLight so can make it follow mouse
-  lights.mouseLight.light.target = lightTarget;
-  lightTarget.position.set(0, 0, 0);
-  lights.mouseLight.light.target.updateMatrixWorld();
+  const mouseLight = lights.mouseLight.light as DirectionalLight;
+  scene.add(lights.mouseLight.light);
+  mouseLight.target = lightTarget;
+  lightTarget.position.set(0, 0 + MODEL_POSITION_Y_CORRECTION, 0);
+  mouseLight.target.updateMatrixWorld();
 }
 
-function setupPane(): Pane {
-  const _pane = new Pane();
-  const positions: (keyof Vector3)[] = ['x', 'y', 'z'];
-  const lightEntries = Object.entries(lights);
-  for (const [index, [_, lightInfo]] of lightEntries.entries()) {
-    if (lightInfo.light) {
-      for (const position of positions) {
-        _pane.addBinding(lightInfo.light.position, position, {
-          min: -10,
-          max: 20,
-          step: 0.1,
-          label: `${lightInfo.label}: ${position as string}`,
-        });
-      }
-
-      _pane.addBinding(lightInfo.light, 'intensity', {
-        min: 0,
-        max: 2000,
-        step: 5,
-        label: `${lightInfo.label} intensity`,
-      });
-
-      const button = _pane.addButton({ title: `Toggle camera helper on light ${index + 1}` });
-      button.on('click', () => {
-        if (localScene && lightInfo.light) {
-          if (lightInfo.helper) {
-            lightInfo.helper.dispose();
-            localScene.remove(lightInfo.helper);
-            lightInfo.helper = null;
-          } else {
-            lightInfo.helper = new CameraHelper(lightInfo.light.shadow.camera);
-            localScene.add(lightInfo.helper);
-          }
-        }
-      });
-    }
+function turnOffLights() {
+  for (const { light } of Object.values(lights)) {
+    light.intensity = 0;
   }
-  _pane.element.style.display = isDebug ? 'block' : 'none';
-  _pane.title = 'Leonardo Rick Logo';
-  return _pane;
 }
-
 /**
  * this is the animation that happesn to fade in the logo on the screen
+ * and hide the overlay
  */
-function setupGsapLogoLoadingAnimation() {
+function setupGsapLoadingAnimation() {
   const FADE_IN_DURATION = 2;
 
   const tl = gsap.timeline({
     onComplete: () => {
-      if (pane) {
-        pane.refresh();
+      if (thisPane) {
+        thisPane.refresh();
       }
     },
   });
@@ -453,23 +582,29 @@ function setupGsapLogoLoadingAnimation() {
       },
     })
 
-    .to(lights.mouseLight.light, {
-      duration: FADE_IN_DURATION,
-      intensity: 30,
-    })
+    .to(
+      lights.mouseLight.light,
+      {
+        duration: FADE_IN_DURATION,
+        intensity: 20,
+      },
+      '<'
+    )
     .to(lights.mouseLight.light, { duration: 3, intensity: 10 });
+
+  gsapAnimations.overlay = tl;
 }
 
 /**
- * this is the animation that happens to make the logo keep moving and softly
- * changing its position
+ * this is the entering animation that happens to build the logo and to make
+ * the logo keep moving and softly changing its position
  */
 function setupGsapModelMotionAnimation() {
   const tl = gsap.timeline();
 
-  const bottom = gltfModel[GLTFModelKeys.bottom];
-  const center = gltfModel[GLTFModelKeys.center];
-  const top = gltfModel[GLTFModelKeys.top];
+  const bottom = gltfModel.instances[GLTFModelKeys.bottom];
+  const center = gltfModel.instances[GLTFModelKeys.center];
+  const top = gltfModel.instances[GLTFModelKeys.top];
   if (
     bottom.mesh &&
     bottom.finalPosition &&
@@ -524,11 +659,129 @@ function setupGsapModelMotionAnimation() {
       .to(center.mesh.scale, { x: '-=0.004', z: '-=0.004', ...OSCILLATING_PROPS }, '<')
 
       // lights animation
-      // .to(lights.dLight2.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 })
-      // .to(lights.dLight2.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 })
+      .to(lights.dLight2.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 })
+      .to(lights.dLight2.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 })
       .to(lights.dLight1.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 }, '-=10')
       .to(lights.dLight1.light, { intensity: '-=800', ...OSCILLATING_PROPS, duration: 10 });
+
+    gsapAnimations.motion = tl;
   }
+}
+
+function animateEntering() {
+  const tl = gsap.timeline({
+    onComplete: () => {
+      isAnimatingEntering.value = false;
+      isEnteringAnimationFinished.value = true;
+      if (thisPane) {
+        thisPane.refresh();
+      }
+    },
+  });
+
+  const clone = gltfModel.instances[GLTFModelKeys.clone];
+  const all = gltfModel.instances[GLTFModelKeys.all];
+  if (
+    clone.mesh &&
+    clone.finalScale &&
+    gsapAnimations.motion &&
+    gsapAnimations.overlay &&
+    floor.mat &&
+    floor.self.mesh &&
+    isDefined(baseCameraPosition?.z)
+  ) {
+    changeElOverflow('hidden');
+    gsapAnimations.motion.pause();
+    gsapAnimations.overlay.pause();
+    thisCamera.updateMatrixWorld();
+    thisCamera.updateMatrix();
+
+    tl
+      // hide main model
+      .to(gltfModel.initialMaterial, { opacity: 0, onComplete: () => turnOffLights() })
+      // zoom camera to continue animation
+      .to(baseCameraPosition, { z: '-=1' }, '<')
+      // hide floor
+      .to(floor.self.mesh.scale, { x: 0, y: 0, z: 0 }, '<')
+      // hide mat
+      .to(
+        floor.mat.material,
+        {
+          opacity: 0,
+          onComplete: () => {
+            shouldBlockScroll.value = true;
+            thisCamera.position.copy(INITIAL_CAMERA_POSITION);
+            thisCamera.rotation.copy(INITIAL_CAMERA_ROTATION);
+
+            if (all.mesh) {
+              all.mesh.scale.set(0, 0, 0);
+            }
+            changeElOverflow('');
+            if (logoCanvas.value) {
+              logoCanvas.value.style.zIndex = '-1';
+            }
+          },
+        },
+        '<'
+      )
+      // decrease mouse light
+      .to(lights.mouseLight.light, { intensity: MOUSE_LIGHT_INTENSITY_AFTER_ENTERING }, '<')
+      // add ambient light with the exact strength so it look like the backgorund
+      .to(
+        lights.ambientLight.light,
+        {
+          intensity: AMBIENT_LIGHT_GENERAL_INTENSITY,
+        },
+        '<'
+      )
+      // show clone scaling it and adding opacity to it material
+      .to(clone.mesh.scale, { x: clone.finalScale.x, y: clone.finalScale.y, z: clone.finalScale.z }, '<')
+      .to(gltfModel.backgroundMaterial, { opacity: 1 });
+  }
+}
+
+function setupPane(): Pane {
+  const _pane = new Pane();
+  const positions: (keyof Vector3)[] = ['x', 'y', 'z'];
+  const lightEntries = Object.entries(lights);
+  for (const [_index, [_, lightInfo]] of lightEntries.entries()) {
+    if (lightInfo.light) {
+      if (isDirectionalLight(lightInfo.light)) {
+        const button = _pane.addButton({ title: `Toggle camera helper on light ${lightInfo.label}` });
+        button.on('click', () => {
+          if (thisScene && lightInfo.light && isDirectionalLight(lightInfo.light)) {
+            if (lightInfo.helper) {
+              lightInfo.helper.dispose();
+              thisScene.remove(lightInfo.helper);
+              lightInfo.helper = null;
+            } else {
+              lightInfo.helper = new CameraHelper(lightInfo.light.shadow.camera);
+              thisScene.add(lightInfo.helper);
+            }
+          }
+        });
+
+        for (const position of positions) {
+          _pane.addBinding(lightInfo.light.position, position, {
+            min: -10,
+            max: 20,
+            step: 0.1,
+            label: `${lightInfo.label}: ${position as string}`,
+          });
+        }
+      }
+      _pane.addBlade({ view: 'separator' });
+      _pane.addBinding(lightInfo.light, 'intensity', {
+        min: 0,
+        max: 5000,
+        step: 0.01,
+        label: `${lightInfo.label} intensity`,
+      });
+    }
+  }
+  _pane.element.style.display = isDebug ? 'block' : 'none';
+  _pane.title = 'Leonardo Rick Logo';
+  return _pane;
 }
 </script>
 
@@ -538,8 +791,6 @@ function setupGsapModelMotionAnimation() {
 }
 
 #logoOverlay {
-  // z-index: -2;
-  // position: absolute;
   top: 0;
   left: 0;
   background-color: $main-dark-bg;

@@ -15,10 +15,6 @@ interface Props {
 }
 const props = defineProps<Props>();
 const loadingBar = ref();
-// onMounted(() => {
-//   console.log(loadingBar.value);
-//   console.log(props);
-// });
 const width = computed(() => `${(props.progress / props.total) * 100}%`);
 defineExpose({ loadingBar });
 </script>

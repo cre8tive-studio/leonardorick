@@ -1,27 +1,34 @@
 {
-  "plugins": ["vitest"],
+  "plugins": ["vitest", "no-autofix"],
   "root": true,
   "extends": ["@nuxtjs/eslint-config-typescript"],
   "rules": {
     "semi": ["error", "always"],
     "vue/html-indent": ["error", 2],
-
-    // delt by prettier
+    /**
+     * delt by prettier
+     */
     "comma-dangle": "off",
     "arrow-parens": "off",
     "indent": "off",
     "vue/singleline-html-element-content-newline": "off",
     "vue/html-self-closing": "off", // there's a hole filosify discussion on this one bruh: https://stackoverflow.com/questions/65105287/how-to-stop-prettier-from-using-the-old-self-closing-tag-syntax
-    // legacy
+
+    /**
+     * legacy
+     */
     "space-before-function-paren": "off",
     "vue/no-multiple-template-root": "off",
     "vue/no-setup-props-destructure": "off", // legacy since vue 3.3
-
-    // just don't make sense
-    "require-await": "off",
-
+    "require-await": "off", // just don't make sense
     /**
-     * added by me
+     * eslint-plugin-no-autofix remaps so we don't
+     * auto fix the following rules
+     */
+    "prefer-const": "off",
+    "no-autofix/prefer-const": "error",
+    /**
+     * custom (added by me)
      */
     //  https://github.com/typescript-eslint/typescript-eslint/issues/2483
     "no-shadow": "off",

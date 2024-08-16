@@ -14,4 +14,16 @@ add color mode
 // scroll animation -> zoom until reaching the middle of the logo.
 // After some scroll value, then change from fixed to absolute so the canvas disappear
 
+understand whats blocking scroll at the begginging
+
 try to duplicate the 3d and cut the upper part out so I can have everything behind the logo
+
+setup central store loading to consider everything and extract overlay from THReeLeonaderoRik
+
+try to duplicate the canvas, change the fov of the second camera to render only the mirror part
+
+set a initial color of the fluid to be blue like the logo, the rest can be diferent but the initial equal
+
+explode some colors at the back when entering animation ends
+
+try to make parallax delayed

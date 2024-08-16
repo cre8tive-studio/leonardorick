@@ -39,10 +39,13 @@
         </select>
       </form>
     </header>
-    <div class="default-slot flex-grow overflow-y-auto">
+    <div
+      ref="defaultLayout"
+      class="default-slot flex-grow overflow-y-auto"
+    >
       <ClientOnly v-if="showThreeJs">
         <div class="l-default__background-positioner relative">
-          <ThreeLeonardoRick />
+          <ThreeLeonardoRick :scroll-el="defaultLayout" />
         </div>
       </ClientOnly>
       <slot />
@@ -51,6 +54,8 @@
 </template>
 <script setup lang="ts">
 import { useAppStore } from '~/store';
+
+const defaultLayout = ref<HTMLDivElement>();
 
 const route = useRoute();
 const { logout } = useAppwrite();
