@@ -182,6 +182,7 @@ const AMPLITUDE_X = 0.8;
 const AMPLITUDE_Y = 0.5;
 const FRACTION = 2;
 let previousTime = 0;
+let normalizedCursorDistanceFromCenter = 0;
 
 /**
  * ~ loading
@@ -194,7 +195,7 @@ const loadingBarComponent = ref();
 /**
  * ˜scrolling
  */
-const ENTERING_ANIMATION_SCROLL_POSITION = 190;
+const ENTERING_ANIMATION_SCROLL_POSITION = 180;
 const MOUSE_LIGHT_INTENSITY_AFTER_ENTERING = 0.13;
 const isAnimatingEntering = ref(false);
 const shouldBlockScroll = ref(false);
@@ -235,8 +236,34 @@ onMounted(async () => {
     //   position: 'absolute',
     // },
     animationCallback: ({ camera: c }) => {
-      const elapsedTime = clock.getElapsedTime();
+      /**
+       * after entering we don't want to scroll anymore, so anything
+       * that should happnen only outside this control flag
+       */
+      if (!shouldBlockScroll.value) {
+        if (
+          getRealScrollTop() > ENTERING_ANIMATION_SCROLL_POSITION - 50 &&
+          !isAnimatingEntering.value &&
+          !isEnteringAnimationFinished.value
+        ) {
+          isAnimatingEntering.value = true;
 
+          animateEntering();
+        }
+
+        /**
+         * Scroll behaviour
+         */
+        const scrollTop = getScrollTop();
+        if (scrollTop) {
+          c.position.z = -scrollTop * 0.003 + baseCameraPosition?.z || INITIAL_CAMERA_POSITION?.z || 3;
+          // center lookAt needs to happen before camera rotation, if not the rotation will not happen.
+          // since it was buggy I commennted and going to try again later
+          // c.rotation.z = -scrollTop * 0.001;
+        }
+      }
+
+      const elapsedTime = clock.getElapsedTime();
       const deltaTime = elapsedTime - previousTime;
       previousTime = elapsedTime;
       const parallaxX = cursor.x * AMPLITUDE_X;
@@ -248,38 +275,10 @@ onMounted(async () => {
       if (center && !isAnimatingEntering.value) {
         camera.lookAt(getCenterToLookAt(center.position));
       }
-
-      // after entering we don't want to scroll anymore, so anything that should happnen
-      // only before entering, should go before this controller flag
-      if (shouldBlockScroll.value) {
-        return;
-      }
-
-      if (
-        getRealScrollTop() > ENTERING_ANIMATION_SCROLL_POSITION - 50 &&
-        !isAnimatingEntering.value &&
-        !isEnteringAnimationFinished.value
-      ) {
-        isAnimatingEntering.value = true;
-        animateEntering();
-      }
-
-      /**
-       * Scroll behaviour
-       */
-      const scrollTop = getScrollTop();
-
-      if (scrollTop) {
-        c.position.z = -scrollTop * 0.01 + baseCameraPosition?.z || INITIAL_CAMERA_POSITION?.z || 3;
-        // center look needs to happen before camera rotation,
-        // if not the rotation will not happen
-        c.rotation.z = -scrollTop * 0.001;
-      }
     },
   });
 
   thisScene = scene;
-  thisCamera = camera;
 
   if (controls) {
     controls.enableZoom = false;
@@ -306,13 +305,9 @@ onMounted(async () => {
   /**
    * MODEL
    */
-
   await loadModel(scene, camera);
+  setupCamera(camera);
   thisPane = setupPane();
-  INITIAL_CAMERA_POSITION = camera.position.clone();
-  INITIAL_CAMERA_ROTATION = camera.rotation.clone();
-  baseCameraPosition = INITIAL_CAMERA_POSITION.clone();
-
   document.addEventListener('mousemove', documentMousemoveHandler);
 });
 
@@ -323,6 +318,13 @@ onUnmounted(() => {
 /**
  * methods
  */
+function setupCamera(camera: Camera) {
+  camera.position.z -= 0.5;
+  INITIAL_CAMERA_POSITION = camera.position.clone();
+  INITIAL_CAMERA_ROTATION = camera.rotation.clone();
+  baseCameraPosition = INITIAL_CAMERA_POSITION.clone();
+  thisCamera = camera;
+}
 async function loadModel(scene: Scene, camera: Camera) {
   /**
    * setup floor
@@ -511,14 +513,15 @@ function documentMousemoveHandler($event: any) {
     mouseLight.updateMatrixWorld();
     // after entering, if mouse is not on center we dont want to show
     // the mouse light, so the background logo really don't appear
+    const distanceFromCenter = Math.sqrt(lightCursorCoord.x ** 2 + lightCursorCoord.y ** 2);
+    // square of 2 is the max distance from center to any coorder in the given coordinate system, which is
+    // the maximum diagonal distance across the square from one corner to the diagonally opposite corner
+    const maxDistance = Math.sqrt(2);
+    normalizedCursorDistanceFromCenter = distanceFromCenter / maxDistance;
     if (isEnteringAnimationFinished.value) {
       // calculate the Euclidean distance from the center (0, 0)
-      const distanceFromCenter = Math.sqrt(lightCursorCoord.x ** 2 + lightCursorCoord.y ** 2);
-      // square of 2 is the max distance from center to any coorder in the given coordinate system, which is
-      // the maximum diagonal distance across the square from one corner to the diagonally opposite corner
-      const maxDistance = Math.sqrt(2);
-      const normalizedDistance = distanceFromCenter / maxDistance;
-      const intensity = MOUSE_LIGHT_INTENSITY_AFTER_ENTERING * (1 - normalizedDistance);
+
+      const intensity = MOUSE_LIGHT_INTENSITY_AFTER_ENTERING * (1 - normalizedCursorDistanceFromCenter);
       const clampedIntensity = Math.max(0, Math.min(intensity, MOUSE_LIGHT_INTENSITY_AFTER_ENTERING));
       mouseLight.intensity = clampedIntensity;
     }

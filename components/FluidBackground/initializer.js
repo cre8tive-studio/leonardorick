@@ -238,7 +238,7 @@ export function initWebGL(canvas) {
   };
 }
 
-export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers) {
+export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers, { initialColor = null } = {}) {
   if (active) {
     const nPointers = [];
     nPointers.push(new Pointer());
@@ -263,6 +263,7 @@ export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers) {
   let curl;
   let pressure;
   let bloom;
+  let isInitialColorUsed = false;
 
   const blit = (() => {
     webGL.bindBuffer(webGL.ARRAY_BUFFER, webGL.createBuffer());
@@ -757,16 +758,25 @@ export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers) {
   }
 
   function generateColor() {
+    if (initialColor && !isInitialColorUsed) {
+      isInitialColorUsed = true;
+      return refineColor(initialColor);
+    }
+
     const c = HSVtoRGB(Math.random(), PARAMS.saturation, PARAMS.brightness);
+    return refineColor(c);
+  }
+
+  function refineColor(color) {
     const [mr, mg, mb] = PARAMS.rgb.multiplier;
     const [ar, ag, ab] = PARAMS.rgb.adder;
-    c.r += ar;
-    c.r *= mr;
-    c.g += ag;
-    c.g *= mg;
-    c.b += ab;
-    c.b *= mb;
-    return c;
+    color.r += ar;
+    color.r *= mr;
+    color.g += ag;
+    color.g *= mg;
+    color.b += ab;
+    color.b *= mb;
+    return color;
   }
 
   function HSVtoRGB(h, s, v) {

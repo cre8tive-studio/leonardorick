@@ -12,7 +12,7 @@ onMounted(() => {
   const { fluid, fluidCanvas } = toRefs(useThreeStore());
   fluidCanvas.value = document.getElementById('fluidCanvas') as HTMLCanvasElement;
 
-  fluid.value = new Fluid(fluidCanvas.value);
+  fluid.value = new Fluid(fluidCanvas.value, { initialColor: { r: 0, g: 246 / 255, b: 1 } });
   fluid.value.mapBehaviors({
     sim_resolution: 128,
     dye_resolution: 512,
