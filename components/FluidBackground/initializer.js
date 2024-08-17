@@ -238,7 +238,7 @@ export function initWebGL(canvas) {
   };
 }
 
-export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers, { initialColor = null } = {}) {
+export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers, { initialColor = null, raf = false } = {}) {
   if (active) {
     const nPointers = [];
     nPointers.push(new Pointer());
@@ -296,7 +296,9 @@ export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers, { init
 
   /* Game Loop */
   let lastColorChangeTime = Date.now();
-  update();
+  if (raf) {
+    update();
+  }
   /* Game Loop */
 
   /**
@@ -484,14 +486,18 @@ export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers, { init
     return obj;
   }
 
-  function update() {
+  function rafCallback() {
     resizeCanvas();
     input();
     if (!PARAMS.paused) {
       step(0.016);
     }
     render(null);
-    const _callback = requestAnimationFrame(update);
+  }
+
+  function update() {
+    rafCallback();
+    requestAnimationFrame(update);
 
     // /* Destroys if Deactivated */
     // if (cancelled.is) {
@@ -916,6 +922,7 @@ export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers, { init
   return {
     getRandomMultipleSplatsArgs,
     multipleSplats,
+    rafCallback,
   };
 }
 

@@ -8,7 +8,7 @@ import { initWebGL, activator, setDitherURL } from './initializer';
 
 export class Fluid {
   /**
-   * @param {HTMLCanvasElement} canvas
+   * @param {HTMLCanvasElement | undefined} canvas
    * @param {{initialColor}} options.
    *  initialColor is an object: {r, g, b} where 1 is 255 and 0 is 0
    */
@@ -33,6 +33,7 @@ export class Fluid {
      */
     this.multipleSplats = null;
     this.getRandomMultipleSplatsArgs = null;
+    this.rafCallback = null;
   }
 
   /**
@@ -48,6 +49,7 @@ export class Fluid {
     });
     this.multipleSplats = res.multipleSplats;
     this.getRandomMultipleSplatsArgs = res.getRandomMultipleSplatsArgs;
+    this.rafCallback = res.rafCallback;
     return res;
   }
 

@@ -69,6 +69,7 @@ export default defineNuxtConfig({
     '@nuxtjs/fontaine',
     '@nuxtjs/tailwindcss',
     '@nuxt/image',
+    'nuxt-svgo',
   ],
   pinia: {
     // some imports that are commonly used to be included automatically as nuxt do with much others

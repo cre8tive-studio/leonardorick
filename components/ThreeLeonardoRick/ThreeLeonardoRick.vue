@@ -42,7 +42,7 @@ import {
 } from 'three';
 import { minimalSetup, isMesh, isDirectionalLight } from '@leonardorick/three';
 import { Pane } from 'tweakpane';
-import { normalize, isDefined } from '@leonardorick/utils';
+import { normalize } from '@leonardorick/utils';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { gsap } from 'gsap';
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
@@ -53,7 +53,8 @@ import { GLTFModelKeys } from './models';
 import LoadingBar from './LoadingBar.vue';
 import lr from '~/assets/models/lr.glb';
 import galaxyTexture from '~/assets/textures/environmentMaps/galaxy.jpg';
-import { useThreeStore } from '~/store/three';
+import { useAnimationStore } from '~/store/animation';
+import useFluid from '~/composables/animations/use-fluid';
 
 interface Props {
   scrollEl?: HTMLElement;
@@ -63,9 +64,9 @@ const { scrollEl } = defineProps<Props>();
 /**
  * data
  */
-const threeStore = useThreeStore();
-const { isEnteringAnimationFinished } = toRefs(threeStore);
-const { fluidExplosion } = threeStore;
+const animationStore = useAnimationStore();
+const { isEnteringAnimationFinished } = toRefs(animationStore);
+const { fluidExplosion } = useFluid();
 
 const MODEL_POSITION_Y_CORRECTION = 0.3;
 const FLOOR_MAT_FINAL_OPACITY = 0.983;
@@ -201,7 +202,6 @@ const isAnimatingEntering = ref(false);
 const shouldBlockScroll = ref(false);
 let INITIAL_CAMERA_POSITION: Vector3;
 let INITIAL_CAMERA_ROTATION: Euler;
-let baseCameraPosition: Vector3;
 
 const changeElOverflow = (overflow: '' | 'hidden') => {
   if (scrollEl) {
@@ -256,7 +256,7 @@ onMounted(async () => {
          */
         const scrollTop = getScrollTop();
         if (scrollTop) {
-          c.position.z = -scrollTop * 0.003 + baseCameraPosition?.z || INITIAL_CAMERA_POSITION?.z || 3;
+          c.position.z = -scrollTop * 0.003 + (INITIAL_CAMERA_POSITION?.z || 3);
           // center lookAt needs to happen before camera rotation, if not the rotation will not happen.
           // since it was buggy I commennted and going to try again later
           // c.rotation.z = -scrollTop * 0.001;
@@ -307,11 +307,16 @@ onMounted(async () => {
    */
   await loadModel(scene, camera);
   setupCamera(camera);
-  thisPane = setupPane();
+  setupPane();
   document.addEventListener('mousemove', documentMousemoveHandler);
 });
 
 onUnmounted(() => {
+  if (thisPane) {
+    thisPane.dispose();
+  }
+  isEnteringAnimationFinished.value = false;
+
   document.removeEventListener('mousemove', documentMousemoveHandler);
 });
 
@@ -322,7 +327,6 @@ function setupCamera(camera: Camera) {
   camera.position.z -= 0.5;
   INITIAL_CAMERA_POSITION = camera.position.clone();
   INITIAL_CAMERA_ROTATION = camera.rotation.clone();
-  baseCameraPosition = INITIAL_CAMERA_POSITION.clone();
   thisCamera = camera;
 }
 async function loadModel(scene: Scene, camera: Camera) {
@@ -466,7 +470,7 @@ function createClone(scene: Group<Object3DEventMap>) {
     }
   });
   clone.finalScale = clone.mesh.scale.clone();
-  clone.mesh.position.y -= MODEL_POSITION_Y_CORRECTION - 0.3;
+  clone.mesh.position.y -= MODEL_POSITION_Y_CORRECTION - 0.1;
   clone.finalScale.set(1.4, 1.4, 1.4);
   clone.mesh.scale.set(0, 0, 0);
   thisScene.add(clone.mesh);
@@ -690,8 +694,7 @@ function animateEntering() {
     gsapAnimations.motion &&
     gsapAnimations.overlay &&
     floor.mat &&
-    floor.self.mesh &&
-    isDefined(baseCameraPosition?.z)
+    floor.self.mesh
   ) {
     changeElOverflow('hidden');
     gsapAnimations.motion.pause();
@@ -712,8 +715,6 @@ function animateEntering() {
           }
         },
       })
-      // zoom camera to continue animation
-      .to(baseCameraPosition, { z: '-=1' }, '<')
       // hide floor
       .to(floor.self.mesh.scale, { x: 0, y: 0, z: 0 }, '<')
       // hide mat
@@ -762,14 +763,18 @@ function animateEntering() {
   }
 }
 
-function setupPane(): Pane {
-  const _pane = new Pane();
+function setupPane() {
+  if (!isDebug) {
+    return;
+  }
+
+  const pane = new Pane();
   const positions: (keyof Vector3)[] = ['x', 'y', 'z'];
   const lightEntries = Object.entries(lights);
   for (const [_index, [_, lightInfo]] of lightEntries.entries()) {
     if (lightInfo.light) {
       if (isDirectionalLight(lightInfo.light)) {
-        const button = _pane.addButton({ title: `Toggle camera helper on light ${lightInfo.label}` });
+        const button = pane.addButton({ title: `Toggle camera helper on light ${lightInfo.label}` });
         button.on('click', () => {
           if (thisScene && lightInfo.light && isDirectionalLight(lightInfo.light)) {
             if (lightInfo.helper) {
@@ -784,7 +789,7 @@ function setupPane(): Pane {
         });
 
         for (const position of positions) {
-          _pane.addBinding(lightInfo.light.position, position, {
+          pane.addBinding(lightInfo.light.position, position, {
             min: -10,
             max: 20,
             step: 0.1,
@@ -792,8 +797,8 @@ function setupPane(): Pane {
           });
         }
       }
-      _pane.addBlade({ view: 'separator' });
-      _pane.addBinding(lightInfo.light, 'intensity', {
+      pane.addBlade({ view: 'separator' });
+      pane.addBinding(lightInfo.light, 'intensity', {
         min: 0,
         max: 5000,
         step: 0.01,
@@ -801,9 +806,9 @@ function setupPane(): Pane {
       });
     }
   }
-  _pane.element.style.display = isDebug ? 'block' : 'none';
-  _pane.title = 'Leonardo Rick Logo';
-  return _pane;
+
+  pane.title = 'Leonardo Rick Logo';
+  thisPane = pane;
 }
 </script>
 

@@ -1,5 +1,8 @@
 <template>
   <NuxtRouteAnnouncer />
+  <ClientOnly>
+    <LRAnimations />
+  </ClientOnly>
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
@@ -13,6 +16,7 @@ import { getExpireTime } from './utils/js-utilities';
 import { useAppStore } from '~/store';
 
 useHeadConfig();
+
 const { loaded, lang, recommendations, quotes } = toRefs(useAppStore());
 const nuxtApp = useNuxtApp();
 const { $recommendations, $quotes, $fetchInitialData, $initializerClientError } = nuxtApp;

@@ -1,11 +1,8 @@
 <template>
-  <ClientOnly>
-    <FluidBackground />
-  </ClientOnly>
-  <div class="l-default w-screen flex flex-col">
-    <header class="l-default__header flex-shrink-0 flex gap-4">
+  <div class="l-default w-screen flex flex-row-reverse p-4">
+    <header class="l-default__header flex-shrink-0 flex flex-col gap-4">
       <nav>
-        <ul class="pb-5 flex gap-4">
+        <ul class="pb-5 flex flex-col gap-4 text-right">
           <li>
             <NuxtLink :to="localeRoute('/')"> Home </NuxtLink>
           </li>
@@ -32,7 +29,7 @@
         </ul>
       </nav>
 
-      <form>
+      <form class="language-select-form flex justify-end">
         <select v-model="lang">
           <option value="en">{{ $t('english') }}</option>
           <option value="pt-BR">{{ $t('portuguese') }}</option>
@@ -50,16 +47,60 @@
       </ClientOnly>
       <slot />
     </div>
+    <footer class="l-default__footer flex items-end">
+      <nav>
+        <ul class="flex flex-col gap-5">
+          <li>
+            <NuxtLink
+              to="https://spotify.com"
+              target="_blank"
+            >
+              <SvgoSpotify />
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink
+              to="https://github.com"
+              target="_blank"
+            >
+              <SvgoGithub />
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink
+              to="https://linkedin.com"
+              target="_blank"
+            >
+              <SvgoLinkedin />
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink
+              to="https://stackoverflow.com"
+              target="_blank"
+            >
+              <SvgoStackoverflow />
+            </NuxtLink>
+          </li>
+        </ul>
+      </nav>
+    </footer>
   </div>
 </template>
 <script setup lang="ts">
 import { useAppStore } from '~/store';
+import { useAnimationStore } from '~/store/animation';
 
 const defaultLayout = ref<HTMLDivElement>();
 
 const route = useRoute();
 const { logout } = useAppwrite();
 const { lang, session } = toRefs(useAppStore());
+const { scrollLayout } = toRefs(useAnimationStore());
+
+onMounted(() => {
+  scrollLayout.value = defaultLayout.value;
+});
 
 const showThreeJs = computed(() => ['/music'].includes(route.path) || route.path === '/');
 const localeRoute = computed(() => (r: string) => lang.value === 'en' ? r : `${r}?locale=${lang.value}`);
@@ -74,6 +115,21 @@ const handleLogout = async () => {
 .l-default {
   &__header {
     height: $header-opened-height;
+    width: 88px;
+  }
+
+  &__footer {
+    min-width: 88px;
+    li {
+      &:hover {
+        color: $main-dark-bg;
+        transition: color 1s ease-in-out;
+      }
+      svg {
+        height: 38px;
+        width: 38px;
+      }
+    }
   }
 
   .default-slot {
@@ -89,6 +145,13 @@ const handleLogout = async () => {
   .default-slot::-webkit-scrollbar {
     /* Safari and Chrome */
     display: none;
+  }
+
+  .language-select-form {
+    color: $main-dark-bg;
+    select {
+      width: 80px;
+    }
   }
 }
 </style>

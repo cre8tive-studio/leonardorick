@@ -1,11 +1,12 @@
 <template>
   <template v-if="loaded">
-    <div class="main">
-      <h2>Home</h2>
-      main page container
-      <p class="pb-5">
-        {{ $t('welcome') }}
-      </p>
+    <div class="main flex items-end justify-center gap-2">
+      <h1
+        ref="nameTitle"
+        class="main__title"
+      >
+        Leonardo Rick
+      </h1>
     </div>
 
     <div class="recommendations">
@@ -43,12 +44,79 @@
 </template>
 
 <script setup lang="ts">
+import SplitType from 'split-type';
+import { gsap } from 'gsap';
 import { useAppStore } from '~/store';
 
 const { loaded, recommendations, quotes } = toRefs(useAppStore());
+const nameTitle = ref();
+onMounted(() => {
+  const repeatCount = 8;
+  const tl = gsap.timeline({ paused: true });
+  const split = new SplitType('h1', { types: 'chars' });
+
+  if (split.chars) {
+    split.chars.forEach((obj, i) => {
+      const txt = obj.innerText;
+      const clone = `<div class="cloneText"> ${txt} </div>`;
+      const newHTML = `<div class="originalText"> ${txt} </div>${clone}`;
+      obj.innerHTML = newHTML;
+      gsap.set(obj.childNodes[1], {
+        yPercent: i % 2 === 0 ? -100 : 100,
+      });
+      const tween = gsap.to(obj.childNodes, {
+        repeat: repeatCount,
+        ease: 'none',
+        yPercent: i % 2 === 0 ? '+=100' : '-=100',
+      });
+      tl.add(tween, 0);
+    });
+    gsap.to(tl, { progress: 1, duration: 4, ease: 'power4.inOut' });
+  }
+});
 </script>
 <style scoped lang="scss">
 .main {
   height: calc(100vh - $header-opened-height);
+
+  @keyframes animate {
+    0% {
+      background-position: 0px;
+    }
+
+    100% {
+      background-position: 660px;
+    }
+  }
+
+  &__title {
+    font-size: 72px;
+    margin-bottom: 120px;
+    line-height: 78px;
+    font-family: 'JosefinSans', sans-serif;
+    font-weight: 700;
+    position: relative;
+    bottom: 0;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+
+    // transition: all 3s ease-in-out;
+    // background: linear-gradient(to right, #7a7878 0, white 40%, #7a7878 80%);
+    // background-clip: text;
+    // -webkit-background-clip: text;
+    // -webkit-text-fill-color: transparent;
+    // animation: animate 10s linear infinite;
+
+    :deep(.char) {
+      overflow: hidden;
+      position: relative;
+
+      .cloneText {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    }
+  }
 }
 </style>

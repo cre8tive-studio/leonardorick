@@ -27,3 +27,9 @@ set a initial color of the fluid to be blue like the logo, the rest can be difer
 explode some colors at the back when entering animation ends
 
 try to make parallax delayed
+
+todo remove shining code from index.vue if not used
+
+create footer and header components
+
+put the font effect used on LEONARDO RICK in index.vue on another place so it can be reused

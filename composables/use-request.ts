@@ -1,4 +1,4 @@
-import type { AsyncData } from 'nuxt/dist/app/composables/asyncData';
+import type { AsyncData } from 'nuxt/app';
 import { useFetch } from 'nuxt/app';
 
 const useRequest = () => {
