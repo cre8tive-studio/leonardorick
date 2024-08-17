@@ -26,12 +26,12 @@ const loadingBarComponent = ref();
 const { activate } = useAnimations();
 const { isLRModelLoaded, loadingProgress, loadingTotal } = toRefs(useAnimationStore());
 
-onMounted(() => {
-  activate();
+onMounted(async () => {
   const unwatch = watch(isLRModelLoaded, () => {
     hideOverlay();
     unwatch();
   });
+  await activate();
 });
 
 function hideOverlay() {

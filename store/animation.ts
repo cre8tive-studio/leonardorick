@@ -7,6 +7,7 @@ interface animationStoreModel {
   loadingTotal: number;
   fluid: Fluid | null;
   fluidCanvas: HTMLCanvasElement | undefined;
+  logoCanvas: HTMLCanvasElement | undefined;
   scrollLayout: HTMLElement | undefined;
 }
 export const useAnimationStore = defineStore('animationStore', () => {
@@ -17,10 +18,18 @@ export const useAnimationStore = defineStore('animationStore', () => {
     loadingTotal: 0,
     fluid: null,
     fluidCanvas: undefined,
+    logoCanvas: undefined,
     scrollLayout: undefined,
   });
 
+  const changeScrollLayoutOverflow = (overflow: '' | 'hidden') => {
+    if (state.scrollLayout) {
+      state.scrollLayout.style.overflow = overflow;
+    }
+  };
+
   return {
     ...toRefs(state),
+    changeScrollLayoutOverflow,
   };
 });

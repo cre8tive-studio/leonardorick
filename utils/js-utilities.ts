@@ -14,8 +14,7 @@ export function bypass() {}
  */
 export function isDefinedAndNotEmpty(value: any) {
   return (
-    (value || value === false || value === 0) &&
-    (typeof value === 'object' ? Object.keys(value).length > 0 : true)
+    (value || value === false || value === 0) && (typeof value === 'object' ? Object.keys(value).length > 0 : true)
   );
 }
 

@@ -58,6 +58,7 @@ const useFluid = () => {
       if (multipleSplats && getRandomMultipleSplatsArgs && fluidCanvas.value) {
         const middleX = fluidCanvas.value.clientWidth / 2;
         const middleY = fluidCanvas.value.clientHeight / 2;
+        const timeout = 75;
         multipleSplats({
           ...getRandomMultipleSplatsArgs(),
           sizeX: 1000,
@@ -74,7 +75,7 @@ const useFluid = () => {
             x: middleX - 300,
             y: middleY - 150,
           });
-        }, 70);
+        }, timeout);
 
         setTimeout(() => {
           multipleSplats({
@@ -84,7 +85,7 @@ const useFluid = () => {
             x: middleX - 50,
             y: middleY - 300,
           });
-        }, 140);
+        }, timeout * 2);
 
         setTimeout(() => {
           multipleSplats({
@@ -94,7 +95,7 @@ const useFluid = () => {
             x: middleX - 250,
             y: middleY + 50,
           });
-        }, 210);
+        }, timeout * 3);
       }
     }
   }

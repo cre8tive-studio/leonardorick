@@ -42,7 +42,7 @@
     >
       <ClientOnly v-if="showThreeJs">
         <div class="l-default__background-positioner relative">
-          <ThreeLeonardoRick :scroll-el="defaultLayout" />
+          <ThreeLeonardoRick />
         </div>
       </ClientOnly>
       <slot />
@@ -123,7 +123,7 @@ const handleLogout = async () => {
     li {
       &:hover {
         color: $main-dark-bg;
-        transition: color 1s ease-in-out;
+        transition: color 0.3s ease-in-out;
       }
       svg {
         height: 38px;
