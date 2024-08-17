@@ -39,7 +39,7 @@
     "vitest": "^0.34.6"
   },
   "dependencies": {
-    "@leonardorick/three-lavalamp-background": "^0.0.54",
+    "@leonardorick/three": "^1.0.76",
     "@leonardorick/utils": "^0.0.27",
     "@nuxt/image": "^1.7.0",
     "@pinia/nuxt": "^0.4.11",

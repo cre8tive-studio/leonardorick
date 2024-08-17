@@ -3,17 +3,6 @@
     id="logo"
     ref="logoCanvas"
   />
-  <div
-    id="logoOverlay"
-    ref="logoOverlay"
-    class="fixed h-full w-full"
-  >
-    <LoadingBar
-      ref="loadingBarComponent"
-      :progress="loadingProgress"
-      :total="loadingTotal"
-    />
-  </div>
 </template>
 <script setup lang="ts">
 import {
@@ -49,8 +38,6 @@ import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
 import type { Object3DEventMap } from 'three';
 import type { LightsModel, ThreeGltfModel, FloorModel, GsapAnimationsModel } from './models';
 import { GLTFModelKeys } from './models';
-
-import LoadingBar from './LoadingBar.vue';
 import lr from '~/assets/models/lr.glb';
 import galaxyTexture from '~/assets/textures/environmentMaps/galaxy.jpg';
 import { useAnimationStore } from '~/store/animation';
@@ -65,7 +52,7 @@ const { scrollEl } = defineProps<Props>();
  * data
  */
 const animationStore = useAnimationStore();
-const { isEnteringAnimationFinished } = toRefs(animationStore);
+const { isEnteringAnimationFinished, isLRModelLoaded, loadingProgress, loadingTotal } = toRefs(animationStore);
 const { fluidExplosion } = useFluid();
 
 const MODEL_POSITION_Y_CORRECTION = 0.3;
@@ -186,14 +173,6 @@ let previousTime = 0;
 let normalizedCursorDistanceFromCenter = 0;
 
 /**
- * ~ loading
- */
-const loadingProgress = ref(0);
-const loadingTotal = ref(0);
-const logoOverlay = ref();
-const loadingBarComponent = ref();
-
-/**
  * ˜scrolling
  */
 const ENTERING_ANIMATION_SCROLL_POSITION = 180;
@@ -273,7 +252,7 @@ onMounted(async () => {
 
       const center = gltfModel.instances[GLTFModelKeys.center].mesh;
       if (center && !isAnimatingEntering.value) {
-        camera.lookAt(getCenterToLookAt(center.position));
+        c.lookAt(getCenterToLookAt(center.position));
       }
     },
   });
@@ -315,6 +294,7 @@ onUnmounted(() => {
   if (thisPane) {
     thisPane.dispose();
   }
+  isLRModelLoaded.value = false;
   isEnteringAnimationFinished.value = false;
 
   document.removeEventListener('mousemove', documentMousemoveHandler);
@@ -480,6 +460,7 @@ function getLoadingManager() {
   const manager = new LoadingManager();
   // calls when finish loading
   manager.onLoad = () => {
+    isLRModelLoaded.value = true;
     setupGsapLoadingAnimation();
   };
 
@@ -569,24 +550,7 @@ function setupGsapLoadingAnimation() {
     },
   });
 
-  tl.set(lights.mouseLight.light, { intensity: 0 });
-
-  tl.to(loadingBarComponent.value.loadingBar, {
-    delay: 0.5,
-    duration: 0.3,
-    opacity: 0,
-  })
-
-    .to(logoOverlay.value, {
-      duration: FADE_IN_DURATION,
-      opacity: 0,
-      onComplete: () => {
-        if (logoOverlay.value) {
-          // Once the animation is complete, set the display to 'none'
-          logoOverlay.value.style.display = 'none';
-        }
-      },
-    })
+  tl.set(lights.mouseLight.light, { intensity: 0 })
 
     .to(
       lights.mouseLight.light,
@@ -596,7 +560,7 @@ function setupGsapLoadingAnimation() {
       },
       '<'
     )
-    .to(lights.mouseLight.light, { duration: 3, intensity: 10 });
+    .to(lights.mouseLight.light, { duration: 3, intensity: 10 }, '<');
 
   gsapAnimations.overlay = tl;
 }
@@ -815,11 +779,5 @@ function setupPane() {
 <style scoped lang="scss">
 #logo {
   z-index: -3;
-}
-
-#logoOverlay {
-  top: 0;
-  left: 0;
-  background-color: $main-dark-bg;
 }
 </style>

@@ -6,6 +6,7 @@
         class="main__title"
       >
         Leonardo Rick
+        <span class="registered-icon">®</span>
       </h1>
     </div>
 
@@ -40,7 +41,6 @@
       </div>
     </div>
   </template>
-  <div v-else>loading...</div>
 </template>
 
 <script setup lang="ts">
@@ -79,27 +79,37 @@ onMounted(() => {
 .main {
   height: calc(100vh - $header-opened-height);
 
-  @keyframes animate {
-    0% {
-      background-position: 0px;
-    }
-
-    100% {
-      background-position: 660px;
-    }
-  }
-
   &__title {
-    font-size: 72px;
+    font-size: 86px;
     margin-bottom: 120px;
-    line-height: 78px;
+    line-height: 90px;
     font-family: 'JosefinSans', sans-serif;
     font-weight: 700;
     position: relative;
     bottom: 0;
     letter-spacing: 0.03em;
     text-transform: uppercase;
+    span {
+      display: inline-block;
+      position: relative;
+      height: 100%;
+      font-size: 42px;
+      font-weight: 600;
+      line-height: 90px;
+      top: -23px;
+      left: -14px;
+    }
 
+    // todo remove if shining not used
+    //   @keyframes animate {
+    //   0% {
+    //     background-position: 0px;
+    //   }
+
+    //   100% {
+    //     background-position: 660px;
+    //   }
+    // }
     // transition: all 3s ease-in-out;
     // background: linear-gradient(to right, #7a7878 0, white 40%, #7a7878 80%);
     // background-clip: text;
