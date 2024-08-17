@@ -308,6 +308,7 @@ const useLeonardoRick = () => {
         if (thisPane) {
           thisPane.refresh();
         }
+        animateClone();
       },
     });
 
@@ -544,6 +545,7 @@ const useLeonardoRick = () => {
       // https://github.com/mrdoob/three.js/issues/9603
       toneMapped: false,
       transparent: true,
+      side: DoubleSide,
       opacity: 0,
     });
 
@@ -679,6 +681,19 @@ const useLeonardoRick = () => {
 
       gsapAnimations.motion = tl;
     }
+  }
+
+  /**
+   * this function makes the background change slowly the opacity
+   */
+  function animateClone() {
+    const tl = gsap.timeline({ repeat: -1 });
+
+    tl
+      // slowly dissapear
+      .to(gltfModel.backgroundMaterial, { opacity: 0, ease: 'power2.in', duration: 30 })
+      // put back the right opacity
+      .to(gltfModel.backgroundMaterial, { opacity: 1, ease: 'sine.inOut', duration: 1, delay: 10 });
   }
 
   function documentMousemoveHandler($event: any) {

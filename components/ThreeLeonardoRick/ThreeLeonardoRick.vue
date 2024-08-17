@@ -22,5 +22,6 @@ onMounted(async () => {
 <style scoped lang="scss">
 #logoLeonardoRick {
   z-index: -3;
+  position: fixed;
 }
 </style>

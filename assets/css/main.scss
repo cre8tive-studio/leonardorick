@@ -41,3 +41,13 @@ body {
 .lenis.lenis-smooth iframe {
   pointer-events: none;
 }
+
+/**
+* buttons
+*/
+.main-hover-button {
+  &:hover {
+    color: $main-dark-bg;
+    transition: color 0.3s ease-in-out;
+  }
+}
