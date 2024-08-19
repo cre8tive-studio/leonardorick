@@ -29,18 +29,18 @@ const useAnimations = () => {
     },
   };
 
-  gsap.registerPlugin(ScrollTrigger);
-
   const unwatch = watch(isLRModelLoaded, () => {
     hideOverlay();
     unwatch();
   });
 
   const activate = async () => {
+    gsap.registerPlugin(ScrollTrigger);
+
     if (!isWebglSupported()) {
       hideOverlay();
       // eslint-disable-next-line no-console
-      console.warn('WebGL not supported so animations will be disabled');
+      console.warn('WebGL not supported so most animations will be disabled');
       return;
     }
 

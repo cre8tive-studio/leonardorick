@@ -15,6 +15,7 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@nuxt/devtools": "latest",
     "@nuxt/test-utils": "^3.14.0",
     "@nuxtjs/color-mode": "^3.4.2",
@@ -29,6 +30,7 @@
     "@types/jest": "^29.5.12",
     "@types/node": "^18.19.42",
     "@types/three": "^0.166.0",
+    "@vesp/nuxt-fontawesome": "^1.0.4",
     "@vue-macros/nuxt": "^1.10.2",
     "eslint-plugin-no-autofix": "^2.0.0",
     "eslint-plugin-vitest": "^0.3.26",

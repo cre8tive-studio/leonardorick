@@ -71,10 +71,18 @@ export default defineNuxtConfig({
     '@nuxt/image',
     'nuxt-svgo',
     '@nuxtjs/device',
+    '@vesp/nuxt-fontawesome',
   ],
   // so we can identify which type of device the user is using
   device: {
     refreshOnResize: true,
+  },
+  // fontawesome icons
+  fontawesome: {
+    icons: {
+      solid: ['plus'],
+    },
+    component: 'fa',
   },
   pinia: {
     // some imports that are commonly used to be included automatically as nuxt do with much others

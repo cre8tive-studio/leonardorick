@@ -66,9 +66,9 @@ body {
 */
 
 .lr-section,
-.lr-section-pae,
+.lr-section-page,
 .lr-section-bottom {
-  padding: 16px;
+  padding: 1rem;
 }
 
 .lr-section-page {
@@ -81,11 +81,15 @@ body {
 
 @media (min-width: $xl-breakpoint) {
   .lr-section,
-  .lr-section-page,
   .lr-section-bottom {
-    padding-top: 24px;
-    padding-right: 48px;
-    padding-left: 48px;
+    padding-top: 1.5rem;
+    padding-right: 3rem;
+    padding-left: 3rem;
+  }
+
+  .lr-section-page {
+    padding-right: 8rem;
+    padding-left: 8rem;
   }
 
   .lr-section-bottom {

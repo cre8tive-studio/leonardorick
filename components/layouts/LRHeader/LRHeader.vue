@@ -5,7 +5,7 @@
     </div>
     <div class="small-header flex xl:hidden">
       <button
-        class="circle-button burger-button"
+        class="circle-button burger-button flex flex-col items-center justify-center gap-1 cursor-pointer"
         @click="toggleMobileMenu"
       >
         <span />
@@ -58,15 +58,9 @@ function toggleMobileMenu() {
 <style scoped lang="scss">
 .c-Header {
   .circle-button {
-    display: flex;
-    gap: 4px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     height: 55px;
     width: 55px;
     border-radius: 52px;
-    cursor: pointer;
     background-color: $main-dark-text;
   }
 
@@ -92,7 +86,7 @@ function toggleMobileMenu() {
     left: 0;
     height: 100vh;
     width: 100vw;
-    padding: 16px;
+    padding: 1rem;
     z-index: 20;
   }
   @media (min-width: $xl-breakpoint) {

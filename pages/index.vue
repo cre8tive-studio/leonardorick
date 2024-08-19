@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="loaded"
-    class="p-index xl:mx-20"
+    class="p-index"
   >
     <div class="main lr-section-page flex flex-col items-center justify-end gap-2">
       <h1
@@ -11,6 +11,17 @@
         Leonardo Rick
         <span class="registered-icon">®</span>
       </h1>
+    </div>
+
+    <div class="lr-section-page quotes">
+      <!-- <div class="flex items center justify-center">text</div> -->
+      <div class="quotes-container flex flex-wrap">
+        <div
+          v-for="index in 370"
+          :key="index"
+          class="square"
+        ></div>
+      </div>
     </div>
 
     <div class="lr-section-page recommendations">
@@ -54,7 +65,6 @@ import { useAppStore } from '~/store';
 const { loaded, recommendations, quotes } = toRefs(useAppStore());
 
 const nameTitle = ref();
-
 onMounted(() => {
   if (nameTitle.value) {
     animateAndSplitChars();
@@ -67,6 +77,9 @@ onMounted(() => {
 });
 
 function animateAndSplitChars() {
+  if (!nameTitle.value) {
+    return;
+  }
   animateRollingChars(new SplitType('.title-splitted', { types: 'chars' }));
 }
 function animateRollingChars(split: SplitType) {
@@ -99,9 +112,10 @@ function animateRollingChars(split: SplitType) {
 <style scoped lang="scss">
 .p-index {
   .main {
+    padding-bottom: 25%;
     &__title {
       z-index: -1;
-      font-size: 18px;
+      font-size: 1.5rem;
       font-family: 'JosefinSans', sans-serif;
       font-weight: 700;
       position: relative;
@@ -126,6 +140,100 @@ function animateRollingChars(split: SplitType) {
             position: absolute;
             left: 0;
             top: 0;
+          }
+        }
+      }
+    }
+  }
+
+  // todo move to a component
+  .quotes {
+    padding: 0;
+    perspective: 2000px;
+    overflow: hidden;
+    border-top: 3px solid $secoundary-dark-bg;
+    border-bottom: 3px solid $secoundary-dark-bg;
+
+    .quotes-container {
+      z-index: -2;
+      position: absolute;
+      // position: relative;
+      width: 110%;
+      height: 110%;
+
+      top: -300px;
+      left: -200px;
+      background-color: rgba($main-dark-bg, 0.7);
+      opacity: 0.7;
+
+      transform: rotateX(50deg) rotateY(-5deg) rotateZ(20deg) scale(1.25);
+
+      &:after,
+      &:before {
+        content: '';
+        position: absolute;
+        inset: 0px;
+        pointer-events: none;
+      }
+
+      &:before {
+        // z-index: 2;
+        background-image: url('~/assets/icons/plus-pattern-center.webp');
+        background-size: 144px;
+        background-repeat: repeat;
+        opacity: 0.15;
+      }
+      .square {
+        min-width: 4.5rem;
+        min-height: 4.5rem;
+        border: 1px solid rgba($main-dark-text, 0.25);
+
+        transition-duration: 1500ms;
+        &:hover {
+          transition-duration: 0ms;
+          &:nth-child(4n) {
+            background-color: $blue-2;
+          }
+          &:nth-child(4n + 1) {
+            background-color: $blue-3;
+          }
+          &:nth-child(4n + 2) {
+            background-color: $blue-4;
+          }
+          &:nth-child(4n + 3) {
+            background-color: $blue-5;
+          }
+
+          &:nth-child(7n) {
+            background-color: $blue-2;
+          }
+
+          &:nth-child(7n + 3) {
+            background-color: $blue-3;
+          }
+
+          &:nth-child(7n + 5) {
+            background-color: $blue-4;
+          }
+
+          &:nth-child(7n + 6) {
+            background-color: $blue-5;
+          }
+
+          &:nth-child(11n + 1) {
+            background-color: $blue-5;
+          }
+
+          &:nth-child(11n + 4) {
+            background-color: $blue-2;
+          }
+
+          &:nth-child(11n + 7) {
+            background-color: $blue-3;
+          }
+
+          &:nth-child(11n + 10) {
+            background-color: $blue-4;
           }
         }
       }

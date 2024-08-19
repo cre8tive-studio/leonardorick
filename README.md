@@ -52,3 +52,6 @@ Setup following [this amazing tutorial](https://dev.to/tao/adding-vitest-to-nuxt
 ### ORGANIZE LATER::::
 
 todo: add necessary information here
+
+on every animations composable, never add anything on the root of the composable.
+We should be able to call this composable from wherever we want to do anything animation related

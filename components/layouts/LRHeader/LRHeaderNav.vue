@@ -69,8 +69,8 @@ const handleLogout = async () => {
 
 <style scoped lang="scss">
 .language-select-form {
-  color: $main-dark-bg;
   select {
+    background: transparent;
     width: 80px;
     cursor: pointer;
   }

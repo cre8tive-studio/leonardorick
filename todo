@@ -1,51 +1,16 @@
-posible composible structure
-/client
-/three
-use-experience
-use-mesh
-...
-/three-leonardo-rick
-use-leonardo-rick (implements use-experience)
-use-<some-mesh-name> (implements use-mesh)
 
 add color mode
-
-
-// scroll animation -> zoom until reaching the middle of the logo.
-// After some scroll value, then change from fixed to absolute so the canvas disappear
-
-
-the three appears to be disposed and not beign added again when I navigate to home.
-I'm not calling it on onMounted anymore!!, I need to activate it again probably over
-think about a proper re-render solution
-
 
 setup header items animation on hover on both mobile and normal screens
 
 control leonardo rick animation to only start if we are at home or music
 
-fix letteers animations
-
 pleease try to create a sticky button plugin
 
 setup secoundary background as gradient? or try another prettier blue;
 
-understand whats blocking scroll at the begginging
-
-try to duplicate the 3d and cut the upper part out so I can have everything behind the logo
-
-setup central store loading to consider everything and extract overlay from THReeLeonaderoRik
-
 try to duplicate the canvas, change the fov of the second camera to render only the mirror part
 
-set a initial color of the fluid to be blue like the logo, the rest can be diferent but the initial equal
-
-explode some colors at the back when entering animation ends
-
-try to make parallax delayed
-
-todo remove shining code from index.vue if not used
-
-create footer and header components
-
 put the font effect used on LEONARDO RICK in index.vue on another place so it can be reused
+
+criar logica pra definir background to menu que abre

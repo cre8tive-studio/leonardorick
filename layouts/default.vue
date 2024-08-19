@@ -2,7 +2,7 @@
   <div class="relative l-default">
     <div
       v-if="loaded"
-      class="lr-section w-full flex fixed justify-end xl:justify-between"
+      class="lr-section l-default__header-container w-full flex fixed justify-end xl:justify-between"
     >
       <NuxtLink
         class="home-logo main-hover-button h-fit hidden xl:inline-block"
@@ -29,10 +29,14 @@ const localeRoute = computed(() => (r: string) => lang.value === 'en' ? r : `${r
 <style scoped lang="scss">
 @media (min-width: $xl-breakpoint) {
   .l-default {
+    &__header-container {
+      z-index: 1;
+    }
+
     .home-logo {
       svg {
-        height: 48px;
-        width: 48px;
+        height: 3rem;
+        width: 3rem;
       }
     }
   }
