@@ -2,7 +2,7 @@
   <h1>{{ $t('music_page') }}</h1>
   <ClientOnly>
     <div v-if="session">
-      <div v-if="loaded">
+      <div v-if="musicPageLoaded">
         <p>votes available: {{ upvotesAvailable }}</p>
         <div
           v-for="demo in demos"
@@ -50,7 +50,8 @@ import type { UpvotesClientModel } from '../types/upvotes.model';
 import { useAppStore } from '../store/index';
 import { getExpireTime } from '../utils/js-utilities';
 const nuxtApp = useNuxtApp();
-const { loaded, session } = toRefs(useAppStore());
+const musicPageLoaded = ref(false);
+const { session } = toRefs(useAppStore());
 const { settings, getJWT, getUpvotes, updateVotes } = useAppwrite();
 const { request } = useRequest();
 const demos = ref<DemoClientModel[]>([]);
@@ -61,16 +62,12 @@ const upvotesAvailable = ref(0);
 const userId = ref('');
 
 const filesLoading = computed(() => demosLoadedCount.value < demos.value.length);
-const demosMaxVotes = computed(() =>
-  settings.value ? demos.value.length * settings.value.upvotesMultiplier : 0
-);
+const demosMaxVotes = computed(() => (settings.value ? demos.value.length * settings.value.upvotesMultiplier : 0));
 
 setLoggedInformation();
 
 function playAudio(demoNumber: number) {
-  demoAudioRefs.value
-    .filter((ref) => ref.id !== `demo-${demoNumber}`)
-    .forEach((audio) => audio.pause());
+  demoAudioRefs.value.filter((ref) => ref.id !== `demo-${demoNumber}`).forEach((audio) => audio.pause());
 }
 
 function setUpvotesAvailable() {
@@ -115,7 +112,7 @@ async function setLoggedInformation() {
 
     request<DemoClientModel[]>('/api/getDemosMetadata', undefined, true).then(({ data }) => {
       demos.value = data.value;
-      loaded.value = true;
+      musicPageLoaded.value = true;
       setUpvotesAvailable();
 
       demos.value.forEach(async (demo) => {

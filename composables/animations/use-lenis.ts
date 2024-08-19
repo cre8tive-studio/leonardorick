@@ -3,7 +3,7 @@ interface ActivateOptions {
   raf?: boolean;
   scrollCallback?: (e: Lenis) => void;
 }
-const useLenis = (params?: ConstructorParameters<typeof Lenis>[0]) => {
+const useLenis = () => {
   let lenis: Lenis;
 
   function rafCallback(time: number) {
@@ -11,7 +11,7 @@ const useLenis = (params?: ConstructorParameters<typeof Lenis>[0]) => {
   }
 
   const activate = ({ raf = false, scrollCallback = () => {} }: ActivateOptions = {}) => {
-    lenis = new Lenis(params);
+    lenis = new Lenis();
     lenis.on('scroll', scrollCallback);
 
     if (raf) {

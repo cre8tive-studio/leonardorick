@@ -17,12 +17,13 @@ import { useAppStore } from '~/store';
 
 useHeadConfig();
 
-const { loaded, lang, recommendations, quotes } = toRefs(useAppStore());
+const { contentLoaded, lang, recommendations, quotes } = toRefs(useAppStore());
 const nuxtApp = useNuxtApp();
 const { $recommendations, $quotes, $fetchInitialData, $initializerClientError } = nuxtApp;
 
 if ($initializerClientError) {
   // todo setup modal error
+  // eslint-disable-next-line no-console
   console.error($initializerClientError);
 }
 
@@ -31,7 +32,7 @@ if ($recommendations.value && $quotes.value) {
 }
 
 watch(lang, async () => {
-  loaded.value = false;
+  contentLoaded.value = false;
   const res = await $fetchInitialData();
   if (res.$recommendations.value && res.$quotes.value) {
     setHomeView(res.$recommendations.value, res.$quotes.value);
@@ -73,6 +74,7 @@ async function setHomeView(rcs: RecommendationModel[], qts: QuoteModel[]) {
       if (error.value) {
         // todo: setup modal error
         // and setup a default image
+        // eslint-disable-next-line no-console
         console.error(error.value);
       }
 
@@ -84,6 +86,6 @@ async function setHomeView(rcs: RecommendationModel[], qts: QuoteModel[]) {
       }
     }
   });
-  loaded.value = true;
+  contentLoaded.value = true;
 }
 </script>

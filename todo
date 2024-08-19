@@ -15,8 +15,20 @@ add color mode
 // After some scroll value, then change from fixed to absolute so the canvas disappear
 
 
+the three appears to be disposed and not beign added again when I navigate to home.
+I'm not calling it on onMounted anymore!!, I need to activate it again probably over
+think about a proper re-render solution
+
+
+setup header items animation on hover on both mobile and normal screens
+
+control leonardo rick animation to only start if we are at home or music
+
+fix letteers animations
+
 pleease try to create a sticky button plugin
 
+setup secoundary background as gradient? or try another prettier blue;
 
 understand whats blocking scroll at the begginging
 

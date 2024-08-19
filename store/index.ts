@@ -1,10 +1,12 @@
+import { useAnimationStore } from './animation';
 import type { StoreModel } from '~/types/store.model';
 
 export const useAppStore = defineStore('store', () => {
+  const animationsStore = toRefs(useAnimationStore());
   const state = reactive<StoreModel>({
     lang: 'en',
     session: null,
-    loaded: false,
+    contentLoaded: false,
     settings: null,
     recommendations: [],
     quotes: [],
@@ -14,8 +16,11 @@ export const useAppStore = defineStore('store', () => {
     },
   });
 
+  const loaded = computed(() => state.contentLoaded && animationsStore.isLRModelLoaded);
+
   return {
     ...toRefs(state),
+    loaded,
     // add needed functions here
   };
 });

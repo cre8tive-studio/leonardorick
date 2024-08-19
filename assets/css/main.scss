@@ -4,18 +4,27 @@
 html,
 body,
 #__nuxt {
-  height: 100%;
   margin: 0;
 }
 
 html {
   color: $main-dark-text;
+
+  /* HIDE SCROLLBAR */
+  /* Internet Explorer 10+ */
+  -ms-overflow-style: none;
+  /* Firefox */
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar {
+  /* Safari and Chrome */
+  display: none;
 }
 
 body {
   background: $main-dark-bg;
-  overflow-y: hidden;
   font-family: 'JosefinSans', sans-serif;
+  overflow-y: auto;
 }
 
 /**
@@ -49,5 +58,37 @@ body {
   &:hover {
     color: $main-dark-bg;
     transition: color 0.3s ease-in-out;
+  }
+}
+
+/**
+* layouts
+*/
+
+.lr-section,
+.lr-section-pae,
+.lr-section-bottom {
+  padding: 16px;
+}
+
+.lr-section-page {
+  height: 100vh;
+}
+
+.lr-section-bottom {
+  padding-top: 0;
+}
+
+@media (min-width: $xl-breakpoint) {
+  .lr-section,
+  .lr-section-page,
+  .lr-section-bottom {
+    padding-top: 24px;
+    padding-right: 48px;
+    padding-left: 48px;
+  }
+
+  .lr-section-bottom {
+    padding-top: 0;
   }
 }

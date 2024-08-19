@@ -1,5 +1,5 @@
 <template>
-  <footer class="c-LRFooter flex items-end">
+  <footer class="lr-section-bottom c-LRFooter items-end display-none fixed bottom-0 hidden xl:flex">
     <nav>
       <ul class="flex flex-col gap-5">
         <li class="main-hover-button">
@@ -43,7 +43,7 @@
 
 <style scoped lang="scss">
 .c-LRFooter {
-  min-width: 88px;
+  min-width: $sides-xl-width;
   li {
     svg {
       height: 38px;

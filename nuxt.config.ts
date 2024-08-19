@@ -70,7 +70,12 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxt/image',
     'nuxt-svgo',
+    '@nuxtjs/device',
   ],
+  // so we can identify which type of device the user is using
+  device: {
+    refreshOnResize: true,
+  },
   pinia: {
     // some imports that are commonly used to be included automatically as nuxt do with much others
     autoImports: ['defineStore', ['defineStore', 'definePiniaStore']],

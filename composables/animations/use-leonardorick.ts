@@ -43,9 +43,9 @@ import lr from '~/assets/models/lr.glb';
 import galaxyTexture from '~/assets/textures/environmentMaps/galaxy.jpg';
 
 const useLeonardoRick = () => {
+  const { isMobile } = useDevice();
   const store = useAnimationStore();
-  const { scrollLayout, logoCanvas, isEnteringAnimationFinished, isLRModelLoaded, loadingProgress, loadingTotal } =
-    toRefs(store);
+  const { logoCanvas, isEnteringAnimationFinished, isLRModelLoaded, loadingProgress, loadingTotal } = toRefs(store);
   const { changeScrollLayoutOverflow } = store;
 
   const { fluidExplosion } = useFluid();
@@ -170,7 +170,7 @@ const useLeonardoRick = () => {
   const shouldBlockScroll = ref(false);
   let INITIAL_CAMERA_POSITION: Vector3;
   let INITIAL_CAMERA_ROTATION: Euler;
-  const getRealScrollTop = () => scrollLayout.value?.scrollTop || 0;
+  const getRealScrollTop = () => document.documentElement.scrollTop;
   const getScrollTop = () => {
     const realScrollTop = getRealScrollTop();
     return realScrollTop > ENTERING_ANIMATION_SCROLL_POSITION
@@ -265,25 +265,28 @@ const useLeonardoRick = () => {
        */
       const scrollTop = getScrollTop();
       if (scrollTop) {
-        thisCamera.position.z = -scrollTop * 0.003 + (INITIAL_CAMERA_POSITION?.z || 3);
+        thisCamera.position.z = -scrollTop * 0.0015 + (INITIAL_CAMERA_POSITION?.z || 3);
         // center lookAt needs to happen before camera rotation, if not the rotation will not happen.
         // since it was buggy I commennted and going to try again later
         // c.rotation.z = -scrollTop * 0.001;
       }
     }
 
-    const elapsedTime = clock.getElapsedTime();
-    const deltaTime = elapsedTime - previousTime;
-    previousTime = elapsedTime;
-    const parallaxX = cursor.x * AMPLITUDE_X;
-    const parallaxY = (-cursor.y + MODEL_POSITION_Y_CORRECTION) * AMPLITUDE_Y;
-    thisCamera.position.x += (parallaxX - thisCamera.position.x) * FRACTION * deltaTime;
-    thisCamera.position.y += (parallaxY - thisCamera.position.y) * FRACTION * deltaTime;
+    if (!isMobile) {
+      const elapsedTime = clock.getElapsedTime();
+      const deltaTime = elapsedTime - previousTime;
+      previousTime = elapsedTime;
+      const parallaxX = cursor.x * AMPLITUDE_X;
+      const parallaxY = (-cursor.y + MODEL_POSITION_Y_CORRECTION) * AMPLITUDE_Y;
+      thisCamera.position.x += (parallaxX - thisCamera.position.x) * FRACTION * deltaTime;
+      thisCamera.position.y += (parallaxY - thisCamera.position.y) * FRACTION * deltaTime;
 
-    const center = gltfModel.instances[GLTFModelKeys.center].mesh;
-    if (center) {
-      thisCamera.lookAt(getCenterToLookAt(center.position));
+      const center = gltfModel.instances[GLTFModelKeys.center].mesh;
+      if (center) {
+        thisCamera.lookAt(getCenterToLookAt(center.position));
+      }
     }
+
     thisRenderer.render(thisScene, thisCamera);
   }
   /**
@@ -308,7 +311,9 @@ const useLeonardoRick = () => {
         if (thisPane) {
           thisPane.refresh();
         }
-        animateClone();
+        if (!isMobile) {
+          animateClone();
+        }
       },
     });
 
@@ -357,7 +362,7 @@ const useLeonardoRick = () => {
                 all.mesh.scale.set(0, 0, 0);
               }
 
-              changeScrollLayoutOverflow('');
+              changeScrollLayoutOverflow('auto');
             },
           },
           '<'
@@ -585,6 +590,7 @@ const useLeonardoRick = () => {
    * and hide the overlay
    */
   function setupGsapLoadingAnimation() {
+    changeScrollLayoutOverflow('hidden');
     const FADE_IN_DURATION = 2;
 
     const tl = gsap.timeline({
@@ -592,6 +598,7 @@ const useLeonardoRick = () => {
         if (thisPane) {
           thisPane.refresh();
         }
+        changeScrollLayoutOverflow('auto');
       },
     });
 
@@ -666,18 +673,20 @@ const useLeonardoRick = () => {
 
         // put floor (reflection) on the right place smootly
         .to(floor.self.mesh.position, { x: floor.self.finalPosition.x }, '-=0.68')
-        .to(floor.mat.position, { x: floor.self.finalPosition.x }, '<')
+        .to(floor.mat.position, { x: floor.self.finalPosition.x }, '<');
 
+      if (!isMobile) {
         // Slow Oscillating Movement for top mesh
-        .to(top.mesh.position, { x: '-=0.04', z: '+=0.04', ...OSCILLATING_PROPS })
-        .to(bottom.mesh.position, { x: '+=0.04', z: '-=0.04', ...OSCILLATING_PROPS }, '<')
-        .to(center.mesh.scale, { x: '-=0.004', z: '-=0.004', ...OSCILLATING_PROPS }, '<')
+        tl.to(top.mesh.position, { x: '-=0.04', z: '+=0.04', ...OSCILLATING_PROPS })
+          .to(bottom.mesh.position, { x: '+=0.04', z: '-=0.04', ...OSCILLATING_PROPS }, '<')
+          .to(center.mesh.scale, { x: '-=0.004', z: '-=0.004', ...OSCILLATING_PROPS }, '<')
 
-        // lights animation
-        .to(lights.dLight2.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 })
-        .to(lights.dLight2.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 })
-        .to(lights.dLight1.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 }, '-=10')
-        .to(lights.dLight1.light, { intensity: '-=800', ...OSCILLATING_PROPS, duration: 10 });
+          // lights animation
+          .to(lights.dLight2.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 })
+          .to(lights.dLight2.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 })
+          .to(lights.dLight1.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 }, '-=10')
+          .to(lights.dLight1.light, { intensity: '-=800', ...OSCILLATING_PROPS, duration: 10 });
+      }
 
       gsapAnimations.motion = tl;
     }
@@ -691,9 +700,9 @@ const useLeonardoRick = () => {
 
     tl
       // slowly dissapear
-      .to(gltfModel.backgroundMaterial, { opacity: 0, ease: 'power2.in', duration: 30 })
+      .to(gltfModel.backgroundMaterial, { opacity: 0, ease: 'power2.in', duration: 30, delay: 10 })
       // put back the right opacity
-      .to(gltfModel.backgroundMaterial, { opacity: 1, ease: 'sine.inOut', duration: 1, delay: 10 });
+      .to(gltfModel.backgroundMaterial, { opacity: 1, ease: 'sine.inOut', duration: 1 });
   }
 
   function documentMousemoveHandler($event: any) {

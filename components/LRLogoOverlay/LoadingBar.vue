@@ -3,9 +3,7 @@
     ref="loadingBar"
     class="c-LoadingBar"
     :style="{ width }"
-  >
-    <!-- {{ width }} -->
-  </div>
+  ></div>
 </template>
 
 <script setup lang="ts">

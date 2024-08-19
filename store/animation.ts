@@ -9,7 +9,6 @@ interface animationStoreModel {
   fluid: Fluid | null;
   fluidCanvas: HTMLCanvasElement | undefined;
   logoCanvas: HTMLCanvasElement | undefined;
-  scrollLayout: HTMLElement | undefined;
   loadingBarRef: HTMLDivElement | undefined;
   logoOverlayRef: HTMLDivElement | undefined;
   cubeLoaderContainerRef: HTMLDivElement | undefined;
@@ -24,16 +23,13 @@ export const useAnimationStore = defineStore('animationStore', () => {
     fluid: null,
     fluidCanvas: undefined,
     logoCanvas: undefined,
-    scrollLayout: undefined,
     loadingBarRef: undefined,
     logoOverlayRef: undefined,
     cubeLoaderContainerRef: undefined,
   });
 
-  const changeScrollLayoutOverflow = (overflow: '' | 'hidden') => {
-    if (state.scrollLayout) {
-      state.scrollLayout.style.overflow = overflow;
-    }
+  const changeScrollLayoutOverflow = (overflow: 'auto' | 'hidden') => {
+    document.body.style.overflowY = overflow;
   };
 
   return {

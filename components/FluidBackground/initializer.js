@@ -859,8 +859,13 @@ export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers, { init
   let timeoutId;
   let shouldGenerateColorAgain = true;
   document.addEventListener('mousemove', (e) => {
-    const scrollX = window.scrollX;
-    const scrollY = window.scrollY;
+    /**
+     * use it if you need to put the fluid inside a div that scrolls
+     */
+    // const scrollX = window.scrollX;
+    // const scrollY = document.documentElement.scrollTop;
+    const scrollX = 0;
+    const scrollY = 0;
     const x = e.clientX + scrollX;
     const y = e.clientY + scrollY;
 

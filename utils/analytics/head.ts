@@ -1,7 +1,6 @@
 import type { LanguageOptions } from '../constants/languages';
 
-const isClient = process.client;
-const path = isClient ? window.location.origin : process.env.VUE_APP_BASE_URL;
+const path = process.env.VUE_APP_BASE_URL;
 
 const defaultInfo = {
   title: 'Leonardo Rick - Software Engineer',

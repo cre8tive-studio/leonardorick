@@ -48,3 +48,7 @@ npm run test
 ```
 
 Setup following [this amazing tutorial](https://dev.to/tao/adding-vitest-to-nuxt-3-2023-lpa)
+
+### ORGANIZE LATER::::
+
+todo: add necessary information here

@@ -9,7 +9,7 @@ export interface StoreModel {
   lang: LanguageOptions;
   settings: SettingsClientModel | null;
   session: Models.Session | null;
-  loaded: boolean;
+  contentLoaded: boolean;
   lastJWT: {
     jwt: string;
     expire: number;

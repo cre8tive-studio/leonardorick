@@ -1,16 +1,19 @@
 <template>
-  <template v-if="loaded">
-    <div class="main flex items-end justify-center gap-2">
+  <div
+    v-if="loaded"
+    class="p-index xl:mx-20"
+  >
+    <div class="main lr-section-page flex flex-col items-center justify-end gap-2">
       <h1
         ref="nameTitle"
-        class="main__title"
+        class="main__title title-splitted pb-20 xl:pl-10"
       >
         Leonardo Rick
         <span class="registered-icon">®</span>
       </h1>
     </div>
 
-    <div class="recommendations">
+    <div class="lr-section-page recommendations">
       <div
         v-for="recommendation in recommendations"
         :key="recommendation.id"
@@ -40,21 +43,37 @@
         {{ quote }}
       </div>
     </div>
-  </template>
+  </div>
 </template>
 
 <script setup lang="ts">
 import SplitType from 'split-type';
 import { gsap } from 'gsap';
+import { watchOnce } from '@vueuse/core';
 import { useAppStore } from '~/store';
-
 const { loaded, recommendations, quotes } = toRefs(useAppStore());
-const nameTitle = ref();
-onMounted(() => {
-  const repeatCount = 8;
-  const tl = gsap.timeline({ paused: true });
-  const split = new SplitType('h1', { types: 'chars' });
 
+const nameTitle = ref();
+
+onMounted(() => {
+  if (nameTitle.value) {
+    animateAndSplitChars();
+  } else {
+    watchOnce(loaded, async () => {
+      await nextTick();
+      animateAndSplitChars();
+    });
+  }
+});
+
+function animateAndSplitChars() {
+  animateRollingChars(new SplitType('.title-splitted', { types: 'chars' }));
+}
+function animateRollingChars(split: SplitType) {
+  const mtl = gsap.timeline();
+  const tl = gsap.timeline({ paused: true, repeat: -1 });
+  const repeatCount = 8;
+  // https://codepen.io/PointC/pen/ZEmOKvP
   if (split.chars) {
     split.chars.forEach((obj, i) => {
       const txt = obj.innerText;
@@ -71,60 +90,61 @@ onMounted(() => {
       });
       tl.add(tween, 0);
     });
-    gsap.to(tl, { progress: 1, duration: 4, ease: 'power4.inOut' });
+
+    mtl.fromTo(nameTitle.value, { opacity: 0 }, { opacity: 1, duration: 4, delay: 0.3 });
+    mtl.to(tl, { progress: 1, duration: 4, ease: 'power4.inOut' }, '-=4.5');
   }
-});
+}
 </script>
 <style scoped lang="scss">
-.main {
-  height: calc(100vh - $header-opened-height);
-
-  &__title {
-    font-size: 86px;
-    margin-bottom: 120px;
-    line-height: 90px;
-    font-family: 'JosefinSans', sans-serif;
-    font-weight: 700;
-    position: relative;
-    bottom: 0;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    span {
-      display: inline-block;
+.p-index {
+  .main {
+    &__title {
+      z-index: -1;
+      font-size: 18px;
+      font-family: 'JosefinSans', sans-serif;
+      font-weight: 700;
       position: relative;
-      height: 100%;
-      font-size: 42px;
-      font-weight: 600;
-      line-height: 90px;
-      top: -23px;
-      left: -14px;
+      bottom: 0;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+
+      span {
+        display: inline-block;
+        position: relative;
+        height: 100%;
+
+        font-weight: 600;
+      }
+
+      &.title-splitted {
+        :deep(.char) {
+          overflow: hidden;
+          position: relative;
+
+          .cloneText {
+            position: absolute;
+            left: 0;
+            top: 0;
+          }
+        }
+      }
     }
+  }
+}
+@media (min-width: $xl-breakpoint) {
+  .p-index {
+    .main {
+      &__title {
+        font-size: 86px;
+        line-height: 90px;
 
-    // todo remove if shining not used
-    //   @keyframes animate {
-    //   0% {
-    //     background-position: 0px;
-    //   }
-
-    //   100% {
-    //     background-position: 660px;
-    //   }
-    // }
-    // transition: all 3s ease-in-out;
-    // background: linear-gradient(to right, #7a7878 0, white 40%, #7a7878 80%);
-    // background-clip: text;
-    // -webkit-background-clip: text;
-    // -webkit-text-fill-color: transparent;
-    // animation: animate 10s linear infinite;
-
-    :deep(.char) {
-      overflow: hidden;
-      position: relative;
-
-      .cloneText {
-        position: absolute;
-        left: 0;
-        top: 0;
+        span {
+          line-height: 90px;
+          font-size: 42px;
+          top: -23px;
+          left: -14px;
+        }
       }
     }
   }

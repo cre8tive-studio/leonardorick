@@ -17,6 +17,9 @@ importers:
       '@nuxt/image':
         specifier: ^1.7.0
         version: 1.7.0(ioredis@5.4.1)(magicast@0.3.4)(rollup@4.19.1)
+      '@nuxtjs/device':
+        specifier: ^3.1.1
+        version: 3.1.1(magicast@0.3.4)(rollup@4.19.1)
       '@pinia/nuxt':
         specifier: ^0.4.11
         version: 0.4.11(magicast@0.3.4)(rollup@4.19.1)(typescript@5.5.4)(vue@3.4.34(typescript@5.5.4))
@@ -1013,6 +1016,9 @@ packages:
 
   '@nuxtjs/color-mode@3.4.2':
     resolution: {integrity: sha512-6A+lDP8R6fFXc1Ip5tDepKq9MJW6oxbRlz1plvW52yacnpeDFXv5S5rDS0ax31AuSFUPlgzHymFSdjcylBwZ6w==}
+
+  '@nuxtjs/device@3.1.1':
+    resolution: {integrity: sha512-wHTziEevt1hdgePQwPhEedWW3COalhP0YGVB+sGLqSrKujX8vdz7lcBFB01KIftpaP8kY5H8pssibNaJbxGcYw==}
 
   '@nuxtjs/eslint-config-typescript@12.1.0':
     resolution: {integrity: sha512-l2fLouDYwdAvCZEEw7wGxOBj+i8TQcHFu3zMPTLqKuv1qu6WcZIr0uztkbaa8ND1uKZ9YPqKx6UlSOjM4Le69Q==}
@@ -6647,6 +6653,15 @@ snapshots:
       pathe: 1.1.2
       pkg-types: 1.1.3
       semver: 7.6.3
+    transitivePeerDependencies:
+      - magicast
+      - rollup
+      - supports-color
+
+  '@nuxtjs/device@3.1.1(magicast@0.3.4)(rollup@4.19.1)':
+    dependencies:
+      '@nuxt/kit': 3.12.4(magicast@0.3.4)(rollup@4.19.1)
+      defu: 6.1.4
     transitivePeerDependencies:
       - magicast
       - rollup
