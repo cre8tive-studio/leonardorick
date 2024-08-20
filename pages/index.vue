@@ -13,14 +13,16 @@
       </h1>
     </div>
 
-    <div class="lr-section-page quotes">
-      <!-- <div class="flex items center justify-center">text</div> -->
-      <div class="quotes-container flex flex-wrap">
-        <div
-          v-for="index in 370"
-          :key="index"
-          class="square"
-        ></div>
+    <div class="lr-section-page lr-section-page-no-paddings relative">
+      <LRColorfulTile />
+      <div
+        class="about-me-text lr-section-page-paddings lr-overlaping-allow-hover relative h-full flex flex-col justify-center gap-4"
+      >
+        <h1 class="text-4xl">about me</h1>
+        <p>
+          I'm a selectively skilled Software Engineer with strong focus on frontend development, User Experience and
+          impactful digital experiences.
+        </p>
       </div>
     </div>
 
@@ -114,11 +116,11 @@ function animateRollingChars(split: SplitType) {
   .main {
     padding-bottom: 25%;
     &__title {
+      position: relative;
       z-index: -1;
       font-size: 1.5rem;
       font-family: 'JosefinSans', sans-serif;
       font-weight: 700;
-      position: relative;
       bottom: 0;
       letter-spacing: 0.03em;
       text-transform: uppercase;
@@ -132,6 +134,8 @@ function animateRollingChars(split: SplitType) {
       }
 
       &.title-splitted {
+        // needed because text added to the document later is
+        // not considered of the component scope
         :deep(.char) {
           overflow: hidden;
           position: relative;
@@ -146,99 +150,9 @@ function animateRollingChars(split: SplitType) {
     }
   }
 
-  // todo move to a component
-  .quotes {
-    padding: 0;
-    perspective: 2000px;
-    overflow: hidden;
-    border-top: 3px solid $secoundary-dark-bg;
-    border-bottom: 3px solid $secoundary-dark-bg;
-
-    .quotes-container {
-      z-index: -2;
-      position: absolute;
-      // position: relative;
-      width: 110%;
-      height: 110%;
-
-      top: -300px;
-      left: -200px;
-      background-color: rgba($main-dark-bg, 0.7);
-      opacity: 0.7;
-
-      transform: rotateX(50deg) rotateY(-5deg) rotateZ(20deg) scale(1.25);
-
-      &:after,
-      &:before {
-        content: '';
-        position: absolute;
-        inset: 0px;
-        pointer-events: none;
-      }
-
-      &:before {
-        // z-index: 2;
-        background-image: url('~/assets/icons/plus-pattern-center.webp');
-        background-size: 144px;
-        background-repeat: repeat;
-        opacity: 0.15;
-      }
-      .square {
-        min-width: 4.5rem;
-        min-height: 4.5rem;
-        border: 1px solid rgba($main-dark-text, 0.25);
-
-        transition-duration: 1500ms;
-        &:hover {
-          transition-duration: 0ms;
-          &:nth-child(4n) {
-            background-color: $blue-2;
-          }
-          &:nth-child(4n + 1) {
-            background-color: $blue-3;
-          }
-          &:nth-child(4n + 2) {
-            background-color: $blue-4;
-          }
-          &:nth-child(4n + 3) {
-            background-color: $blue-5;
-          }
-
-          &:nth-child(7n) {
-            background-color: $blue-2;
-          }
-
-          &:nth-child(7n + 3) {
-            background-color: $blue-3;
-          }
-
-          &:nth-child(7n + 5) {
-            background-color: $blue-4;
-          }
-
-          &:nth-child(7n + 6) {
-            background-color: $blue-5;
-          }
-
-          &:nth-child(11n + 1) {
-            background-color: $blue-5;
-          }
-
-          &:nth-child(11n + 4) {
-            background-color: $blue-2;
-          }
-
-          &:nth-child(11n + 7) {
-            background-color: $blue-3;
-          }
-
-          &:nth-child(11n + 10) {
-            background-color: $blue-4;
-          }
-        }
-      }
-    }
-  }
+  // .about-me-text {
+  //   z-index: 1;
+  // }
 }
 @media (min-width: $xl-breakpoint) {
   .p-index {
@@ -254,6 +168,11 @@ function animateRollingChars(split: SplitType) {
           left: -14px;
         }
       }
+    }
+    .about-me-text {
+      font-size: 72px;
+      line-height: 86px;
+      letter-spacing: 0.3rem;
     }
   }
 }

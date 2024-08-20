@@ -2,7 +2,7 @@
   <div class="relative l-default">
     <div
       v-if="loaded"
-      class="lr-section l-default__header-container w-full flex fixed justify-end xl:justify-between"
+      class="lr-section lr-overlaping-allow-hover l-default__header-container w-full flex fixed justify-end xl:justify-between"
     >
       <NuxtLink
         class="home-logo main-hover-button h-fit hidden xl:inline-block"
@@ -12,7 +12,7 @@
       </NuxtLink>
       <LRHeader />
     </div>
-    <div class="default-slot flex-grow top-0 left-0">
+    <div class="default-slot flex-grow">
       <slot />
     </div>
 
@@ -27,12 +27,13 @@ const { lang, loaded } = toRefs(useAppStore());
 const localeRoute = computed(() => (r: string) => lang.value === 'en' ? r : `${r}?locale=${lang.value}`);
 </script>
 <style scoped lang="scss">
+.l-default {
+  &__header-container {
+    z-index: 1;
+  }
+}
 @media (min-width: $xl-breakpoint) {
   .l-default {
-    &__header-container {
-      z-index: 1;
-    }
-
     .home-logo {
       svg {
         height: 3rem;

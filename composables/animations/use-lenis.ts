@@ -11,7 +11,7 @@ const useLenis = () => {
   }
 
   const activate = ({ raf = false, scrollCallback = () => {} }: ActivateOptions = {}) => {
-    lenis = new Lenis();
+    lenis = new Lenis({ duration: 1.4 });
     lenis.on('scroll', scrollCallback);
 
     if (raf) {

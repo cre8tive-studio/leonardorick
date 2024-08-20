@@ -82,6 +82,7 @@ function toggleMobileMenu() {
   .mobile-menu {
     background-color: $secoundary-dark-bg;
     position: absolute;
+
     top: 0;
     left: 0;
     height: 100vh;

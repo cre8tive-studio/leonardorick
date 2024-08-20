@@ -65,10 +65,22 @@ body {
 * layouts
 */
 
+.lr-overlaping-allow-hover {
+  pointer-events: none;
+  > * {
+    pointer-events: auto;
+  }
+}
+
 .lr-section,
 .lr-section-page,
-.lr-section-bottom {
+.lr-section-bottom,
+.lr-section-page-paddings {
   padding: 1rem;
+  &-no-paddings {
+    padding-right: 0;
+    padding-left: 0;
+  }
 }
 
 .lr-section-page {
@@ -87,9 +99,14 @@ body {
     padding-left: 3rem;
   }
 
-  .lr-section-page {
+  .lr-section-page,
+  .lr-section-page-paddings {
     padding-right: 8rem;
     padding-left: 8rem;
+    &-no-paddings {
+      padding-right: 0;
+      padding-left: 0;
+    }
   }
 
   .lr-section-bottom {
