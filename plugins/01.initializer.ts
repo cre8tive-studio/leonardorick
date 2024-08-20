@@ -1,5 +1,6 @@
 import { defineNuxtPlugin } from 'nuxt/app';
 import { useAppStore } from '~/store';
+import type { GeneralsModel } from '~/types/generals.model';
 import type { i18nModel } from '~/types/i18n.model';
 import type { QuoteModel } from '~/types/quote.model';
 import type { RecommendationModel } from '~/types/recommendation-model';
@@ -19,7 +20,7 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
   const { query } = useRoute();
   const locale = (query?.locale as LanguageOptions) || 'en';
 
-  const { $recommendations: recommendations, $quotes: quotes } = await _fetchInitialData(locale);
+  const { $recommendations: recommendations, $quotes: quotes, $generals: generals } = await _fetchInitialData(locale);
 
   (_nuxtApp.$i18n as i18nModel).locale.value = locale;
 
@@ -27,15 +28,18 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
     provide: {
       recommendations,
       quotes,
+      generals,
       fetchInitialData,
     },
   };
 });
 
 const _fetchInitialData = async (locale: LanguageOptions) => {
-  const [{ data: $recommendations }, { data: $quotes }] = await Promise.all([
+  const [{ data: $recommendations }, { data: $quotes }, { data: $generals }] = await Promise.all([
     useFetch<RecommendationModel[]>(localeRoute('/api/recommendations', locale)),
     useFetch<QuoteModel[]>(localeRoute('/api/quotes', locale)),
+    useFetch<GeneralsModel[]>(localeRoute('/api/generals', locale)),
   ]);
-  return { $recommendations, $quotes };
+
+  return { $recommendations, $quotes, $generals };
 };

@@ -18,8 +18,5 @@ export default defineEventHandler(async (event) => {
       }
     }
   `;
-
-  return request<QuotesRequest>(url, query, { locale: formatedLocale }).then(
-    (res) => res.Quotes.docs
-  );
+  return request<QuotesRequest>(url, query, { locale: formatedLocale }).then((res) => res.Quotes.docs);
 });
