@@ -12,14 +12,15 @@ import useHeadConfig from './composables/use-head-config';
 import type { RecommendationModel } from './types/recommendation-model';
 import type { QuoteModel } from './types/quote.model';
 import type { Media } from './types/payload-types';
+import type { GeneralsModel } from './types/generals.model';
 import { getExpireTime } from './utils/js-utilities';
 import { useAppStore } from '~/store';
 
 useHeadConfig();
 
-const { contentLoaded, lang, recommendations, quotes } = toRefs(useAppStore());
+const { contentLoaded, lang, recommendations, quotes, generals } = toRefs(useAppStore());
 const nuxtApp = useNuxtApp();
-const { $recommendations, $quotes, $fetchInitialData, $initializerClientError } = nuxtApp;
+const { $recommendations, $quotes, $generals, $fetchInitialData, $initializerClientError } = nuxtApp;
 
 if ($initializerClientError) {
   // todo setup modal error
@@ -27,23 +28,27 @@ if ($initializerClientError) {
   console.error($initializerClientError);
 }
 
-if ($recommendations.value && $quotes.value) {
-  await setHomeView($recommendations.value, $quotes.value);
+if ($recommendations.value && $quotes.value && $generals.value) {
+  await setHomeView($recommendations.value, $quotes.value, $generals.value);
 }
 
 watch(lang, async () => {
   contentLoaded.value = false;
   const res = await $fetchInitialData();
-  if (res.$recommendations.value && res.$quotes.value) {
-    setHomeView(res.$recommendations.value, res.$quotes.value);
+  if (res.$recommendations.value && res.$quotes.value && res.generals.value) {
+    setHomeView(res.$recommendations.value, res.$quotes.value, res.$generals.value);
   }
 });
 
-async function setHomeView(rcs: RecommendationModel[], qts: QuoteModel[]) {
+async function setHomeView(rcs: RecommendationModel[], qts: QuoteModel[], gnrs: GeneralsModel[]) {
   recommendations.value = rcs;
   quotes.value = qts;
+  generals.value = gnrs;
 
   recommendations.value.forEach(async (rc) => {
+    /**
+     * setting up cloudinary image
+     */
     const url = (rc.author.image as Media).cloudinary?.secure_url;
     if (url) {
       const { data, error } = await useFetch(url, {
