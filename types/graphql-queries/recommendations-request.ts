@@ -1,6 +1,6 @@
 import type { RecommendationModel } from '~/types/recommendation-model';
 
-export interface RecommendationsRequest {
+export interface RecommendationsResponse {
   Recommendations: {
     docs: RecommendationModel[];
   };

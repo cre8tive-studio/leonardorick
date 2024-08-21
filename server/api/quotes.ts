@@ -1,6 +1,6 @@
 import { request, gql } from 'graphql-request';
 import { getFormattedLocale } from '../utils/get-formatted-locale';
-import type { QuotesRequest } from '../../types/graphql-queries/quotes-request';
+import type { QuotesResponse } from '../../types/graphql-queries/quotes-response';
 
 export default defineEventHandler(async (event) => {
   const { locale } = getQuery(event);
@@ -18,5 +18,5 @@ export default defineEventHandler(async (event) => {
       }
     }
   `;
-  return request<QuotesRequest>(url, query, { locale: formatedLocale }).then((res) => res.Quotes.docs);
+  return request<QuotesResponse>(url, query, { locale: formatedLocale }).then((res) => res.Quotes.docs);
 });

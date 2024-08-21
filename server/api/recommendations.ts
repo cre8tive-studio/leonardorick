@@ -1,5 +1,5 @@
 import { request, gql } from 'graphql-request';
-import type { RecommendationsRequest } from '../../types/graphql-queries/recommendations-request';
+import type { RecommendationsResponse } from '../../types/graphql-queries/recommendations-request';
 import { getFormattedLocale } from '../utils/get-formatted-locale';
 
 export default defineEventHandler(async (event) => {
@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
       }
     }
   `;
-  return request<RecommendationsRequest>(url, query, { locale: formatedLocale }).then(
+  return request<RecommendationsResponse>(url, query, { locale: formatedLocale }).then(
     (res) => res.Recommendations.docs
   );
 });

@@ -1,6 +1,6 @@
 import type { QuoteModel } from '../quote.model';
 
-export interface QuotesRequest {
+export interface QuotesResponse {
   Quotes: {
     docs: QuoteModel[];
   };

@@ -1,7 +1,7 @@
 import { isGeneralHtmlTag, isGeneralKey, type GeneralsModel } from '~/types/generals.model';
-import type { GeneralsRequest } from '~/types/graphql-queries/generals-request';
+import type { GeneralsResponse } from '~/types/graphql-queries/generals-response';
 
-export function parseGenerals(response: GeneralsRequest): GeneralsModel[] {
+export function parseGenerals(response: GeneralsResponse): GeneralsModel[] {
   return response.Generals.docs.map(({ data, ...doc }) => ({
     ...doc,
     key: isGeneralKey(doc.key) ? doc.key : 'about-me',

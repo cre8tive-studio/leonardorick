@@ -1,5 +1,5 @@
 import { request, gql } from 'graphql-request';
-import type { GeneralsRequest } from '../../types/graphql-queries/generals-request';
+import type { GeneralsResponse } from '../../types/graphql-queries/generals-response';
 import { getFormattedLocale } from '../utils/get-formatted-locale';
 import { parseGenerals } from '~/utils/parsers/generals.parser';
 
@@ -24,5 +24,5 @@ export default defineEventHandler(async (event) => {
   `;
 
   // this map reduces a unecessary (for my usecase at least) list level present on payload
-  return request<GeneralsRequest>(url, query, { locale: formatedLocale }).then(parseGenerals);
+  return request<GeneralsResponse>(url, query, { locale: formatedLocale }).then(parseGenerals);
 });
