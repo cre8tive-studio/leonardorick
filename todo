@@ -27,3 +27,12 @@ criar logica pra definir background to menu que abre
 test change font to ICA Rubrik https://globalfonts.pro/font/ica-rubrik
 
 update payload version to at least 2.22 (https://github.com/payloadcms/payload/releases?page=4)
+
+add
+htmlTagStyle optional to the payload so I can control exactly the style and make a more generic component
+
+copy margins and breakpoints of https://minhpham.design/
+
+set custom colors on Lr colorful tile
+
+try to control the first color of the fluid once it enters a specific region. Actually ,just control it frmo outside somehow sending an event to the store

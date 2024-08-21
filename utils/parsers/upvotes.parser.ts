@@ -1,19 +1,4 @@
-import type { SettingsClientModel, SettingsModel } from '~/types/settings.model';
 import type { UpvotesClientModel, UpvotesModel } from '~/types/upvotes.model';
-
-export function parseSettings({
-  availableDemosCount,
-  demosReady,
-  startDemosCount,
-  upvotesMultiplier,
-}: SettingsModel): SettingsClientModel {
-  return {
-    availableDemosCount,
-    demosReady,
-    startDemosCount,
-    upvotesMultiplier,
-  };
-}
 
 export function parseUpvotes(res: { documents: UpvotesModel[] }): UpvotesClientModel {
   return res.documents

@@ -3,7 +3,8 @@
     v-if="loaded"
     class="p-index"
   >
-    <div class="main lr-section-page flex flex-col items-center justify-end gap-2">
+    <div class="main lr-section-page flex flex-col items-center justify-end gap-2 relative">
+      <div class="background-fade-tile fade-top absolute left-0 h-full w-full pointer-events-none" />
       <h1
         ref="nameTitle"
         class="main__title title-splitted pb-20 xl:pl-10"
@@ -18,12 +19,15 @@
       <div
         class="about-me-text lr-section-page-paddings lr-overlaping-allow-hover relative h-full flex flex-col justify-center gap-4"
       >
-        <h1 class="text-4xl">about me</h1>
-        <p>
-          I'm a selectively skilled Software Engineer with strong focus on frontend development, User Experience and
-          impactful digital experiences.
-        </p>
+        <LRGeneralText
+          v-if="aboutMeContent"
+          :info="aboutMeContent"
+        />
       </div>
+    </div>
+
+    <div class="todo lr-section-page relative">
+      <div class="background-fade-tile fade-bottom absolute left-0 h-full w-full pointer-events-none" />
     </div>
 
     <div class="lr-section-page recommendations">
@@ -64,9 +68,11 @@ import SplitType from 'split-type';
 import { gsap } from 'gsap';
 import { watchOnce } from '@vueuse/core';
 import { useAppStore } from '~/store';
-const { loaded, recommendations, quotes } = toRefs(useAppStore());
-
+const { loaded, recommendations, quotes, generals } = toRefs(useAppStore());
 const nameTitle = ref();
+
+const aboutMeContent = computed(() => generals.value.find((general) => general.key === 'about-me'));
+
 onMounted(() => {
   if (nameTitle.value) {
     animateAndSplitChars();
@@ -113,9 +119,21 @@ function animateRollingChars(split: SplitType) {
 </script>
 <style scoped lang="scss">
 .p-index {
+  $main-margin-bottom: 25%;
+  .background-fade-tile {
+    background: $main-dark-bg;
+    bottom: -$main-margin-bottom;
+    &.fade-top {
+      background: linear-gradient(0deg, $main-dark-bg 19%, rgba($main-dark-bg, 0) 52%);
+    }
+    &.fade-bottom {
+      top: 0;
+      background: linear-gradient(180deg, $main-dark-bg 19%, rgba($main-dark-bg, 0) 52%);
+    }
+  }
   .main {
-    padding-bottom: 25%;
     &__title {
+      margin-bottom: $main-margin-bottom;
       position: relative;
       z-index: -1;
       font-size: 1.5rem;
@@ -149,14 +167,11 @@ function animateRollingChars(split: SplitType) {
       }
     }
   }
-
-  // .about-me-text {
-  //   z-index: 1;
-  // }
 }
 @media (min-width: $xl-breakpoint) {
   .p-index {
     .main {
+      margin-bottom: 210px;
       &__title {
         font-size: 86px;
         line-height: 90px;
@@ -168,11 +183,6 @@ function animateRollingChars(split: SplitType) {
           left: -14px;
         }
       }
-    }
-    .about-me-text {
-      font-size: 72px;
-      line-height: 86px;
-      letter-spacing: 0.3rem;
     }
   }
 }

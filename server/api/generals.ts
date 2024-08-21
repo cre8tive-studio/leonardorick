@@ -1,6 +1,7 @@
 import { request, gql } from 'graphql-request';
 import type { GeneralsRequest } from '../../types/graphql-queries/generals-request';
 import { getFormattedLocale } from '../utils/get-formatted-locale';
+import { parseGenerals } from '~/utils/parsers/generals.parser';
 
 export default defineEventHandler(async (event) => {
   const { locale } = getQuery(event);
@@ -15,6 +16,7 @@ export default defineEventHandler(async (event) => {
           data {
             text
             id
+            htmlTag
           }
         }
       }
@@ -22,13 +24,5 @@ export default defineEventHandler(async (event) => {
   `;
 
   // this map reduces a unecessary (for my usecase at least) list level present on payload
-  return request<GeneralsRequest>(url, query, { locale: formatedLocale }).then((res) =>
-    res.Generals.docs.map(({ data, ...doc }) => ({
-      ...doc,
-      data: data.map(({ text, ...item }) => ({
-        ...item,
-        text: text.map(({ children }) => children),
-      })),
-    }))
-  );
+  return request<GeneralsRequest>(url, query, { locale: formatedLocale }).then(parseGenerals);
 });

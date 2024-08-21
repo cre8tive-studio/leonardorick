@@ -3,7 +3,8 @@ import { useAppStore } from '~/store';
 import type { SettingsModel } from '~/types/settings.model';
 import type { UserModel } from '~/types/user.model';
 import type { UpvotesModel, UpvotesClientModel } from '~/types/upvotes.model';
-import { parseUpvotes, parseSettings } from '~/utils/parsers';
+import { parseUpvotes } from '~/utils/parsers/upvotes.parser';
+import { parseSettings } from '~/utils/parsers/settings.parser';
 import { isNotExpired, getExpireTime } from '~/utils/js-utilities';
 export { ID } from 'appwrite';
 
@@ -13,15 +14,8 @@ const client = new Client();
 
 const useAppwrite = () => {
   const { appwrite } = useRuntimeConfig().public;
-  const {
-    endpoint,
-    project,
-    databaseId,
-    usersCollection,
-    upvotesCollection,
-    settingsCollection,
-    settingsDocument,
-  } = appwrite;
+  const { endpoint, project, databaseId, usersCollection, upvotesCollection, settingsCollection, settingsDocument } =
+    appwrite;
 
   const { session: storedSession, settings, lastJWT } = toRefs(useAppStore());
 
@@ -36,11 +30,7 @@ const useAppwrite = () => {
       return null;
     }
 
-    if (
-      !fresh &&
-      storedSession.value &&
-      isNotExpired(getExpireTime(0, storedSession.value.expire))
-    ) {
+    if (!fresh && storedSession.value && isNotExpired(getExpireTime(0, storedSession.value.expire))) {
       return storedSession.value;
     }
 

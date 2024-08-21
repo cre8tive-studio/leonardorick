@@ -3,6 +3,7 @@ export interface GeneralsServerModel {
   key: string;
   data: {
     id: string;
+    htmlTag: string;
     text: {
       children: {
         text: string;

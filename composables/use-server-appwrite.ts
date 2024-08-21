@@ -1,16 +1,9 @@
-import {
-  Databases,
-  Users,
-  Client as ServerClient,
-  Account as ServerAccount,
-  Query,
-  Storage,
-} from 'node-appwrite';
+import { Databases, Users, Client as ServerClient, Account as ServerAccount, Query, Storage } from 'node-appwrite';
 
 import type { AllowedEmailModel } from '~/server/types/allowed-email.model';
 import type { SettingsModel } from '~/types/settings.model';
 import type { UserModel } from '~/types/user.model';
-import { parseSettings } from '~/utils/parsers';
+import { parseSettings } from '~/utils/parsers/settings.parser';
 
 let serverClient: ServerClient;
 let users: Users;
@@ -21,8 +14,7 @@ const useServerAppwrite = () => {
   const { appwrite, public: publicConfig } = useRuntimeConfig();
   const { allowedEmailsCollection, demosCollection, bucketId } = appwrite;
   const { appwrite: publicAppwrite } = publicConfig;
-  const { endpoint, project, databaseId, usersCollection, settingsCollection, settingsDocument } =
-    publicAppwrite;
+  const { endpoint, project, databaseId, usersCollection, settingsCollection, settingsDocument } = publicAppwrite;
 
   if (!serverClient) {
     serverClient = new ServerClient();
@@ -47,9 +39,7 @@ const useServerAppwrite = () => {
 
   const queryAllowedEmail = async (email: string) => {
     return databases
-      .listDocuments<AllowedEmailModel>(databaseId, allowedEmailsCollection, [
-        Query.equal('email', [email]),
-      ])
+      .listDocuments<AllowedEmailModel>(databaseId, allowedEmailsCollection, [Query.equal('email', [email])])
       .then((res) => res.documents[0]);
   };
 
@@ -64,9 +54,7 @@ const useServerAppwrite = () => {
   };
 
   const getSettings = async () => {
-    return databases
-      .getDocument<SettingsModel>(databaseId, settingsCollection, settingsDocument)
-      .then(parseSettings);
+    return databases.getDocument<SettingsModel>(databaseId, settingsCollection, settingsDocument).then(parseSettings);
   };
 
   const getAuthUserWithEmail = async (email: string) => {

@@ -94,15 +94,15 @@ body {
 @media (min-width: $xl-breakpoint) {
   .lr-section,
   .lr-section-bottom {
-    padding-top: 1.5rem;
-    padding-right: 3rem;
-    padding-left: 3rem;
+    padding-top: 2rem;
+    padding-right: 4rem;
+    padding-left: 4rem;
   }
 
   .lr-section-page,
   .lr-section-page-paddings {
-    padding-right: 8rem;
-    padding-left: 8rem;
+    padding-right: 15rem;
+    padding-left: 15rem;
     &-no-paddings {
       padding-right: 0;
       padding-left: 0;
@@ -111,5 +111,6 @@ body {
 
   .lr-section-bottom {
     padding-top: 0;
+    padding-bottom: 3rem;
   }
 }

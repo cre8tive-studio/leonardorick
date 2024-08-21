@@ -35,7 +35,7 @@ if ($recommendations.value && $quotes.value && $generals.value) {
 watch(lang, async () => {
   contentLoaded.value = false;
   const res = await $fetchInitialData();
-  if (res.$recommendations.value && res.$quotes.value && res.generals.value) {
+  if (res.$recommendations.value && res.$quotes.value && res.$generals.value) {
     setHomeView(res.$recommendations.value, res.$quotes.value, res.$generals.value);
   }
 });
