@@ -14,7 +14,10 @@
     </div>
 
     <div class="about-me lr-section-page lr-section-page-no-paddings relative">
-      <LRColorfulTile />
+      <LRColorfulTile
+        :colors="colors"
+        :background-color="tilesBackgroundColor"
+      />
       <div
         class="about-me-text lr-section-page-paddings lr-overlaping-allow-hover relative h-full flex flex-col justify-center gap-4"
       >
@@ -64,11 +67,14 @@
 import SplitType from 'split-type';
 import { gsap } from 'gsap';
 import { watchOnce } from '@vueuse/core';
+import { COLORS } from '../utils/constants/colors';
 import { useAppStore } from '~/store';
 const { loaded, recommendations, quotes, generals } = toRefs(useAppStore());
 const nameTitle = ref();
 
 const aboutMeContent = computed(() => generals.value.find((general) => general.key === 'about-me'));
+const colors = [COLORS.blue1, COLORS.blue2, COLORS.blue3, COLORS.blue4, COLORS.blue5];
+const tilesBackgroundColor = COLORS.mainDarkBg;
 
 onMounted(() => {
   if (nameTitle.value) {

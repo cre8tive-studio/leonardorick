@@ -36,3 +36,5 @@ copy margins and breakpoints of https://minhpham.design/
 set custom colors on Lr colorful tile
 
 try to control the first color of the fluid once it enters a specific region. Actually ,just control it frmo outside somehow sending an event to the store
+
+understand the differnce between useFetch and $fetch because apperently I need to use $fetch after ssr is generated
