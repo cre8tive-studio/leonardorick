@@ -3,11 +3,14 @@ import { useAnimationStore } from '~/store/animation';
 
 const useFluid = () => {
   const { fluid, fluidCanvas } = toRefs(useAnimationStore());
+  const activated = ref(false);
 
   function rafCallback() {
-    if (fluid.value?.rafCallback) {
-      fluid.value.rafCallback();
+    if (!fluid.value?.rafCallback || !activated.value) {
+      return;
     }
+
+    fluid.value.rafCallback();
   }
 
   function activate() {
@@ -50,6 +53,7 @@ const useFluid = () => {
     const res = fluid.value.activate();
     const { multipleSplats, getRandomMultipleSplatsArgs } = res;
     multipleSplats(getRandomMultipleSplatsArgs());
+    activated.value = true;
   }
 
   function fluidExplosion() {

@@ -4,7 +4,6 @@
     class="p-index"
   >
     <div class="main lr-section-page flex flex-col items-center justify-end gap-2 relative">
-      <div class="background-fade-tile fade-top absolute left-0 h-full w-full pointer-events-none" />
       <h1
         ref="nameTitle"
         class="main__title title-splitted pb-20 xl:pl-10"
@@ -14,7 +13,7 @@
       </h1>
     </div>
 
-    <div class="lr-section-page lr-section-page-no-paddings relative">
+    <div class="about-me lr-section-page lr-section-page-no-paddings relative">
       <LRColorfulTile />
       <div
         class="about-me-text lr-section-page-paddings lr-overlaping-allow-hover relative h-full flex flex-col justify-center gap-4"
@@ -26,9 +25,7 @@
       </div>
     </div>
 
-    <div class="todo lr-section-page relative">
-      <div class="background-fade-tile fade-bottom absolute left-0 h-full w-full pointer-events-none" />
-    </div>
+    <div class="todo lr-section-page relative"></div>
 
     <div class="lr-section-page recommendations">
       <div
@@ -119,21 +116,9 @@ function animateRollingChars(split: SplitType) {
 </script>
 <style scoped lang="scss">
 .p-index {
-  $main-margin-bottom: 25%;
-  .background-fade-tile {
-    background: $main-dark-bg;
-    bottom: -$main-margin-bottom;
-    &.fade-top {
-      background: linear-gradient(0deg, $main-dark-bg 19%, rgba($main-dark-bg, 0) 52%);
-    }
-    &.fade-bottom {
-      top: 0;
-      background: linear-gradient(180deg, $main-dark-bg 19%, rgba($main-dark-bg, 0) 52%);
-    }
-  }
   .main {
     &__title {
-      margin-bottom: $main-margin-bottom;
+      margin-bottom: 25%;
       position: relative;
       z-index: -1;
       font-size: 1.5rem;
@@ -166,6 +151,10 @@ function animateRollingChars(split: SplitType) {
         }
       }
     }
+  }
+
+  .about-me {
+    // overflow-y: scroll;
   }
 }
 @media (min-width: $xl-breakpoint) {

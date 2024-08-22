@@ -29,7 +29,7 @@ const _props = defineProps<Props>();
 
 <style scoped lang="scss">
 .highlight {
-  color: purple;
+  color: $highlight;
 }
 
 @media (min-width: $xl-breakpoint) {

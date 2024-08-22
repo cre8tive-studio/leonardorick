@@ -3,6 +3,7 @@ import type { Fluid } from '~/components/FluidBackground/fluid';
 interface animationStoreModel {
   isEnteringAnimationFinished: boolean;
   isLRModelLoaded: boolean;
+  isLRModelTimedout: boolean;
   isOverlayCompleteHidden: boolean;
   loadingProgress: number;
   loadingTotal: number;
@@ -17,6 +18,7 @@ export const useAnimationStore = defineStore('animationStore', () => {
   const state = reactive<animationStoreModel>({
     isEnteringAnimationFinished: false,
     isLRModelLoaded: false,
+    isLRModelTimedout: false,
     isOverlayCompleteHidden: false,
     loadingProgress: 0,
     loadingTotal: 0,

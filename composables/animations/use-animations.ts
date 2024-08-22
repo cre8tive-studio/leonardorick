@@ -13,9 +13,14 @@ interface runWithControlledFPSOptions {
 const useAnimations = () => {
   const isDebug = !!Object.prototype.hasOwnProperty.call(useRoute().query, 'debug');
   const { isMobile } = useDevice();
-  const { loadingBarRef, logoOverlayRef, cubeLoaderContainerRef, isOverlayCompleteHidden, isLRModelLoaded } = toRefs(
-    useAnimationStore()
-  );
+  const {
+    loadingBarRef,
+    logoOverlayRef,
+    cubeLoaderContainerRef,
+    isOverlayCompleteHidden,
+    isLRModelLoaded,
+    isLRModelTimedout,
+  } = toRefs(useAnimationStore());
   const lenis = useLenis();
   const fluid = useFluid();
   const leonardorick = useLeonardoRick();
@@ -29,12 +34,15 @@ const useAnimations = () => {
     },
   };
 
+  const LRModelTimeout = setLRModelTimeout();
+
   const unwatch = watch(isLRModelLoaded, () => {
+    clearTimeout(LRModelTimeout);
     hideOverlay();
     unwatch();
   });
 
-  const activate = async () => {
+  async function activate() {
     gsap.registerPlugin(ScrollTrigger);
 
     if (!isWebglSupported()) {
@@ -45,8 +53,8 @@ const useAnimations = () => {
     }
 
     fluid.activate();
-
     await leonardorick.activate(isDebug);
+
     if (!isMobile) {
       lenis.activate();
     }
@@ -61,7 +69,7 @@ const useAnimations = () => {
 
       requestAnimationFrame(update);
     }
-  };
+  }
 
   function hideOverlay() {
     const tl = gsap.timeline();
@@ -90,6 +98,16 @@ const useAnimations = () => {
           },
         });
     }
+  }
+  function setLRModelTimeout() {
+    return setTimeout(() => {
+      isLRModelTimedout.value = true;
+      // this will trigger the watch and handle hiding the overlay. if in the
+      // future we need a different approach when timing out, might change the logic
+      isLRModelLoaded.value = true;
+      // eslint-disable-next-line no-console
+      console.warn('3D model was not loaded after 10s');
+    }, 10000);
   }
 
   const t: number[] = [];

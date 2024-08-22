@@ -10,7 +10,7 @@ const useLenis = () => {
     lenis.raf(time);
   }
 
-  const activate = ({ raf = false, scrollCallback = () => {} }: ActivateOptions = {}) => {
+  function activate({ raf = false, scrollCallback = () => {} }: ActivateOptions = {}) {
     lenis = new Lenis({ duration: 1.4 });
     lenis.on('scroll', scrollCallback);
 
@@ -21,7 +21,7 @@ const useLenis = () => {
       }
       requestAnimationFrame(update);
     }
-  };
+  }
 
   return {
     activate,

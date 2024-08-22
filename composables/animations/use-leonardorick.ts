@@ -43,16 +43,17 @@ import lr from '~/assets/models/lr.glb';
 import galaxyTexture from '~/assets/textures/environmentMaps/galaxy.jpg';
 
 const useLeonardoRick = () => {
+  const MODEL_POSITION_Y_CORRECTION = 0.3;
+  const FLOOR_MAT_FINAL_OPACITY = 0.983;
+  const AMBIENT_LIGHT_GENERAL_INTENSITY = 310;
+
   const { isMobile } = useDevice();
   const store = useAnimationStore();
   const { logoCanvas, isEnteringAnimationFinished, isLRModelLoaded, loadingProgress, loadingTotal } = toRefs(store);
   const { changeScrollLayoutOverflow } = store;
-
   const { fluidExplosion } = useFluid();
 
-  const MODEL_POSITION_Y_CORRECTION = 0.3;
-  const FLOOR_MAT_FINAL_OPACITY = 0.983;
-  const AMBIENT_LIGHT_GENERAL_INTENSITY = 310;
+  const activated = ref(false);
 
   const lights: LightsModel = {
     dLight1: {
@@ -239,10 +240,11 @@ const useLeonardoRick = () => {
     setupPane(isDebug);
 
     document.addEventListener('mousemove', documentMousemoveHandler);
+    activated.value = true;
   }
 
   function rafCallback() {
-    if (!thisCamera || !thisRenderer || !thisCamera) {
+    if (!thisCamera || !thisRenderer || !thisCamera || !activated.value) {
       return;
     }
     /**

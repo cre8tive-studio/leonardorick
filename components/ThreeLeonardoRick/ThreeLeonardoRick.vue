@@ -1,5 +1,6 @@
 <template>
   <canvas
+    v-if="!isLRModelTimedout"
     id="logoLeonardoRick"
     ref="logoCanvasRef"
   />
@@ -11,7 +12,7 @@ import { useAnimationStore } from '~/store/animation';
  * data
  */
 const animationStore = useAnimationStore();
-const { logoCanvas } = toRefs(animationStore);
+const { logoCanvas, isLRModelTimedout } = toRefs(animationStore);
 const logoCanvasRef = ref<HTMLCanvasElement>();
 
 onMounted(async () => {

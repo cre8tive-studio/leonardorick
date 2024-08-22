@@ -1,4 +1,5 @@
 <template>
+  <div class="background-fade-tile fade-top" />
   <div class="c-LRColorfulTile">
     <div
       aria-hidden="true"
@@ -15,6 +16,7 @@
       class="quotes-gradient-background"
     />
   </div>
+  <div class="background-fade-tile fade-bottom" />
 </template>
 
 <script setup lang="ts"></script>
@@ -123,9 +125,24 @@
     left: 0;
     height: 100%;
     width: 100%;
-    background: $main-dark-bg;
     pointer-events: none;
-    background: linear-gradient(0deg, $main-dark-bg 5%, rgba(#fff, 0) 50%, $main-dark-bg 95%);
+    background: linear-gradient(0deg, $main-dark-bg 5%, rgba($main-dark-bg, 0) 50%, $main-dark-bg 95%);
+  }
+}
+.background-fade-tile {
+  position: absolute;
+  left: 0;
+  pointer-events: none;
+  background: $main-dark-bg;
+  height: 100%;
+  width: 100%;
+  &.fade-top {
+    top: -100%;
+    background: linear-gradient(0deg, $main-dark-bg 10%, rgba($main-dark-bg, 0) 63%);
+  }
+  &.fade-bottom {
+    top: 100%;
+    background: linear-gradient(180deg, $main-dark-bg 10%, rgba($main-dark-bg, 0) 63%);
   }
 }
 </style>
