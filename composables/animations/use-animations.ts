@@ -24,6 +24,7 @@ const useAnimations = () => {
   const lenis = useLenis();
   const fluid = useFluid();
   const leonardorick = useLeonardoRick();
+  const isDocumentVisible = ref(true);
 
   let fps = 60;
   const fpsController = {
@@ -41,6 +42,16 @@ const useAnimations = () => {
     hideOverlay();
     unwatch();
   });
+
+  document.addEventListener('visibilitychange', visibilityChangeHandler);
+
+  onUnmounted(() => {
+    document.removeEventListener('visibilitychange', visibilityChangeHandler);
+  });
+
+  function visibilityChangeHandler() {
+    isDocumentVisible.value = document.visibilityState === 'visible';
+  }
 
   async function activate() {
     gsap.registerPlugin(ScrollTrigger);
@@ -62,10 +73,16 @@ const useAnimations = () => {
     requestAnimationFrame(update);
 
     function update(time: number) {
+      if (!isDocumentVisible.value) {
+        requestAnimationFrame(update);
+        return;
+      }
+
       setFPS(time);
       leonardorick.rafCallback();
+
       runWithController(() => lenis.rafCallback(time), { forbidden: isMobile });
-      runWithControlledFPS(() => fluid.rafCallback());
+      runWithController(() => runWithControlledFPS(() => fluid.rafCallback()), { forbidden: !document.hasFocus() });
 
       requestAnimationFrame(update);
     }
