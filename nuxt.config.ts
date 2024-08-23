@@ -4,6 +4,10 @@ const { VUE_APP_NITRO_PRESET: preset, VUE_APP_BASE_URL: baseUrl } = process.env;
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  future: {
+    // todo remove this after nuxt 4 release
+    compatibilityVersion: 4,
+  },
   css: ['~/assets/css/main.scss'],
 
   routeRules: {

@@ -34,7 +34,7 @@
     "@vue-macros/nuxt": "^1.10.2",
     "eslint-plugin-no-autofix": "^2.0.0",
     "eslint-plugin-vitest": "^0.3.26",
-    "nuxt": "^3.12.4",
+    "nuxt": "^3.13.0",
     "nuxt-svgo": "^4.0.3",
     "prettier": "^2.8.8",
     "sass": "^1.77.8",
