@@ -1,9 +1,15 @@
 <template>
   <header class="c-Header">
-    <div class="hidden xl:flex">
+    <div
+      v-if="isXl"
+      class="flex"
+    >
       <LRHeaderNav class="text-right" />
     </div>
-    <div class="small-header flex xl:hidden">
+    <div
+      v-else
+      class="small-header flex"
+    >
       <button
         class="circle-button burger-button flex flex-col items-center justify-center gap-1 cursor-pointer"
         @click="toggleMobileMenu"
@@ -23,35 +29,26 @@
 </template>
 
 <script setup lang="ts">
-import { gsap } from 'gsap';
-
+import { timeline } from 'motion';
+import type { TimelineDefinition } from 'motion';
+import useCssBreakpoints from '~/composables/use-css-breakpoints';
 const mobileMenu = ref<HTMLDivElement>();
-const isTimelineDefined = ref(false);
 const isMobileMenuVisible = ref(false);
+const { isXl } = useCssBreakpoints();
 
-const tl = gsap.timeline({
-  paused: true,
-  defaults: { duration: 0.5 },
-});
+const openSequence: TimelineDefinition = [
+  ['.mobile-menu', { scaleY: [0, 1] }],
+  ['.burger-button span', { rotate: 45 }, { at: '<' }],
+];
 
-onMounted(() => {
-  defineTimeline();
-});
-
-function defineTimeline() {
-  if (!mobileMenu.value) {
-    return;
-  }
-
-  tl.from(mobileMenu.value, { scaleY: 0, ease: 'none', transformOrigin: 'top' }, '<');
-  tl.to(mobileMenu.value, { scaleY: 1, ease: 'none', transformOrigin: 'top' }, '<');
-  tl.to('.burger-button span', { rotation: 45 }, '<');
-  isTimelineDefined.value = true;
-}
+const closeSequence: TimelineDefinition = [
+  ['.mobile-menu', { scaleY: [1, 0] }],
+  ['.burger-button span', { rotate: 0 }, { at: '<' }],
+];
 
 function toggleMobileMenu() {
   isMobileMenuVisible.value = !isMobileMenuVisible.value;
-  isMobileMenuVisible.value ? tl.play() : tl.reverse();
+  isMobileMenuVisible.value ? timeline(openSequence) : timeline(closeSequence);
 }
 </script>
 
@@ -89,6 +86,10 @@ function toggleMobileMenu() {
     width: 100vw;
     padding: 1rem;
     z-index: 20;
+
+    // inital state to be animated from motion one
+    transform: scaleY(0);
+    transform-origin: top;
   }
   @media (min-width: $xl-breakpoint) {
     min-width: $sides-xl-width;

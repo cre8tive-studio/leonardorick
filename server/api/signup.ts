@@ -1,6 +1,8 @@
 import { ID, Permission, Role } from 'node-appwrite';
+import { isDefinedAndNotEmpty } from '@leonardorick/utils';
 import { createGenericError } from '../utils/errors';
-import { bypass, isDefinedAndNotEmpty } from '~/utils/js-utilities';
+import { bypass } from '~/utils/js-utilities';
+
 import useServerAppwrite from '~/composables/use-server-appwrite';
 
 const {

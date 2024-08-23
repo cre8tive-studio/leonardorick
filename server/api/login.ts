@@ -1,6 +1,6 @@
+import { isDefinedAndNotEmpty } from '@leonardorick/utils';
 import { createGenericError } from '../utils/errors';
 import useServerAppwrite from '~/composables/use-server-appwrite';
-import { isDefinedAndNotEmpty } from '~/utils/js-utilities';
 
 const { users, queryAllowedEmail, getAuthUserWithEmail, getSettings } = useServerAppwrite();
 
