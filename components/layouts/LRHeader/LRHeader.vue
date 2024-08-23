@@ -1,25 +1,35 @@
 <template>
-  <header class="c-Header">
-    <template v-if="isXl">
-      <LRHeaderNav class="text-right" />
-    </template>
-    <div
-      v-else
-      class="small-header"
+  <header
+    class="c-LRHeader lr-section lr-overlaping-allow-hover l-default__header-container w-full flex fixed justify-end xl:justify-between"
+  >
+    <NuxtLink
+      class="home-logo main-hover-button h-fit hidden xl:inline-block"
+      :to="localeRoute('/')"
     >
-      <button
-        class="circle-button burger-button cursor-pointer"
-        @click="toggleMobileMenu"
-      >
-        <span />
-        <span />
-      </button>
-
+      <SvgoLeonardorick />
+    </NuxtLink>
+    <div>
+      <template v-if="isXl">
+        <LRHeaderNav class="text-right" />
+      </template>
       <div
-        ref="mobileMenu"
-        class="c-Header mobile-menu w-full h-full flex flex-col gap-4"
+        v-else
+        class="small-header"
       >
-        <LRHeaderNav @route-selected="toggleMobileMenu" />
+        <button
+          class="circle-button burger-button cursor-pointer"
+          @click="toggleMobileMenu"
+        >
+          <span />
+          <span />
+        </button>
+
+        <div
+          ref="mobileMenu"
+          class="mobile-menu w-full h-full flex flex-col gap-4"
+        >
+          <LRHeaderNav @route-selected="toggleMobileMenu" />
+        </div>
       </div>
     </div>
   </header>
@@ -29,9 +39,16 @@
 import { timeline } from 'motion';
 import type { TimelineDefinition } from 'motion';
 import useCssBreakpoints from '~/composables/use-css-breakpoints';
+
+import { useAppStore } from '~/store';
+
+const { lang } = toRefs(useAppStore());
+const { isXl } = useCssBreakpoints();
+
 const mobileMenu = ref<HTMLDivElement>();
 const isMobileMenuVisible = ref(false);
-const { isXl } = useCssBreakpoints();
+
+const localeRoute = computed(() => (r: string) => lang.value === 'en' ? r : `${r}?locale=${lang.value}`);
 
 watch(isXl, () => {
   isMobileMenuVisible.value = false;
@@ -54,7 +71,14 @@ function toggleMobileMenu() {
 </script>
 
 <style scoped lang="scss">
-.c-Header {
+.c-LRHeader {
+  .home-logo {
+    svg {
+      height: 3rem;
+      width: 3rem;
+    }
+  }
+
   .circle-button {
     z-index: 30;
     position: relative;
