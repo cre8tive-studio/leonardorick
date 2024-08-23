@@ -70,7 +70,7 @@ import { watchOnce } from '@vueuse/core';
 import { COLORS } from '../utils/constants/colors';
 import { useAppStore } from '~/store';
 const { loaded, recommendations, quotes, generals } = toRefs(useAppStore());
-const nameTitle = ref();
+const nameTitle = ref<HTMLDivElement>();
 
 const aboutMeContent = computed(() => generals.value.find((general) => general.key === 'about-me'));
 const colors = [COLORS.blue1, COLORS.blue2, COLORS.blue3, COLORS.blue4, COLORS.blue5];
@@ -98,7 +98,7 @@ function animateRollingChars(split: SplitType) {
   const tl = gsap.timeline({ paused: true, repeat: -1 });
   const repeatCount = 8;
   // https://codepen.io/PointC/pen/ZEmOKvP
-  if (split.chars) {
+  if (split.chars && nameTitle.value) {
     split.chars.forEach((obj, i) => {
       const txt = obj.innerText;
       const clone = `<div class="cloneText"> ${txt} </div>`;
@@ -114,7 +114,6 @@ function animateRollingChars(split: SplitType) {
       });
       tl.add(tween, 0);
     });
-
     mtl.fromTo(nameTitle.value, { opacity: 0 }, { opacity: 1, duration: 4, delay: 0.3 });
     mtl.to(tl, { progress: 1, duration: 4, ease: 'power4.inOut' }, '-=4.5');
   }
@@ -123,10 +122,9 @@ function animateRollingChars(split: SplitType) {
 <style scoped lang="scss">
 .p-index {
   .main {
+    padding-bottom: 20%;
     &__title {
-      margin-bottom: 25%;
       position: relative;
-      z-index: -1;
       font-size: 1.5rem;
       font-family: 'JosefinSans', sans-serif;
       font-weight: 700;
@@ -166,7 +164,7 @@ function animateRollingChars(split: SplitType) {
 @media (min-width: $xl-breakpoint) {
   .p-index {
     .main {
-      margin-bottom: 210px;
+      margin-bottom: 60px;
       &__title {
         font-size: 86px;
         line-height: 90px;

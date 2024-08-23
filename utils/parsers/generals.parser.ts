@@ -1,4 +1,4 @@
-import { isGeneralHtmlTag, isGeneralKey, type GeneralsModel } from '~/types/generals.model';
+import { isGeneralAnimationType, isGeneralHtmlTag, isGeneralKey, type GeneralsModel } from '~/types/generals.model';
 import type { GeneralsResponse } from '~/types/graphql-queries/generals-response';
 
 export function parseGenerals(response: GeneralsResponse): GeneralsModel[] {
@@ -8,6 +8,7 @@ export function parseGenerals(response: GeneralsResponse): GeneralsModel[] {
     data: data.map(({ text, ...item }) => ({
       ...item,
       htmlTag: isGeneralHtmlTag(item.htmlTag) ? item.htmlTag : 'p',
+      animationType: isGeneralAnimationType(item.animationType) ? item.animationType : 'none',
       text: text
         // deconstruct children level, flat and return so verything from the same richText
         // will be at the same array level (simplifying the data structure a bit)

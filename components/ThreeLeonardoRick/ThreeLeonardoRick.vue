@@ -3,6 +3,7 @@
     v-if="!isLRModelTimedout"
     id="logoLeonardoRick"
     ref="logoCanvasRef"
+    aria-hidden="true"
   />
 </template>
 <script setup lang="ts">

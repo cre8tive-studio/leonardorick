@@ -10,12 +10,19 @@ export function isGeneralKey(key: string): key is GeneralKeyOptions {
   return GENERAL_KEY_OPTIONS.includes(key as GeneralKeyOptions);
 }
 
+const GENERAL_ANIMATION_TYPE_OPTIONS = ['none', 'fadeOpacity'] as const;
+export type GeneralAnimationTypeOptions = (typeof GENERAL_ANIMATION_TYPE_OPTIONS)[number];
+export function isGeneralAnimationType(key: string): key is GeneralAnimationTypeOptions {
+  return GENERAL_ANIMATION_TYPE_OPTIONS.includes(key as GeneralAnimationTypeOptions);
+}
+
 export interface GeneralsModel {
   id: string;
   key: GeneralKeyOptions;
   data: {
     id: string;
     htmlTag: GeneralHtmlTagOptions;
+    animationType: GeneralAnimationTypeOptions;
     text: {
       text: string;
       bold?: string;

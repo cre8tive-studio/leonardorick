@@ -1,17 +1,14 @@
 <template>
   <header class="c-Header">
-    <div
-      v-if="isXl"
-      class="flex"
-    >
+    <template v-if="isXl">
       <LRHeaderNav class="text-right" />
-    </div>
+    </template>
     <div
       v-else
-      class="small-header flex"
+      class="small-header"
     >
       <button
-        class="circle-button burger-button flex flex-col items-center justify-center gap-1 cursor-pointer"
+        class="circle-button burger-button cursor-pointer"
         @click="toggleMobileMenu"
       >
         <span />
@@ -36,6 +33,10 @@ const mobileMenu = ref<HTMLDivElement>();
 const isMobileMenuVisible = ref(false);
 const { isXl } = useCssBreakpoints();
 
+watch(isXl, () => {
+  isMobileMenuVisible.value = false;
+});
+
 const openSequence: TimelineDefinition = [
   ['.mobile-menu', { scaleY: [0, 1] }],
   ['.burger-button span', { rotate: 45 }, { at: '<' }],
@@ -55,17 +56,24 @@ function toggleMobileMenu() {
 <style scoped lang="scss">
 .c-Header {
   .circle-button {
+    z-index: 30;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+
     height: 55px;
     width: 55px;
-    border-radius: 52px;
+    border-radius: 27.5px;
     background-color: $main-dark-text;
-  }
 
-  .burger-button {
-    z-index: 30;
     span {
-      height: 2px;
-      width: 30%;
+      // using border instead of height looked better
+      // and more matching for both span sizes on the menu
+      border: 2px solid $main-dark-bg;
+      width: 40%;
       background-color: $main-dark-bg;
     }
   }

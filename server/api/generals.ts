@@ -17,6 +17,7 @@ export default defineEventHandler(async (event) => {
             text
             id
             htmlTag
+            animationType
           }
         }
       }

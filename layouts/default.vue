@@ -12,9 +12,12 @@
       </NuxtLink>
       <LRHeader />
     </div>
-    <div class="default-slot flex-grow">
+    <main
+      role="main"
+      class="default-slot flex-grow"
+    >
       <slot />
-    </div>
+    </main>
 
     <LRFooter v-if="loaded" />
   </div>
@@ -23,7 +26,6 @@
 import { useAppStore } from '~/store';
 
 const { lang, loaded } = toRefs(useAppStore());
-
 const localeRoute = computed(() => (r: string) => lang.value === 'en' ? r : `${r}?locale=${lang.value}`);
 </script>
 <style scoped lang="scss">

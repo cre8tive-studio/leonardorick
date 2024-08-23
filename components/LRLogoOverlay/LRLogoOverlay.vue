@@ -2,6 +2,7 @@
   <div
     id="logoOverlay"
     ref="logoOverlay"
+    aria-hidden="true"
     class="fixed h-full w-full"
   >
     <LoadingBar

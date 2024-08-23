@@ -4,6 +4,7 @@ export interface GeneralsServerModel {
   data: {
     id: string;
     htmlTag: string;
+    animationType: string;
     text: {
       children: {
         text: string;

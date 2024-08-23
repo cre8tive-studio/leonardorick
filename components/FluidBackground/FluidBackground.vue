@@ -2,7 +2,8 @@
   <canvas
     id="fluidCanvas"
     ref="fluidCanvasRef"
-  ></canvas>
+    aria-hidden="true"
+  />
 </template>
 <script setup lang="ts">
 import { useAnimationStore } from '~/store/animation';
