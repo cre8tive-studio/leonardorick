@@ -13,6 +13,9 @@ interface animationStoreModel {
   loadingBarRef: HTMLDivElement | undefined;
   logoOverlayRef: HTMLDivElement | undefined;
   cubeLoaderContainerRef: HTMLDivElement | undefined;
+  cursorOuter: HTMLDivElement | undefined;
+  cursorInner: HTMLDivElement | undefined;
+  cursorActivated: boolean;
 }
 export const useAnimationStore = defineStore('animationStore', () => {
   const state = reactive<animationStoreModel>({
@@ -28,6 +31,9 @@ export const useAnimationStore = defineStore('animationStore', () => {
     loadingBarRef: undefined,
     logoOverlayRef: undefined,
     cubeLoaderContainerRef: undefined,
+    cursorOuter: undefined,
+    cursorInner: undefined,
+    cursorActivated: false,
   });
 
   const changeScrollLayoutOverflow = (overflow: 'auto' | 'hidden') => {

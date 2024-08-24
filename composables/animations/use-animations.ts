@@ -4,6 +4,7 @@ import { isWebglSupported } from '@leonardorick/three';
 import useLenis from './use-lenis';
 import useFluid from './use-fluid';
 import useLeonardoRick from './use-leonardorick';
+import useCursor from './use-cursor';
 import { useAnimationStore } from '~/store/animation';
 
 interface runWithControlledFPSOptions {
@@ -24,6 +25,7 @@ const useAnimations = () => {
   const lenis = useLenis();
   const fluid = useFluid();
   const leonardorick = useLeonardoRick();
+  const cursor = useCursor();
   const isDocumentVisible = ref(true);
 
   let fps = 60;
@@ -67,6 +69,7 @@ const useAnimations = () => {
     await leonardorick.activate(isDebug);
 
     if (!isMobile) {
+      cursor.activate();
       lenis.activate();
     }
 
@@ -77,10 +80,10 @@ const useAnimations = () => {
         requestAnimationFrame(update);
         return;
       }
-
       setFPS(time);
-      leonardorick.rafCallback();
 
+      cursor.rafCallback();
+      leonardorick.rafCallback();
       runWithController(() => lenis.rafCallback(time), { forbidden: isMobile });
       runWithController(() => runWithControlledFPS(() => fluid.rafCallback()), { forbidden: !document.hasFocus() });
 

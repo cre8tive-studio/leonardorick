@@ -23,6 +23,7 @@
       >
         <LRGeneralText
           v-if="aboutMeContent"
+          :key="refreshKey"
           :info="aboutMeContent"
         />
       </div>
@@ -69,12 +70,13 @@ import { gsap } from 'gsap';
 import { watchOnce } from '@vueuse/core';
 import { COLORS } from '../utils/constants/colors';
 import { useAppStore } from '~/store';
-const { loaded, recommendations, quotes, generals } = toRefs(useAppStore());
+const { loaded, recommendations, quotes, generals, contentLoaded } = toRefs(useAppStore());
 const nameTitle = ref<HTMLDivElement>();
 
 const aboutMeContent = computed(() => generals.value.find((general) => general.key === 'about-me'));
 const colors = [COLORS.blue1, COLORS.blue2, COLORS.blue3, COLORS.blue4, COLORS.blue5];
 const tilesBackgroundColor = COLORS.mainDarkBg;
+const refreshKey = ref(0);
 
 onMounted(() => {
   if (nameTitle.value) {
@@ -85,6 +87,10 @@ onMounted(() => {
       animateAndSplitChars();
     });
   }
+});
+
+watch(contentLoaded, () => {
+  refreshKey.value++;
 });
 
 function animateAndSplitChars() {

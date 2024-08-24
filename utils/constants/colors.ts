@@ -10,5 +10,10 @@ export const COLORS = {
   blue4: '#0093dd',
   blue5: '#07eee4',
 
-  highlight1: '#a020f0',
+  highlight: '#a020f0',
+
+  highlight2: '#570987',
+  highlight3: '#7D0DC3',
+  highlight4: '#B95CF4',
+  highlight5: '#D397F8',
 };

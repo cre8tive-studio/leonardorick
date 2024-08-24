@@ -17,7 +17,7 @@
         class="small-header"
       >
         <button
-          class="circle-button burger-button cursor-pointer"
+          class="circle-button burger-button"
           @click="toggleMobileMenu"
         >
           <span />
@@ -73,6 +73,7 @@ function toggleMobileMenu() {
 <style scoped lang="scss">
 .c-LRHeader {
   .home-logo {
+    cursor: none;
     svg {
       height: 3rem;
       width: 3rem;

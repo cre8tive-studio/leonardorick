@@ -1,6 +1,9 @@
 try motion one out (animate only scss) https://onedrive.live.com/view.aspx?resid=9C46BFB4BFC3C49A%214444&id=documents&wd=target%28Immersive%20Websites.one%7C83EE0992-1DE7-4FD0-B85E-50252BBAAB08%2FMotion%20one%7CF92843BE-2A5E-714F-A5A4-51B80F44C13F%2F%29
 onenote:https://d.docs.live.net/9c46bfb4bfc3c49a/Documentos/Cadernos%20One%20Note/Develop/Immersive%20Websites.one#Motion%20one&section-id={83EE0992-1DE7-4FD0-B85E-50252BBAAB08}&page-id={F92843BE-2A5E-714F-A5A4-51B80F44C13F}&end
 
+change main deploy to nuxtHub
+|--change cloudinary images to nuxtHub
+
 check if the performance problem is related to the ThreeLeonardoRick or to the fluid and think about some solutions
 
 think about gradient background

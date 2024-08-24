@@ -44,13 +44,6 @@ onBeforeMount(() => {
   setParagraphsInfo();
 });
 
-watch(
-  () => info.data,
-  () => {
-    init();
-  }
-);
-
 onMounted(async () => {
   init();
 });
@@ -71,11 +64,12 @@ function init() {
       types: 'words,chars',
     });
 
+    gsap.killTweensOf(tag);
     // todo set how animations happens based on animationType defined in payload
     gsap.from(text.chars, {
       scrollTrigger: {
         trigger: tag,
-        start: 'top 96%',
+        start: 'top 93%',
         end: 'top 42%',
         scrub: true,
         markers: false,

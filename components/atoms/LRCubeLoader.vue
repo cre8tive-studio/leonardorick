@@ -17,15 +17,15 @@
 
 <style scoped lang="scss">
 .sk-cube-grid {
-  width: 40px;
-  height: 40px;
+  width: 64px;
+  height: 64px;
   margin: 100px auto;
 }
 
 .sk-cube-grid .sk-cube {
   width: 33%;
   height: 33%;
-  background-color: $secoundary-dark-bg;
+  background-color: $highlight;
   float: left;
   -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
   animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;

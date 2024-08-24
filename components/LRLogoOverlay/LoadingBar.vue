@@ -21,7 +21,7 @@ defineExpose({ loadingBar });
 .c-LoadingBar {
   height: 0.5rem;
   width: 0;
-  background-color: $secoundary-dark-bg;
+  background-color: $highlight;
   transition: width 0.5s ease-in-out;
 }
 </style>
