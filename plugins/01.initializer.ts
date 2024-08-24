@@ -1,4 +1,4 @@
-import { defineNuxtPlugin } from 'nuxt/app';
+import { defineNuxtPlugin, useFetch } from 'nuxt/app';
 import { useAppStore } from '~/store';
 import type { GeneralsModel } from '~/types/generals.model';
 import type { i18nModel } from '~/types/i18n.model';
@@ -14,13 +14,17 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
     // lang, and the next times we use the store lang.
     const store = useAppStore();
     const { lang } = toRefs(store);
-    return await _fetchInitialData(lang.value);
+    return await _fetchInitialData(lang.value, $fetch);
   };
 
   const { query } = useRoute();
   const locale = (query?.locale as LanguageOptions) || 'en';
 
-  const { $recommendations: recommendations, $quotes: quotes, $generals: generals } = await _fetchInitialData(locale);
+  const {
+    $recommendations: recommendations,
+    $quotes: quotes,
+    $generals: generals,
+  } = await _fetchInitialData(locale, useFetch);
 
   (_nuxtApp.$i18n as i18nModel).locale.value = locale;
 
@@ -34,12 +38,25 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
   };
 });
 
-const _fetchInitialData = async (locale: LanguageOptions) => {
-  const [{ data: $recommendations }, { data: $quotes }, { data: $generals }] = await Promise.all([
-    useFetch<RecommendationModel[]>(localeRoute('/api/recommendations', locale)),
-    useFetch<QuoteModel[]>(localeRoute('/api/quotes', locale)),
-    useFetch<GeneralsModel[]>(localeRoute('/api/generals', locale)),
+type FetchFunction =
+  | (<T>(url: string) => Promise<{ data: T }>) // Type for useFetch
+  | (<T>(url: string) => Promise<T>); // Type for $fetch
+
+const _fetchInitialData = async (locale: LanguageOptions, f: FetchFunction) => {
+  const res = await Promise.all([
+    f<RecommendationModel[]>(localeRoute('/api/recommendations', locale)),
+    f<QuoteModel[]>(localeRoute('/api/quotes', locale)),
+    f<GeneralsModel[]>(localeRoute('/api/generals', locale)),
   ]);
+
+  const [$recommendations, $quotes, $generals] = res.map((item) =>
+    isDataWrapper(item) && item.data ? item.data : item
+  );
 
   return { $recommendations, $quotes, $generals };
 };
+
+// Type guard to check if the fetch function returns a data object or not
+function isDataWrapper<T>(result: any): result is { data: T } {
+  return result && Object.prototype.hasOwnProperty.call(result, 'data');
+}

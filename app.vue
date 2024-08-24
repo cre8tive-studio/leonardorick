@@ -13,14 +13,13 @@ import type { RecommendationModel } from './types/recommendation-model';
 import type { QuoteModel } from './types/quote.model';
 import type { Media } from './types/payload-types';
 import type { GeneralsModel } from './types/generals.model';
-import { getExpireTime } from './utils/js-utilities';
 import { useAppStore } from '~/store';
 
 useHeadConfig();
 
-const { contentLoaded, lang, recommendations, quotes, generals } = toRefs(useAppStore());
 const nuxtApp = useNuxtApp();
 const { $recommendations, $quotes, $generals, $fetchInitialData, $initializerClientError } = nuxtApp;
+const { contentLoaded, lang, recommendations, quotes, generals } = toRefs(useAppStore());
 
 if ($initializerClientError) {
   // todo setup modal error
@@ -28,17 +27,18 @@ if ($initializerClientError) {
   console.error($initializerClientError);
 }
 
-if ($recommendations.value && $quotes.value && $generals.value) {
-  await setHomeView($recommendations.value, $quotes.value, $generals.value);
-}
-
 watch(lang, async () => {
   contentLoaded.value = false;
   const res = await $fetchInitialData();
-  if (res.$recommendations.value && res.$quotes.value && res.$generals.value) {
-    setHomeView(res.$recommendations.value, res.$quotes.value, res.$generals.value);
+  if (res.$recommendations && res.$quotes && res.$generals) {
+    setHomeView(res.$recommendations, res.$quotes, res.$generals);
   }
 });
+
+if ($recommendations.value && $quotes.value && $generals.value) {
+  await setHomeView($recommendations.value, $quotes.value, $generals.value);
+  contentLoaded.value = true;
+}
 
 async function setHomeView(rcs: RecommendationModel[], qts: QuoteModel[], gnrs: GeneralsModel[]) {
   recommendations.value = rcs;

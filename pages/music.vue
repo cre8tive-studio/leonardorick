@@ -10,7 +10,7 @@
           class="border border-gray-300 p-4 m-4"
         >
           <h2>{{ demo.title }}</h2>
-          <p>votes: {{ upvotes[demo.number].length }}</p>
+          <p>votes: {{ upvotes[demo.number]?.length }}</p>
           <div class="flex gap-4">
             <button
               :disabled="upvotesAvailable < 1"
@@ -35,7 +35,7 @@
             :src="demo.demoUrl"
             controls
             @play="playAudio(demo.number)"
-          ></audio>
+          />
           <div v-else-if="filesLoading">Loading demo player...</div>
           <div v-else>Unable to load demo player for this demo. Try again latter</div>
         </div>
@@ -81,8 +81,8 @@ function setUpvotesAvailable() {
   });
 }
 
-function demoVotes(demoNumber: number) {
-  return upvotes.value[demoNumber.toString()];
+function demoVotes(demoNumber: number): string[] {
+  return upvotes.value[demoNumber.toString()] || [];
 }
 
 function removeVote(demoNumber: number) {
@@ -110,12 +110,12 @@ async function setLoggedInformation() {
     userId.value = session.value.userId;
     upvotes.value = await getUpvotes();
 
-    request<DemoClientModel[]>('/api/getDemosMetadata', undefined, true).then(({ data }) => {
+    request<DemoClientModel[]>('/api/getDemosMetadata', undefined, true).then(async ({ data }) => {
       demos.value = data.value;
       musicPageLoaded.value = true;
       setUpvotesAvailable();
 
-      demos.value.forEach(async (demo) => {
+      for (const demo of demos.value) {
         useFetch('/api/getDemoFile', {
           method: 'post',
           // unique key to ensure that data fetching can be properly de-duplicated and not cached wrongly
@@ -168,7 +168,7 @@ async function setLoggedInformation() {
             demo.demoUrl = null;
             demosLoadedCount.value += 1;
           });
-      });
+      }
     });
   }
 }

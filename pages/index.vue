@@ -26,38 +26,38 @@
           :info="aboutMeContent"
         />
       </div>
-    </div>
 
-    <div class="todo lr-section-page relative"></div>
+      <div class="todo lr-section-page relative"></div>
 
-    <div class="lr-section-page recommendations">
-      <div
-        v-for="recommendation in recommendations"
-        :key="recommendation.id"
-        class="border border-gray-300 p-4 m-4"
-      >
-        <p>
-          {{ recommendation.id }} -=- {{ recommendation.author?.name }} -=-
-          {{ recommendation.author.description }}
-        </p>
-        <div>
-          <ClientOnly>
-            <NuxtImg
-              v-if="recommendation.authorImage"
-              :width="100"
-              :height="100"
-              :src="recommendation.authorImage"
-            />
-          </ClientOnly>
-          <p>{{ recommendation.recommendation }}</p>
+      <div class="lr-section-page recommendations">
+        <div
+          v-for="recommendation in recommendations"
+          :key="recommendation.id"
+          class="border border-gray-300 p-4 m-4"
+        >
+          <p>
+            {{ recommendation.id }} -=- {{ recommendation.author?.name }} -=-
+            {{ recommendation.author.description }}
+          </p>
+          <div>
+            <ClientOnly>
+              <NuxtImg
+                v-if="recommendation.authorImage"
+                :width="100"
+                :height="100"
+                :src="recommendation.authorImage"
+              />
+            </ClientOnly>
+            <p>{{ recommendation.recommendation }}</p>
+          </div>
         </div>
-      </div>
 
-      <div
-        v-for="quote in quotes"
-        :key="quote.id"
-      >
-        {{ quote }}
+        <div
+          v-for="quote in quotes"
+          :key="quote.id"
+        >
+          {{ quote }}
+        </div>
       </div>
     </div>
   </div>
@@ -104,15 +104,17 @@ function animateRollingChars(split: SplitType) {
       const clone = `<div class="cloneText"> ${txt} </div>`;
       const newHTML = `<div class="originalText"> ${txt} </div>${clone}`;
       obj.innerHTML = newHTML;
-      gsap.set(obj.childNodes[1], {
-        yPercent: i % 2 === 0 ? -100 : 100,
-      });
-      const tween = gsap.to(obj.childNodes, {
-        repeat: repeatCount,
-        ease: 'none',
-        yPercent: i % 2 === 0 ? '+=100' : '-=100',
-      });
-      tl.add(tween, 0);
+      if (obj.childNodes && obj.childNodes[1]) {
+        gsap.set(obj.childNodes[1], {
+          yPercent: i % 2 === 0 ? -100 : 100,
+        });
+        const tween = gsap.to(obj.childNodes, {
+          repeat: repeatCount,
+          ease: 'none',
+          yPercent: i % 2 === 0 ? '+=100' : '-=100',
+        });
+        tl.add(tween, 0);
+      }
     });
     mtl.fromTo(nameTitle.value, { opacity: 0 }, { opacity: 1, duration: 4, delay: 0.3 });
     mtl.to(tl, { progress: 1, duration: 4, ease: 'power4.inOut' }, '-=4.5');
@@ -174,6 +176,28 @@ function animateRollingChars(split: SplitType) {
           font-size: 42px;
           top: -23px;
           left: -14px;
+        }
+      }
+    }
+  }
+  .about-me {
+    :deep(.c-LRGeneralText) {
+      .bold {
+        color: $highlight;
+      }
+
+      h1 {
+        font-size: 1.5rem; /* 24px */
+        line-height: 2rem; /* 32px */
+        font-weight: 300;
+        text-transform: uppercase;
+      }
+      p {
+        font-size: 72px;
+        line-height: 86px;
+        letter-spacing: 0.3rem;
+        > * {
+          display: inline !important;
         }
       }
     }

@@ -1,26 +1,27 @@
 <template>
-  <template
+  <div
     v-for="paragraph in info.data"
     :key="paragraph.id"
+    class="c-LRGeneralText"
   >
     <component
       :is="paragraph.htmlTag"
       :id="'p-' + paragraph.id"
       ref="tags"
-      :aria-label="paragraphsFullText[paragraph.id].fullText"
+      :aria-label="paragraphsFullText[paragraph.id]?.fullText"
     >
       <template v-if="paragraph.text.length > 1">
         <span
           v-for="(segment, sindex) in paragraph.text"
           :key="sindex"
-          :class="{ highlight: segment.bold }"
+          :class="{ bold: segment.bold }"
         >
           {{ segment.text }}
         </span>
       </template>
-      <template v-else> {{ paragraph.text[0].text }}</template>
+      <template v-else> {{ paragraph.text[0]?.text }}</template>
     </component>
-  </template>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -43,7 +44,18 @@ onBeforeMount(() => {
   setParagraphsInfo();
 });
 
+watch(
+  () => info.data,
+  () => {
+    init();
+  }
+);
+
 onMounted(async () => {
+  init();
+});
+
+function init() {
   if (!tags.value || !tags.value.length) {
     return;
   }
@@ -72,7 +84,7 @@ onMounted(async () => {
       stagger: 0.2,
     });
   }
-});
+}
 
 function setParagraphsInfo() {
   for (const paragraph of info.data) {
@@ -91,23 +103,12 @@ function getFullText(item: GeneralsModel['data'][0]) {
 </script>
 
 <style scoped lang="scss">
-.highlight {
-  color: $highlight;
-}
-
-@media (min-width: $xl-breakpoint) {
-  h1 {
-    font-size: 1.5rem; /* 24px */
-    line-height: 2rem; /* 32px */
-    font-weight: 300;
-    text-transform: uppercase;
-  }
-  p {
-    font-size: 72px;
-    line-height: 86px;
-    letter-spacing: 0.3rem;
-    :deep(> *) {
-      display: inline !important;
+.c-LRGeneralText {
+  pointer-events: none;
+  & > * {
+    pointer-events: none;
+    span {
+      pointer-events: auto;
     }
   }
 }
