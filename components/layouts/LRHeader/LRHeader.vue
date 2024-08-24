@@ -3,7 +3,8 @@
     class="c-LRHeader lr-section lr-overlaping-allow-hover l-default__header-container w-full flex fixed justify-end xl:justify-between"
   >
     <NuxtLink
-      class="home-logo main-hover-button h-fit hidden xl:inline-block"
+      magnetic-hover
+      class="home-logo main-hover-button h-fit hidden xl:flex"
       :to="localeRoute('/')"
     >
       <SvgoLeonardorick />
@@ -73,10 +74,16 @@ function toggleMobileMenu() {
 <style scoped lang="scss">
 .c-LRHeader {
   .home-logo {
+    height: 7rem;
+    width: 7rem;
     cursor: none;
+    align-items: center;
+    justify-content: center;
+
     svg {
       height: 3rem;
       width: 3rem;
+      pointer-events: none;
     }
   }
 

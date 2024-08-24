@@ -5,6 +5,7 @@ import useLenis from './use-lenis';
 import useFluid from './use-fluid';
 import useLeonardoRick from './use-leonardorick';
 import useCursor from './use-cursor';
+import useMagneticHover from './use-magnetic-hover';
 import { useAnimationStore } from '~/store/animation';
 
 interface runWithControlledFPSOptions {
@@ -26,6 +27,7 @@ const useAnimations = () => {
   const fluid = useFluid();
   const leonardorick = useLeonardoRick();
   const cursor = useCursor();
+  const magneticHover = useMagneticHover();
   const isDocumentVisible = ref(true);
 
   let fps = 60;
@@ -69,6 +71,7 @@ const useAnimations = () => {
     await leonardorick.activate(isDebug);
 
     if (!isMobile) {
+      magneticHover.activate();
       cursor.activate();
       lenis.activate();
     }
@@ -83,6 +86,7 @@ const useAnimations = () => {
       setFPS(time);
 
       cursor.rafCallback();
+      magneticHover.rafCallback();
       leonardorick.rafCallback();
       runWithController(() => lenis.rafCallback(time), { forbidden: isMobile });
       runWithController(() => runWithControlledFPS(() => fluid.rafCallback()), { forbidden: !document.hasFocus() });

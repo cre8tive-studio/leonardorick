@@ -16,6 +16,7 @@ interface animationStoreModel {
   cursorOuter: HTMLDivElement | undefined;
   cursorInner: HTMLDivElement | undefined;
   cursorActivated: boolean;
+  magneticHoverActivated: boolean;
 }
 export const useAnimationStore = defineStore('animationStore', () => {
   const state = reactive<animationStoreModel>({
@@ -34,6 +35,7 @@ export const useAnimationStore = defineStore('animationStore', () => {
     cursorOuter: undefined,
     cursorInner: undefined,
     cursorActivated: false,
+    magneticHoverActivated: false,
   });
 
   const changeScrollLayoutOverflow = (overflow: 'auto' | 'hidden') => {

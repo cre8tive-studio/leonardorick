@@ -9,8 +9,8 @@ const cursor = {
   y: -100,
 };
 const cursorOuterOriginalState = {
-  width: 42,
-  height: 42,
+  width: 48,
+  height: 48,
 };
 
 let lastScrolledY = 0;
