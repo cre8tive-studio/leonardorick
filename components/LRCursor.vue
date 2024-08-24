@@ -35,13 +35,13 @@ onMounted(() => {
     // tweak to perfect align large ball
     left: -2.5px;
     top: -2.5px;
-    --size: 40px; // overriten on use-cursor
+    --size: 42px; // this value overrites use-cursor cursorOuterOriginalState
     border: 3px solid $highlight;
   }
   &--small {
     // tweak to perfect align middle ball
-    left: -1.7px;
-    top: -1.7px;
+    left: -7.24px;
+    top: -7.24px;
     --size: 10px;
     background: $highlight;
     transform: translate(-50%, -50%);
