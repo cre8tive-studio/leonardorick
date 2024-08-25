@@ -1,9 +1,7 @@
 <template>
-  <footer
-    class="c-LRFooter lr-section-bottom lr-overlaping-allow-hover items-end display-none fixed bottom-0 hidden xl:flex"
-  >
+  <footer class="c-LRFooter lr-section-bottom lr-safe-pointer-events-none w-full fixed bottom-0 hidden xl:flex">
     <nav>
-      <ul class="flex flex-col">
+      <ul class="flex w-fit flex-col">
         <li
           v-for="(link, index) of links"
           :key="index"

@@ -1,6 +1,6 @@
 <template>
   <header
-    class="c-LRHeader lr-section lr-overlaping-allow-hover l-default__header-container w-full flex fixed justify-end xl:justify-between"
+    class="c-LRHeader lr-section lr-safe-pointer-events-none l-default__header-container w-full flex fixed justify-end xl:justify-between"
   >
     <NuxtLink
       magnetic-hover

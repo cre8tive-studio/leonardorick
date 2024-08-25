@@ -10,7 +10,7 @@
         class="squares-container flex flex-wrap"
       >
         <div
-          v-for="index in 800"
+          v-for="index in 850"
           :key="index"
           class="square"
         ></div>
@@ -60,8 +60,8 @@ onMounted(() => {
 
     .squares-container {
       position: relative;
-      top: -26%;
-      left: -28%;
+      top: -23%;
+      left: -20%;
       height: 1600px;
       width: 3341px;
 

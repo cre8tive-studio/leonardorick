@@ -19,7 +19,7 @@
         :background-color="tilesBackgroundColor"
       />
       <div
-        class="about-me-text lr-section-page-paddings lr-overlaping-allow-hover relative h-full flex flex-col justify-center gap-4"
+        class="about-me-text lr-section-page-paddings lr-safe-pointer-events-none relative h-full flex flex-col justify-center gap-4"
       >
         <LRGeneralText
           v-if="aboutMeContent"

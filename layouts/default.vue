@@ -1,5 +1,5 @@
 <template>
-  <div class="relative l-default">
+  <div class="l-default">
     <LRHeader />
     <main
       role="main"
@@ -21,6 +21,10 @@ onMounted(() => {
 </script>
 <style scoped lang="scss">
 .l-default {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   &__header-container {
     z-index: 1;
   }
