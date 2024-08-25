@@ -6,7 +6,6 @@ export const useAppStore = defineStore('store', () => {
   const state = reactive<StoreModel>({
     lang: 'en',
     session: null,
-    contentLoaded: false,
     settings: null,
     recommendations: [],
     quotes: [],
@@ -15,6 +14,8 @@ export const useAppStore = defineStore('store', () => {
       jwt: '',
       expire: 0,
     },
+    contentLoaded: false,
+    defaultLayoutMounted: false,
   });
 
   const loaded = computed(() => state.contentLoaded && animationsStore.isLRModelLoaded);

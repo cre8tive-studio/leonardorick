@@ -166,7 +166,7 @@ const useLeonardoRick = () => {
    * ~ scrolling
    */
   const MOUSE_LIGHT_INTENSITY_AFTER_ENTERING = 0.13;
-  const ENTERING_ANIMATION_SCROLL_POSITION = 180;
+  const ENTERING_ANIMATION_SCROLL_POSITION = 200;
   const isAnimatingEntering = ref(false);
   const shouldBlockScroll = ref(false);
   let INITIAL_CAMERA_POSITION: Vector3;

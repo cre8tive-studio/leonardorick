@@ -47,17 +47,16 @@ const useAnimations = () => {
     unwatch();
   });
 
-  document.addEventListener('visibilitychange', visibilityChangeHandler);
-
-  onUnmounted(() => {
+  function cleanup() {
     document.removeEventListener('visibilitychange', visibilityChangeHandler);
-  });
+  }
 
   function visibilityChangeHandler() {
     isDocumentVisible.value = document.visibilityState === 'visible';
   }
 
   async function activate() {
+    document.addEventListener('visibilitychange', visibilityChangeHandler);
     gsap.registerPlugin(ScrollTrigger);
 
     if (!isWebglSupported()) {
@@ -71,8 +70,8 @@ const useAnimations = () => {
     await leonardorick.activate(isDebug);
 
     if (!isMobile) {
-      magneticHover.activate();
       cursor.activate();
+      magneticHover.activate();
       lenis.activate();
     }
 
@@ -177,6 +176,7 @@ const useAnimations = () => {
   return {
     lenisActivate: lenis.activate,
     activate,
+    cleanup,
   };
 };
 

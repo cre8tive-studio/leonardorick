@@ -1,4 +1,4 @@
-import { animate } from 'motion';
+import { gsap } from 'gsap';
 import { useAnimationStore } from '~/store/animation';
 // todo implement stuck state
 // eslint-disable-next-line no-autofix/prefer-const
@@ -16,28 +16,28 @@ const cursorOuterOriginalState = {
 let lastScrolledY = 0;
 let lastScrolledX = 0;
 
+let buttons = 0;
+
 const useCursor = () => {
   const { cursorOuter, cursorInner, cursorActivated: activated } = toRefs(useAnimationStore());
 
   function activate() {
     if (!cursorOuter.value || !cursorInner.value) return;
 
-    document.body.addEventListener('mousemove', updateCursorPosition);
-    window.addEventListener('scroll', scrollHandler);
-    //   window.addEventListener('scroll', () => updateCursorPosition());
     const boundingClientRect = cursorOuter.value.getBoundingClientRect();
     cursorOuterOriginalState.width = boundingClientRect.width;
     cursorOuterOriginalState.height = boundingClientRect.height;
 
-    document.body.addEventListener('pointerdown', () => {
+    window.addEventListener('scroll', scrollHandler); // this one feels more natural on window
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('pointerdown', () => {
       if (!cursorInner.value) return;
-
-      animate(cursorInner.value, { scale: 2.1 }, { duration: 0.2 });
+      gsap.to(cursorInner.value, { scale: 2.1, duration: 0.2 });
     });
-    document.body.addEventListener('pointerup', () => {
+    document.addEventListener('pointerup', () => {
       if (!cursorInner.value) return;
 
-      animate(cursorInner.value, { scale: 1 }, { duration: 0.2 });
+      gsap.to(cursorInner.value, { scale: 1, duration: 0.2 });
     });
 
     activated.value = true;
@@ -53,9 +53,26 @@ const useCursor = () => {
     cursor.x += lastScrolledX;
   }
 
+  function mouseMoveHandler(e: MouseEvent) {
+    updateCursorPosition(e);
+    // handle click and drag not triggering pointerup
+    // https://stackoverflow.com/a/48970682/10526869
+    if (e.buttons !== buttons) {
+      buttons = e.buttons;
+      if (e.buttons === 0) {
+        animateMouseDown();
+      }
+    }
+  }
+
   function updateCursorPosition(e: MouseEvent) {
     cursor.x = e.pageX;
     cursor.y = e.pageY;
+  }
+
+  function animateMouseDown() {
+    if (!cursorInner.value) return;
+    gsap.to(cursorInner.value, { scale: 1, duration: 0.2 });
   }
 
   function handleCursorEnter(_e: MouseEvent) {
@@ -102,17 +119,14 @@ const useCursor = () => {
   function rafCallback() {
     if (!activated.value || !cursorOuter.value || !cursorInner.value) return;
 
-    animate(cursorInner.value, { x: cursor.x, y: cursor.y }, { duration: 0 });
+    gsap.to(cursorInner.value, { x: cursor.x, y: cursor.y, duration: 0 });
 
     if (!isStuck) {
-      animate(
-        cursorOuter.value,
-        {
-          x: cursor.x - cursorOuterOriginalState.width / 2,
-          y: cursor.y - cursorOuterOriginalState.height / 2,
-        },
-        { duration: 0.12 }
-      );
+      gsap.to(cursorOuter.value, {
+        duration: 0.7,
+        x: cursor.x - cursorOuterOriginalState.width / 2,
+        y: cursor.y - cursorOuterOriginalState.height / 2,
+      });
     }
   }
 

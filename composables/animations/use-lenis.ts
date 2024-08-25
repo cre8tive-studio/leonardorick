@@ -5,10 +5,7 @@ interface ActivateOptions {
 }
 const useLenis = () => {
   let lenis: Lenis;
-
-  function rafCallback(time: number) {
-    lenis.raf(time);
-  }
+  const activated = ref(false);
 
   function activate({ raf = false, scrollCallback = () => {} }: ActivateOptions = {}) {
     lenis = new Lenis({ duration: 1.4 });
@@ -21,6 +18,12 @@ const useLenis = () => {
       }
       requestAnimationFrame(update);
     }
+    activated.value = true;
+  }
+
+  function rafCallback(time: number) {
+    if (!activated.value) return;
+    lenis.raf(time);
   }
 
   return {

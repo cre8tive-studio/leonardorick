@@ -25,7 +25,6 @@ body {
   background: $main-dark-bg;
   font-family: 'JosefinSans', sans-serif;
   overflow-y: auto;
-  cursor: none;
 }
 
 /**
@@ -57,7 +56,7 @@ body {
 */
 .main-hover-button {
   &:hover {
-    color: $secoundary-dark-bg;
+    color: $highlight-3;
     transition: color 0.3s ease-in-out;
   }
 }

@@ -40,8 +40,8 @@ onMounted(() => {
   }
   &--small {
     // tweak to perfect align middle ball
-    left: -10.24px;
-    top: -10.24px;
+    left: -1.9px;
+    top: -1.9px;
     --size: 16px;
     background: $highlight;
     transform: translate(-50%, -50%);

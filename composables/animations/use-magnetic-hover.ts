@@ -1,4 +1,4 @@
-import { animate, spring } from 'motion';
+import { gsap } from 'gsap';
 import { useAnimationStore } from '~/store/animation';
 import { COLORS } from '~/utils/constants/colors';
 
@@ -88,40 +88,42 @@ const useMagneticHover = () => {
     const { offsetX, offsetY } = mouseEvent;
     const { offsetWidth: width, offsetHeight: height } = el;
 
-    // const GSAP_MOVE_STRENGTH = 15;
-    const MOTION_MOVE_STRENGTH = 25;
+    const MOTION_MOVE_STRENGTH = 15; // GSAP better
+    // const MOTION_MOVE_STRENGTH = 25;
     const xMove = (offsetX / width) * (MOTION_MOVE_STRENGTH * 2) - MOTION_MOVE_STRENGTH;
     const yMove = (offsetY / height) * (MOTION_MOVE_STRENGTH * 2) - MOTION_MOVE_STRENGTH;
 
     if (shouldAnimateOut) {
-      // gsap.to(element, {
-      //   duration: 0.2,
-      //   transform: '',
-      //   color: COLORS.mainDarkText,
-      //   onComplete: () => {
-      //     svgReferences.set(li, { ...ref, shouldAnimateOut: false });
-      //   },
-      // });
-      animate(
-        element,
-        { transform: 'translate(0px, 0px) scale(1)', color: COLORS.mainDarkText },
-        { easing: spring({ velocity: 400 }) }
-      ).finished.then(() => magneticChildrenReferences.set(el, { ...ref, shouldAnimateOut: false }));
+      gsap.to(element, {
+        duration: 0.2,
+        transform: '',
+        color: COLORS.mainDarkText,
+        onComplete: () => {
+          magneticChildrenReferences.set(el, { ...ref, shouldAnimateOut: false });
+        },
+      });
+      // motion was being buggy, be careful
+      // animate(
+      //   element,
+      //   { transform: 'translate(0px, 0px) scale(1)', color: COLORS.mainDarkText },
+      //   { easing: spring({ velocity: 400 }) }
+      // ).finished.then(() => magneticChildrenReferences.set(el, { ...ref, shouldAnimateOut: false }));
     }
 
     if (shouldAnimatateIn) {
-      // gsap.to(svg, {
-      //   duration: 0.2,
-      //   scale: 1.2,
-      //   color: COLORS.highlight3,
-      //   transform: `translate(${xMove}px, ${yMove}px)`,
-      // });
-      animate(
-        element,
-        { transform: `translate(${xMove}px, ${yMove}px) scale(1.15)`, color: COLORS.highlight3 },
+      gsap.to(element, {
+        duration: 0.2,
+        scale: 1.2,
+        color: COLORS.highlight3,
+        transform: `translate(${xMove}px, ${yMove}px)`,
+      });
+      // motion was being buggy, be careful
+      // animate(
+      //   element,
+      //   { transform: `translate(${xMove}px, ${yMove}px) scale(1.15)`, color: COLORS.highlight3 },
 
-        { easing: spring({ velocity: 400 }) }
-      );
+      //   { easing: spring({ velocity: 400 }) }
+      // );
     }
   }
   function setChildrenReference(el: HTMLElement) {

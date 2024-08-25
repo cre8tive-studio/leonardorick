@@ -11,9 +11,10 @@ export interface StoreModel {
   lang: LanguageOptions;
   settings: SettingsClientModel | null;
   session: Models.Session | null;
-  contentLoaded: boolean;
   lastJWT: {
     jwt: string;
     expire: number;
   };
+  contentLoaded: boolean;
+  defaultLayoutMounted: boolean;
 }

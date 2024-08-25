@@ -104,7 +104,7 @@ function toggleMobileMenu() {
     span {
       // using border instead of height looked better
       // and more matching for both span sizes on the menu
-      border: 2px solid $main-dark-bg;
+      border: 1px solid $main-dark-bg;
       width: 40%;
       background-color: $main-dark-bg;
     }

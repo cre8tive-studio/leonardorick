@@ -1,6 +1,6 @@
 <template>
   <div class="relative l-default">
-    <LRHeader v-if="loaded" />
+    <LRHeader />
     <main
       role="main"
       class="default-slot flex-grow"
@@ -8,13 +8,16 @@
       <slot />
     </main>
 
-    <LRFooter v-if="loaded" />
+    <LRFooter />
   </div>
 </template>
 <script setup lang="ts">
 import { useAppStore } from '~/store';
 
-const { loaded } = toRefs(useAppStore());
+const { defaultLayoutMounted } = toRefs(useAppStore());
+onMounted(() => {
+  defaultLayoutMounted.value = true;
+});
 </script>
 <style scoped lang="scss">
 .l-default {

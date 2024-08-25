@@ -172,7 +172,6 @@ function animateRollingChars(split: SplitType) {
 @media (min-width: $xl-breakpoint) {
   .p-index {
     .main {
-      margin-bottom: 40px;
       &__title {
         font-size: 86px;
         line-height: 90px;

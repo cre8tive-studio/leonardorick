@@ -1,7 +1,7 @@
 <template>
   <NuxtRouteAnnouncer />
   <ClientOnly>
-    <LRAnimations />
+    <LRAnimations v-if="defaultLayoutMounted" />
   </ClientOnly>
   <NuxtLayout>
     <NuxtPage />
@@ -19,7 +19,7 @@ useHeadConfig();
 
 const nuxtApp = useNuxtApp();
 const { $recommendations, $quotes, $generals, $fetchInitialData, $initializerClientError } = nuxtApp;
-const { contentLoaded, lang, recommendations, quotes, generals } = toRefs(useAppStore());
+const { contentLoaded, lang, recommendations, quotes, generals, defaultLayoutMounted } = toRefs(useAppStore());
 
 if ($initializerClientError) {
   // todo setup modal error
