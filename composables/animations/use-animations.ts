@@ -47,16 +47,7 @@ const useAnimations = () => {
     unwatch();
   });
 
-  function cleanup() {
-    document.removeEventListener('visibilitychange', visibilityChangeHandler);
-  }
-
-  function visibilityChangeHandler() {
-    isDocumentVisible.value = document.visibilityState === 'visible';
-  }
-
   async function activate() {
-    document.addEventListener('visibilitychange', visibilityChangeHandler);
     gsap.registerPlugin(ScrollTrigger);
 
     if (!isWebglSupported()) {
@@ -65,6 +56,8 @@ const useAnimations = () => {
       console.warn('WebGL not supported so most animations will be disabled');
       return;
     }
+
+    setupListeners();
 
     fluid.activate();
     await leonardorick.activate(isDebug);
@@ -92,6 +85,46 @@ const useAnimations = () => {
 
       requestAnimationFrame(update);
     }
+  }
+
+  function setupListeners() {
+    document.addEventListener('visibilitychange', visibilityChangeHandler);
+    document.addEventListener('mousemove', mousemoveHandler);
+    document.addEventListener('pointerup', pointerupHandler);
+    document.addEventListener('pointerdown', pointerdownHandler);
+    document.addEventListener('keydown', keydownHandler);
+  }
+
+  function mousemoveHandler(e: MouseEvent) {
+    leonardorick.listeners.mousemove(e);
+    cursor.listeners.mousemove(e);
+    fluid.listeners.mousemove(e);
+  }
+
+  function pointerupHandler(e: PointerEvent) {
+    cursor.listeners.pointerup(e);
+    fluid.listeners.pointerup(e);
+  }
+
+  function pointerdownHandler(e: PointerEvent) {
+    cursor.listeners.pointerdown(e);
+    fluid.listeners.pointerdown(e);
+  }
+
+  function keydownHandler(e: KeyboardEvent) {
+    fluid.listeners.keydown(e);
+  }
+
+  function cleanup() {
+    document.removeEventListener('visibilitychange', visibilityChangeHandler);
+    document.removeEventListener('mousemove', mousemoveHandler);
+    document.removeEventListener('pointerup', pointerupHandler);
+    document.removeEventListener('pointerdown', pointerdownHandler);
+    document.removeEventListener('keydown', keydownHandler);
+  }
+
+  function visibilityChangeHandler() {
+    isDocumentVisible.value = document.visibilityState === 'visible';
   }
 
   function hideOverlay() {

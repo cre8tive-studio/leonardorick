@@ -238,7 +238,14 @@ export function initWebGL(canvas) {
   };
 }
 
-export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers, { initialColor = null, raf = false } = {}) {
+export function activator(
+  canvas,
+  webGL,
+  colorFormat,
+  PROGRAMS,
+  pointers,
+  { initialColor = null, raf = false, addListeners = true } = {}
+) {
   if (active) {
     const nPointers = [];
     nPointers.push(new Pointer());
@@ -858,7 +865,8 @@ export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers, { init
 
   let timeoutId;
   let shouldGenerateColorAgain = true;
-  document.addEventListener('mousemove', (e) => {
+
+  function mousemoveHandler(e) {
     /**
      * use it if you need to put the fluid inside a div that scrolls
      */
@@ -900,34 +908,48 @@ export function activator(canvas, webGL, colorFormat, PROGRAMS, pointers, { init
     timeoutId = setTimeout(() => {
       shouldGenerateColorAgain = true;
     }, PARAMS.hover_new_color_generator_timeout_if_multi_color_false);
-  });
+  }
 
-  document.addEventListener('mousedown', () => {
+  function pointerdownHandler(_e) {
     if (PARAMS.effect_trigger === 'click') {
       pointers[0].down = true;
       pointers[0].color = generateColor();
     }
-  });
+  }
 
-  window.addEventListener('mouseup', () => {
+  function pointerupHandler(_e) {
     if (PARAMS.effect_trigger === 'click') {
       pointers[0].down = false;
     }
-  });
+  }
 
-  window.addEventListener('keydown', (e) => {
+  function keydownHandler(e) {
     if (e.code === 'KeyP') {
       PARAMS.paused = !PARAMS.paused;
     }
     if (e.key === ' ') {
       splatStack.push({ ...getRandomMultipleSplatsArgs(), sizeX: 1000, sizeY: 500 });
     }
-  });
+  }
+
+  if (addListeners) {
+    document.addEventListener('mousemove', mousemoveHandler);
+    document.addEventListener('pointerdown', pointerdownHandler);
+    document.addEventListener('pointerup', pointerupHandler);
+    document.addEventListener('keydown', keydownHandler);
+  }
 
   return {
     getRandomMultipleSplatsArgs,
     multipleSplats,
     rafCallback,
+
+    listeners: {
+      mousemove: mousemoveHandler,
+      pointerup: pointerupHandler,
+      pointerdown: pointerdownHandler,
+      keydown: keydownHandler,
+    },
   };
 }
 

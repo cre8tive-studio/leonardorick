@@ -29,16 +29,6 @@ const useCursor = () => {
     cursorOuterOriginalState.height = boundingClientRect.height;
 
     window.addEventListener('scroll', scrollHandler); // this one feels more natural on window
-    document.addEventListener('mousemove', mouseMoveHandler);
-    document.addEventListener('pointerdown', () => {
-      if (!cursorInner.value) return;
-      gsap.to(cursorInner.value, { scale: 2.1, duration: 0.2 });
-    });
-    document.addEventListener('pointerup', () => {
-      if (!cursorInner.value) return;
-
-      gsap.to(cursorInner.value, { scale: 1, duration: 0.2 });
-    });
 
     activated.value = true;
   }
@@ -53,7 +43,7 @@ const useCursor = () => {
     cursor.x += lastScrolledX;
   }
 
-  function mouseMoveHandler(e: MouseEvent) {
+  function handleDocumentCursorMove(e: MouseEvent) {
     updateCursorPosition(e);
     // handle click and drag not triggering pointerup
     // https://stackoverflow.com/a/48970682/10526869
@@ -63,6 +53,16 @@ const useCursor = () => {
         animateMouseDown();
       }
     }
+  }
+
+  function handlePointerUp(_e: PointerEvent) {
+    if (!cursorInner.value) return;
+    gsap.to(cursorInner.value, { scale: 1, duration: 0.2 });
+  }
+
+  function handlePointerDown(_e: PointerEvent) {
+    if (!cursorInner.value) return;
+    gsap.to(cursorInner.value, { scale: 2.1, duration: 0.2 });
   }
 
   function updateCursorPosition(e: MouseEvent) {
@@ -133,6 +133,11 @@ const useCursor = () => {
   return {
     activate,
     rafCallback,
+    listeners: {
+      mousemove: handleDocumentCursorMove,
+      pointerup: handlePointerUp,
+      pointerdown: handlePointerDown,
+    },
     handleCursorEnter,
     handleCursorLeave,
   };

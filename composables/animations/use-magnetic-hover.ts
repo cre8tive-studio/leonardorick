@@ -88,7 +88,7 @@ const useMagneticHover = () => {
     const { offsetX, offsetY } = mouseEvent;
     const { offsetWidth: width, offsetHeight: height } = el;
 
-    const MOTION_MOVE_STRENGTH = 15; // GSAP better
+    const MOTION_MOVE_STRENGTH = 12; // GSAP better
     // const MOTION_MOVE_STRENGTH = 25;
     const xMove = (offsetX / width) * (MOTION_MOVE_STRENGTH * 2) - MOTION_MOVE_STRENGTH;
     const yMove = (offsetY / height) * (MOTION_MOVE_STRENGTH * 2) - MOTION_MOVE_STRENGTH;
@@ -150,9 +150,13 @@ const useMagneticHover = () => {
     activate,
     rafCallback,
     registerElement,
-    handleCursorEnter,
-    handleCursorLeave,
-    handleCursorMove,
+    // this listeners should be used by
+    // any element that wants to be magnetic
+    listeneers: {
+      mouseenter: handleCursorEnter,
+      mousemove: handleCursorLeave,
+      mouseleave: handleCursorMove,
+    },
   };
 };
 export default useMagneticHover;

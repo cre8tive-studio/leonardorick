@@ -9,10 +9,10 @@ import { initWebGL, activator, setDitherURL } from './initializer';
 export class Fluid {
   /**
    * @param {HTMLCanvasElement | undefined} canvas
-   * @param {{initialColor}} options.
+   * @param {{initialColor, raf?, addListeners}} options.
    *  initialColor is an object: {r, g, b} where 1 is 255 and 0 is 0
    */
-  constructor(canvas, { initialColor = null } = {}) {
+  constructor(canvas, { initialColor = null, raf = false, addListeners = true } = {}) {
     this.PARAMS = behavior;
 
     /* Set canvas to desired width and height
@@ -27,6 +27,8 @@ export class Fluid {
     this.colorFormats = colorFormats;
     this.pointers = pointers;
     this.initialColor = initialColor;
+    this.raf = raf;
+    this.addListeners = addListeners;
 
     /**
      * custom exported methods
@@ -34,6 +36,8 @@ export class Fluid {
     this.multipleSplats = null;
     this.getRandomMultipleSplatsArgs = null;
     this.rafCallback = null;
+
+    this.listeners = null;
   }
 
   /**
@@ -46,10 +50,13 @@ export class Fluid {
   activate() {
     const res = activator(this.canvas, this.webGL, this.colorFormats, this.programs, this.pointers, {
       initialColor: this.initialColor,
+      raf: this.raf,
+      addListeners: this.addListeners,
     });
     this.multipleSplats = res.multipleSplats;
     this.getRandomMultipleSplatsArgs = res.getRandomMultipleSplatsArgs;
     this.rafCallback = res.rafCallback;
+    this.listeners = res.listeners;
     return res;
   }
 

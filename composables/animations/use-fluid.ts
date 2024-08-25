@@ -14,7 +14,7 @@ const useFluid = () => {
   }
 
   function activate() {
-    fluid.value = new Fluid(fluidCanvas.value, { initialColor: { r: 0, g: 246 / 255, b: 1 } });
+    fluid.value = new Fluid(fluidCanvas.value, { initialColor: { r: 0, g: 246 / 255, b: 1 }, addListeners: false });
     fluid.value.mapBehaviors({
       sim_resolution: 128,
       dye_resolution: 512,
@@ -104,10 +104,32 @@ const useFluid = () => {
     }
   }
 
+  function mousemoveHandler(e: MouseEvent) {
+    fluid.value?.listeners?.mousemove(e);
+  }
+
+  function pointerupHandler(e: PointerEvent) {
+    fluid.value?.listeners?.pointerup(e);
+  }
+
+  function pointerdownHandler(e: PointerEvent) {
+    fluid.value?.listeners?.pointerdown(e);
+  }
+
+  function keydownHandler(e: KeyboardEvent) {
+    fluid.value?.listeners?.keydown(e);
+  }
+
   return {
     fluidExplosion,
     activate,
     rafCallback,
+    listeners: {
+      mousemove: mousemoveHandler,
+      pointerup: pointerupHandler,
+      pointerdown: pointerdownHandler,
+      keydown: keydownHandler,
+    },
   };
 };
 export default useFluid;

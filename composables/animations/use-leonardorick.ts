@@ -239,7 +239,6 @@ const useLeonardoRick = () => {
     setupCamera(camera);
     setupPane(isDebug);
 
-    document.addEventListener('mousemove', documentMousemoveHandler);
     activated.value = true;
   }
 
@@ -368,32 +367,35 @@ const useLeonardoRick = () => {
             },
           },
           '<'
-        )
-        // decrease mouse light
-        .to(lights.mouseLight.light, { intensity: MOUSE_LIGHT_INTENSITY_AFTER_ENTERING }, '<')
-        // add ambient light with the exact strength so it look like the backgorund
-        .to(
-          lights.ambientLight.light,
-          {
-            intensity: AMBIENT_LIGHT_GENERAL_INTENSITY,
-          },
-          '<'
-        )
-        // show clone scaling it and adding opacity to it material
-        .to(
-          clone.mesh.scale,
-          {
-            x: clone.finalScale.x,
-            y: clone.finalScale.y,
-            z: clone.finalScale.z,
-            onComplete: () => {
-              if (gltfModel.backgroundMaterial) {
-                gltfModel.backgroundMaterial.opacity = 1;
-              }
-            },
-          },
-          '<'
         );
+
+      if (lights.mouseLight && lights.ambientLight) {
+        // decrease mouse light
+        tl.to(lights.mouseLight.light, { intensity: MOUSE_LIGHT_INTENSITY_AFTER_ENTERING }, '<')
+          // add ambient light with the exact strength so it look like the backgorund
+          .to(
+            lights.ambientLight.light,
+            {
+              intensity: AMBIENT_LIGHT_GENERAL_INTENSITY,
+            },
+            '<'
+          );
+      }
+      // show clone scaling it and adding opacity to it material
+      tl.to(
+        clone.mesh.scale,
+        {
+          x: clone.finalScale.x,
+          y: clone.finalScale.y,
+          z: clone.finalScale.z,
+          onComplete: () => {
+            if (gltfModel.backgroundMaterial) {
+              gltfModel.backgroundMaterial.opacity = 1;
+            }
+          },
+        },
+        '<'
+      );
     }
   }
 
@@ -407,6 +409,7 @@ const useLeonardoRick = () => {
       scene.add(light);
     }
     // seutup target for mouseLight so can make it follow mouse
+    if (!lights.mouseLight) return;
     const mouseLight = lights.mouseLight.light as DirectionalLight;
     scene.add(lights.mouseLight.light);
     mouseLight.target = lightTarget;
@@ -510,6 +513,8 @@ const useLeonardoRick = () => {
     const center = gltfModel.instances[GLTFModelKeys.center].mesh;
     if (center) {
       camera.lookAt(getCenterToLookAt(center.position));
+
+      if (!lights.dLight1 || !lights.dLight2) return;
       lights.dLight1.light?.lookAt(center.position);
       lights.dLight2.light?.lookAt(center.position);
     }
@@ -604,6 +609,9 @@ const useLeonardoRick = () => {
       },
     });
 
+    gsapAnimations.overlay = tl;
+    if (!lights.mouseLight) return;
+
     tl.set(lights.mouseLight.light, { intensity: 0 })
 
       .to(
@@ -615,8 +623,6 @@ const useLeonardoRick = () => {
         '<'
       )
       .to(lights.mouseLight.light, { duration: 3, intensity: 10 }, '<');
-
-    gsapAnimations.overlay = tl;
   }
 
   /**
@@ -681,10 +687,11 @@ const useLeonardoRick = () => {
         // Slow Oscillating Movement for top mesh
         tl.to(top.mesh.position, { x: '-=0.04', z: '+=0.04', ...OSCILLATING_PROPS })
           .to(bottom.mesh.position, { x: '+=0.04', z: '-=0.04', ...OSCILLATING_PROPS }, '<')
-          .to(center.mesh.scale, { x: '-=0.004', z: '-=0.004', ...OSCILLATING_PROPS }, '<')
+          .to(center.mesh.scale, { x: '-=0.004', z: '-=0.004', ...OSCILLATING_PROPS }, '<');
 
-          // lights animation
-          .to(lights.dLight2.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 })
+        if (!lights.dLight2 || !lights.dLight1) return;
+        // lights animation
+        tl.to(lights.dLight2.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 })
           .to(lights.dLight2.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 })
           .to(lights.dLight1.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 }, '-=10')
           .to(lights.dLight1.light, { intensity: '-=800', ...OSCILLATING_PROPS, duration: 10 });
@@ -707,12 +714,12 @@ const useLeonardoRick = () => {
       .to(gltfModel.backgroundMaterial, { opacity: 1, ease: 'sine.inOut', duration: 1 });
   }
 
-  function documentMousemoveHandler($event: any) {
+  function handleCursorMove($event: MouseEvent) {
     const y = normalize($event.clientY, window.innerHeight, { min: -1, max: 1 });
     cursor.x = normalize($event.clientX, window.innerWidth, { min: -1, max: 1 });
     cursor.y = y;
 
-    if (lights.mouseLight.light && document.hasFocus()) {
+    if (lights.mouseLight?.light && document.hasFocus()) {
       // don't ask me why it's inverted on x and not on y but it's working like this
       const lightCursorCoord = {
         x: normalize($event.clientX, window.innerWidth, { min: -1, max: 1, inverted: true }),
@@ -792,13 +799,14 @@ const useLeonardoRick = () => {
     }
     isLRModelLoaded.value = false;
     isEnteringAnimationFinished.value = false;
-    document.removeEventListener('mousemove', documentMousemoveHandler);
   });
 
   return {
     activate,
     rafCallback,
-
+    listeners: {
+      mousemove: handleCursorMove,
+    },
     // to use on template component
     MOUSE_LIGHT_INTENSITY_AFTER_ENTERING,
     lights,

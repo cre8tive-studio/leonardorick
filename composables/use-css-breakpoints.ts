@@ -10,6 +10,10 @@ const useCssBreakpoints = () => {
     onUnmounted(() => {
       query.removeEventListener('change', handler);
     });
+
+    onUnmounted(() => {
+      query.removeEventListener('change', handler);
+    });
   }
   return {
     isXl,
