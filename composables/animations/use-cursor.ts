@@ -93,7 +93,7 @@ const useCursor = () => {
     gsap.killTweensOf(cursorOuter.value);
     gsap.to(cursorOuter.value, {
       duration: 0.2,
-      x: targetBox.x,
+      x: targetBox.x + window.scrollX,
       y: targetBox.y + window.scrollY,
       width: targetBox.width,
       height: targetBox.height,

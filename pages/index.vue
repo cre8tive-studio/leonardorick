@@ -43,6 +43,22 @@
 
       <div class="todo lr-section-page relative"></div>
 
+      <div class="lr-section-page">
+        <LRGeneralText
+          v-if="experienceContent"
+          :key="refreshKey"
+          :info="experienceContent"
+        />
+      </div>
+
+      <div class="lr-section-page">
+        <LRGeneralText
+          v-if="environmentContent"
+          :key="refreshKey"
+          :info="environmentContent"
+        />
+      </div>
+
       <div class="lr-section-page recommendations">
         <div
           v-for="recommendation in recommendations"
@@ -89,6 +105,9 @@ const nameTitleOutline = ref<HTMLDivElement>();
 const mainTitleContainer = ref<HTMLDivElement>();
 
 const aboutMeContent = computed(() => generals.value.find((general) => general.key === 'about-me'));
+const experienceContent = computed(() => generals.value.find((general) => general.key === 'experience'));
+const environmentContent = computed(() => generals.value.find((general) => general.key === 'environment'));
+
 const colors = [COLORS.blue1, COLORS.blue2, COLORS.blue3, COLORS.blue4, COLORS.blue5];
 const tilesBackgroundColor = COLORS.mainDarkBg;
 const refreshKey = ref(0);
@@ -237,7 +256,6 @@ function animateRollingChars(split: SplitType) {
   }
 
   .about-me {
-    // overflow-y: scroll;
     :deep(.c-LRGeneralText) {
       .bold {
         color: $highlight;

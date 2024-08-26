@@ -34,7 +34,7 @@ onMounted(() => {
   top: 0;
   pointer-events: none;
   z-index: 100;
-  opacity: 0.7;
+  // opacity: 0.7; // overwritten in use-cursor
   &--large {
     // tweak to perfect align large ball
     left: -2.5px;

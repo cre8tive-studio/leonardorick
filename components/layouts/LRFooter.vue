@@ -30,20 +30,20 @@ import SvgoStackoverflow from '~/assets/icons/stackoverflow.svg';
 const lis = ref<HTMLLIElement[]>();
 const links = [
   {
-    link: 'https://spotify.com',
-    svg: SvgoSpotify,
-  },
-  {
-    link: 'https://github.com',
-    svg: SvgoGithub,
-  },
-  {
-    link: 'https://linkedin.com',
+    link: 'https://linkedin.com/in/leonardo-rick/',
     svg: SvgoLinkedin,
   },
   {
-    link: 'https://stackoverflow.com',
+    link: 'https://github.com/LeonardoRick',
+    svg: SvgoGithub,
+  },
+  {
+    link: 'https://stackoverflow.com/users/10526869/leonardo-rick',
     svg: SvgoStackoverflow,
+  },
+  {
+    link: 'https://open.spotify.com/intl-pt/artist/166zddGlNMJbuq99HrkyNb',
+    svg: SvgoSpotify,
   },
 ];
 </script>
@@ -69,8 +69,8 @@ const links = [
       cursor: none;
 
       svg {
-        height: 24px;
-        width: 24px;
+        height: 32px;
+        width: 32px;
         pointer-events: none;
       }
 
