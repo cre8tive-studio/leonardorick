@@ -1,16 +1,16 @@
 <template>
   <header
-    class="c-LRHeader lr-section lr-safe-pointer-events-none l-default__header-container w-full flex fixed justify-end xl:justify-between"
+    class="c-LRHeader lr-section lr-safe-pointer-events-none l-default__header-container w-full flex fixed justify-end lg:justify-between"
   >
     <NuxtLink
       magnetic-hover
-      class="home-logo main-hover-button h-fit hidden xl:flex"
+      class="home-logo main-hover-button h-fit hidden lg:flex"
       :to="localeRoute('/')"
     >
       <SvgoLeonardorick />
     </NuxtLink>
     <div>
-      <template v-if="isXl">
+      <template v-if="isLg">
         <LRHeaderNav class="text-right" />
       </template>
       <div
@@ -44,14 +44,14 @@ import useCssBreakpoints from '~/composables/use-css-breakpoints';
 import { useAppStore } from '~/store';
 
 const { lang } = toRefs(useAppStore());
-const { isXl } = useCssBreakpoints();
+const { isLg } = useCssBreakpoints();
 
 const mobileMenu = ref<HTMLDivElement>();
 const isMobileMenuVisible = ref(false);
 
 const localeRoute = computed(() => (r: string) => lang.value === 'en' ? r : `${r}?locale=${lang.value}`);
 
-watch(isXl, () => {
+watch(isLg, () => {
   isMobileMenuVisible.value = false;
 });
 
@@ -131,7 +131,7 @@ function toggleMobileMenu() {
     transform: scaleY(0);
     transform-origin: top;
   }
-  @media (min-width: $xl-breakpoint) {
+  @media (min-width: $lg-breakpoint) {
     min-width: $sides-xl-width;
   }
 }

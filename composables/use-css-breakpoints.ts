@@ -1,10 +1,10 @@
 const useCssBreakpoints = () => {
-  const isXl = ref(true);
+  const isLg = ref(true);
   if (import.meta.client) {
-    const query = window.matchMedia('screen and (min-width: 1280px)');
-    isXl.value = query.matches;
+    const query = window.matchMedia('screen and (min-width: 1024px)');
+    isLg.value = query.matches;
     const handler = (e: MediaQueryListEvent) => {
-      isXl.value = e.matches;
+      isLg.value = e.matches;
     };
     query.addEventListener('change', handler);
     onUnmounted(() => {
@@ -16,7 +16,7 @@ const useCssBreakpoints = () => {
     });
   }
   return {
-    isXl,
+    isLg,
   };
 };
 export default useCssBreakpoints;

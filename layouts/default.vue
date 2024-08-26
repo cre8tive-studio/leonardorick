@@ -29,7 +29,7 @@ onMounted(() => {
     z-index: 1;
   }
 }
-@media (min-width: $xl-breakpoint) {
+@media (min-width: $lg-breakpoint) {
   .l-default {
   }
 }

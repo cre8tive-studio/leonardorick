@@ -6,7 +6,7 @@
     <div class="main lr-section-page flex flex-col items-center justify-end gap-2 relative">
       <h1
         ref="nameTitle"
-        class="main__title title-splitted pb-20 xl:pl-10"
+        class="main__title title-splitted pb-20 lg:pl-10"
       >
         Leonardo Rick
         <span class="registered-icon">®</span>
@@ -167,9 +167,28 @@ function animateRollingChars(split: SplitType) {
 
   .about-me {
     // overflow-y: scroll;
+    :deep(.c-LRGeneralText) {
+      .bold {
+        color: $highlight;
+      }
+
+      h1 {
+        font-size: 1.5rem; /* 24px */
+        line-height: 2rem; /* 32px */
+        font-weight: 300;
+        text-transform: uppercase;
+      }
+      p {
+        font-size: 1.5rem; /* 24px */
+        line-height: 2rem; /* 32px */
+        > * {
+          display: inline !important;
+        }
+      }
+    }
   }
 }
-@media (min-width: $xl-breakpoint) {
+@media (min-width: $lg-breakpoint) {
   .p-index {
     .main {
       &__title {
@@ -184,25 +203,13 @@ function animateRollingChars(split: SplitType) {
         }
       }
     }
-  }
-  .about-me {
-    :deep(.c-LRGeneralText) {
-      .bold {
-        color: $highlight;
-      }
 
-      h1 {
-        font-size: 1.5rem; /* 24px */
-        line-height: 2rem; /* 32px */
-        font-weight: 300;
-        text-transform: uppercase;
-      }
-      p {
-        font-size: 72px;
-        line-height: 86px;
-        letter-spacing: 0.3rem;
-        > * {
-          display: inline !important;
+    .about-me {
+      :deep(.c-LRGeneralText) {
+        p {
+          font-size: 72px;
+          line-height: 86px;
+          letter-spacing: 0.3rem;
         }
       }
     }
