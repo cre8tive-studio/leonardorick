@@ -20,6 +20,6 @@ canvas {
   height: 100vh;
   background-color: transparent;
   position: fixed;
-  z-index: -20;
+  z-index: -40;
 }
 </style>

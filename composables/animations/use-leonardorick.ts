@@ -166,7 +166,7 @@ const useLeonardoRick = () => {
    * ~ scrolling
    */
   const MOUSE_LIGHT_INTENSITY_AFTER_ENTERING = 0.13;
-  const ENTERING_ANIMATION_SCROLL_POSITION = 200;
+  const ENTERING_ANIMATION_SCROLL_POSITION = 210;
   const isAnimatingEntering = ref(false);
   const shouldBlockScroll = ref(false);
   let INITIAL_CAMERA_POSITION: Vector3;
@@ -320,14 +320,7 @@ const useLeonardoRick = () => {
 
     const clone = gltfModel.instances[GLTFModelKeys.clone];
     const all = gltfModel.instances[GLTFModelKeys.all];
-    if (
-      clone.mesh &&
-      clone.finalScale &&
-      gsapAnimations.motion &&
-      gsapAnimations.overlay &&
-      floor.mat &&
-      floor.self.mesh
-    ) {
+    if (clone.mesh && clone.finalScale && gsapAnimations.motion && gsapAnimations.overlay) {
       changeScrollLayoutOverflow('hidden');
       gsapAnimations.motion.pause();
       gsapAnimations.overlay.pause();
@@ -342,32 +335,36 @@ const useLeonardoRick = () => {
           onComplete: () => {
             fluidExplosion();
             turnOffLights();
-            if (logoCanvas.value) {
-              logoCanvas.value.style.zIndex = '-1';
-            }
+            // activate if adding  floot again
+            // if (logoCanvas.value) {
+            //   logoCanvas.value.style.zIndex = '-1';
+            // }
           },
-        })
+        });
+
+      if (floor.mat && floor.self.mesh) {
         // hide floor
-        .to(floor.self.mesh.scale, { x: 0, y: 0, z: 0 }, '<')
-        // hide mat
-        .to(
-          floor.mat.material,
-          {
-            opacity: 0,
-            onComplete: () => {
-              shouldBlockScroll.value = true;
-              thisCamera.position.copy(INITIAL_CAMERA_POSITION);
-              thisCamera.rotation.copy(INITIAL_CAMERA_ROTATION);
+        tl.to(floor.self.mesh.scale, { x: 0, y: 0, z: 0 }, '<')
+          // hide mat
+          .to(
+            floor.mat.material,
+            {
+              opacity: 0,
+              onComplete: () => {
+                shouldBlockScroll.value = true;
+                thisCamera.position.copy(INITIAL_CAMERA_POSITION);
+                thisCamera.rotation.copy(INITIAL_CAMERA_ROTATION);
 
-              if (all.mesh) {
-                all.mesh.scale.set(0, 0, 0);
-              }
+                if (all.mesh) {
+                  all.mesh.scale.set(0, 0, 0);
+                }
 
-              changeScrollLayoutOverflow('auto');
+                changeScrollLayoutOverflow('auto');
+              },
             },
-          },
-          '<'
-        );
+            '<'
+          );
+      }
 
       if (lights.mouseLight && lights.ambientLight) {
         // decrease mouse light
@@ -445,7 +442,7 @@ const useLeonardoRick = () => {
     floor.self.mesh.rotateX(X_ROTATION);
     floor.self.finalPosition = floor.self.mesh.position.clone();
     floor.self.finalScale = floor.self.mesh.scale.clone();
-    scene.add(floor.self.mesh);
+    // scene.add(floor.self.mesh); // ? uncomment to add floor
 
     floor.mat = new Mesh(
       plane,
@@ -460,7 +457,7 @@ const useLeonardoRick = () => {
     );
     floor.mat.position.set(0, floor.self.mesh.position.y + 0.001, Z_POSITION);
     floor.mat.rotateX(X_ROTATION);
-    scene.add(floor.mat);
+    // scene.add(floor.mat); // ? uncomment to add floor mat
 
     /**
      * load model
@@ -635,17 +632,7 @@ const useLeonardoRick = () => {
     const bottom = gltfModel.instances[GLTFModelKeys.bottom];
     const center = gltfModel.instances[GLTFModelKeys.center];
     const top = gltfModel.instances[GLTFModelKeys.top];
-    if (
-      bottom.mesh &&
-      bottom.finalPosition &&
-      top.mesh &&
-      top.finalPosition &&
-      center.mesh &&
-      center.finalScale &&
-      floor.self.mesh &&
-      floor.self.finalPosition &&
-      floor.mat
-    ) {
+    if (bottom.mesh && bottom.finalPosition && top.mesh && top.finalPosition && center.mesh && center.finalScale) {
       const OSCILLATING_PROPS = {
         duration: 5.5,
         yoyo: true,
@@ -659,13 +646,15 @@ const useLeonardoRick = () => {
       tl.set(bottom.mesh.position, { x: -10 });
       tl.set(bottom.mesh.position, { z: 10 });
 
-      // give space to the bottom part enter without being cutted
-      tl.set(floor.self.mesh.position, { x: 0.6 });
-      tl.set(floor.mat.position, { x: 0.6 });
+      if (floor.self.mesh && floor.self.finalPosition && floor.mat) {
+        // give space to the bottom part enter without being cutted
+        tl.set(floor.self.mesh.position, { x: 0.6 });
+        tl.set(floor.mat.position, { x: 0.6 });
 
-      tl.set(top.mesh.position, { x: 10 });
-      tl.set(top.mesh.position, { z: -10 });
-      tl.set(center.mesh.scale, { x: 0, y: 0, z: 0 });
+        tl.set(top.mesh.position, { x: 10 });
+        tl.set(top.mesh.position, { z: -10 });
+        tl.set(center.mesh.scale, { x: 0, y: 0, z: 0 });
+      }
 
       tl
         // animate center entering
@@ -677,11 +666,16 @@ const useLeonardoRick = () => {
 
         // animate bottom of mesh entering
         .to(bottom.mesh.position, { duration: 2, ease: 'back.out(0.4)', x: bottom.finalPosition.x }, '-=1.7')
-        .to(bottom.mesh.position, { duration: 2, ease: 'back.out(0.4)', z: bottom.finalPosition.z }, '<')
+        .to(bottom.mesh.position, { duration: 2, ease: 'back.out(0.4)', z: bottom.finalPosition.z }, '<');
 
+      if (floor.self.mesh && floor.self.finalPosition && floor.mat) {
         // put floor (reflection) on the right place smootly
-        .to(floor.self.mesh.position, { x: floor.self.finalPosition.x }, '-=0.68')
-        .to(floor.mat.position, { x: floor.self.finalPosition.x }, '<');
+        tl.to(floor.self.mesh.position, { x: floor.self.finalPosition.x }, '-=0.68').to(
+          floor.mat.position,
+          { x: floor.self.finalPosition.x },
+          '<'
+        );
+      }
 
       if (!isMobile) {
         // Slow Oscillating Movement for top mesh

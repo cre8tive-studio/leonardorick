@@ -3,14 +3,27 @@
     v-if="loaded"
     class="p-index"
   >
-    <div class="main lr-section-page flex flex-col items-center justify-end gap-2 relative">
-      <h1
-        ref="nameTitle"
-        class="main__title title-splitted pb-20 lg:pl-10"
+    <div class="main lr-section-page">
+      <div
+        ref="mainTitleContainer"
+        class="main__title--container"
       >
-        Leonardo Rick
-        <span class="registered-icon">®</span>
-      </h1>
+        <h1
+          ref="nameTitle"
+          class="main__title title-splitted title-filled"
+        >
+          Leonardo Rick
+          <span class="registered-icon">®</span>
+        </h1>
+        <h1
+          ref="nameTitleOutline"
+          aria-hidden="true"
+          class="main__title title-splitted title-outline"
+        >
+          Leonardo Rick
+          <span class="registered-icon">®</span>
+        </h1>
+      </div>
     </div>
 
     <div class="about-me lr-section-page lr-section-page-no-paddings relative">
@@ -72,6 +85,8 @@ import { COLORS } from '../utils/constants/colors';
 import { useAppStore } from '~/store';
 const { loaded, recommendations, quotes, generals, contentLoaded } = toRefs(useAppStore());
 const nameTitle = ref<HTMLDivElement>();
+const nameTitleOutline = ref<HTMLDivElement>();
+const mainTitleContainer = ref<HTMLDivElement>();
 
 const aboutMeContent = computed(() => generals.value.find((general) => general.key === 'about-me'));
 const colors = [COLORS.blue1, COLORS.blue2, COLORS.blue3, COLORS.blue4, COLORS.blue5];
@@ -80,11 +95,11 @@ const refreshKey = ref(0);
 
 onMounted(() => {
   if (nameTitle.value) {
-    animateAndSplitChars();
+    runAnimations();
   } else {
     watchOnce(loaded, async () => {
       await nextTick();
-      animateAndSplitChars();
+      runAnimations();
     });
   }
 });
@@ -93,59 +108,115 @@ watch(contentLoaded, () => {
   refreshKey.value++;
 });
 
+function runAnimations() {
+  animateTitle();
+  animateAndSplitChars();
+}
+
+function animateTitle() {
+  if (!nameTitle.value || !nameTitleOutline.value) return;
+  gsap.to(nameTitle.value, {
+    scrollTrigger: {
+      trigger: '.main',
+      start: 'top top',
+      end: () => window.innerWidth * 0.094,
+      pin: nameTitle.value,
+      scrub: true,
+    },
+    scale: 0.95,
+  });
+
+  gsap.to(nameTitleOutline.value, {
+    scrollTrigger: {
+      trigger: '.main',
+      start: 'top top',
+      end: () => window.innerWidth * 0.094,
+      scrub: true,
+    },
+    scale: 0.95,
+  });
+}
+
 function animateAndSplitChars() {
-  if (!nameTitle.value) {
-    return;
-  }
   animateRollingChars(new SplitType('.title-splitted', { types: 'chars' }));
 }
 function animateRollingChars(split: SplitType) {
+  if (!split.chars || !nameTitle.value) return;
+
   const mtl = gsap.timeline();
   const tl = gsap.timeline({ paused: true, repeat: -1 });
-  const repeatCount = 8;
+  const repeatCount = 11;
   // https://codepen.io/PointC/pen/ZEmOKvP
-  if (split.chars && nameTitle.value) {
-    split.chars.forEach((obj, i) => {
-      const txt = obj.innerText;
-      const clone = `<div class="cloneText"> ${txt} </div>`;
-      const newHTML = `<div class="originalText"> ${txt} </div>${clone}`;
-      obj.innerHTML = newHTML;
-      if (obj.childNodes && obj.childNodes[1]) {
-        gsap.set(obj.childNodes[1], {
-          yPercent: i % 2 === 0 ? -100 : 100,
-        });
-        const tween = gsap.to(obj.childNodes, {
-          repeat: repeatCount,
-          ease: 'none',
-          yPercent: i % 2 === 0 ? '+=100' : '-=100',
-        });
-        tl.add(tween, 0);
-      }
-    });
-    mtl.fromTo(nameTitle.value, { opacity: 0 }, { opacity: 1, duration: 4, delay: 0.3 });
-    mtl.to(tl, { progress: 1, duration: 4, ease: 'power4.inOut' }, '-=4.5');
-  }
+
+  split.chars.forEach((obj, i) => {
+    const txt = obj.innerText;
+    const clone = `<div class="cloneText"> ${txt} </div>`;
+    const newHTML = `<div class="originalText pointer-events-none"> ${txt} </div>${clone}`;
+    obj.innerHTML = newHTML;
+    if (obj.childNodes && obj.childNodes[1]) {
+      gsap.set(obj.childNodes[1], {
+        yPercent: i % 2 === 0 ? -100 : 100,
+      });
+      const tween = gsap.to(obj.childNodes, {
+        repeat: repeatCount,
+        ease: 'none',
+        yPercent: i % 2 === 0 ? '+=100' : '-=100',
+      });
+      tl.add(tween, 0);
+    }
+  });
+  mtl.fromTo(nameTitle.value, { opacity: 0 }, { opacity: 1, duration: 4, delay: 0.3 });
+  mtl.to(tl, { progress: 1, duration: 4, ease: 'power4.inOut' }, '');
 }
 </script>
 <style scoped lang="scss">
 .p-index {
   .main {
-    padding-bottom: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+
+    .main__title--container {
+      position: relative;
+      width: 100%;
+      left: 1vw; // half size of span with ® (registered mark character)
+      top: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
     &__title {
       position: relative;
       font-size: 1.5rem;
-      font-family: 'JosefinSans', sans-serif;
+      // font-family: 'JosefinSans', sans-serif;
       font-weight: 700;
       bottom: 0;
       letter-spacing: 0.03em;
       text-transform: uppercase;
+      white-space: nowrap;
 
       span {
         display: inline-block;
         position: relative;
         height: 100%;
+        color: white;
+        -webkit-text-stroke: 0px;
 
         font-weight: 600;
+      }
+
+      &.title-outline {
+        z-index: 0;
+        -webkit-text-stroke: 2px $main-dark-text;
+        color: transparent;
+
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -25%);
       }
 
       &.title-splitted {
@@ -191,15 +262,16 @@ function animateRollingChars(split: SplitType) {
 @media (min-width: $lg-breakpoint) {
   .p-index {
     .main {
+      // margin-bottom: 50px;
       &__title {
-        font-size: 86px;
-        line-height: 90px;
+        font-size: min(12.97vw, 30rem);
 
         span {
-          line-height: 90px;
-          font-size: 42px;
-          top: -23px;
-          left: -14px;
+          line-height: 12.97vw;
+          font-size: 3vw;
+          top: -6.5vw;
+          left: -3vw;
+          font-weight: 100;
         }
       }
     }
@@ -207,8 +279,8 @@ function animateRollingChars(split: SplitType) {
     .about-me {
       :deep(.c-LRGeneralText) {
         p {
-          font-size: 72px;
-          line-height: 86px;
+          font-size: min(4vw, 6rem);
+          line-height: min(4vw, 6rem);
           letter-spacing: 0.3rem;
         }
       }

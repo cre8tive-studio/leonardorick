@@ -1,8 +1,9 @@
 <template>
-  <nav>
+  <nav class="c-LRHeaderNav">
     <ul class="pb-5 flex flex-col gap-4">
       <li>
         <NuxtLink
+          lr-cursor
           :to="localeRoute('/')"
           @click="$emit('routeSelected')"
         >
@@ -11,6 +12,7 @@
       </li>
       <li>
         <NuxtLink
+          lr-cursor
           :to="localeRoute('/music')"
           @click="$emit('routeSelected')"
         >
@@ -20,6 +22,7 @@
       <ClientOnly>
         <li v-if="!session">
           <NuxtLink
+            lr-cursor
             :to="localeRoute('/login')"
             @click="$emit('routeSelected')"
           >
@@ -29,6 +32,7 @@
         <template v-else>
           <li>
             <NuxtLink
+              lr-cursor
               :to="localeRoute('/profile')"
               @click="$emit('routeSelected')"
             >
@@ -36,7 +40,10 @@
             </NuxtLink>
           </li>
           <li>
-            <button @click="handleLogout">
+            <button
+              lr-cursor
+              @click="handleLogout"
+            >
               {{ $t('logout') }}
             </button>
           </li>
@@ -68,11 +75,23 @@ const handleLogout = async () => {
 </script>
 
 <style scoped lang="scss">
-.language-select-form {
-  select {
-    background: transparent;
-    width: 80px;
-    cursor: pointer;
+.c-LRHeaderNav {
+  li {
+    a,
+    button {
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: none;
+    }
+  }
+  .language-select-form {
+    select {
+      background: transparent;
+      width: 80px;
+      cursor: pointer;
+    }
   }
 }
 </style>

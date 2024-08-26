@@ -21,9 +21,15 @@ html::-webkit-scrollbar {
   display: none;
 }
 
+/* CHANGE TEXT HIGHLIGHT */
+::selection {
+  background-color: rgba($highlight-3, 0.5); /* Change this to your desired background color */
+  // color: $highlight-3; /* Change this to your desired text color */
+}
+
 body {
   background: $main-dark-bg;
-  font-family: 'JosefinSans', sans-serif;
+  font-family: 'ICA Rubrik', sans-serif;
   overflow-y: auto;
 }
 
@@ -102,8 +108,9 @@ body {
 
   .lr-section-page,
   .lr-section-page-paddings {
-    padding-right: 15rem;
-    padding-left: 15rem;
+    padding-right: 11rem;
+    padding-left: 12rem;
+    width: 100vw;
     max-width: 3450px;
     &-no-paddings {
       padding-right: 0;

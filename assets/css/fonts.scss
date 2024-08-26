@@ -1,3 +1,6 @@
+/**
+* JosefinSans
+*/
 @font-face {
   font-family: 'JosefinSans';
   font-style: normal;
@@ -59,4 +62,72 @@
   font-style: normal;
   font-weight: 900;
   src: url('../fonts//JosefinSans//JosefinSans-Black.ttf') format('truetype');
+}
+
+/**
+* ICA Rubrik
+*/
+@font-face {
+  font-family: 'ICA Rubrik';
+  src: url('../fonts/ICARubrik/ICARubrik-Light.eot');
+  src: local('ICA Rubrik Light'), local('ICARubrik-Light'),
+    url('../fonts/ICARubrik/ICARubrik-Light.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/ICARubrik/ICARubrik-Light.woff2') format('woff2'),
+    url('../fonts/ICARubrik/ICARubrik-Light.woff') format('woff'),
+    url('../fonts/ICARubrik/ICARubrik-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ICA Rubrik';
+  src: url('../fonts/ICARubrik/ICARubrik-Bold.eot');
+  src: local('ICA Rubrik'), local('ICARubrik-Bold'),
+    url('../fonts/ICARubrik/ICARubrik-Bold.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/ICARubrik/ICARubrik-Bold.woff2') format('woff2'),
+    url('../fonts/ICARubrik/ICARubrik-Bold.woff') format('woff'),
+    url('../fonts/ICARubrik/ICARubrik-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ICA Rubrik';
+  src: url('../fonts/ICARubrik/ICARubrik-Regular.eot');
+  src: local('ICA Rubrik Regular'), local('ICARubrik-Regular'),
+    url('../fonts/ICARubrik/ICARubrik-Regular.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/ICARubrik/ICARubrik-Regular.woff2') format('woff2'),
+    url('../fonts/ICARubrik/ICARubrik-Regular.woff') format('woff'),
+    url('../fonts/ICARubrik/ICARubrik-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ICA Rubrik';
+  src: url('../fonts/ICARubrik/ICARubrik-Medium.eot');
+  src: local('ICA Rubrik Medium'), local('ICARubrik-Medium'),
+    url('../fonts/ICARubrik/ICARubrik-Medium.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/ICARubrik/ICARubrik-Medium.woff2') format('woff2'),
+    url('../fonts/ICARubrik/ICARubrik-Medium.woff') format('woff'),
+    url('../fonts/ICARubrik/ICARubrik-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ICA Rubrik';
+  src: url('../fonts/ICARubrik/ICARubrik-Black.eot');
+  src: local('ICA Rubrik Black'), local('ICARubrik-Black'),
+    url('../fonts/ICARubrik/ICARubrik-Black.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/ICARubrik/ICARubrik-Black.woff2') format('woff2'),
+    url('../fonts/ICARubrik/ICARubrik-Black.woff') format('woff'),
+    url('../fonts/ICARubrik/ICARubrik-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
 }

@@ -6,7 +6,7 @@
           v-for="(link, index) of links"
           :key="index"
           ref="lis"
-          calss="main-hover-button"
+          class="main-hover-button"
           magnetic-hover
         >
           <NuxtLink
@@ -72,6 +72,10 @@ const links = [
         height: 24px;
         width: 24px;
         pointer-events: none;
+      }
+
+      &:hover {
+        color: $highlight-3;
       }
     }
   }

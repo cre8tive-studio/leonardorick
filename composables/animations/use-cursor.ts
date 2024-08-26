@@ -1,7 +1,6 @@
 import { gsap } from 'gsap';
 import { useAnimationStore } from '~/store/animation';
 // todo implement stuck state
-// eslint-disable-next-line no-autofix/prefer-const
 let isStuck = false;
 
 const cursor = {
@@ -15,8 +14,8 @@ const cursorOuterOriginalState = {
 
 let lastScrolledY = 0;
 let lastScrolledX = 0;
-
 let buttons = 0;
+const elementsToFocus = new Set<HTMLElement>();
 
 const useCursor = () => {
   const { cursorOuter, cursorInner, cursorActivated: activated } = toRefs(useAnimationStore());
@@ -43,7 +42,17 @@ const useCursor = () => {
     cursor.x += lastScrolledX;
   }
 
-  function handleDocumentCursorMove(e: MouseEvent) {
+  function mousemoveHandler(e: MouseEvent) {
+    const el = e.target as HTMLElement;
+    const attr = el.attributes.getNamedItem('lr-cursor');
+    if (attr) {
+      if (!elementsToFocus.has(el)) {
+        elementsToFocus.add(el);
+      }
+    } else {
+      animateCursorLeave();
+    }
+
     updateCursorPosition(e);
     // handle click and drag not triggering pointerup
     // https://stackoverflow.com/a/48970682/10526869
@@ -75,45 +84,34 @@ const useCursor = () => {
     gsap.to(cursorInner.value, { scale: 1, duration: 0.2 });
   }
 
-  function handleCursorEnter(_e: MouseEvent) {
-    // todo: implement something. This functions are exposed to manipulate
-    // todo: cursor border based on hovering another elements
-    // if (!activated.value || !cursorOuter.value) return;
-    // const outer = cursorOuter.value;
-    // const targetEl = e.currentTarget as HTMLElement;
-    // const targetBox = targetEl.getBoundingClientRect();
-    // const computedStyle = getComputedStyle(targetEl);
-    // // console.log('targetEl.style.borderRadius', getComputedStyle(targetEl).borderRadius);
-    // if (!targetBox) return;
-    // console.log(targetBox.left);
-    // outer.style.x = `${targetBox.left}px`;
-    // outer.style.y = `${targetBox.top + window.scrollY}px`;
-    // outer.style.borderRadius = computedStyle.borderRadius;
-    // isStuck = true;
-    // gsap.to(cursorOuter.value, {
-    //   duration: 0.2,
-    //   x: targetBox.left,
-    //   y: targetBox.top + window.scrollY,
-    //   width: targetBox.width,
-    //   height: targetBox.width,
-    //   borderRadius: getComputedStyle(targetEl).borderRadius,
-    //   backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    // });
+  function animateCursorEnter(targetEl: HTMLElement) {
+    if (!activated.value || !cursorOuter.value || !targetEl || isStuck) return;
+    const targetBox = targetEl.getBoundingClientRect();
+
+    // ANIMATION 2;
+    isStuck = true;
+    gsap.killTweensOf(cursorOuter.value);
+    gsap.to(cursorOuter.value, {
+      duration: 0.2,
+      x: targetBox.x,
+      y: targetBox.y + window.scrollY,
+      width: targetBox.width,
+      height: targetBox.height,
+      opacity: 1,
+      borderRadius: getComputedStyle(targetEl).borderRadius,
+    });
   }
 
-  function handleCursorLeave(_e: MouseEvent) {
-    // todo: implement something. This functions are exposed to manipulate
-    // todo: cursor border based on hovering another elements
-    // if (!activated.value || !cursorOuter.value) return;
-    // isStuck = false;
-    // console.log(cursorOuterOriginalState);
-    // gsap.to(cursorOuter.value, {
-    //   duration: 0.2,
-    //   width: cursorOuterOriginalState.width,
-    //   height: cursorOuterOriginalState.width,
-    //   borderRadius: '50%',
-    //   backgroundColor: 'transparent',
-    // });
+  function animateCursorLeave() {
+    if (!activated.value || !cursorOuter.value) return;
+    isStuck = false;
+    gsap.to(cursorOuter.value, {
+      duration: 0.2,
+      width: cursorOuterOriginalState.width,
+      height: cursorOuterOriginalState.width,
+      opacity: 0.7,
+      borderRadius: '50%',
+    });
   }
 
   function rafCallback() {
@@ -121,12 +119,25 @@ const useCursor = () => {
 
     gsap.to(cursorInner.value, { x: cursor.x, y: cursor.y, duration: 0 });
 
+    const elToFocus = shiftSet(elementsToFocus);
+    if (elToFocus) {
+      animateCursorEnter(elToFocus);
+    }
+
     if (!isStuck) {
+      // ANIMATION 1;
       gsap.to(cursorOuter.value, {
-        duration: 0.7,
+        duration: 0.5,
         x: cursor.x - cursorOuterOriginalState.width / 2,
         y: cursor.y - cursorOuterOriginalState.height / 2,
       });
+    }
+  }
+
+  function shiftSet(set: Set<HTMLElement>) {
+    for (const v of set) {
+      set.delete(v);
+      return v;
     }
   }
 
@@ -134,12 +145,10 @@ const useCursor = () => {
     activate,
     rafCallback,
     listeners: {
-      mousemove: handleDocumentCursorMove,
+      mousemove: mousemoveHandler,
       pointerup: handlePointerUp,
       pointerdown: handlePointerDown,
     },
-    handleCursorEnter,
-    handleCursorLeave,
   };
 };
 export default useCursor;

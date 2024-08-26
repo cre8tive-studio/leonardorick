@@ -88,7 +88,7 @@ const useMagneticHover = () => {
     const { offsetX, offsetY } = mouseEvent;
     const { offsetWidth: width, offsetHeight: height } = el;
 
-    const MOTION_MOVE_STRENGTH = 12; // GSAP better
+    const MOTION_MOVE_STRENGTH = 10; // GSAP better
     // const MOTION_MOVE_STRENGTH = 25;
     const xMove = (offsetX / width) * (MOTION_MOVE_STRENGTH * 2) - MOTION_MOVE_STRENGTH;
     const yMove = (offsetY / height) * (MOTION_MOVE_STRENGTH * 2) - MOTION_MOVE_STRENGTH;
@@ -97,7 +97,7 @@ const useMagneticHover = () => {
       gsap.to(element, {
         duration: 0.2,
         transform: '',
-        color: COLORS.mainDarkText,
+        // color: COLORS.mainDarkText,
         onComplete: () => {
           magneticChildrenReferences.set(el, { ...ref, shouldAnimateOut: false });
         },
@@ -114,7 +114,7 @@ const useMagneticHover = () => {
       gsap.to(element, {
         duration: 0.2,
         scale: 1.2,
-        color: COLORS.highlight3,
+        // color: COLORS.highlight3,
         transform: `translate(${xMove}px, ${yMove}px)`,
       });
       // motion was being buggy, be careful

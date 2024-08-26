@@ -7,10 +7,7 @@ import useLeonardoRick from './use-leonardorick';
 import useCursor from './use-cursor';
 import useMagneticHover from './use-magnetic-hover';
 import { useAnimationStore } from '~/store/animation';
-
-interface runWithControlledFPSOptions {
-  key?: 'default';
-}
+import { setFPS, runWithControlledFPS } from '~/utils/run-with-controlled-fps';
 
 const useAnimations = () => {
   const isDebug = !!Object.prototype.hasOwnProperty.call(useRoute().query, 'debug');
@@ -28,16 +25,8 @@ const useAnimations = () => {
   const leonardorick = useLeonardoRick();
   const cursor = useCursor();
   const magneticHover = useMagneticHover();
+  const fluidFramersToSkipRef = { value: 0 };
   const isDocumentVisible = ref(true);
-
-  let fps = 60;
-  const fpsController = {
-    default: {
-      TRESHOLD: 85,
-      SKIP_FRAMES: 1,
-      framesToSkip: 0,
-    },
-  };
 
   const LRModelTimeout = setLRModelTimeout();
 
@@ -81,7 +70,9 @@ const useAnimations = () => {
       magneticHover.rafCallback();
       leonardorick.rafCallback();
       runWithController(() => lenis.rafCallback(time), { forbidden: isMobile });
-      runWithController(() => runWithControlledFPS(() => fluid.rafCallback()), { forbidden: !document.hasFocus() });
+      runWithController(() => runWithControlledFPS(() => fluid.rafCallback(), fluidFramersToSkipRef), {
+        forbidden: !document.hasFocus(),
+      });
 
       requestAnimationFrame(update);
     }
@@ -164,35 +155,6 @@ const useAnimations = () => {
       // eslint-disable-next-line no-console
       console.warn('3D model was not loaded after 10s');
     }, 10000);
-  }
-
-  const t: number[] = [];
-  function setFPS(now: number) {
-    t.unshift(now);
-    if (t.length > 10) {
-      const t0 = t.pop();
-      fps = Math.floor((1000 * 10) / (now - (t0 || 0)));
-    }
-  }
-
-  /**
-   * used ro tun a functoin inside requestAnimationFrame blocking
-   * some executions so it matches lower fps rates
-   * @param cb function to run
-   * @param options key of fpsControoller so we know the settings to  apply
-   */
-  function runWithControlledFPS(cb: (...args: any) => void, { key = 'default' }: runWithControlledFPSOptions = {}) {
-    const controller = fpsController[key];
-
-    if (controller.framesToSkip > 0) {
-      controller.framesToSkip--;
-      return;
-    }
-    if (fps > controller.TRESHOLD) {
-      controller.framesToSkip = controller.SKIP_FRAMES;
-    }
-
-    cb();
   }
 
   /**
