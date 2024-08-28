@@ -148,6 +148,21 @@ export default defineNuxtConfig({
       // ignore: ['/stupid-route'], // ignore routes to be pre-rendered
     },
   },
+  // todo:  remove this when netlify fix the out of memory problem during deployment
+  // https://answers.netlify.com/t/javascript-heap-out-of-memory-when-trying-to-build-a-nuxt-app/93138/13
+  ...(preset === 'netlify'
+    ? {
+        postcss: {
+          plugins: {
+            cssnano:
+              process.env.NODE_ENV === 'production'
+                ? { preset: ['default', { discardComments: { removeAll: true } }] }
+                : (false as any), // disable cssnano when not in production
+          },
+        },
+      }
+    : {}),
+  // https://answers.netlify.com/t/javascript-heap-out-of-memory-when-trying-to-build-a-nuxt-app/93138/14?u=leonardorick
 
   compatibilityDate: '2024-07-18',
 });

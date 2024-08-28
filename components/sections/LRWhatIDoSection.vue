@@ -140,8 +140,8 @@ onMounted(() => {
     ul {
       li {
         h2 {
-          font-size: 9rem;
-          line-height: 5.5rem;
+          font-size: 13rem;
+          line-height: 8rem;
         }
       }
     }
