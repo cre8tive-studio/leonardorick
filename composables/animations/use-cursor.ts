@@ -18,16 +18,13 @@ let buttons = 0;
 const elementsToFocus = new Set<HTMLElement>();
 
 const useCursor = () => {
-  const { cursorOuter, cursorInner, cursorActivated: activated } = toRefs(useAnimationStore());
+  const { cursorOuter, cursorInner, isCursorActivated: activated } = toRefs(useAnimationStore());
 
   function activate() {
-    if (!cursorOuter.value || !cursorInner.value) return;
-
+    if (!cursorOuter.value) return;
     const boundingClientRect = cursorOuter.value.getBoundingClientRect();
     cursorOuterOriginalState.width = boundingClientRect.width;
     cursorOuterOriginalState.height = boundingClientRect.height;
-
-    window.addEventListener('scroll', scrollHandler); // this one feels more natural on window
 
     activated.value = true;
   }
@@ -109,7 +106,7 @@ const useCursor = () => {
       duration: 0.2,
       width: cursorOuterOriginalState.width,
       height: cursorOuterOriginalState.width,
-      opacity: 0.7,
+      // opacity: 0.7,
       borderRadius: '50%',
     });
   }
@@ -148,6 +145,7 @@ const useCursor = () => {
       mousemove: mousemoveHandler,
       pointerup: handlePointerUp,
       pointerdown: handlePointerDown,
+      scroll: scrollHandler,
     },
   };
 };

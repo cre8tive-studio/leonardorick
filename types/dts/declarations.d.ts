@@ -4,5 +4,10 @@ declare module '*.glb' {
   export default value;
 }
 
+declare module '*.gltf' {
+  const value: string;
+  export default value;
+}
+
 // somehow needed for nuxtApp types to be recognized
 declare function useNuxtApp(): NuxtApp;

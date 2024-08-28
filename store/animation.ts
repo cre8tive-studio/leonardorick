@@ -15,6 +15,7 @@ interface animationStoreModel {
   cubeLoaderContainerRef: HTMLDivElement | undefined;
   cursorOuter: HTMLDivElement | undefined;
   cursorInner: HTMLDivElement | undefined;
+  isCursorActivated: boolean;
   isMagneticHoverActivated: boolean;
 }
 export const useAnimationStore = defineStore('animationStore', () => {
@@ -33,6 +34,7 @@ export const useAnimationStore = defineStore('animationStore', () => {
     cubeLoaderContainerRef: undefined,
     cursorOuter: undefined,
     cursorInner: undefined,
+    isCursorActivated: false,
     isMagneticHoverActivated: false,
   });
 

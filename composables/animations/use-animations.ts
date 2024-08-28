@@ -84,6 +84,7 @@ const useAnimations = () => {
     document.addEventListener('pointerup', pointerupHandler);
     document.addEventListener('pointerdown', pointerdownHandler);
     document.addEventListener('keydown', keydownHandler);
+    window.addEventListener('scroll', scrollHandler);
   }
 
   function mousemoveHandler(e: MouseEvent) {
@@ -106,12 +107,20 @@ const useAnimations = () => {
     fluid.listeners.keydown(e);
   }
 
+  function scrollHandler(e: Event) {
+    if (!shouldLoadThreeSecondary.value && window.scrollY > THREE_SECOND_LAYER_ACTIVATE_SCROLL_POSITION) {
+      shouldLoadThreeSecondary.value = true;
+    }
+    cursor.listeners.scroll(e);
+  }
+
   function cleanup() {
     document.removeEventListener('visibilitychange', visibilityChangeHandler);
     document.removeEventListener('mousemove', mousemoveHandler);
     document.removeEventListener('pointerup', pointerupHandler);
     document.removeEventListener('pointerdown', pointerdownHandler);
     document.removeEventListener('keydown', keydownHandler);
+    window.removeEventListener('scroll', scrollHandler);
   }
 
   function visibilityChangeHandler() {
