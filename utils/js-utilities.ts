@@ -30,3 +30,25 @@ function getNumberTime(time?: number | string | Date): number {
 export function isProduction(env?: string) {
   return (env || process.env.NODE_ENV) === 'production';
 }
+
+export function dateDifference(startDate: Date, endDate: Date) {
+  let years = endDate.getFullYear() - startDate.getFullYear();
+  let months = endDate.getMonth() - startDate.getMonth();
+  let days = endDate.getDate() - startDate.getDate();
+
+  // Adjust for negative day differences by going to the previous month
+  if (days < 0) {
+    months -= 1;
+    // Use the previous month's last day to get the exact number of days
+    const prevMonth = new Date(endDate.getFullYear(), endDate.getMonth(), 0);
+    days += prevMonth.getDate();
+  }
+
+  // Adjust for negative month differences by going to the previous year
+  if (months < 0) {
+    years -= 1;
+    months += 12;
+  }
+
+  return { years, months, days };
+}
