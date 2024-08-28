@@ -1,11 +1,14 @@
 {
+    "day": "Day | Days",
     "english": "English",
     "login": "Login",
     "logout": "Logout",
+    "month": "Month | Months",
     "music": "Music",
     "music_page": "Music Page",
     "password": "Password",
     "portuguese": "Portuguese",
     "signup": "Signup",
-    "welcome": "Welcome"
+    "welcome": "Welcome",
+    "year": "Year | Years"
 }

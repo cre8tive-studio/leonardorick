@@ -1,11 +1,14 @@
 {
+    "day": "Dia | Dias",
     "english": "Inglês",
     "login": "Login",
     "logout": "Sair",
+    "month": "Mês | Meses",
     "music": "Música",
     "music_page": "Página de Música",
     "password": "Senha",
     "portuguese": "Português",
     "signup": "Cadastrar",
-    "welcome": "Bem vindo"
+    "welcome": "Bem vindo",
+    "year": "Ano | Anos"
 }
