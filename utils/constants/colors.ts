@@ -1,12 +1,12 @@
 export const COLORS = {
   mainDarkBg: '#060615',
   mainDarkText: '#fffdf8',
-  secondaryDarkBg: '#0a1656',
+  secondaryDarkBg: '#060b2e',
 
   // Palette
   blue1: '#060615',
-  blue2: '#0a1656',
-  blue3: '#00343d',
+  blue2: '#060b2e',
+  blue3: '#003f4a',
   blue4: '#0093dd',
   blue5: '#07eee4',
 

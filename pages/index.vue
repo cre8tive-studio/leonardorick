@@ -26,68 +26,62 @@
       </div>
     </div>
 
-    <div class="about-me lr-section-page lr-section-page-no-paddings relative">
+    <LRAboutMeSection :refresh-key="refreshKey" />
+    <LRWhatIDoSection />
+    <LRCompetencesSection />
+
+    <div class="lr-section-page lr-section-page-no-paddings relative">
       <LRColorfulTile
         :colors="colors"
         :background-color="tilesBackgroundColor"
       />
-      <div
-        class="about-me-text lr-section-page-paddings lr-safe-pointer-events-none relative h-full flex flex-col justify-center gap-4"
-      >
-        <LRGeneralText
-          v-if="aboutMeContent"
-          :key="refreshKey"
-          :info="aboutMeContent"
-        />
-      </div>
-
-      <div class="todo lr-section-page relative"></div>
-
-      <div class="lr-section-page">
+      <div class="wrapper-default-generals-text lr-section-page-paddings lr-safe-pointer-events-none">
         <LRGeneralText
           v-if="experienceContent"
           :key="refreshKey"
           :info="experienceContent"
         />
       </div>
+    </div>
 
-      <div class="lr-section-page">
+    <div class="lr-section-page">
+      <div class="wrapper-default-generals-text">
         <LRGeneralText
           v-if="environmentContent"
           :key="refreshKey"
           :info="environmentContent"
         />
       </div>
+    </div>
 
-      <div class="lr-section-page recommendations">
-        <div
-          v-for="recommendation in recommendations"
-          :key="recommendation.id"
-          class="border border-gray-300 p-4 m-4"
-        >
-          <p>
-            {{ recommendation.id }} -=- {{ recommendation.author?.name }} -=-
-            {{ recommendation.author.description }}
-          </p>
-          <div>
-            <ClientOnly>
-              <NuxtImg
-                v-if="recommendation.authorImage"
-                :width="100"
-                :height="100"
-                :src="recommendation.authorImage"
-              />
-            </ClientOnly>
-            <p>{{ recommendation.recommendation }}</p>
-          </div>
+    <div class="lr-section-page recommendations">
+      <div
+        v-for="recommendation in recommendations"
+        :key="recommendation.id"
+        class="border border-gray-300 p-4 m-4"
+      >
+        <p>
+          {{ recommendation.id }} -=- {{ recommendation.author?.name }} -=-
+          {{ recommendation.author.description }}
+        </p>
+        <div>
+          <ClientOnly>
+            <NuxtImg
+              v-if="recommendation.authorImage"
+              :width="100"
+              :height="100"
+              :src="recommendation.authorImage"
+            />
+          </ClientOnly>
+          <p>{{ recommendation.recommendation }}</p>
         </div>
+      </div>
 
-        <div
-          v-for="quote in quotes"
-          :key="quote.id"
-        >
-          {{ quote }}
-        </div>
+      <div
+        v-for="quote in quotes"
+        :key="quote.id"
+      >
+        {{ quote }}
       </div>
     </div>
   </div>
@@ -104,7 +98,6 @@ const nameTitle = ref<HTMLDivElement>();
 const nameTitleOutline = ref<HTMLDivElement>();
 const mainTitleContainer = ref<HTMLDivElement>();
 
-const aboutMeContent = computed(() => generals.value.find((general) => general.key === 'about-me'));
 const experienceContent = computed(() => generals.value.find((general) => general.key === 'experience'));
 const environmentContent = computed(() => generals.value.find((general) => general.key === 'environment'));
 
@@ -254,28 +247,6 @@ function animateRollingChars(split: SplitType) {
       }
     }
   }
-
-  .about-me {
-    :deep(.c-LRGeneralText) {
-      .bold {
-        color: $highlight;
-      }
-
-      h1 {
-        font-size: 1.5rem; /* 24px */
-        line-height: 2rem; /* 32px */
-        font-weight: 300;
-        text-transform: uppercase;
-      }
-      p {
-        font-size: 1.5rem; /* 24px */
-        line-height: 2rem; /* 32px */
-        > * {
-          display: inline !important;
-        }
-      }
-    }
-  }
 }
 @media (min-width: $lg-breakpoint) {
   .p-index {
@@ -290,16 +261,6 @@ function animateRollingChars(split: SplitType) {
           top: -6.5vw;
           left: -3vw;
           font-weight: 100;
-        }
-      }
-    }
-
-    .about-me {
-      :deep(.c-LRGeneralText) {
-        p {
-          font-size: min(4vw, 6rem);
-          line-height: min(4vw, 6rem);
-          letter-spacing: 0.3rem;
         }
       }
     }

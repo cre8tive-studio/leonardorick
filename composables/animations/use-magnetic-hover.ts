@@ -12,7 +12,7 @@ interface MagneticChildReferenceModel {
 // I honestly just found this solution could reach what I want but this composible probably
 // should only be used once
 const useMagneticHover = () => {
-  const { magneticHoverActivated: activated } = toRefs(useAnimationStore());
+  const { isMagneticHoverActivated: activated } = toRefs(useAnimationStore());
   const magneticChildrenReferences = new WeakMap<Element, MagneticChildReferenceModel>();
   const lastHoveredEl = ref<HTMLElement | null>(null);
   const hoveredEls: HTMLElement[] = [];

@@ -49,9 +49,7 @@ onMounted(async () => {
 });
 
 function init() {
-  if (!tags.value || !tags.value.length) {
-    return;
-  }
+  if (!tags.value || !tags.value.length) return;
 
   for (const tag of tags.value) {
     const paragraphInfo = info.data.find((paragraph) => tag.id === `p-${paragraph.id}`);

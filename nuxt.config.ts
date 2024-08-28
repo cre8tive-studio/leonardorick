@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     // todo remove this after nuxt 4 release
     compatibilityVersion: 4,
   },
-  css: ['~/assets/css/main.scss'],
+  css: ['~/assets/css/index.scss'],
 
   routeRules: {
     // redirects goes here
@@ -119,7 +119,7 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: "@import '@/assets/css/global.scss';",
+          additionalData: "@import '@/assets/css/_imports.scss';",
         },
       },
     },

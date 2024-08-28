@@ -15,8 +15,7 @@ interface animationStoreModel {
   cubeLoaderContainerRef: HTMLDivElement | undefined;
   cursorOuter: HTMLDivElement | undefined;
   cursorInner: HTMLDivElement | undefined;
-  cursorActivated: boolean;
-  magneticHoverActivated: boolean;
+  isMagneticHoverActivated: boolean;
 }
 export const useAnimationStore = defineStore('animationStore', () => {
   const state = reactive<animationStoreModel>({
@@ -34,8 +33,7 @@ export const useAnimationStore = defineStore('animationStore', () => {
     cubeLoaderContainerRef: undefined,
     cursorOuter: undefined,
     cursorInner: undefined,
-    cursorActivated: false,
-    magneticHoverActivated: false,
+    isMagneticHoverActivated: false,
   });
 
   const changeScrollLayoutOverflow = (overflow: 'auto' | 'hidden') => {

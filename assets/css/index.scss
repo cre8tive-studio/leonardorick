@@ -1,0 +1,62 @@
+/**
+* index.scss should only be used for reseting css and to create
+* global classes that will be applied but never extended into other
+* components. If you need your classes to be @extended, use main.scss
+*/
+@import './_imports.scss'; // this file store all others scss
+
+html,
+body,
+#__nuxt {
+  margin: 0;
+}
+
+html {
+  color: $main-dark-text;
+
+  /* HIDE SCROLLBAR */
+  /* Internet Explorer 10+ */
+  -ms-overflow-style: none;
+  /* Firefox */
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar {
+  /* Safari and Chrome */
+  display: none;
+}
+
+/* CHANGE TEXT HIGHLIGHT */
+::selection {
+  background-color: rgba($highlight-3, 0.5); /* Change this to your desired background color */
+  // color: $highlight-3; /* Change this to your desired text color */
+}
+
+body {
+  background: $main-dark-bg;
+  font-family: 'ICA Rubrik', sans-serif;
+  overflow-y: auto;
+}
+
+/**
+* LENIS
+*/
+.lenis,
+.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
