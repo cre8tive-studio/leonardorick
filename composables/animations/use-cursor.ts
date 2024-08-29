@@ -22,11 +22,16 @@ const useCursor = () => {
 
   function activate() {
     if (!cursorOuter.value) return;
+    setCursorOuterOriginalState();
+
+    activated.value = true;
+  }
+
+  function setCursorOuterOriginalState() {
+    if (!cursorOuter.value) return;
     const boundingClientRect = cursorOuter.value.getBoundingClientRect();
     cursorOuterOriginalState.width = boundingClientRect.width;
     cursorOuterOriginalState.height = boundingClientRect.height;
-
-    activated.value = true;
   }
 
   function scrollHandler(_e: Event) {

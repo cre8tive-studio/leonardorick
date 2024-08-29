@@ -45,3 +45,7 @@ About me related to who is reading https://billysweeney.com/
 |try to add a script on payoad cms htmltag type and check if I can inject something
 
 setup failing state if payload cms get fails
+
+setup posthog in production
+
+decrease a bit max sisze width of screens

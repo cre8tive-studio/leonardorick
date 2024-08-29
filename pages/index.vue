@@ -189,6 +189,7 @@ function animateRollingChars(split: SplitType) {
     align-items: center;
     justify-content: flex-end;
     position: relative;
+    overflow: hidden; // block x scroll
 
     .main__title--container {
       position: relative;

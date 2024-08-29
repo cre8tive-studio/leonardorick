@@ -1,6 +1,5 @@
 import { gsap } from 'gsap';
 import { useAnimationStore } from '~/store/animation';
-import { COLORS } from '~/utils/constants/colors';
 
 interface MagneticChildReferenceModel {
   element: HTMLElement | SVGElement | null;

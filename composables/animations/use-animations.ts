@@ -9,6 +9,8 @@ import useMagneticHover from './use-magnetic-hover';
 import { useAnimationStore } from '~/store/animation';
 import { setFPS, runWithControlledFPS } from '~/utils/run-with-controlled-fps';
 
+const LR_TIMEOUT_SECONDS = 10;
+
 const useAnimations = () => {
   const isDebug = !!Object.prototype.hasOwnProperty.call(useRoute().query, 'debug');
   const { isMobile } = useDevice();
@@ -49,12 +51,12 @@ const useAnimations = () => {
     setupListeners();
 
     fluid.activate();
+    lenis.activate();
     await leonardorick.activate(isDebug);
 
     if (!isMobile) {
       cursor.activate();
       magneticHover.activate();
-      lenis.activate();
     }
 
     requestAnimationFrame(update);
@@ -69,7 +71,7 @@ const useAnimations = () => {
       cursor.rafCallback();
       magneticHover.rafCallback();
       leonardorick.rafCallback();
-      runWithController(() => lenis.rafCallback(time), { forbidden: isMobile });
+      lenis.rafCallback(time);
       runWithController(() => runWithControlledFPS(() => fluid.rafCallback(), fluidFramersToSkipRef), {
         forbidden: !document.hasFocus(),
       });
@@ -121,6 +123,7 @@ const useAnimations = () => {
     document.removeEventListener('pointerdown', pointerdownHandler);
     document.removeEventListener('keydown', keydownHandler);
     window.removeEventListener('scroll', scrollHandler);
+    lenis.cleanup();
   }
 
   function visibilityChangeHandler() {
@@ -162,8 +165,8 @@ const useAnimations = () => {
       // future we need a different approach when timing out, might change the logic
       isLRModelLoaded.value = true;
       // eslint-disable-next-line no-console
-      console.warn('3D model was not loaded after 10s');
-    }, 10000);
+      console.warn(`3D model was not loaded after ${LR_TIMEOUT_SECONDS}s`);
+    }, LR_TIMEOUT_SECONDS * 1000);
   }
 
   /**

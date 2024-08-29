@@ -4,8 +4,8 @@
     <div class="flex">
       <ul>
         <li
-          v-for="(item, index) in content"
-          :key="index"
+          v-for="item in whatIdoContent"
+          :key="item.id"
         >
           <div class="li-content-wrapper">
             <div class="description">
@@ -28,26 +28,25 @@
 <script setup lang="ts">
 import { gsap } from 'gsap';
 import SplitType from 'split-type';
+import { useAppStore } from '~/store';
+import type { TitleDescriptionModel } from '~/types/title-description.model';
+import { getGeneralsFullText } from '~/utils/parsers/generals.parser';
+const { generals } = toRefs(useAppStore());
+const whatIDoList = computed(() => generals.value.find((general) => general.key === 'what-i-do')?.data || []);
 
-const content = [
-  {
-    title: 'Frontend',
-    description:
-      'My main work is here, bla bla bal. Since the specs of the product until shipping and monitoriing, and more and more and more ',
-  },
-  {
-    title: 'Product',
-    description: 'something2',
-  },
-  {
-    title: 'Fullstack',
-    description: 'something3',
-  },
-  {
-    title: '3D',
-    description: 'something4',
-  },
-];
+const whatIdoContent = computed(() =>
+  whatIDoList.value.reduce((acum, curr, index) => {
+    if (curr.htmlTag === 'h2') {
+      acum.push({
+        id: curr.id,
+        title: getGeneralsFullText(curr),
+        description: getGeneralsFullText(whatIDoList.value[index + 1]),
+      });
+    }
+    return acum;
+  }, [] as TitleDescriptionModel[])
+);
+
 const items = ref<HTMLHeadingElement[]>();
 onMounted(() => {
   if (!items.value || !items.value.length) return;
@@ -77,11 +76,17 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     li {
+      overflow: hidden; // .description has a width bigger than screen, this blocks the x scroll
       .li-content-wrapper {
         position: relative;
         &:hover {
           .description {
-            height: 100%;
+            height: 110%;
+          }
+
+          :deep(.char) {
+            transition: opacity 0.5s $default-ease; // keep it inside the hover to not affect gsap
+            opacity: 1 !important;
           }
         }
 
@@ -92,22 +97,15 @@ onMounted(() => {
           font-weight: 600;
           width: 100%;
           letter-spacing: -0.2rem;
-
-          &:hover,
-          & + .description:hover {
-            :deep(.char) {
-              transition: opacity 0.5s $default-ease; // keep it inside the hover to not affect gsap
-              opacity: 1 !important;
-            }
-          }
         }
+
         .description {
           position: absolute;
           padding: 0;
           top: 50%;
           transform: translateY(-50%);
           height: 0;
-          width: 100%;
+          width: 103vw;
           display: flex;
           justify-content: flex-end;
           align-items: center;
@@ -127,15 +125,18 @@ onMounted(() => {
           }
           &-text {
             position: absolute;
-            top: 0;
-            max-width: 35rem;
+            top: 50%;
+            transform: translateY(-50%);
+            max-width: 31rem;
+            margin-right: 4.5rem;
           }
         }
       }
     }
   }
 }
-@media (min-width: 1580px) {
+
+@media (min-width: 1800px) {
   .s-LRWhatIDoSection {
     ul {
       li {
@@ -143,12 +144,15 @@ onMounted(() => {
           font-size: 13rem;
           line-height: 8rem;
         }
+        .description {
+          font-size: 1.2rem;
+        }
       }
     }
   }
 }
 
-@media (max-width: 1580px) {
+@media (max-width: 1800px) {
   .s-LRWhatIDoSection {
     ul {
       li {
@@ -159,7 +163,7 @@ onMounted(() => {
 
           &:hover,
           &:focus {
-            height: calc(var(--height) * 2);
+            height: calc(var(--height) * 2.4);
           }
           .description {
             justify-content: flex-start;
@@ -173,7 +177,7 @@ onMounted(() => {
           }
           h2 {
             font-size: 7rem;
-            line-height: 5.5rem;
+            line-height: 5rem;
           }
         }
       }
@@ -183,9 +187,24 @@ onMounted(() => {
 
 @media (max-width: $sm-breakpoint) {
   .s-LRWhatIDoSection {
-    ul li .li-content-wrapper h2 {
-      font-size: rem;
-      line-height: 5.5rem;
+    ul li .li-content-wrapper {
+      --height: 5rem;
+
+      &:hover,
+      &:focus {
+        height: calc(var(--height) * 3.5);
+      }
+
+      .description-paddings-wrapper {
+        margin-top: 1.5rem;
+        margin-left: 2rem;
+        margin-right: 1rem;
+      }
+
+      h2 {
+        font-size: 4rem;
+        line-height: 2rem;
+      }
     }
   }
 }

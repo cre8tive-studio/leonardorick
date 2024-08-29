@@ -42,7 +42,7 @@
     "vitest": "^0.34.6"
   },
   "dependencies": {
-    "@leonardorick/three": "^1.0.77",
+    "@leonardorick/three": "^1.0.78",
     "@leonardorick/utils": "^0.0.27",
     "@nuxt/image": "^1.7.0",
     "@nuxtjs/device": "^3.1.1",
@@ -51,7 +51,7 @@
     "appwrite": "^13.0.2",
     "graphql-request": "^6.1.0",
     "gsap": "^3.12.5",
-    "lenis": "^1.1.9",
+    "lenis": "^1.1.13",
     "motion": "^10.18.0",
     "node-appwrite": "^11.1.1",
     "pinia": "^2.2.0",

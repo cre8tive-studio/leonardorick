@@ -197,6 +197,7 @@ const useLeonardoRick = () => {
   async function activate(isDebug: boolean) {
     const { renderer, scene, camera, controls } = minimalSetup({
       canvasId: 'logoLeonardoRick',
+      enableOrbitControl: false,
       addMeshOnScene: false,
       antialias: true,
       powerPreference: 'default',
@@ -311,9 +312,6 @@ const useLeonardoRick = () => {
 
         if (thisPane) {
           thisPane.refresh();
-        }
-        if (!isMobile) {
-          animateClone();
         }
       },
     });
@@ -682,30 +680,10 @@ const useLeonardoRick = () => {
         tl.to(top.mesh.position, { x: '-=0.04', z: '+=0.04', ...OSCILLATING_PROPS })
           .to(bottom.mesh.position, { x: '+=0.04', z: '-=0.04', ...OSCILLATING_PROPS }, '<')
           .to(center.mesh.scale, { x: '-=0.004', z: '-=0.004', ...OSCILLATING_PROPS }, '<');
-
-        if (!lights.dLight2 || !lights.dLight1) return;
-        // lights animation
-        tl.to(lights.dLight2.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 })
-          .to(lights.dLight2.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 })
-          .to(lights.dLight1.light, { intensity: '+=800', ...OSCILLATING_PROPS, duration: 10 }, '-=10')
-          .to(lights.dLight1.light, { intensity: '-=800', ...OSCILLATING_PROPS, duration: 10 });
       }
 
       gsapAnimations.motion = tl;
     }
-  }
-
-  /**
-   * this function makes the background change slowly the opacity
-   */
-  function animateClone() {
-    const tl = gsap.timeline({ repeat: -1 });
-
-    tl
-      // slowly dissapear
-      .to(gltfModel.backgroundMaterial, { opacity: 0, ease: 'power2.in', duration: 30, delay: 10 })
-      // put back the right opacity
-      .to(gltfModel.backgroundMaterial, { opacity: 1, ease: 'sine.inOut', duration: 1 });
   }
 
   function handleCursorMove($event: MouseEvent) {

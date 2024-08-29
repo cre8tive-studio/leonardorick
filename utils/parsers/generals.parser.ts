@@ -18,3 +18,11 @@ export function parseGenerals(response: GeneralsResponse): GeneralsModel[] {
     })),
   }));
 }
+
+export function getGeneralsFullText(item: GeneralsModel['data'][0] | undefined) {
+  if (!item) return '';
+  return item.text.reduce((acum, curr) => {
+    acum += curr.text;
+    return acum;
+  }, '');
+}

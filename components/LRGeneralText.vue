@@ -29,6 +29,7 @@ import { gsap } from 'gsap';
 
 import SplitType from 'split-type';
 import type { GeneralsModel } from '../types/generals.model';
+import { getGeneralsFullText } from '~/utils/parsers/generals.parser';
 interface Props {
   info: GeneralsModel;
 }
@@ -81,16 +82,9 @@ function init() {
 function setParagraphsInfo() {
   for (const paragraph of info.data) {
     paragraphsFullText[paragraph.id] = {
-      fullText: getFullText(paragraph),
+      fullText: getGeneralsFullText(paragraph),
     };
   }
-}
-
-function getFullText(item: GeneralsModel['data'][0]) {
-  return item.text.reduce((acum, curr) => {
-    acum += curr.text;
-    return acum;
-  }, '');
 }
 </script>
 
