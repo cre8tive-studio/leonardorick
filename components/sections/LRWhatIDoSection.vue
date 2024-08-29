@@ -1,6 +1,6 @@
 <template>
   <div class="s-LRWhatIDoSection what-i-do lr-section-page lr-section-page-no-paddings">
-    <h1 class="lr-section-page-paddings section-h1">What I do</h1>
+    <h1 class="lr-section-page-paddings section-h1">{{ whatIDoTItle?.title }}</h1>
     <div class="flex">
       <ul>
         <li
@@ -33,6 +33,14 @@ import type { TitleDescriptionModel } from '~/types/title-description.model';
 import { getGeneralsFullText } from '~/utils/parsers/generals.parser';
 const { generals } = toRefs(useAppStore());
 const whatIDoList = computed(() => generals.value.find((general) => general.key === 'what-i-do')?.data || []);
+
+const whatIDoTItle = computed(
+  () =>
+    [whatIDoList.value.find((item) => item.htmlTag === 'h1')].map((item) => ({
+      id: item?.id,
+      title: getGeneralsFullText(item),
+    }))[0]
+);
 
 const whatIdoContent = computed(() =>
   whatIDoList.value.reduce((acum, curr, index) => {
