@@ -12,6 +12,7 @@ export default defineEventHandler(async (event) => {
         docs {
           id
           recommendation
+          order
           author {
             name
             description

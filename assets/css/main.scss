@@ -38,6 +38,7 @@
   p {
     font-size: 1.5rem; /* 24px */
     line-height: 2rem; /* 32px */
+    // todo: maybe this should be inside the comopnent LRGeneralsText
     > * {
       display: inline !important;
     }

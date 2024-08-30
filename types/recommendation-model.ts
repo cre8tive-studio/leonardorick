@@ -5,4 +5,5 @@ export interface RecommendationModel {
   author: Person;
   recommendation: string;
   authorImage?: string;
+  order?: number;
 }

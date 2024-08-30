@@ -9,7 +9,7 @@ export function parseGenerals(response: GeneralsResponse): GeneralsModel[] {
       ...item,
       htmlTag: isGeneralHtmlTag(item.htmlTag) ? item.htmlTag : 'p',
       animationType: isGeneralAnimationType(item.animationType) ? item.animationType : 'none',
-      text: text
+      text: (text || [])
         // deconstruct children level, flat and return so verything from the same richText
         // will be at the same array level (simplifying the data structure a bit)
         .map(({ children }) => children)

@@ -1,5 +1,5 @@
 <template>
-  <div class="s-LRWhatIDoSection what-i-do lr-section-page lr-section-page-no-paddings">
+  <div class="s-LRWhatIDoSection lr-section-page lr-section-page-no-paddings">
     <h1 class="lr-section-page-paddings section-h1">{{ whatIDoTItle?.title }}</h1>
     <div class="flex">
       <ul>
@@ -66,7 +66,7 @@ onMounted(() => {
       scrollTrigger: {
         trigger: li,
         start: 'bottom bottom',
-        end: 'top 42%',
+        end: 'top 52%',
         scrub: true,
         markers: false,
       },

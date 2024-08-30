@@ -24,7 +24,6 @@ const formattedDaysText = computed(() => `${days} ${$t('day', days).toLocaleLowe
 
 <style scoped lang="scss">
 .s-LRCompetencesSection {
-  border: 1px solid red;
   display: flex;
   align-items: center;
   justify-content: center;

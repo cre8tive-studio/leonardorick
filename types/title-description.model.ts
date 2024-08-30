@@ -1,5 +1,5 @@
 export interface TitleDescriptionModel {
-  id?: string | number;
   title: string;
-  description: string;
+  description?: string;
+  id?: string | number;
 }

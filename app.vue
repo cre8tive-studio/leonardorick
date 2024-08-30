@@ -57,7 +57,8 @@ async function setHomeView(rcs: RecommendationModel[], qts: QuoteModel[], gnrs: 
         },
         responseType: 'blob',
         // sadly if we call in server it gives a weird error: Cannot stringify arbitrary non-POJOs.
-        // try to debug that later and remove the <ClientOnly> tag on index.vue after fixing it
+        // try to debug that later and remove the <ClientOnly> tag on LRRecommendations.vue after fixing it.
+        // if somehow it works, remember to remove the <ClientOnly tag from the recommendations images
         server: false,
         transform(input: Blob) {
           return {
@@ -91,6 +92,7 @@ async function setHomeView(rcs: RecommendationModel[], qts: QuoteModel[], gnrs: 
       }
     }
   });
+  recommendations.value.sort((r1, r2) => r1.order || 0 - (r2.order || 0));
   contentLoaded.value = true;
 }
 </script>

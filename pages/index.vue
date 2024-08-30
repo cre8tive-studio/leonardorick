@@ -28,6 +28,8 @@
 
     <LRAboutMeSection :refresh-key="refreshKey" />
     <LRWhatIDoSection />
+    <!-- <LRCompaniesSection /> -->
+    <LRRecommendations />
     <LRCompetencesSection />
 
     <div class="lr-section-page lr-section-page-no-paddings relative">
@@ -54,35 +56,11 @@
       </div>
     </div>
 
-    <div class="lr-section-page recommendations">
-      <div
-        v-for="recommendation in recommendations"
-        :key="recommendation.id"
-        class="border border-gray-300 p-4 m-4"
-      >
-        <p>
-          {{ recommendation.id }} -=- {{ recommendation.author?.name }} -=-
-          {{ recommendation.author.description }}
-        </p>
-        <div>
-          <ClientOnly>
-            <NuxtImg
-              v-if="recommendation.authorImage"
-              :width="100"
-              :height="100"
-              :src="recommendation.authorImage"
-            />
-          </ClientOnly>
-          <p>{{ recommendation.recommendation }}</p>
-        </div>
-      </div>
-
-      <div
-        v-for="quote in quotes"
-        :key="quote.id"
-      >
-        {{ quote }}
-      </div>
+    <div
+      v-for="quote in quotes"
+      :key="quote.id"
+    >
+      {{ quote }}
     </div>
   </div>
 </template>
@@ -93,7 +71,8 @@ import { gsap } from 'gsap';
 import { watchOnce } from '@vueuse/core';
 import { COLORS } from '../utils/constants/colors';
 import { useAppStore } from '~/store';
-const { loaded, recommendations, quotes, generals, contentLoaded } = toRefs(useAppStore());
+
+const { loaded, generals, quotes, contentLoaded } = toRefs(useAppStore());
 const nameTitle = ref<HTMLDivElement>();
 const nameTitleOutline = ref<HTMLDivElement>();
 const mainTitleContainer = ref<HTMLDivElement>();
