@@ -28,10 +28,6 @@
 
     <LRAboutMeSection :refresh-key="refreshKey" />
     <LRWhatIDoSection />
-    <!-- <LRCompaniesSection /> -->
-    <LRRecommendations />
-    <LRCompetencesSection />
-
     <div class="lr-section-page lr-section-page-no-paddings relative">
       <LRColorfulTile
         :colors="colors"
@@ -45,8 +41,11 @@
         />
       </div>
     </div>
+    <!-- <LRCompaniesSection /> -->
+    <LRRecommendations />
+    <LRCompetencesSection />
 
-    <div class="lr-section-page">
+    <!-- <div class="lr-section-page">
       <div class="wrapper-default-generals-text">
         <LRGeneralText
           v-if="environmentContent"
@@ -54,7 +53,7 @@
           :info="environmentContent"
         />
       </div>
-    </div>
+    </div> -->
 
     <div
       v-for="quote in quotes"

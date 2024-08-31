@@ -1,6 +1,6 @@
 <template>
   <div class="s-LRRecommendations lr-section-page lr-section-page-no-paddings">
-    <h1 class="lr-section-page-paddings section-h1">What they said</h1>
+    <h1 class="lr-section-page-paddings section-h1">{{ $t('what_they_said') }}</h1>
     <div class="lr-section-page-paddings recommendations">
       <div class="quote-col">
         <div
@@ -13,7 +13,9 @@
             <b aria-hidden="true">“</b>
             <div class="text-content">
               <p :class="`recommendation-text recommendation-text-${index}`">
-                {{ recommendation.recommendation }}
+                <span class="lr-fade-opacity">
+                  {{ recommendation.recommendation }}
+                </span>
               </p>
 
               <p class="author">
@@ -141,6 +143,12 @@ onMounted(() => {
 
         &:first-child {
           border-top: 1px solid $blue-3;
+        }
+        &:not(:first-child) {
+          .lr-fade-opacity {
+            --lr-fade-opacity-animation-start: 39vh;
+            --lr-fade-opacity-animation-end: 80vh;
+          }
         }
 
         .content {

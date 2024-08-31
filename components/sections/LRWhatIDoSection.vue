@@ -1,26 +1,28 @@
 <template>
   <div class="s-LRWhatIDoSection lr-section-page lr-section-page-no-paddings">
-    <h1 class="lr-section-page-paddings section-h1">{{ whatIDoTItle?.title }}</h1>
-    <div class="flex">
-      <ul>
-        <li
-          v-for="item in whatIdoContent"
-          :key="item.id"
-        >
-          <div class="li-content-wrapper">
-            <div class="description">
-              <span class="description-paddings-wrapper">
-                <span class="description-text">
-                  {{ item.description }}
+    <div class="flex flex-col gap-4">
+      <h1 class="lr-section-page-paddings section-h1">{{ whatIDoTItle?.title }}</h1>
+      <div class="flex">
+        <ul>
+          <li
+            v-for="item in whatIdoContent"
+            :key="item.id"
+          >
+            <div class="li-content-wrapper">
+              <div class="description">
+                <span class="description-paddings-wrapper">
+                  <span class="description-text">
+                    {{ item.description }}
+                  </span>
                 </span>
-              </span>
+              </div>
+              <h2 ref="items">
+                {{ item.title }}
+              </h2>
             </div>
-            <h2 ref="items">
-              {{ item.title }}
-            </h2>
-          </div>
-        </li>
-      </ul>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -62,23 +64,33 @@ onMounted(() => {
     const text = new SplitType(li, { types: 'chars' });
 
     gsap.killTweensOf(text.chars);
-    gsap.from(text.chars, {
-      scrollTrigger: {
-        trigger: li,
-        start: 'bottom bottom',
-        end: 'top 52%',
-        scrub: true,
-        markers: false,
+    gsap.fromTo(
+      text.chars,
+      {
+        opacity: 0.3,
       },
-      opacity: 0.3,
-      stagger: 0.2,
-    });
+      {
+        scrollTrigger: {
+          trigger: li,
+          start: 'bottom bottom',
+          end: 'top 40%',
+          scrub: true,
+          markers: false,
+        },
+        opacity: 1,
+        stagger: 0.2,
+      }
+    );
   }
 });
 </script>
 
 <style scoped lang="scss">
 .s-LRWhatIDoSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   ul {
     width: 100%;
     display: flex;
@@ -87,13 +99,18 @@ onMounted(() => {
       overflow: hidden; // .description has a width bigger than screen, this blocks the x scroll
       .li-content-wrapper {
         position: relative;
+
+        :deep(.char) {
+          // this will affect the speed of the gsap animation as well
+          transition: opacity 0.3s $default-ease;
+        }
+
         &:hover {
           .description {
             height: 110%;
           }
 
           :deep(.char) {
-            transition: opacity 0.5s $default-ease; // keep it inside the hover to not affect gsap
             opacity: 1 !important;
           }
         }

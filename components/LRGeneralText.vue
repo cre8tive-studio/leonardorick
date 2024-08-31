@@ -6,7 +6,7 @@
   >
     <component
       :is="paragraph.htmlTag"
-      :id="'p-' + paragraph.id"
+      :id="`id-${paragraph.id}`"
       ref="tags"
       :aria-label="paragraphsFullText[paragraph.id]?.fullText"
     >
@@ -41,28 +41,21 @@ const tags = ref<HTMLElement[]>();
 const { info } = defineProps<Props>();
 const paragraphsFullText: Record<string, ComponentParagraphInfo> = reactive({});
 
-onBeforeMount(() => {
-  setParagraphsInfo();
-});
-
 onMounted(async () => {
+  setMetadata();
   init();
 });
 
 function init() {
   if (!tags.value || !tags.value.length) return;
-
   for (const tag of tags.value) {
-    const paragraphInfo = info.data.find((paragraph) => tag.id === `p-${paragraph.id}`);
-
+    const paragraphInfo = info.data.find((paragraph) => tag.id === `id-${paragraph.id}`);
     if (!paragraphInfo || paragraphInfo.animationType === 'none') {
       continue;
     }
-
     const text = new SplitType(tag, {
       types: 'words,chars',
     });
-
     gsap.killTweensOf(tag);
     // todo set how animations happens based on animationType defined in payload
     gsap.from(text.chars, {
@@ -79,11 +72,18 @@ function init() {
   }
 }
 
-function setParagraphsInfo() {
+function setMetadata() {
   for (const paragraph of info.data) {
+    // set full string content so it can be used as a11y value
     paragraphsFullText[paragraph.id] = {
       fullText: getGeneralsFullText(paragraph),
     };
+
+    // add classes relative to the animation. Uncomment this and remove gsap when you undestand
+    // how  to apply this effect in phrases with words with multiple colors
+    // if (paragraph.animationType === 'fadeOpacity') {
+    // tags.value?.find((el) => el.id === `id-${paragraph.id}`)?.classList.add('lr-fade-opacity');
+    // }
   }
 }
 </script>
