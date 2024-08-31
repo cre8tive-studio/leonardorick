@@ -15,3 +15,14 @@ $highlight-2: #570987;
 $highlight-3: #7d0dc3;
 $highlight-4: #b95cf4;
 $hightlight-5: #d397f8;
+
+$main-dark-text-hsl: hsl(43 100% 99%);
+$main-dark-text-hsl-angle: 43;
+$main-dark-text-hsl-saturation: 100%;
+$main-dark-text-hsl-lightness: 99%;
+$main-dark-text-dark: hsl(
+  #{$main-dark-text-hsl-angle} #{$main-dark-text-hsl-saturation} #{$main-dark-text-hsl-lightness} / 0.4
+);
+$main-dark-text-darker: hsl(
+  #{$main-dark-text-hsl-angle} #{$main-dark-text-hsl-saturation} #{$main-dark-text-hsl-lightness} / 0.3
+);

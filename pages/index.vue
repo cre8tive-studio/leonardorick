@@ -28,7 +28,7 @@
 
     <LRAboutMeSection :refresh-key="refreshKey" />
     <LRWhatIDoSection />
-    <div class="lr-section-page lr-section-page-no-paddings relative">
+    <div class="s-ExperienceTextSection lr-section-page lr-section-page-no-paddings relative">
       <LRColorfulTile
         :colors="colors"
         :background-color="tilesBackgroundColor"
@@ -41,6 +41,7 @@
         />
       </div>
     </div>
+    <LRTimelineSection />
     <!-- <LRCompaniesSection /> -->
     <LRRecommendations />
     <LRCompetencesSection />
@@ -225,6 +226,10 @@ function animateRollingChars(split: SplitType) {
         }
       }
     }
+  }
+
+  .s-ExperienceTextSection {
+    margin-bottom: 8rem;
   }
 }
 @media (min-width: $lg-breakpoint) {

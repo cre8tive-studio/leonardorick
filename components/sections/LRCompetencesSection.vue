@@ -1,6 +1,6 @@
 <template>
   <div class="s-LRCompetencesSection lr-section-page relative">
-    <h2>Being a nerd for</h2>
+    <h2>{{ $t('being_nerd_for') }}</h2>
     <p>{{ formattedYearsText }}</p>
     <p>{{ formattedMonthsText }}</p>
     <p>{{ formattedDaysText }}</p>
@@ -24,6 +24,7 @@ const formattedDaysText = computed(() => `${days} ${$t('day', days).toLocaleLowe
 
 <style scoped lang="scss">
 .s-LRCompetencesSection {
+  border: 1px solid red;
   display: flex;
   align-items: center;
   justify-content: center;

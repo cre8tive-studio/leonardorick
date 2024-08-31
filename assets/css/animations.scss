@@ -1,1 +1,27 @@
 $default-ease: cubic-bezier(0.49, 0.225, 0.175, 0.86);
+
+// if want to use the css approach, add the class on elements
+.lr-fade-opacity {
+  --lr-fade-opacity-animation-start: 8vh;
+  --lr-fade-opacity-animation-end: 60vh;
+  color: $main-dark-text-darker;
+  background-clip: text;
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  background-image: linear-gradient(90deg, $main-dark-text, $main-dark-text);
+  animation: scroll-reveal linear forwards;
+  animation-timeline: view();
+  // the default view() means that the animation will start when the element enters the viewport
+  // and going to end when it's gone. changing the animtion range will tweak this behaviour
+  animation-range-start: cover var(--lr-fade-opacity-animation-start);
+  animation-range-end: cover var(--lr-fade-opacity-animation-end);
+  & > * {
+    display: inline;
+  }
+
+  @keyframes scroll-reveal {
+    to {
+      background-size: 100% 100%;
+    }
+  }
+}

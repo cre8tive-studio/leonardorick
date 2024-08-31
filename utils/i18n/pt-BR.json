@@ -1,6 +1,8 @@
 {
+    "being_nerd_for": "Sendo um nerd por",
     "day": "Dia | Dias",
     "english": "Inglês",
+    "history": "Histórico",
     "login": "Login",
     "logout": "Sair",
     "month": "Mês | Meses",
@@ -11,5 +13,6 @@
     "signup": "Cadastrar",
     "what_they_said": "O que eles disseram",
     "welcome": "Bem vindo",
+    "work_more_information": "Para mais detalhes sobre cada trabalho veja meu linkedIn",
     "year": "Ano | Anos"
 }

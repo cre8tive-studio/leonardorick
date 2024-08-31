@@ -172,7 +172,7 @@ onMounted(() => {
               line-height: 1.8rem;
             }
             .author-description {
-              opacity: 0.5;
+              color: $main-dark-text-dark;
             }
           }
         }

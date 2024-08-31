@@ -1,0 +1,22 @@
+/**
+  * wrappers and sections
+  */
+.section-h1 {
+  font-size: 1.5rem; /* 24px */
+  line-height: 2rem; /* 32px */
+  font-weight: 500;
+  letter-spacing: 1rem;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+.lr-text-body-1 {
+  font-size: 1rem;
+  line-height: 1.6rem;
+}
+
+@media (min-width: 1800px) {
+  .lr-text-body-1 {
+    font-size: 1.2rem;
+  }
+}

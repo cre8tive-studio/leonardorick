@@ -167,11 +167,11 @@ onMounted(() => {
   width: 100%;
   &.fade-top {
     top: -100%;
-    background: linear-gradient(0deg, var(--tiles-background-color) 0%, rgba(#000, 0) 35%);
+    background: linear-gradient(0deg, var(--tiles-background-color) 0%, rgba(#000, 0) 25%);
   }
   &.fade-bottom {
     top: 100%;
-    background: linear-gradient(180deg, var(--tiles-background-color) 10%, rgba(#000, 0) 63%);
+    background: linear-gradient(180deg, var(--tiles-background-color) 0%, rgba(#000, 0) 25%);
   }
 }
 </style>

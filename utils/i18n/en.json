@@ -1,6 +1,8 @@
 {
+    "being_nerd_for": "Being a nerd for",
     "day": "Day | Days",
     "english": "English",
+    "history": "History",
     "login": "Login",
     "logout": "Logout",
     "month": "Month | Months",
@@ -11,5 +13,6 @@
     "signup": "Signup",
     "what_they_said": "What they said",
     "welcome": "Welcome",
+    "work_more_information": "for more details about each job check my linkedIn",
     "year": "Year | Years"
 }

@@ -26,23 +26,24 @@ import SvgoSpotify from '~/assets/icons/spotify.svg';
 import SvgoGithub from '~/assets/icons/github.svg';
 import SvgoLinkedin from '~/assets/icons/linkedin.svg';
 import SvgoStackoverflow from '~/assets/icons/stackoverflow.svg';
+import { LINKS } from '~/utils/constants/links';
 
 const lis = ref<HTMLLIElement[]>();
 const links = [
   {
-    link: 'https://linkedin.com/in/leonardo-rick/',
+    link: LINKS.LINKEDIN,
     svg: SvgoLinkedin,
   },
   {
-    link: 'https://github.com/LeonardoRick',
+    link: LINKS.GITHUB,
     svg: SvgoGithub,
   },
   {
-    link: 'https://stackoverflow.com/users/10526869/leonardo-rick',
+    link: LINKS.STACKOVERFLOW,
     svg: SvgoStackoverflow,
   },
   {
-    link: 'https://open.spotify.com/intl-pt/artist/166zddGlNMJbuq99HrkyNb',
+    link: LINKS.SPOTIFY,
     svg: SvgoSpotify,
   },
 ];
