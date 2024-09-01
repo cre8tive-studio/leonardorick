@@ -36,6 +36,28 @@ export function dateDifference(startDate: Date, endDate: Date) {
   let months = endDate.getMonth() - startDate.getMonth();
   let days = endDate.getDate() - startDate.getDate();
 
+  let hours = endDate.getHours() - startDate.getHours();
+  let minutes = endDate.getMinutes() - startDate.getMinutes();
+  let seconds = endDate.getSeconds() - startDate.getSeconds();
+
+  // Adjust for negative seconds differences by going to the previous minute
+  if (seconds < 0) {
+    minutes -= 1;
+    seconds += 60;
+  }
+
+  // Adjust for negative minutes differences by going to the previous hour
+  if (minutes < 0) {
+    hours -= 1;
+    minutes += 60;
+  }
+
+  // Adjust for negative hours differences by going to the previous day
+  if (hours < 0) {
+    days -= 1;
+    hours += 24;
+  }
+
   // Adjust for negative day differences by going to the previous month
   if (days < 0) {
     months -= 1;
@@ -50,5 +72,5 @@ export function dateDifference(startDate: Date, endDate: Date) {
     months += 12;
   }
 
-  return { years, months, days };
+  return { years, months, days, hours, minutes, seconds };
 }

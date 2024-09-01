@@ -72,7 +72,7 @@ onMounted(() => {
       {
         scrollTrigger: {
           trigger: li,
-          start: 'bottom bottom',
+          start: 'top bottom',
           end: 'top 40%',
           scrub: true,
           markers: false,
