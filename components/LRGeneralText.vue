@@ -64,7 +64,6 @@ function init() {
         start: 'top 93%',
         end: 'top 42%',
         scrub: true,
-        markers: false,
       },
       opacity: 0.3,
       stagger: 0.2,

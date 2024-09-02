@@ -42,9 +42,8 @@
       </div>
     </div>
     <LRTimelineSection />
-    <!-- <LRCompaniesSection /> -->
-    <LRRecommendations />
     <LRCompetencesSection />
+    <LRRecommendations />
 
     <!-- <div class="lr-section-page">
       <div class="wrapper-default-generals-text">

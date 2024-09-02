@@ -75,7 +75,6 @@ onMounted(() => {
           start: 'top bottom',
           end: 'top 40%',
           scrub: true,
-          markers: false,
         },
         opacity: 1,
         stagger: 0.2,
@@ -161,7 +160,7 @@ onMounted(() => {
   }
 }
 
-@media (min-width: 1800px) {
+@media (min-width: $xxxl-breakpoint) {
   .s-LRWhatIDoSection {
     ul {
       li {
@@ -174,7 +173,7 @@ onMounted(() => {
   }
 }
 
-@media (max-width: 1800px) {
+@media (max-width: $xxxl-breakpoint) {
   .s-LRWhatIDoSection {
     ul {
       li {

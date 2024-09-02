@@ -72,6 +72,9 @@ const arrow = ref<HTMLDivElement>();
 const { recommendations } = toRefs(useAppStore());
 
 onMounted(() => {
+  /**
+   * animate stickying the images at the right side column
+   */
   ScrollTrigger.create({
     trigger: '.s-LRRecommendations',
     pin: '.images-col',
@@ -80,6 +83,9 @@ onMounted(() => {
     end: 'bottom bottom',
   });
 
+  /**
+   * animate left arrow that points to the quote
+   */
   ScrollTrigger.batch('.recommendation', {
     start: 'top 45%',
     onEnter: (_targets, triggers) => {

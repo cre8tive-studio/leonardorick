@@ -12,6 +12,7 @@ const COMPETENCE_NAME_OPTIONS = [
   'jest',
   'aws',
   'firebase',
+  'git',
 ] as const;
 export type CompetenceNameOptions = (typeof COMPETENCE_NAME_OPTIONS)[number];
 export interface CompetenceModel {
@@ -19,8 +20,8 @@ export interface CompetenceModel {
   icon: string; // the svg itself
   background: string;
   position: {
-    x: number;
-    y: number;
+    x: number | string;
+    y: number | string;
   };
   direction: 1 | -1;
   durationOffset?: number;

@@ -1,28 +1,69 @@
 <template>
-  <div class="s-LRCompetencesSection lr-section-page">
-    <LRWorkClock />
+  <div
+    ref="section"
+    class="s-LRCompetencesSection lr-section-page"
+  >
     <div
-      v-for="competence in COMPETENCES"
-      :key="competence.name"
-      class="orbit"
-      :data-icon="competence.name"
+      ref="mainContainer"
+      class="main-container"
     >
-      <div class="floating-icon-wrapper">
-        <component
-          :is="competence.icon"
-          filled
-        />
+      <LRWorkClock
+        :containers-query="'.phrase-scroll-marker'"
+        :base-height="BASE_HEIGHT"
+        @set-container-height="setContainerHeight"
+      />
+      <div
+        v-for="competence in COMPETENCES"
+        :key="competence.name"
+        class="orbit"
+        :data-icon="competence.name"
+      >
+        <div class="floating-icon-wrapper">
+          <component
+            :is="competence.icon"
+            filled
+          />
+        </div>
       </div>
+    </div>
+    <div>
+      <div
+        v-for="index of containersCount"
+        :key="index"
+        ref="phraseScrollMarkers"
+        class="phrase-scroll-marker"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/all';
 import type { CompetenceNameOptions } from '~/types/competences.model';
 import { COMPETENCES } from '~/utils/constants/competences';
 
+const BASE_HEIGHT = 130;
+const section = ref<HTMLDivElement>();
+const mainContainer = ref<HTMLDivElement>();
+const phraseScrollMarkers = ref<HTMLDivElement[] | undefined>();
+const containersCount = ref(0);
 onMounted(() => {
+  /**
+   * sticky main content on view until the whole wrapper is out of screen
+   */
+  ScrollTrigger.create({
+    trigger: '.s-LRCompetencesSection',
+    pin: mainContainer.value,
+    start: 'top top',
+    end: 'bottom bottom',
+  });
+
+  /**
+   * timeline for
+   * 1) big bang entering (scroll trigger)
+   * 2) orbit effect on each icon
+   */
   const tl = gsap.timeline({
     paused: true,
     scrollTrigger: {
@@ -65,19 +106,19 @@ onMounted(() => {
     const name = getName(element);
     const competence = COMPETENCES[name];
 
-    const roffset = competence.rotationOffset || 0;
+    const rotationOffset = competence.rotationOffset || 0;
 
     // aproximate the yPercent of 0 to reduce the orbit radius
     gsap.set(wrapper, { xPercent: 0, yPercent: -35, x: 0, y: 0 });
-    if (roffset) {
-      gsap.set(element, { rotation: roffset * competence.direction });
-      gsap.set(wrapper, { rotation: roffset * competence.direction * -1 });
+    if (rotationOffset) {
+      gsap.set(element, { rotation: rotationOffset * competence.direction });
+      gsap.set(wrapper, { rotation: rotationOffset * competence.direction * -1 });
     }
 
     tl.to(
       element,
       {
-        rotation: (360 + roffset) * competence.direction,
+        rotation: (360 + rotationOffset) * competence.direction,
         ease: 'none',
         repeat: -1,
         duration: 18 + (competence.durationOffset || 0),
@@ -87,7 +128,7 @@ onMounted(() => {
     tl.to(
       wrapper,
       {
-        rotation: (360 + roffset) * competence.direction * -1,
+        rotation: (360 + rotationOffset) * competence.direction * -1,
         ease: 'none',
         repeat: -1,
         duration: 18 + (competence.durationOffset || 0),
@@ -97,6 +138,22 @@ onMounted(() => {
   });
 });
 
+async function setContainerHeight(count: number, max: number) {
+  if (!section.value) return;
+
+  // the container hight is always fixed on the maxium size plus a offset so it doesn't
+  // end right exactly when the text in the middle fniishes
+  const offset = BASE_HEIGHT + 28;
+  section.value.style.setProperty('height', `${BASE_HEIGHT * max + offset}vh`);
+
+  containersCount.value = count;
+  await nextTick();
+  if (!phraseScrollMarkers.value) return;
+  for (const container of phraseScrollMarkers.value) {
+    container.style.setProperty('height', `${BASE_HEIGHT}vh`);
+  }
+}
+
 function getName(element: HTMLElement): CompetenceNameOptions {
   return (element.getAttribute('data-icon') || 'vue') as CompetenceNameOptions;
 }
@@ -104,45 +161,72 @@ function getName(element: HTMLElement): CompetenceNameOptions {
 
 <style scoped lang="scss">
 .s-LRCompetencesSection {
-  position: relative;
   display: flex;
-  align-items: center;
-  justify-content: center;
 
-  // &.lr-section-page {
-  //   height: 600vh;
-  //   border: 2px solid red;
-  // }
+  .phrase-scroll-marker:not(.main-container) {
+    // uncomment border to understand markers of each line on LRWorkCLock
+    // border: 2px solid yellow;
+    margin-bottom: 5px;
+    width: 0px;
+  }
 
-  .orbit {
-    position: absolute;
-    .floating-icon-wrapper {
-      background-color: $main-dark-text;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.4rem;
-      height: 84px;
-      width: 84px;
-      position: relative;
-      border-radius: 24px;
-
-      -webkit-box-shadow: -16px 9px 149px -0px rgba($highlight, 0.35);
-      -moz-box-shadow: -16px 9px 149px -0px rgba($highlight, 0.35);
-      box-shadow: -16px 9px 149px -0px rgba($highlight, 0.35);
-
-      svg {
-        height: 64px;
-        width: 64px;
+  .main-container {
+    container-type: size;
+    height: 100vh;
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .orbit {
+      position: absolute;
+      --size: 5.5rem;
+      .floating-icon-wrapper {
+        background-color: $main-dark-text;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.4rem;
+        height: var(--size);
+        width: var(--size);
         position: relative;
+        border-radius: 27%;
+
+        -webkit-box-shadow: -16px 9px 149px -0px rgba($highlight, 0.35);
+        -moz-box-shadow: -16px 9px 149px -0px rgba($highlight, 0.35);
+        box-shadow: -16px 9px 149px -0px rgba($highlight, 0.35);
+
+        svg {
+          height: 80%;
+          width: 80%;
+          position: relative;
+        }
+      }
+      &[data-icon='vue'] svg {
+        top: 5px;
+      }
+      &[data-icon='threejs'] svg {
+        top: 3px;
+        left: 3px;
       }
     }
-    &[data-icon='vue'] svg {
-      top: 5px;
+  }
+}
+@media (min-width: 1950px) {
+  .s-LRCompetencesSection {
+    .main-container {
+      .orbit {
+        --size: 7rem;
+      }
     }
-    &[data-icon='threejs'] svg {
-      top: 3px;
-      left: 3px;
+  }
+}
+@media (max-width: $sm-breakpoint) {
+  .s-LRCompetencesSection {
+    .main-container {
+      .orbit {
+        --size: 3rem;
+      }
     }
   }
 }

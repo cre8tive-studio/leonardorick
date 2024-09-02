@@ -22,8 +22,8 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     icon: SvgoLogoVue,
     background: COLORS.mainDarkText,
     position: {
-      x: -350,
-      y: -300,
+      x: '-24cqw',
+      y: '-33cqh',
     },
     direction: -1,
   },
@@ -32,8 +32,8 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     icon: SvgoLogoPython,
     background: COLORS.mainDarkText,
     position: {
-      x: 310,
-      y: 210,
+      x: '19cqw',
+      y: '15cqh',
     },
     direction: 1,
     durationOffset: 2,
@@ -44,8 +44,8 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     icon: SvgoLogoPostman,
     background: '#FF6C37',
     position: {
-      x: -280,
-      y: -60,
+      x: '-17cqw',
+      y: '-6cqh',
     },
     direction: 1,
     durationOffset: -2,
@@ -56,8 +56,8 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     icon: SvgoLogoAngular,
     background: '#0F0F11',
     position: {
-      x: 350,
-      y: -300,
+      x: '21cqw',
+      y: '-30cqh',
     },
     direction: 1,
     durationOffset: 2,
@@ -67,8 +67,8 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     icon: SvgoLogoJavascript,
     background: '#F7DF1E',
     position: {
-      x: 0,
-      y: -350,
+      x: '0cqw',
+      y: '-42cqh',
     },
     direction: 1,
     durationOffset: 3,
@@ -78,10 +78,9 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     name: 'threejs',
     icon: SvgoLogoThreeJs,
     background: COLORS.mainDarkText,
-
     position: {
-      x: -260,
-      y: 180,
+      x: '-16cqw',
+      y: '18cqh',
     },
     direction: -1,
     durationOffset: 1,
@@ -91,10 +90,9 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     name: 'nodejs',
     icon: SvgoLogoNodeJs,
     background: '#468C45',
-
     position: {
-      x: 260,
-      y: -100,
+      x: '16cqw',
+      y: '-10cqh',
     },
     direction: -1,
     durationOffset: -1,
@@ -104,10 +102,9 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     name: 'react',
     icon: SvgoLogoReact,
     background: '#222222',
-
     position: {
-      x: -550,
-      y: -130,
+      x: '-34cqw',
+      y: '-14cqh',
     },
     direction: -1,
     durationOffset: -1,
@@ -117,10 +114,9 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     name: 'graphql',
     icon: SvgoLogoGraphql,
     background: '#1B1B1B',
-
     position: {
-      x: 650,
-      y: -220,
+      x: '40cqw',
+      y: '-22cqh',
     },
     direction: 1,
     durationOffset: -1,
@@ -130,10 +126,9 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     name: 'typescript',
     icon: SvgoLogoTypescript,
     background: '#3178C6',
-
     position: {
-      x: -600,
-      y: 110,
+      x: '-37.5cqw',
+      y: '11cqh',
     },
     direction: 1,
     durationOffset: -1,
@@ -143,10 +138,9 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     name: 'jest',
     icon: SvgoLogoJest,
     background: '#99424F',
-
     position: {
-      x: 550,
-      y: 310,
+      x: '34cqw',
+      y: '31cqh',
     },
     direction: -1,
     durationOffset: -2,
@@ -156,10 +150,9 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     name: 'aws',
     icon: SvgoLogoAWS,
     background: '#2C3641',
-
     position: {
-      x: 10,
-      y: 270,
+      x: '1cqw',
+      y: '40cqh',
     },
     direction: 1,
     durationOffset: -2,
@@ -169,10 +162,9 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     name: 'firebase',
     icon: SvgoLogoFirebase,
     background: '#1E1E1E',
-
     position: {
-      x: -490,
-      y: 310,
+      x: '-30.6cqw',
+      y: '31cqh',
     },
     direction: -1,
     durationOffset: -2,
@@ -182,10 +174,9 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     name: 'git',
     icon: SvgoLogoGIT,
     background: '#222115',
-
     position: {
-      x: 550,
-      y: 0,
+      x: '34cqw',
+      y: '0cqh',
     },
     direction: 1,
     durationOffset: -2,
