@@ -9,12 +9,14 @@ export default defineEventHandler(async (event) => {
   const url = process.env.VUE_APP_PAYLOAD_GRAPHQL_URL as string;
   const query = gql`
     query ($locale: LocaleInputType!) {
-      Quotes(locale: $locale) {
+      Quotes(locale: $locale, limit: 100) {
         docs {
           id
           quote
           author
+          label
         }
+        limit
       }
     }
   `;

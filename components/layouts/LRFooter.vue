@@ -7,7 +7,7 @@
           :key="index"
           ref="lis"
           class="main-hover-button"
-          magnetic-hover
+          lr-magnetic-hover
         >
           <NuxtLink
             :to="link.link"

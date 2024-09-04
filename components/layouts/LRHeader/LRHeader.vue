@@ -3,7 +3,7 @@
     class="c-LRHeader lr-section lr-safe-pointer-events-none l-default__header-container w-full flex fixed justify-end lg:justify-between"
   >
     <NuxtLink
-      magnetic-hover
+      lr-magnetic-hover
       class="home-logo main-hover-button h-fit hidden lg:flex"
       :to="localeRoute('/')"
     >

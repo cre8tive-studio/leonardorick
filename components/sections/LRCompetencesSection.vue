@@ -143,7 +143,7 @@ async function setContainerHeight(count: number, max: number) {
 
   // the container hight is always fixed on the maxium size plus a offset so it doesn't
   // end right exactly when the text in the middle fniishes
-  const offset = BASE_HEIGHT + 28;
+  const offset = BASE_HEIGHT + 0;
   section.value.style.setProperty('height', `${BASE_HEIGHT * max + offset}vh`);
 
   containersCount.value = count;

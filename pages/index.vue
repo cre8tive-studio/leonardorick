@@ -54,13 +54,8 @@
         />
       </div>
     </div> -->
-
-    <div
-      v-for="quote in quotes"
-      :key="quote.id"
-    >
-      {{ quote }}
-    </div>
+    <LRQuotesSection />
+    <LRContactFooter />
   </div>
 </template>
 
@@ -71,13 +66,13 @@ import { watchOnce } from '@vueuse/core';
 import { COLORS } from '../utils/constants/colors';
 import { useAppStore } from '~/store';
 
-const { loaded, generals, quotes, contentLoaded } = toRefs(useAppStore());
+const { loaded, generals, contentLoaded } = toRefs(useAppStore());
 const nameTitle = ref<HTMLDivElement>();
 const nameTitleOutline = ref<HTMLDivElement>();
 const mainTitleContainer = ref<HTMLDivElement>();
 
 const experienceContent = computed(() => generals.value.find((general) => general.key === 'experience'));
-const environmentContent = computed(() => generals.value.find((general) => general.key === 'environment'));
+// const environmentContent = computed(() => generals.value.find((general) => general.key === 'environment'));
 
 const colors = [COLORS.blue1, COLORS.blue2, COLORS.blue3, COLORS.blue4, COLORS.blue5];
 const tilesBackgroundColor = COLORS.mainDarkBg;

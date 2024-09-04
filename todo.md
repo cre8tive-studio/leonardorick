@@ -49,3 +49,9 @@ setup failing state if payload cms get fails
 setup posthog in production
 
 decrease a bit max sisze width of screens
+
+do this with header: https://gsap.com/community/forums/topic/39286-scrolltrigger-lenis-problem/
+
+change LRGeneralsText to LRFadeInText and mode styles inside it
+
+add scrolldown around the cursor

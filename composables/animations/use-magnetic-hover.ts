@@ -23,7 +23,7 @@ const useMagneticHover = () => {
   }
 
   function activate() {
-    for (const el of document.querySelectorAll('[magnetic-hover]')) {
+    for (const el of document.querySelectorAll('[lr-magnetic-hover]')) {
       const element = el as HTMLElement;
       wrappers.push(element);
       setChildrenReference(element);
