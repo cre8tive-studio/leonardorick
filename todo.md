@@ -55,3 +55,15 @@ do this with header: https://gsap.com/community/forums/topic/39286-scrolltrigger
 change LRGeneralsText to LRFadeInText and mode styles inside it
 
 add scrolldown around the cursor
+
+create # urls so I can jump right to the place I want
+
+make sidebar appear only on hover
+
+remove scroll block variables from beginning
+
+add another transition timing on :hover so it can close faster than it opens on both contact footter and what i do sections (like seen in the css video 5 tips)
+
+Add on readme: This project is my experience lab, I just add things here for trying out stuff so that's why the structure and coding might not be as organized as you would expect in a real project. In real life we never to that much of different animations and try to repeat more stuff, here I just went crazy and did everything I always wanted! It's all about 1) How many maintainence is needed in the code (this project is not intended to keep changing), 2) how many developers are going to touch the code (only me) and 3) focus on what really matters (perfecsionism is not always a good thing)
+
+If you want to check some nice code structures check my packages project, were I create some helper functions for my projects

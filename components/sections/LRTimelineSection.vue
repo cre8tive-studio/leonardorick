@@ -7,8 +7,6 @@
         :key="index"
         :index="index"
         class="timeline-entry"
-        @mouseenter="mouseEnterHandler"
-        @mouseleave="mouseLeaveHandler"
       >
         <h3 class="time">
           <div class="over-layer over-layer-time" />
@@ -17,7 +15,7 @@
           </span>
         </h3>
         <div class="description">
-          <h3 class="description-title">{{ active === index ? experience.funTitle : experience.title }}</h3>
+          <h3 class="description-title">{{ experience.title }}</h3>
           <div class="over-layer over-layer-description">
             <h3 class>{{ experience.funTitle }}</h3>
             <h4 aria-hidden="true">[hidden]</h4>
@@ -31,7 +29,7 @@
       {{ $t('work_more_information') }}
       <NuxtLink
         target="_blank"
-        :to="LINKS.LINKEDIN"
+        :to="linkedinUrl"
       >
         <SvgoLinkedin />
       </NuxtLink>
@@ -40,16 +38,12 @@
 </template>
 
 <script setup lang="ts">
-import { LINKS } from '~/utils/constants/links';
-const active = ref<number>(-1);
-function mouseEnterHandler(_e: MouseEvent) {
-  // console.log(e.target);
-  // active.value = parseInt((e.target as HTMLDivElement).getAttribute('index') || '-1');
-}
-function mouseLeaveHandler(_e: MouseEvent) {
-  // active.value = -1;
-}
+import { useAppStore } from '~/store';
 
+const { personalInfo } = toRefs(useAppStore());
+const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
+
+// todo: move experiencesContent to payload
 const experiencesContent = [
   {
     company: 'Unbabel',

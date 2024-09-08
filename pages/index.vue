@@ -12,7 +12,7 @@
           ref="nameTitle"
           class="main__title title-splitted title-filled"
         >
-          Leonardo Rick
+          {{ nameText }}
           <span class="registered-icon">®</span>
         </h1>
         <h1
@@ -20,31 +20,21 @@
           aria-hidden="true"
           class="main__title title-splitted title-outline"
         >
-          Leonardo Rick
+          {{ nameText }}
           <span class="registered-icon">®</span>
         </h1>
       </div>
     </div>
 
     <LRAboutMeSection :refresh-key="refreshKey" />
+    <LRExperiencesTextSection :refresh-key="refreshKey" />
+
     <LRWhatIDoSection />
-    <div class="s-ExperienceTextSection lr-section-page lr-section-page-no-paddings relative">
-      <LRColorfulTile
-        :colors="colors"
-        :background-color="tilesBackgroundColor"
-      />
-      <div class="wrapper-default-generals-text lr-section-page-paddings lr-safe-pointer-events-none">
-        <LRGeneralText
-          v-if="experienceContent"
-          :key="refreshKey"
-          :info="experienceContent"
-        />
-      </div>
-    </div>
     <LRTimelineSection />
     <LRCompetencesSection />
     <LRRecommendations />
-
+    <LRQuotesSection />
+    <LRFooterController />
     <!-- <div class="lr-section-page">
       <div class="wrapper-default-generals-text">
         <LRGeneralText
@@ -54,8 +44,6 @@
         />
       </div>
     </div> -->
-    <LRQuotesSection />
-    <LRContactFooter />
   </div>
 </template>
 
@@ -63,19 +51,16 @@
 import SplitType from 'split-type';
 import { gsap } from 'gsap';
 import { watchOnce } from '@vueuse/core';
-import { COLORS } from '../utils/constants/colors';
 import { useAppStore } from '~/store';
 
-const { loaded, generals, contentLoaded } = toRefs(useAppStore());
+const { loaded, personalInfo, contentLoaded } = toRefs(useAppStore());
 const nameTitle = ref<HTMLDivElement>();
 const nameTitleOutline = ref<HTMLDivElement>();
 const mainTitleContainer = ref<HTMLDivElement>();
 
-const experienceContent = computed(() => generals.value.find((general) => general.key === 'experience'));
+const nameText = computed(() => personalInfo.value?.name || '');
 // const environmentContent = computed(() => generals.value.find((general) => general.key === 'environment'));
 
-const colors = [COLORS.blue1, COLORS.blue2, COLORS.blue3, COLORS.blue4, COLORS.blue5];
-const tilesBackgroundColor = COLORS.mainDarkBg;
 const refreshKey = ref(0);
 
 onMounted(() => {
@@ -94,11 +79,11 @@ watch(contentLoaded, () => {
 });
 
 function runAnimations() {
-  animateTitle();
-  animateAndSplitChars();
+  animateTitleOverflow();
+  animateTitleRollingChars();
 }
 
-function animateTitle() {
+function animateTitleOverflow() {
   if (!nameTitle.value || !nameTitleOutline.value) return;
   gsap.to(nameTitle.value, {
     scrollTrigger: {
@@ -122,7 +107,7 @@ function animateTitle() {
   });
 }
 
-function animateAndSplitChars() {
+function animateTitleRollingChars() {
   animateRollingChars(new SplitType('.title-splitted', { types: 'chars' }));
 }
 function animateRollingChars(split: SplitType) {
@@ -177,7 +162,6 @@ function animateRollingChars(split: SplitType) {
     &__title {
       position: relative;
       font-size: 1.5rem;
-      // font-family: 'JosefinSans', sans-serif;
       font-weight: 700;
       bottom: 0;
       letter-spacing: 0.03em;
@@ -190,8 +174,11 @@ function animateRollingChars(split: SplitType) {
         height: 100%;
         color: white;
         -webkit-text-stroke: 0px;
-
         font-weight: 600;
+      }
+
+      &.title-filled {
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3), 3px 3px 15px rgba(255, 255, 255, 0.4);
       }
 
       &.title-outline {

@@ -2,6 +2,7 @@ import { defineNuxtPlugin, useFetch } from 'nuxt/app';
 import { useAppStore } from '~/store';
 import type { GeneralsModel } from '~/types/generals.model';
 import type { i18nModel } from '~/types/i18n.model';
+import type { PersonalInfoModel } from '~/types/personal-info.model';
 import type { QuoteModel } from '~/types/quote.model';
 import type { RecommendationModel } from '~/types/recommendation-model';
 import type { LanguageOptions } from '~/utils/constants/languages';
@@ -26,6 +27,8 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
     $generals: generals,
   } = await _fetchInitialData(locale, useFetch);
 
+  const personalInfo = await fetchPersonalInfo();
+
   (_nuxtApp.$i18n as i18nModel).locale.value = locale;
 
   return {
@@ -33,6 +36,7 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
       recommendations,
       quotes,
       generals,
+      personalInfo,
       fetchInitialData,
     },
   };
@@ -55,6 +59,10 @@ const _fetchInitialData = async (locale: LanguageOptions, f: FetchFunction) => {
 
   return { $recommendations, $quotes, $generals };
 };
+
+function fetchPersonalInfo() {
+  return useFetch<PersonalInfoModel>('/api/personal-info').then((res) => res.data);
+}
 
 // Type guard to check if the fetch function returns a data object or not
 function isDataWrapper<T>(result: any): result is { data: T } {

@@ -10,12 +10,12 @@ export const useAppStore = defineStore('store', () => {
     recommendations: [],
     quotes: [],
     generals: [],
+    personalInfo: null,
     lastJWT: {
       jwt: '',
       expire: 0,
     },
     contentLoaded: false,
-    defaultLayoutMounted: false,
   });
 
   const loaded = computed(() => state.contentLoaded && animationsStore.isLRModelLoaded);

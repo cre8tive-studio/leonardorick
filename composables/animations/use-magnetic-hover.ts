@@ -1,5 +1,6 @@
 import { gsap } from 'gsap';
 import { useAnimationStore } from '~/store/animation';
+import { isStringTrue } from '@leonardorick/utils';
 
 interface MagneticChildReferenceModel {
   element: HTMLElement | SVGElement | null;
@@ -41,9 +42,9 @@ const useMagneticHover = () => {
   function handleCursorEnter(this: HTMLElement) {
     const self = this as HTMLElement;
     const ref = magneticChildrenReferences.get(self);
-    hoveredEls.push(self);
-    lastHoveredEl.value = self;
-    if (ref) {
+    if (ref && isMagneticHoverActivatedOnElement(self)) {
+      hoveredEls.push(self);
+      lastHoveredEl.value = self;
       magneticChildrenReferences.set(self, { ...ref, shouldAnimatateIn: true, shouldAnimateOut: false });
     }
   }
@@ -51,6 +52,7 @@ const useMagneticHover = () => {
   function handleCursorLeave(this: HTMLElement) {
     const self = this as HTMLElement;
     const ref = magneticChildrenReferences.get(self);
+
     hoveredEls.push(self);
     if (ref) {
       magneticChildrenReferences.set(self, { ...ref, shouldAnimatateIn: false, shouldAnimateOut: true });
@@ -58,31 +60,44 @@ const useMagneticHover = () => {
   }
 
   function handleCursorMove(this: HTMLElement, e: MouseEvent) {
+    mouseEvent = e;
     const self = this as HTMLElement;
     const ref = magneticChildrenReferences.get(self);
-    lastHoveredEl.value = self;
-    if (ref) {
+
+    if (ref && isMagneticHoverActivatedOnElement(self)) {
+      lastHoveredEl.value = self;
       magneticChildrenReferences.set(self, { ...ref, shouldAnimatateIn: true, shouldAnimateOut: false });
     }
-    mouseEvent = e;
+  }
+
+  /**
+   * Check if the magnetic hover is enabled on an element. If we don't specify anything,
+   *it should be enabled. That's why '' (empty string) should return true. Ex:
+   * <li
+   *  lr-magnetic-hover
+   * > ...
+   * @param element
+   * @returns {boolean} value indicating the magnetic hover is enabled or not on this component
+   */
+  function isMagneticHoverActivatedOnElement(element: HTMLElement): boolean {
+    const attr = element.getAttribute('lr-magnetic-hover');
+    return attr === '' || isStringTrue(attr);
   }
 
   function rafCallback() {
-    if (!activated.value || (!hoveredEls.length && !lastHoveredEl.value)) return;
+    if (!activated.value || !(hoveredEls.length || lastHoveredEl.value)) return;
 
     const el = hoveredEls.pop() || lastHoveredEl.value;
+    lastHoveredEl.value = null;
 
     if (!el || !mouseEvent) return;
 
     const ref = magneticChildrenReferences.get(el);
-    if (!ref) {
-      return;
-    }
+    if (!ref) return;
+
     const { element, shouldAnimatateIn, shouldAnimateOut } = ref;
 
-    if (!element) {
-      return;
-    }
+    if (!element || !(shouldAnimatateIn || shouldAnimateOut)) return;
 
     const { offsetX, offsetY } = mouseEvent;
     const { offsetWidth: width, offsetHeight: height } = el;

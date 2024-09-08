@@ -1,7 +1,7 @@
 <template>
   <NuxtRouteAnnouncer />
   <ClientOnly>
-    <LRAnimations v-if="defaultLayoutMounted" />
+    <LRAnimations />
   </ClientOnly>
   <NuxtLayout>
     <NuxtPage />
@@ -18,8 +18,8 @@ import { useAppStore } from '~/store';
 useHeadConfig();
 
 const nuxtApp = useNuxtApp();
-const { $recommendations, $quotes, $generals, $fetchInitialData, $initializerClientError } = nuxtApp;
-const { contentLoaded, lang, recommendations, quotes, generals, defaultLayoutMounted } = toRefs(useAppStore());
+const { $recommendations, $quotes, $generals, $personalInfo, $fetchInitialData, $initializerClientError } = nuxtApp;
+const { contentLoaded, lang, recommendations, quotes, generals, personalInfo } = toRefs(useAppStore());
 
 if ($initializerClientError) {
   // todo setup modal error
@@ -38,6 +38,10 @@ watch(lang, async () => {
 if ($recommendations.value && $quotes.value && $generals.value) {
   await setHomeView($recommendations.value, $quotes.value, $generals.value);
   contentLoaded.value = true;
+}
+
+if ($personalInfo.value) {
+  personalInfo.value = $personalInfo.value;
 }
 
 async function setHomeView(rcs: RecommendationModel[], qts: QuoteModel[], gnrs: GeneralsModel[]) {

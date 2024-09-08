@@ -30,16 +30,14 @@ const useAnimations = () => {
   const fluidFramersToSkipRef = { value: 0 };
   const isDocumentVisible = ref(true);
 
-  const LRModelTimeout = setLRModelTimeout();
-
-  const unwatch = watch(isLRModelLoaded, () => {
-    clearTimeout(LRModelTimeout);
-    hideOverlay();
-    unwatch();
-  });
-
   async function activate() {
-    gsap.registerPlugin(ScrollTrigger);
+    const LRModelTimeout = setLRModelTimeout();
+
+    const unwatch = watch(isLRModelLoaded, () => {
+      clearTimeout(LRModelTimeout);
+      hideOverlay();
+      unwatch();
+    });
 
     if (!isWebglSupported()) {
       hideOverlay();

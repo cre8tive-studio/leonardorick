@@ -8,8 +8,6 @@
 
 export interface Config {
   collections: {
-    categories: Category;
-    posts: Post;
     tags: Tag;
     users: User;
     media: Media;
@@ -18,24 +16,6 @@ export interface Config {
     people: Person;
   };
   globals: {};
-}
-export interface Category {
-  id: string;
-  name?: string;
-}
-export interface Post {
-  id: string;
-  title?: string;
-  author?: string | User;
-  publishedDate?: string;
-  category?: string | Category;
-  tags?: string[] | Tag[];
-  content?: {
-    [k: string]: unknown;
-  }[];
-  status?: 'draft' | 'published';
-  updatedAt: string;
-  createdAt: string;
 }
 export interface User {
   id: string;

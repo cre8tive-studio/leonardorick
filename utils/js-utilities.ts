@@ -74,3 +74,7 @@ export function dateDifference(startDate: Date, endDate: Date) {
 
   return { years, months, days, hours, minutes, seconds };
 }
+
+export function openExternalLink(link: string, target = '_blank') {
+  open(link, target);
+}

@@ -5,9 +5,9 @@
 * buttons
 */
 .main-hover-button {
+  transition: color 0.3s $default-ease;
   &:hover {
     color: $highlight-3;
-    transition: color 0.3s ease-in-out;
   }
 }
 
@@ -93,6 +93,7 @@
     padding-inline: var(--lr-side-space);
     width: 100vw;
     max-width: 3450px;
+
     &-no-paddings {
       padding-right: 0;
       padding-left: 0;

@@ -11,14 +11,7 @@
     <LRFooter />
   </div>
 </template>
-<script setup lang="ts">
-import { useAppStore } from '~/store';
-
-const { defaultLayoutMounted } = toRefs(useAppStore());
-onMounted(() => {
-  defaultLayoutMounted.value = true;
-});
-</script>
+<script setup lang="ts"></script>
 <style scoped lang="scss">
 .l-default {
   position: relative;

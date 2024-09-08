@@ -3,6 +3,7 @@ import type { QuoteModel } from './quote.model';
 import type { RecommendationModel } from './recommendation-model';
 import type { SettingsClientModel } from './settings.model';
 import type { GeneralsModel } from './generals.model';
+import type { PersonalInfoModel } from './personal-info.model';
 import type { LanguageOptions } from '~/utils/constants/languages';
 export interface StoreModel {
   recommendations: RecommendationModel[];
@@ -11,10 +12,10 @@ export interface StoreModel {
   lang: LanguageOptions;
   settings: SettingsClientModel | null;
   session: Models.Session | null;
+  personalInfo: PersonalInfoModel | null;
   lastJWT: {
     jwt: string;
     expire: number;
   };
   contentLoaded: boolean;
-  defaultLayoutMounted: boolean;
 }
