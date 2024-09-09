@@ -1,5 +1,6 @@
 import { defineNuxtPlugin, useFetch } from 'nuxt/app';
 import { useAppStore } from '~/store';
+import type { ExperienceModel } from '~/types/experience.model';
 import type { GeneralsModel } from '~/types/generals.model';
 import type { i18nModel } from '~/types/i18n.model';
 import type { PersonalInfoModel } from '~/types/personal-info.model';
@@ -24,6 +25,7 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
   const {
     $recommendations: recommendations,
     $quotes: quotes,
+    $experiences: experiences,
     $generals: generals,
   } = await _fetchInitialData(locale, useFetch);
 
@@ -35,6 +37,7 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
     provide: {
       recommendations,
       quotes,
+      experiences,
       generals,
       personalInfo,
       fetchInitialData,
@@ -51,13 +54,14 @@ const _fetchInitialData = async (locale: LanguageOptions, f: FetchFunction) => {
     f<RecommendationModel[]>(localeRoute('/api/recommendations', locale)),
     f<QuoteModel[]>(localeRoute('/api/quotes', locale)),
     f<GeneralsModel[]>(localeRoute('/api/generals', locale)),
+    f<ExperienceModel[]>(localeRoute('/api/experiences', locale)),
   ]);
 
-  const [$recommendations, $quotes, $generals] = res.map((item) =>
+  const [$recommendations, $quotes, $generals, $experiences] = res.map((item) =>
     isDataWrapper(item) && item.data ? item.data : item
   );
 
-  return { $recommendations, $quotes, $generals };
+  return { $recommendations, $quotes, $experiences, $generals };
 };
 
 function fetchPersonalInfo() {

@@ -13,30 +13,40 @@ import type { RecommendationModel } from './types/recommendation-model';
 import type { QuoteModel } from './types/quote.model';
 import type { Media } from './types/payload-types';
 import type { GeneralsModel } from './types/generals.model';
+import type { ExperienceModel } from './types/experience.model';
 import { useAppStore } from '~/store';
 
 useHeadConfig();
 
 const nuxtApp = useNuxtApp();
-const { $recommendations, $quotes, $generals, $personalInfo, $fetchInitialData, $initializerClientError } = nuxtApp;
-const { contentLoaded, lang, recommendations, quotes, generals, personalInfo } = toRefs(useAppStore());
+const {
+  $recommendations,
+  $quotes,
+  $experiences,
+  $generals,
+  $personalInfo,
+  $fetchInitialData,
+  $initializerClientError,
+} = nuxtApp;
+const { contentLoaded, lang, recommendations, experiences, quotes, generals, personalInfo } = toRefs(useAppStore());
 
 if ($initializerClientError) {
   // todo setup modal error
   // eslint-disable-next-line no-console
   console.error($initializerClientError);
+  const x = 1141110;
 }
 
 watch(lang, async () => {
   contentLoaded.value = false;
   const res = await $fetchInitialData();
-  if (res.$recommendations && res.$quotes && res.$generals) {
-    setHomeView(res.$recommendations, res.$quotes, res.$generals);
+  if (res.$recommendations && res.$quotes && res.$experiences && res.$generals) {
+    setHomeView(res.$recommendations, res.$quotes, res.$experiences, res.$generals);
   }
 });
 
-if ($recommendations.value && $quotes.value && $generals.value) {
-  await setHomeView($recommendations.value, $quotes.value, $generals.value);
+if ($recommendations.value && $quotes.value && $generals.value && $experiences.value) {
+  await setHomeView($recommendations.value, $quotes.value, $experiences.value, $generals.value);
   contentLoaded.value = true;
 }
 
@@ -44,10 +54,16 @@ if ($personalInfo.value) {
   personalInfo.value = $personalInfo.value;
 }
 
-async function setHomeView(rcs: RecommendationModel[], qts: QuoteModel[], gnrs: GeneralsModel[]) {
+async function setHomeView(
+  rcs: RecommendationModel[],
+  qts: QuoteModel[],
+  exps: ExperienceModel[],
+  gnrs: GeneralsModel[]
+) {
   recommendations.value = rcs;
   quotes.value = qts;
   generals.value = gnrs;
+  experiences.value = exps;
 
   recommendations.value.forEach(async (rc) => {
     /**

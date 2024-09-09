@@ -10,6 +10,7 @@ export const useAppStore = defineStore('store', () => {
     recommendations: [],
     quotes: [],
     generals: [],
+    experiences: [],
     personalInfo: null,
     lastJWT: {
       jwt: '',

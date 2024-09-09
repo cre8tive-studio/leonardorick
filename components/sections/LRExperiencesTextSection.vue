@@ -29,4 +29,8 @@ const colors = [COLORS.blue1, COLORS.blue2, COLORS.blue3, COLORS.blue4, COLORS.b
 const tilesBackgroundColor = COLORS.mainDarkBg;
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.s-ExperienceTextSection {
+  margin-bottom: 8rem;
+}
+</style>

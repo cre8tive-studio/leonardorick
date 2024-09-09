@@ -1,6 +1,6 @@
 import type { Fluid } from '~/components/FluidBackground/fluid';
 
-interface animationStoreModel {
+interface AnimationStoreModel {
   isEnteringAnimationFinished: boolean;
   isLRModelLoaded: boolean;
   isLRModelTimedout: boolean;
@@ -18,8 +18,9 @@ interface animationStoreModel {
   isCursorActivated: boolean;
   isMagneticHoverActivated: boolean;
 }
+
 export const useAnimationStore = defineStore('animationStore', () => {
-  const state = reactive<animationStoreModel>({
+  const state = reactive<AnimationStoreModel>({
     isEnteringAnimationFinished: false,
     isLRModelLoaded: false,
     isLRModelTimedout: false,

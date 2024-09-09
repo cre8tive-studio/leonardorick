@@ -1,4 +1,3 @@
-import { ScrollTrigger } from 'gsap/all';
 import gsap from 'gsap';
 import { isWebglSupported } from '@leonardorick/three';
 import useLenis from './use-lenis';

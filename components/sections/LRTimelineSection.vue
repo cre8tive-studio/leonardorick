@@ -3,7 +3,7 @@
     <h1 class="section-h1">{{ $t('history') }}</h1>
     <section class="timeline">
       <div
-        v-for="(experience, index) in experiencesContent"
+        v-for="(experience, index) in experiences"
         :key="index"
         :index="index"
         class="timeline-entry"
@@ -40,42 +40,8 @@
 <script setup lang="ts">
 import { useAppStore } from '~/store';
 
-const { personalInfo } = toRefs(useAppStore());
+const { personalInfo, experiences } = toRefs(useAppStore());
 const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
-
-// todo: move experiencesContent to payload
-const experiencesContent = [
-  {
-    company: 'Unbabel',
-    title: 'Software Engineer',
-    funTitle: 'Unbabel fun title',
-    year: 'now',
-  },
-  {
-    company: 'BySix',
-    title: 'Software Development Engineer',
-    funTitle: 'Bysix fun title',
-    year: '2021',
-  },
-  {
-    company: 'Itaú',
-    title: 'Software Engineer',
-    funTitle: 'When things started to get serious',
-    year: '2020',
-  },
-  {
-    company: 'Itaú',
-    title: 'Junior Software Developer',
-    funTitle: 'Bla bla bla',
-    year: '2019',
-  },
-  {
-    company: 'Itaú',
-    title: 'Intern',
-    funTitle: 'Just the perfect guy to solve annoying bugs ',
-    year: '2018',
-  },
-];
 </script>
 
 <style scoped lang="scss">

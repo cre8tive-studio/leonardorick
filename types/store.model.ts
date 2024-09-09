@@ -5,9 +5,12 @@ import type { SettingsClientModel } from './settings.model';
 import type { GeneralsModel } from './generals.model';
 import type { PersonalInfoModel } from './personal-info.model';
 import type { LanguageOptions } from '~/utils/constants/languages';
+import type { ExperienceModel } from './experience.model';
+
 export interface StoreModel {
   recommendations: RecommendationModel[];
   quotes: QuoteModel[];
+  experiences: ExperienceModel[];
   generals: GeneralsModel[];
   lang: LanguageOptions;
   settings: SettingsClientModel | null;

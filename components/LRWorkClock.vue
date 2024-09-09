@@ -54,9 +54,9 @@ const paragraphsText = ref([
 
 const paragraphsLength = computed(() => paragraphs.value?.length || 0);
 
-let initialized = false;
-
 const scaleOffset = [0, 0.35, 0.38, 0.44, 0.48, 0.52];
+let initialized = false;
+const scrollTriggers: ScrollTrigger[] = [];
 
 onMounted(async () => {
   updateDifference();
@@ -65,6 +65,11 @@ onMounted(async () => {
   setContainerHeight();
 });
 
+onUnmounted(() => {
+  for (const trigger of scrollTriggers) {
+    trigger.kill(true);
+  }
+});
 async function setAnimateWordsEntering() {
   await nextTick();
   const containers = Array.from(document.querySelectorAll(containersQuery));
@@ -73,7 +78,7 @@ async function setAnimateWordsEntering() {
 
     gsap.killTweensOf(p);
     gsap.set(p, { scale: 1 - (scaleOffset[index] || 0.1) });
-    gsap.fromTo(
+    const tween = gsap.fromTo(
       p,
       {
         // translateY: `${10 * (index + 1)}cqh`,
@@ -93,6 +98,10 @@ async function setAnimateWordsEntering() {
         opacity: 1,
       }
     );
+
+    if (tween.scrollTrigger) {
+      scrollTriggers.push(tween.scrollTrigger);
+    }
   }
 }
 function getText(value: number, label: string) {

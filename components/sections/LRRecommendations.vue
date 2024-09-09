@@ -67,15 +67,18 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import { useAppStore } from '~/store';
+import { SCROLL_TRIGGER_IDS } from '~/utils/constants/scroll-trigger-ids';
 
 const arrow = ref<HTMLDivElement>();
 const { recommendations } = toRefs(useAppStore());
+let scrollTriggers: ScrollTrigger[];
 
 onMounted(() => {
   /**
    * animate stickying the images at the right side column
    */
   ScrollTrigger.create({
+    id: SCROLL_TRIGGER_IDS.RECOMMENDATIONS_PIN_IMAGE,
     trigger: '.s-LRRecommendations',
     pin: '.images-col',
     start: 'top top',
@@ -86,7 +89,7 @@ onMounted(() => {
   /**
    * animate left arrow that points to the quote
    */
-  ScrollTrigger.batch('.recommendation', {
+  scrollTriggers = ScrollTrigger.batch('.recommendation', {
     start: 'top 45%',
     onEnter: (_targets, triggers) => {
       const index = parseInt(triggers[0]?.trigger?.getAttribute('lr-index') || '0');
@@ -105,6 +108,13 @@ onMounted(() => {
       gsap.to(`.img-wrapper:nth-child(${index})`, { opacity: 1, scale: 1 });
     },
   });
+});
+
+onUnmounted(() => {
+  ScrollTrigger.getById(SCROLL_TRIGGER_IDS.RECOMMENDATIONS_PIN_IMAGE)?.kill(true);
+  for (const trigger of scrollTriggers) {
+    trigger.kill(true);
+  }
 });
 </script>
 

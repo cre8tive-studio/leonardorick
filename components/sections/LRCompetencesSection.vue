@@ -42,17 +42,20 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import type { CompetenceNameOptions } from '~/types/competences.model';
 import { COMPETENCES } from '~/utils/constants/competences';
+import { SCROLL_TRIGGER_IDS } from '~/utils/constants/scroll-trigger-ids';
 
 const BASE_HEIGHT = 130;
 const section = ref<HTMLDivElement>();
 const mainContainer = ref<HTMLDivElement>();
 const phraseScrollMarkers = ref<HTMLDivElement[] | undefined>();
 const containersCount = ref(0);
+
 onMounted(() => {
   /**
    * sticky main content on view until the whole wrapper is out of screen
    */
   ScrollTrigger.create({
+    id: SCROLL_TRIGGER_IDS.COMPETENECES_PIN,
     trigger: '.s-LRCompetencesSection',
     pin: mainContainer.value,
     start: 'top top',
@@ -67,6 +70,7 @@ onMounted(() => {
   const tl = gsap.timeline({
     paused: true,
     scrollTrigger: {
+      id: SCROLL_TRIGGER_IDS.COMPETENECES_TIMELINE,
       trigger: '.s-LRCompetencesSection',
       start: 'top center+=5%',
     },
@@ -136,6 +140,11 @@ onMounted(() => {
       index ? '<' : ''
     );
   });
+});
+
+onUnmounted(() => {
+  ScrollTrigger.getById(SCROLL_TRIGGER_IDS.COMPETENECES_PIN)?.kill(true);
+  ScrollTrigger.getById(SCROLL_TRIGGER_IDS.COMPETENECES_TIMELINE)?.kill(true);
 });
 
 async function setContainerHeight(count: number, max: number) {

@@ -26,10 +26,11 @@
 
 <script setup lang="ts">
 import { gsap } from 'gsap';
-
+import { ScrollTrigger } from 'gsap/all';
 import SplitType from 'split-type';
 import type { GeneralsModel } from '../types/generals.model';
 import { getGeneralsFullText } from '~/utils/parsers/generals.parser';
+import { SCROLL_TRIGGER_IDS } from '~/utils/constants/scroll-trigger-ids';
 interface Props {
   info: GeneralsModel;
 }
@@ -40,6 +41,8 @@ interface ComponentParagraphInfo {
 const tags = ref<HTMLElement[]>();
 const { info } = defineProps<Props>();
 const paragraphsFullText: Record<string, ComponentParagraphInfo> = reactive({});
+
+const scrollTriggerId = computed(() => SCROLL_TRIGGER_IDS.GENERALS + info.id);
 
 onMounted(async () => {
   setMetadata();
@@ -56,10 +59,11 @@ function init() {
     const text = new SplitType(tag, {
       types: 'words,chars',
     });
-    gsap.killTweensOf(tag);
+    // gsap.killTweensOf(tag);
     // todo set how animations happens based on animationType defined in payload
     gsap.from(text.chars, {
       scrollTrigger: {
+        id: scrollTriggerId.value,
         trigger: tag,
         start: 'top 93%',
         end: 'top 42%',
@@ -70,6 +74,10 @@ function init() {
     });
   }
 }
+
+onUnmounted(() => {
+  ScrollTrigger.getById(scrollTriggerId.value)?.kill(true);
+});
 
 function setMetadata() {
   for (const paragraph of info.data) {

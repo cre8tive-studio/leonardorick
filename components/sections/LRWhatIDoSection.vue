@@ -16,7 +16,10 @@
                   </span>
                 </span>
               </div>
-              <h2 ref="items">
+              <h2
+                :id="item.id"
+                ref="items"
+              >
                 {{ item.title }}
               </h2>
             </div>
@@ -29,11 +32,16 @@
 
 <script setup lang="ts">
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/all';
 import SplitType from 'split-type';
 import { useAppStore } from '~/store';
 import type { TitleDescriptionModel } from '~/types/title-description.model';
+import { SCROLL_TRIGGER_IDS } from '~/utils/constants/scroll-trigger-ids';
 import { getGeneralsFullText } from '~/utils/parsers/generals.parser';
+
 const { generals } = toRefs(useAppStore());
+const items = ref<HTMLHeadingElement[]>();
+
 const whatIDoList = computed(() => generals.value.find((general) => general.key === 'what-i-do')?.data || []);
 
 const whatIDoTItle = computed(
@@ -57,7 +65,6 @@ const whatIdoContent = computed(() =>
   }, [] as TitleDescriptionModel[])
 );
 
-const items = ref<HTMLHeadingElement[]>();
 onMounted(() => {
   if (!items.value || !items.value.length) return;
   for (const li of items.value) {
@@ -71,6 +78,7 @@ onMounted(() => {
       },
       {
         scrollTrigger: {
+          id: getScrollerId(li.id),
           trigger: li,
           start: 'top bottom',
           end: 'top 40%',
@@ -82,6 +90,17 @@ onMounted(() => {
     );
   }
 });
+
+onUnmounted(() => {
+  if (!whatIdoContent.value) return;
+  for (const item of whatIdoContent.value) {
+    ScrollTrigger.getById(getScrollerId(String(item.id)))?.kill(true);
+  }
+});
+
+function getScrollerId(id?: string) {
+  return `${SCROLL_TRIGGER_IDS.WHAT_I_DO}-${id}`;
+}
 </script>
 
 <style scoped lang="scss">
