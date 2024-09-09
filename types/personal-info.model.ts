@@ -1,5 +1,7 @@
 export interface PersonalInfoModel {
+  name: string;
   email: string;
+  startWorkingDate: string;
   globalType: 'personalInfo';
   links: {
     linkedin: string;
@@ -7,6 +9,5 @@ export interface PersonalInfoModel {
     stackoverflow: string;
     spotify: string;
   };
-  name: string;
   id: string;
 }

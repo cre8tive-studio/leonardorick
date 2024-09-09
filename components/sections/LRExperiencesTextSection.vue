@@ -17,14 +17,26 @@
 <script setup lang="ts">
 import { useAppStore } from '~/store';
 import { COLORS } from '~/utils/constants/colors';
+import { DEFAULTS } from '~/utils/constants/defaults';
 
 interface Props {
   refreshKey: number;
 }
 defineProps<Props>();
 
-const { generals } = toRefs(useAppStore());
-const experienceContent = computed(() => generals.value.find((general) => general.key === 'experience'));
+const { generals, personalInfo } = toRefs(useAppStore());
+
+const experienceYears = computed(
+  () =>
+    new Date().getFullYear() - new Date(personalInfo.value?.startWorkingDate || DEFAULTS.startWorkingDate).getFullYear()
+);
+const experienceContent = computed(() => {
+  const experience = structuredClone(toRaw(generals.value.find((general) => general.key === 'experience')));
+  if (experience) {
+    experience.data[1]?.text.unshift({ text: `${experienceYears.value} ` });
+  }
+  return experience;
+});
 const colors = [COLORS.blue1, COLORS.blue2, COLORS.blue3, COLORS.blue4, COLORS.blue5];
 const tilesBackgroundColor = COLORS.mainDarkBg;
 </script>

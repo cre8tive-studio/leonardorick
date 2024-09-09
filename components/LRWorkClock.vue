@@ -13,6 +13,8 @@
 
 <script setup lang="ts">
 import { gsap } from 'gsap';
+import { useAppStore } from '~/store';
+import { DEFAULTS } from '~/utils/constants/defaults';
 import { dateDifference } from '~/utils/js-utilities';
 interface Props {
   containersQuery: string;
@@ -21,6 +23,7 @@ interface Emits {
   (e: 'set-container-height', count: number, max: number): void;
 }
 
+const { personalInfo } = toRefs(useAppStore());
 const $t = useNuxtApp().$i18n.t;
 const $emit = defineEmits<Emits>();
 const { containersQuery } = defineProps<Props>();
@@ -28,7 +31,7 @@ const { containersQuery } = defineProps<Props>();
 const paragraphs = ref<HTMLParagraphElement[]>();
 
 // date I started woking. 9 in the morning in brazil is 12 in GMT+0;
-const initialDate = new Date('2018-07-01T12:00:00.000Z');
+const initialDate = new Date(personalInfo.value?.startWorkingDate || DEFAULTS.startWorkingDate);
 const years = ref(0);
 const months = ref(0);
 const days = ref(0);

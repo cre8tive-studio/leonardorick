@@ -28,11 +28,11 @@
         </ul>
       </div>
       <div class="second-column flex-1 flex flex-col">
-        <h2>Let's build something together</h2>
+        <h2>{{ $t('footer_message') }}</h2>
         <div class="email">
           <h4 class="relative">Email</h4>
           <div class="email__overlay">
-            <h4>100% change I'll read it</h4>
+            <h4>{{ $t('footer_message_email') }}</h4>
             <a>[hidden]</a>
           </div>
 

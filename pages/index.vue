@@ -7,7 +7,7 @@
     <LRTimelineSection />
     <LRCompetencesSection />
     <LRRecommendationsSection />
-    <LRQuotesSection />
+    <LRQuotesSection :key="refreshKey" />
     <LRFooterController />
   </template>
   <template v-else>

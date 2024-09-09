@@ -9,14 +9,14 @@
         class="timeline-entry"
       >
         <h3 class="time">
-          <div class="over-layer over-layer-time" />
+          <div class="overlay overlay-time" />
           <span>
             {{ experience.year }}
           </span>
         </h3>
         <div class="description">
           <h3 class="description-title">{{ experience.title }}</h3>
-          <div class="over-layer over-layer-description">
+          <div class="overlay overlay-description">
             <h3 class>{{ experience.funTitle }}</h3>
             <h4 aria-hidden="true">[hidden]</h4>
           </div>
@@ -79,13 +79,13 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
       height: 8rem;
 
       &:has(~ .description:hover) {
-        .over-layer {
+        .overlay {
           transform: scaleY(1);
         }
       }
       &:hover {
         + .description {
-          .over-layer {
+          .overlay {
             transform: scaleY(1);
           }
 
@@ -94,7 +94,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
           }
         }
 
-        .over-layer {
+        .overlay {
           transform: scaleY(1);
         }
         .description-title {
@@ -133,7 +133,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
         color: $main-dark-text-dark;
       }
     }
-    .over-layer {
+    .overlay {
       position: absolute;
       top: 0;
       left: 0;
@@ -158,6 +158,9 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
         justify-content: center;
         h3 {
           margin-bottom: 1rem;
+          font-size: min(1.7vw, 4rem);
+          line-height: min(1.7vw, 4rem);
+          letter-spacing: 0.2rem;
         }
         h4 {
           visibility: hidden;

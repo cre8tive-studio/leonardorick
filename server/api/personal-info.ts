@@ -12,8 +12,7 @@ export default defineEventHandler(async (event) => {
       PersonalInfo {
         name
         email
-        updatedAt
-        createdAt
+        startWorkingDate
         links {
           linkedin
           github

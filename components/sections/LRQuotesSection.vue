@@ -21,9 +21,39 @@ import { useAppStore } from '~/store';
 import type { QuoteModel } from '~/types/quote.model';
 
 const { quotes } = toRefs(useAppStore());
+
 const selectedQuote = ref<QuoteModel | undefined>(quotes.value[0]);
 
 let quotesClone = [...quotes.value];
+
+onMounted(() => {
+  quotesClone = [...quotes.value];
+
+  selectRandomQuote();
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '.s-LRQuotesSection',
+      once: true,
+      start: 'top center',
+    },
+    repeat: -1,
+    // might be needed if scrollTrigger is removed. but for now,
+    // just delaying the animation repetition worked well.
+    // repeatDelay: 7
+  });
+  tl.to('.s-LRQuotesSection', {
+    opacity: 0,
+    repeat: 1,
+    yoyo: true,
+    delay: 6,
+    duration: 3,
+    onRepeat: () => {
+      selectRandomQuote();
+    },
+  });
+});
+
 function selectRandomQuote() {
   const maxIndex = quotesClone.length - 1;
 
@@ -53,31 +83,6 @@ function selectRandomQuote() {
   // you can test if things fit properly on the screen
   // selectedQuote.value = quotesClone[9];
 }
-selectRandomQuote();
-
-onMounted(() => {
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: '.s-LRQuotesSection',
-      once: true,
-      start: 'top center',
-    },
-    repeat: -1,
-    // might be needed if scrollTrigger is removed. but for now,
-    // just delaying the animation repetition worked well.
-    // repeatDelay: 7
-  });
-  tl.to('.s-LRQuotesSection', {
-    opacity: 0,
-    repeat: 1,
-    yoyo: true,
-    delay: 6,
-    duration: 3,
-    onRepeat: () => {
-      selectRandomQuote();
-    },
-  });
-});
 </script>
 
 <style scoped lang="scss">
