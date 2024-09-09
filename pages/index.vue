@@ -2,12 +2,11 @@
   <div v-if="loaded">
     <LRMainSection />
     <LRAboutMeSection :refresh-key="refreshKey" />
-    <LRExperiencesTextSection :refresh-key="refreshKey" />
-
     <LRWhatIDoSection />
+    <LRExperiencesTextSection :refresh-key="refreshKey" />
     <LRTimelineSection />
     <LRCompetencesSection />
-    <LRRecommendations />
+    <LRRecommendationsSection />
     <LRQuotesSection />
     <LRFooterController />
 

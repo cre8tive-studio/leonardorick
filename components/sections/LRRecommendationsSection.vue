@@ -1,5 +1,5 @@
 <template>
-  <div class="s-LRRecommendations lr-section-page lr-section-page-no-paddings">
+  <div class="s-LRRecommendationsSection lr-section-page lr-section-page-no-paddings">
     <h1 class="lr-section-page-paddings section-h1">{{ $t('what_they_said') }}</h1>
     <div class="lr-section-page-paddings recommendations">
       <div class="quote-col">
@@ -79,7 +79,7 @@ onMounted(() => {
    */
   ScrollTrigger.create({
     id: SCROLL_TRIGGER_IDS.RECOMMENDATIONS_PIN_IMAGE,
-    trigger: '.s-LRRecommendations',
+    trigger: '.s-LRRecommendationsSection',
     pin: '.images-col',
     start: 'top top',
     pinSpacing: false,
@@ -119,7 +119,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
-.s-LRRecommendations {
+.s-LRRecommendationsSection {
   display: flex;
   flex-direction: column;
   position: relative;

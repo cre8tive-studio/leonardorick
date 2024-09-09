@@ -77,7 +77,7 @@ async function setHomeView(
         },
         responseType: 'blob',
         // sadly if we call in server it gives a weird error: Cannot stringify arbitrary non-POJOs.
-        // try to debug that later and remove the <ClientOnly> tag on LRRecommendations.vue after fixing it.
+        // try to debug that later and remove the <ClientOnly> tag on LRRecommendationsSection.vue after fixing it.
         // if somehow it works, remember to remove the <ClientOnly tag from the recommendations images
         server: false,
         transform(input: Blob) {

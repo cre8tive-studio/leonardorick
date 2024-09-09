@@ -33,7 +33,6 @@ const useAnimations = () => {
 
   async function activate() {
     const LRModelTimeout = setLRModelTimeout();
-
     const unwatch = watch(isLRModelLoaded, () => {
       clearTimeout(LRModelTimeout);
       hideOverlay();
@@ -42,14 +41,11 @@ const useAnimations = () => {
 
     if (!isWebglSupported()) {
       hideOverlay();
-      // eslint-disable-next-line no-console
       console.warn('WebGL not supported so most animations will be disabled');
       return;
     }
 
     setupListeners();
-
-    fluid.activate();
     lenis.activate();
     await leonardorick.activate(isDebug);
 
@@ -153,6 +149,10 @@ const useAnimations = () => {
         duration: 2,
         opacity: 0,
         onStart: () => {
+          // we only activate the fluid when the overlay is gone
+          // so we can see the first color as the first colour is
+          // possible to specify to be the same
+          fluid.activate();
           isScrollEnabled.value = true;
         },
         onComplete: () => {

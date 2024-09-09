@@ -71,7 +71,7 @@ onMounted(() => {
     opacity: 0,
     repeat: 1,
     yoyo: true,
-    delay: 7,
+    delay: 6,
     duration: 3,
     onRepeat: () => {
       selectRandomQuote();
