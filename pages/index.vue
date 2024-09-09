@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loaded">
+  <template v-if="loaded">
     <LRMainSection />
     <LRAboutMeSection :refresh-key="refreshKey" />
     <LRWhatIDoSection />
@@ -9,8 +9,12 @@
     <LRRecommendationsSection />
     <LRQuotesSection />
     <LRFooterController />
+  </template>
+  <template v-else>
+    <LRMainErrorSection />
+  </template>
 
-    <!-- <div class="lr-section-page">
+  <!-- <div class="lr-section-page">
       <div class="wrapper-default-generals-text">
         <LRGeneralText
           v-if="environmentContent"
@@ -19,7 +23,6 @@
         />
       </div>
     </div> -->
-  </div>
 </template>
 
 <script setup lang="ts">

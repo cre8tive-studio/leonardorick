@@ -6,6 +6,8 @@
     "hour": "Hour | Hours",
     "login": "Login",
     "logout": "Logout",
+    "main_error_title": "It was not possible to load Home information",
+    "main_error_subtitle": "You can navigate to the Music page or enjoy the mouse effect. Sorry about that.",
     "minute": "Minute | Minutes",
     "month": "Month | Months",
     "music": "Music",

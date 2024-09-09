@@ -6,6 +6,8 @@
     "hour": "Hora | Horas",
     "login": "Login",
     "logout": "Sair",
+    "main_error_title": "Não foi possível carregar as informações da Home",
+    "main_error_subtitle": "Você pode visitar a página de Música ou curtir o efeito do mouse. Desculpa por isso.",
     "minute": "Minuto | Minutos",
     "month": "Mês | Meses",
     "music": "Música",
