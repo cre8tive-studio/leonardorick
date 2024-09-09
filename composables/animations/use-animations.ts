@@ -20,7 +20,9 @@ const useAnimations = () => {
     isOverlayCompleteHidden,
     isLRModelLoaded,
     isLRModelTimedout,
+    isScrollEnabled,
   } = toRefs(useAnimationStore());
+
   const lenis = useLenis();
   const fluid = useFluid();
   const leonardorick = useLeonardoRick();
@@ -128,33 +130,41 @@ const useAnimations = () => {
   }
 
   function hideOverlay() {
+    isScrollEnabled.value = false;
+    if (!logoOverlayRef.value || !loadingBarRef.value || !cubeLoaderContainerRef.value) {
+      isScrollEnabled.value = true;
+      return;
+    }
+
     const tl = gsap.timeline();
-    if (logoOverlayRef.value && loadingBarRef.value && cubeLoaderContainerRef.value) {
-      // hide only topbar first
-      tl.to(loadingBarRef.value, {
-        delay: 0.5,
+    // hide only topbar first
+    tl.to(loadingBarRef.value, {
+      delay: 0.5,
+      duration: 0.3,
+      opacity: 0,
+    })
+      // hide cube loader
+      .to(cubeLoaderContainerRef.value, {
         duration: 0.3,
         opacity: 0,
       })
-        // hide cube loader
-        .to(cubeLoaderContainerRef.value, {
-          duration: 0.3,
-          opacity: 0,
-        })
-        // hide overlay completly
-        .to(logoOverlayRef.value, {
-          duration: 2,
-          opacity: 0,
-          onComplete: () => {
-            if (logoOverlayRef.value) {
-              // Once the animation is complete, set the display to 'none'
-              logoOverlayRef.value.style.display = 'none';
-              isOverlayCompleteHidden.value = true;
-            }
-          },
-        });
-    }
+      // hide overlay completly
+      .to(logoOverlayRef.value, {
+        duration: 2,
+        opacity: 0,
+        onStart: () => {
+          isScrollEnabled.value = true;
+        },
+        onComplete: () => {
+          if (logoOverlayRef.value) {
+            // Once the animation is complete, set the display to 'none'
+            logoOverlayRef.value.style.display = 'none';
+            isOverlayCompleteHidden.value = true;
+          }
+        },
+      });
   }
+
   function setLRModelTimeout() {
     return setTimeout(() => {
       isLRModelTimedout.value = true;
@@ -178,7 +188,6 @@ const useAnimations = () => {
   }
 
   return {
-    lenisActivate: lenis.activate,
     activate,
     cleanup,
   };

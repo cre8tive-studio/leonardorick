@@ -17,6 +17,7 @@ interface AnimationStoreModel {
   cursorInner: HTMLDivElement | undefined;
   isCursorActivated: boolean;
   isMagneticHoverActivated: boolean;
+  isScrollEnabled: boolean;
 }
 
 export const useAnimationStore = defineStore('animationStore', () => {
@@ -37,14 +38,10 @@ export const useAnimationStore = defineStore('animationStore', () => {
     cursorInner: undefined,
     isCursorActivated: false,
     isMagneticHoverActivated: false,
+    isScrollEnabled: true,
   });
-
-  const changeScrollLayoutOverflow = (overflow: 'auto' | 'hidden') => {
-    document.body.style.overflowY = overflow;
-  };
 
   return {
     ...toRefs(state),
-    changeScrollLayoutOverflow,
   };
 });

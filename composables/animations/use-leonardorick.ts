@@ -49,8 +49,8 @@ const useLeonardoRick = () => {
 
   const { isMobile } = useDevice();
   const store = useAnimationStore();
-  const { logoCanvas, isEnteringAnimationFinished, isLRModelLoaded, loadingProgress, loadingTotal } = toRefs(store);
-  const { changeScrollLayoutOverflow } = store;
+  const { logoCanvas, isEnteringAnimationFinished, isLRModelLoaded, loadingProgress, loadingTotal, isScrollEnabled } =
+    toRefs(store);
   const { fluidExplosion } = useFluid();
 
   const activated = ref(false);
@@ -168,7 +168,7 @@ const useLeonardoRick = () => {
   const MOUSE_LIGHT_INTENSITY_AFTER_ENTERING = 0.13;
   const ENTERING_ANIMATION_SCROLL_POSITION = 210;
   const isAnimatingEntering = ref(false);
-  const shouldBlockScroll = ref(false);
+  const shouldBlock3DScroll = ref(false);
   let INITIAL_CAMERA_POSITION: Vector3;
   let INITIAL_CAMERA_ROTATION: Euler;
   const getRealScrollTop = () => document.documentElement.scrollTop;
@@ -251,7 +251,7 @@ const useLeonardoRick = () => {
      * after entering we don't want to scroll anymore, so anything
      * that should happnen only outside this control flag
      */
-    if (!shouldBlockScroll.value) {
+    if (!shouldBlock3DScroll.value) {
       if (
         getRealScrollTop() > ENTERING_ANIMATION_SCROLL_POSITION - 50 &&
         !isAnimatingEntering.value &&
@@ -307,6 +307,14 @@ const useLeonardoRick = () => {
   function animateEntering() {
     const tl = gsap.timeline({
       onComplete: () => {
+        shouldBlock3DScroll.value = true;
+        thisCamera.position.copy(INITIAL_CAMERA_POSITION);
+        thisCamera.rotation.copy(INITIAL_CAMERA_ROTATION);
+
+        if (all.mesh) {
+          all.mesh.scale.set(0, 0, 0);
+        }
+
         isAnimatingEntering.value = false;
         isEnteringAnimationFinished.value = true;
 
@@ -319,7 +327,6 @@ const useLeonardoRick = () => {
     const clone = gltfModel.instances[GLTFModelKeys.clone];
     const all = gltfModel.instances[GLTFModelKeys.all];
     if (clone.mesh && clone.finalScale && gsapAnimations.motion && gsapAnimations.overlay) {
-      changeScrollLayoutOverflow('hidden');
       gsapAnimations.motion.pause();
       gsapAnimations.overlay.pause();
       thisCamera.updateMatrixWorld();
@@ -333,36 +340,26 @@ const useLeonardoRick = () => {
           onComplete: () => {
             fluidExplosion();
             turnOffLights();
-            // activate if adding  floot again
+            // uncomment if adding  floot again
             // if (logoCanvas.value) {
             //   logoCanvas.value.style.zIndex = '-1';
             // }
           },
         });
 
-      if (floor.mat && floor.self.mesh) {
-        // hide floor
-        tl.to(floor.self.mesh.scale, { x: 0, y: 0, z: 0 }, '<')
-          // hide mat
-          .to(
-            floor.mat.material,
-            {
-              opacity: 0,
-              onComplete: () => {
-                shouldBlockScroll.value = true;
-                thisCamera.position.copy(INITIAL_CAMERA_POSITION);
-                thisCamera.rotation.copy(INITIAL_CAMERA_ROTATION);
-
-                if (all.mesh) {
-                  all.mesh.scale.set(0, 0, 0);
-                }
-
-                changeScrollLayoutOverflow('auto');
-              },
-            },
-            '<'
-          );
-      }
+      // uncomment if adding floor again
+      // if (floor.mat && floor.self.mesh) {
+      //   // hide floor
+      //   tl.to(floor.self.mesh.scale, { x: 0, y: 0, z: 0 }, '<')
+      //     // hide mat
+      //     .to(
+      //       floor.mat.material,
+      //       {
+      //         opacity: 0,
+      //       },
+      //       '<'
+      //     );
+      // }
 
       if (lights.mouseLight && lights.ambientLight) {
         // decrease mouse light
@@ -592,7 +589,6 @@ const useLeonardoRick = () => {
    * and hide the overlay
    */
   function setupGsapLoadingAnimation() {
-    changeScrollLayoutOverflow('hidden');
     const FADE_IN_DURATION = 2;
 
     const tl = gsap.timeline({
@@ -600,7 +596,6 @@ const useLeonardoRick = () => {
         if (thisPane) {
           thisPane.refresh();
         }
-        changeScrollLayoutOverflow('auto');
       },
     });
 
