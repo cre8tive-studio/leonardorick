@@ -1,9 +1,5 @@
 # BUGS OR FEATURES REQUIRED BEFORE RESPONSIVENESS FIX
 
-Fix texts content
-
-Fix language picker not showing the full name of portugues
-
 Setup posthog in production
 
 Improve magnetic
@@ -36,7 +32,7 @@ About me related to who is reading https://billysweeney.com/
 # FEATURES THAT I REALLY WANT
 
 create a nice console.log signature like https://hontran.dev/
-|-- something like "got you sneakyy, if you have any questions about something that was implemented here in this website, just drop me a message on linkein "
+|-- something like "can I ask why your enakking on my website? :D. If you have any questions about something that was implemented here in this website, just drop me a message on linkein "
 
 do this with header: https://gsap.com/community/forums/topic/39286-scrolltrigger-lenis-problem/
 
@@ -58,3 +54,5 @@ stop caching images with useFetch
 
 change main deploy to nuxtHub
 |--change cloudinary images to nuxtHub
+
+Add an icon on each footer link indicating that it will open another tab

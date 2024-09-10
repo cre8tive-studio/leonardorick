@@ -4,7 +4,7 @@
       :colors="colors"
       :background-color="tilesBackgroundColor"
     />
-    <div class="wrapper-default-generals-text lr-section-page-paddings lr-safe-pointer-events-none">
+    <div class="wrapper-default-generals-text lr-section-page-paddings pointer-events-none">
       <LRGeneralText
         v-if="experienceContent"
         :key="refreshKey"

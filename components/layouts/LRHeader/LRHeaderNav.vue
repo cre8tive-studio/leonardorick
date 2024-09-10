@@ -1,6 +1,6 @@
 <template>
   <nav class="c-LRHeaderNav">
-    <ul class="pb-5 flex flex-col gap-4">
+    <ul class="pb-3 flex flex-col gap-4">
       <li>
         <NuxtLink
           lr-cursor
@@ -51,7 +51,10 @@
       </ClientOnly>
     </ul>
     <form class="language-select-form">
-      <select v-model="lang">
+      <select
+        lr-cursor
+        v-model="lang"
+      >
         <option value="en">{{ $t('english') }}</option>
         <option value="pt-BR">{{ $t('portuguese') }}</option>
       </select>
@@ -89,8 +92,18 @@ const handleLogout = async () => {
   .language-select-form {
     select {
       background: transparent;
-      width: 80px;
+      border-radius: 8px;
+      text-align: right;
+
+      height: 35px;
+      font-weight: 700;
+
       cursor: pointer;
+      text-transform: uppercase;
+
+      &:focus {
+        outline: 0;
+      }
     }
   }
 }

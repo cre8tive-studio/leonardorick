@@ -1,6 +1,6 @@
 <template>
   <div class="about-me lr-section-page lr-section-page-no-paddings relative">
-    <div class="about-me-text wrapper-default-generals-text lr-section-page-paddings lr-safe-pointer-events-none">
+    <div class="about-me-text wrapper-default-generals-text lr-section-page-paddings pointer-events-none">
       <LRGeneralText
         v-if="aboutMeContent"
         :key="refreshKey"
