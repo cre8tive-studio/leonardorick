@@ -10,7 +10,8 @@
     <LRQuotesSection :key="refreshKey" />
     <LRFooterController />
   </template>
-  <template v-else>
+
+  <template v-if="isContentErrored">
     <LRMainErrorSection />
   </template>
 
@@ -27,12 +28,12 @@
 
 <script setup lang="ts">
 import { useAppStore } from '~/store';
-const { loaded, contentLoaded } = toRefs(useAppStore());
+const { loaded, isContentLoaded, isContentErrored } = toRefs(useAppStore());
 const refreshKey = ref(0);
 
 // const environmentContent = computed(() => generals.value.find((general) => general.key === 'environment'));
 
-watch(contentLoaded, () => {
+watch(isContentLoaded, () => {
   refreshKey.value++;
 });
 </script>

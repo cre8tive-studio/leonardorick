@@ -49,8 +49,7 @@ const useLeonardoRick = () => {
 
   const { isMobile } = useDevice();
   const store = useAnimationStore();
-  const { logoCanvas, isEnteringAnimationFinished, isLRModelLoaded, loadingProgress, loadingTotal, isScrollEnabled } =
-    toRefs(store);
+  const { logoCanvas, isEnteringAnimationFinished, isLRModelLoaded, loadingProgress, loadingTotal } = toRefs(store);
   const { fluidExplosion } = useFluid();
 
   const activated = ref(false);

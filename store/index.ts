@@ -16,10 +16,11 @@ export const useAppStore = defineStore('store', () => {
       jwt: '',
       expire: 0,
     },
-    contentLoaded: false,
+    isContentLoaded: false,
+    isContentErrored: false,
   });
 
-  const loaded = computed(() => state.contentLoaded && animationsStore.isLRModelLoaded);
+  const loaded = computed(() => state.isContentLoaded && animationsStore.isLRModelLoaded);
 
   return {
     ...toRefs(state),

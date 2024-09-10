@@ -28,31 +28,34 @@ const {
   $fetchInitialData,
   $initializerClientError,
 } = nuxtApp;
-const { contentLoaded, lang, recommendations, experiences, quotes, generals, personalInfo } = toRefs(useAppStore());
+const { isContentLoaded, isContentErrored, lang, recommendations, experiences, quotes, generals, personalInfo } =
+  toRefs(useAppStore());
 
 if ($initializerClientError) {
   // todo setup modal error
   // eslint-disable-next-line no-console
   console.error($initializerClientError);
-  const x = 1141110;
 }
 
 watch(lang, async () => {
-  contentLoaded.value = false;
+  isContentLoaded.value = false;
   const res = await $fetchInitialData();
-  if (res.$recommendations && res.$quotes && res.$experiences && res.$generals) {
-    setHomeView(res.$recommendations, res.$quotes, res.$experiences, res.$generals);
+  if (!res.$recommendations || res.$quotes || res.$experiences || res.$generals) {
+    isContentErrored.value = true;
+    return;
   }
+  setHomeView(res.$recommendations, res.$quotes, res.$experiences, res.$generals);
 });
 
-if ($recommendations.value && $quotes.value && $generals.value && $experiences.value) {
-  await setHomeView($recommendations.value, $quotes.value, $experiences.value, $generals.value);
-  contentLoaded.value = true;
-}
+onMounted(async () => {
+  if (!$personalInfo.value || !$recommendations.value || !$quotes.value || !$generals.value || !$experiences.value) {
+    isContentErrored.value = true;
+    return;
+  }
 
-if ($personalInfo.value) {
   personalInfo.value = $personalInfo.value;
-}
+  await setHomeView($recommendations.value, $quotes.value, $experiences.value, $generals.value);
+});
 
 async function setHomeView(
   rcs: RecommendationModel[],
@@ -113,6 +116,6 @@ async function setHomeView(
     }
   });
   recommendations.value.sort((r1, r2) => r1.order || 0 - (r2.order || 0));
-  contentLoaded.value = true;
+  isContentLoaded.value = true;
 }
 </script>

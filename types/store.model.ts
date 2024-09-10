@@ -20,5 +20,6 @@ export interface StoreModel {
     jwt: string;
     expire: number;
   };
-  contentLoaded: boolean;
+  isContentLoaded: boolean;
+  isContentErrored: boolean;
 }

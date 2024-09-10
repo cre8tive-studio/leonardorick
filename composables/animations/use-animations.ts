@@ -7,6 +7,7 @@ import useCursor from './use-cursor';
 import useMagneticHover from './use-magnetic-hover';
 import { useAnimationStore } from '~/store/animation';
 import { setFPS, runWithControlledFPS } from '~/utils/run-with-controlled-fps';
+import { COLORS } from '~/utils/constants/colors';
 
 const LR_TIMEOUT_SECONDS = 10;
 
@@ -34,9 +35,11 @@ const useAnimations = () => {
   async function activate() {
     const LRModelTimeout = setLRModelTimeout();
     const unwatch = watch(isLRModelLoaded, () => {
-      clearTimeout(LRModelTimeout);
-      hideOverlay();
-      unwatch();
+      if (isLRModelLoaded.value) {
+        clearTimeout(LRModelTimeout);
+        hideOverlay();
+        unwatch();
+      }
     });
 
     if (!isWebglSupported()) {
@@ -81,6 +84,7 @@ const useAnimations = () => {
     document.addEventListener('pointerup', pointerupHandler);
     document.addEventListener('pointerdown', pointerdownHandler);
     document.addEventListener('keydown', keydownHandler);
+    window.addEventListener('beforeunload', beforeUnloadHandler);
     window.addEventListener('scroll', scrollHandler);
   }
 
@@ -111,6 +115,20 @@ const useAnimations = () => {
     cursor.listeners.scroll(e);
   }
 
+  function visibilityChangeHandler() {
+    isDocumentVisible.value = document.visibilityState === 'visible';
+  }
+
+  function beforeUnloadHandler() {
+    // setting html background avoid white flicker. Since reload removes
+    // it after it's fine to leave it here, but, keep in mind that adding
+    // html background will hide lodo and fluid
+    const html = document.querySelector('html');
+    if (html) {
+      html.style.background = COLORS.mainDarkBg;
+    }
+  }
+
   function cleanup() {
     document.removeEventListener('visibilitychange', visibilityChangeHandler);
     document.removeEventListener('mousemove', mousemoveHandler);
@@ -118,11 +136,8 @@ const useAnimations = () => {
     document.removeEventListener('pointerdown', pointerdownHandler);
     document.removeEventListener('keydown', keydownHandler);
     window.removeEventListener('scroll', scrollHandler);
+    window.removeEventListener('beforeunload', beforeUnloadHandler);
     lenis.cleanup();
-  }
-
-  function visibilityChangeHandler() {
-    isDocumentVisible.value = document.visibilityState === 'visible';
   }
 
   function hideOverlay() {
