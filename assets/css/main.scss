@@ -58,6 +58,8 @@
 }
 
 .lr-section-page {
+  // svg handles mobile problem that 100vh
+  // actually considers the navigation bar
   height: 100svh;
 }
 

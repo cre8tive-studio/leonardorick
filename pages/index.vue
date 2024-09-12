@@ -2,13 +2,13 @@
   <template v-if="loaded">
     <LRMainSection />
     <LRAboutMeSection :refresh-key="refreshKey" />
-    <LRWhatIDoSection />
+    <!-- <LRWhatIDoSection />
     <LRExperiencesTextSection :refresh-key="refreshKey" />
     <LRTimelineSection />
     <LRCompetencesSection />
     <LRRecommendationsSection />
     <LRQuotesSection :key="refreshKey" />
-    <LRFooterController />
+    <LRFooterController /> -->
   </template>
 
   <template v-if="isContentErrored">

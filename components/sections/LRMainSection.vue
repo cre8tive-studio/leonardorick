@@ -45,8 +45,14 @@ onMounted(() => {
 });
 
 function runAnimations() {
-  animateTitleOverflow();
   animateTitleRollingChars();
+  // starting both animations at the same time was
+  // causing some flickering on the pinning. since 100ms
+  // is not pereceptive for this scenario, we add this solid
+  // value to ensure initial needed value for pinning are available
+  setTimeout(() => {
+    animateTitleOverflow();
+  }, 100);
 }
 
 function animateTitleOverflow() {
@@ -124,7 +130,6 @@ function animateRollingChars(split: SplitType) {
 
   .title--container {
     position: relative;
-
     top: 0;
     display: flex;
     justify-content: center;
@@ -133,20 +138,21 @@ function animateRollingChars(split: SplitType) {
 
   .title {
     position: relative;
-    font-size: min(12.8vw, 30rem);
-    font-weight: 700;
     bottom: 0;
+    font-size: min(12.6vw, 30rem);
+    font-weight: 700;
     letter-spacing: 0.03em;
     text-transform: uppercase;
     white-space: nowrap;
 
     .registered-icon {
-      position: relative;
+      font-size: 0.3em;
+      line-height: 1em;
       height: 100%;
       font-weight: 100;
-      line-height: 12.97vw;
-      font-size: max(3vw, 1rem);
-      top: -5.5vw;
+
+      position: relative;
+      top: max(-11vw, -25rem);
 
       // make it work on the outline
       -webkit-text-stroke: 0px;
