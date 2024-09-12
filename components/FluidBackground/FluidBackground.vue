@@ -17,7 +17,7 @@ onMounted(() => {
 <style scoped lang="scss">
 canvas {
   width: 100vw;
-  height: 100vh;
+  height: 100svh;
   background-color: transparent;
   position: fixed;
   z-index: -40;

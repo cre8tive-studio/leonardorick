@@ -181,7 +181,7 @@ function getName(element: HTMLElement): CompetenceNameOptions {
 
   .main-container {
     container-type: size;
-    height: 100vh;
+    height: 100svh;
     flex-grow: 1;
     position: relative;
     display: flex;

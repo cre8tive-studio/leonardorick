@@ -122,7 +122,7 @@ function toggleMobileMenu() {
 
     top: 0;
     left: 0;
-    height: 100vh;
+    height: 100svh;
     width: 100vw;
     padding: 1rem;
     z-index: 20;

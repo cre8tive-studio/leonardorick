@@ -1,22 +1,19 @@
 <template>
-  <div class="main lr-section-page">
-    <div
-      ref="mainTitleContainer"
-      class="main__title--container"
-    >
+  <div class="s-LRMainSection lr-section-page lr-section-page-no-paddings">
+    <div class="title--container">
       <h1
         ref="nameTitle"
-        class="main__title title-splitted title-filled"
+        class="title title-splitted title-filled"
       >
-        {{ nameText }}
+        <span class="main">{{ nameText }}</span>
         <span class="registered-icon">®</span>
       </h1>
       <h1
         ref="nameTitleOutline"
         aria-hidden="true"
-        class="main__title title-splitted title-outline"
+        class="title title-splitted title-outline"
       >
-        {{ nameText }}
+        <span class="main">{{ nameText }}</span>
         <span class="registered-icon">®</span>
       </h1>
     </div>
@@ -32,12 +29,10 @@ import { SCROLL_TRIGGER_IDS } from '~/utils/constants/scroll-trigger-ids';
 import { ScrollTrigger } from 'gsap/all';
 
 const { loaded, personalInfo } = toRefs(useAppStore());
-const mainTitleContainer = ref<HTMLDivElement>();
 const nameTitle = ref<HTMLDivElement>();
 const nameTitleOutline = ref<HTMLDivElement>();
 
 const nameText = computed(() => personalInfo.value?.name || '');
-
 onMounted(() => {
   if (nameTitle.value) {
     runAnimations();
@@ -60,7 +55,7 @@ function animateTitleOverflow() {
   const tl = gsap.timeline({
     scrollTrigger: {
       id: SCROLL_TRIGGER_IDS.NAME_MAIN_TEXT,
-      trigger: '.main',
+      trigger: '.s-LRMainSection',
       start: 'top top',
       end: () => window.innerWidth * 0.094,
       pin: nameTitle.value,
@@ -120,40 +115,42 @@ function animateRollingChars(split: SplitType) {
 </script>
 
 <style scoped lang="scss">
-.main {
+.s-LRMainSection {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   position: relative;
-  overflow: hidden; // block x scroll
 
-  .main__title--container {
+  .title--container {
     position: relative;
-    width: 100%;
-    left: 1vw; // half size of span with ® (registered mark character)
+
     top: 0;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  &__title {
+  .title {
     position: relative;
-    font-size: 1.5rem;
+    font-size: min(12.8vw, 30rem);
     font-weight: 700;
     bottom: 0;
     letter-spacing: 0.03em;
     text-transform: uppercase;
     white-space: nowrap;
 
-    span {
-      display: inline-block;
+    .registered-icon {
       position: relative;
       height: 100%;
-      color: white;
+      font-weight: 100;
+      line-height: 12.97vw;
+      font-size: max(3vw, 1rem);
+      top: -5.5vw;
+
+      // make it work on the outline
       -webkit-text-stroke: 0px;
-      font-weight: 600;
+      color: $main-dark-text;
     }
 
     &.title-filled {
@@ -183,23 +180,6 @@ function animateRollingChars(split: SplitType) {
           left: 0;
           top: 0;
         }
-      }
-    }
-  }
-}
-
-@media (min-width: $lg-breakpoint) {
-  .main {
-    // margin-bottom: 50px;
-    &__title {
-      font-size: min(12.97vw, 30rem);
-
-      span {
-        line-height: 12.97vw;
-        font-size: 3vw;
-        top: -6.5vw;
-        left: -3vw;
-        font-weight: 100;
       }
     }
   }

@@ -93,7 +93,7 @@ const handleLogout = async () => {
     select {
       background: transparent;
       border-radius: 8px;
-      text-align: right;
+      text-align: left;
 
       height: 35px;
       font-weight: 700;
@@ -105,6 +105,12 @@ const handleLogout = async () => {
         outline: 0;
       }
     }
+  }
+}
+
+@media (min-width: $lg-breakpoint) {
+  .c-LRHeaderNav .language-select-form select {
+    text-align: right;
   }
 }
 </style>

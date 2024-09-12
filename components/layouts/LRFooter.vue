@@ -231,6 +231,11 @@ const links = [
     opacity: 1;
   }
 
+  /**
+  * footer is activated when we reach the end of the page
+  * and it appears bibgger and expnanded. activated='fase'
+  * is the default footer state when we first load the page
+  */
   &[activated='false'] {
     pointer-events: none;
     .separator {
@@ -241,6 +246,11 @@ const links = [
       opacity: 0;
       pointer-events: none;
     }
+
+    .overlay {
+      pointer-events: none;
+    }
+
     li {
       width: 70px;
       a {
@@ -248,6 +258,7 @@ const links = [
       }
       span {
         opacity: 0;
+        pointer-events: none;
       }
     }
 

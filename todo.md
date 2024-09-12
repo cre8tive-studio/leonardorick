@@ -1,13 +1,5 @@
 # BUGS OR FEATURES REQUIRED BEFORE RESPONSIVENESS FIX
 
-Setup posthog in production
-
-Improve magnetic
-
-- Fix magnetic items keeping on active state
-- Magnetic to animate out only when the intersection between the icon and the round circle ends. This way I don't need the mouseleave listener. For that I need to understand better the intersection API
-- improve sticky button
-
 Improve Experience Clock
 
 - Understand why sometimes minutes and seconds are stickying together
@@ -19,7 +11,6 @@ About me related to who is reading https://billysweeney.com/
 
 # RESPONSIVENES
 
-- criar logica pra definir background to menu que abre
 - copy margins and breakpoints of https://minhpham.design/
 - decrease a bit max sisze width of screens
 - fix and enable lenis in mobile
@@ -56,3 +47,11 @@ change main deploy to nuxtHub
 |--change cloudinary images to nuxtHub
 
 Add an icon on each footer link indicating that it will open another tab
+
+- understand how can I properly set posthog api key to only accept requests from specific hosts
+
+Improve magnetic
+
+- Fix magnetic items keeping on active state
+- improve sticky button to do not rely on a padding and consider the cursor outer
+- Magnetic to animate out only when the intersection between the icon and the round circle ends. This way I don't need the mouseleave listener. For that I need to understand better the intersection API

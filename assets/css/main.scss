@@ -51,14 +51,14 @@
 .lr-section-bottom,
 .lr-section-page-paddings {
   padding: 1rem;
+  width: 100vw;
   &-no-paddings {
-    padding-right: 0;
-    padding-left: 0;
+    padding: 0;
   }
 }
 
 .lr-section-page {
-  height: max(100vh, 667px);
+  height: 100svh;
 }
 
 .lr-section-bottom {
@@ -91,7 +91,6 @@
   .lr-section-page,
   .lr-section-page-paddings {
     padding-inline: var(--lr-side-space);
-    width: 100vw;
     max-width: 3450px;
 
     &-no-paddings {
