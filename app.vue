@@ -40,7 +40,7 @@ if ($initializerClientError) {
 watch(lang, async () => {
   isContentLoaded.value = false;
   const res = await $fetchInitialData();
-  if (!res.$recommendations || res.$quotes || res.$experiences || res.$generals) {
+  if (!res.$recommendations || !res.$quotes || !res.$experiences || !res.$generals) {
     isContentErrored.value = true;
     return;
   }
@@ -48,7 +48,7 @@ watch(lang, async () => {
 });
 
 onMounted(async () => {
-  if (!$personalInfo.value || !$recommendations.value || !$quotes.value || !$generals.value || !$experiences.value) {
+  if (!$personalInfo.value || !$recommendations.value || !$quotes.value || !$experiences.value || !$generals.value) {
     isContentErrored.value = true;
     return;
   }

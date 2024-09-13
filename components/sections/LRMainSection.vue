@@ -1,5 +1,8 @@
 <template>
-  <div class="s-LRMainSection lr-section-page lr-section-page-no-paddings">
+  <div
+    ref="mainSection"
+    class="s-LRMainSection lr-section-page lr-section-page-no-paddings"
+  >
     <div class="title--container">
       <h1
         ref="nameTitle"
@@ -29,6 +32,7 @@ import { SCROLL_TRIGGER_IDS } from '~/utils/constants/scroll-trigger-ids';
 import { ScrollTrigger } from 'gsap/all';
 
 const { loaded, personalInfo } = toRefs(useAppStore());
+const mainSection = ref<HTMLDivElement>();
 const nameTitle = ref<HTMLDivElement>();
 const nameTitleOutline = ref<HTMLDivElement>();
 
@@ -49,10 +53,10 @@ function runAnimations() {
   // starting both animations at the same time was
   // causing some flickering on the pinning. since 100ms
   // is not pereceptive for this scenario, we add this solid
-  // value to ensure initial needed value for pinning are available
-  setTimeout(() => {
-    animateTitleOverflow();
-  }, 100);
+  // value to ensure initial needed value for pinning are available.
+  // I already tried delaying the timeline but with no succsss. Timeout
+  // should work well
+  setTimeout(() => animateTitleOverflow(), 100);
 }
 
 function animateTitleOverflow() {
@@ -61,12 +65,13 @@ function animateTitleOverflow() {
   const tl = gsap.timeline({
     scrollTrigger: {
       id: SCROLL_TRIGGER_IDS.NAME_MAIN_TEXT,
-      trigger: '.s-LRMainSection',
+      trigger: mainSection.value,
       start: 'top top',
-      end: () => window.innerWidth * 0.094,
+      end: () => (mainSection.value?.offsetWidth || 0) * 0.093,
       pin: nameTitle.value,
       scrub: true,
     },
+    delay: 1,
   });
 
   tl.to(nameTitle.value, {
@@ -139,7 +144,8 @@ function animateRollingChars(split: SplitType) {
   .title {
     position: relative;
     bottom: 0;
-    font-size: min(12.6vw, 30rem);
+    font-size: clamp(2rem, 12.6vw, 28rem);
+    line-height: clamp(5.4rem, 19.5vw, 46rem);
     font-weight: 700;
     letter-spacing: 0.03em;
     text-transform: uppercase;
