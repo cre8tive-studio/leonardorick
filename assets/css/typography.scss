@@ -12,12 +12,6 @@
 }
 
 .lr-text-body-1 {
-  font-size: 1rem;
-  line-height: 1.6rem;
-}
-
-@media (min-width: 1800px) {
-  .lr-text-body-1 {
-    font-size: 1.2rem;
-  }
+  font-size: clamp(1rem, 1.5vw, 1.8rem);
+  line-height: clmap(1.6rem, 1vw, 2.3rem);
 }

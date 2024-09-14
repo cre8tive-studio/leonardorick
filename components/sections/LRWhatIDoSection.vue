@@ -17,7 +17,7 @@
                 </span>
               </div>
               <h2
-                :id="item.id"
+                :id="`${item.id}`"
                 ref="items"
               >
                 {{ item.title }}
@@ -114,9 +114,12 @@ function getScrollerId(id?: string) {
     display: flex;
     flex-direction: column;
     li {
-      overflow: hidden; // .description has a width bigger than screen, this blocks the x scroll
       .li-content-wrapper {
         position: relative;
+        --height: clamp(4.5rem, 8.5vw, 16rem);
+        height: var(--height);
+
+        transition: all 0.5s $default-ease;
 
         :deep(.char) {
           // this will affect the speed of the gsap animation as well
@@ -125,7 +128,7 @@ function getScrollerId(id?: string) {
 
         &:hover {
           .description {
-            height: 110%;
+            height: 140%;
           }
 
           :deep(.char) {
@@ -139,7 +142,8 @@ function getScrollerId(id?: string) {
           text-transform: uppercase;
           font-weight: 600;
           width: 100%;
-          letter-spacing: -0.2rem;
+          font-size: clamp(4rem, 10vw, 20rem);
+          line-height: clamp(4.5rem, 8.5vw, 16rem);
         }
 
         .description {
@@ -148,7 +152,6 @@ function getScrollerId(id?: string) {
           top: 50%;
           transform: translateY(-50%);
           height: 0;
-          width: 103vw;
           display: flex;
           justify-content: flex-end;
           align-items: center;
@@ -170,22 +173,9 @@ function getScrollerId(id?: string) {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            max-width: 31rem;
-            margin-right: 4.5rem;
+            max-width: clamp(32rem, 20vw, 45rem);
+            // max-width: clamp(33rem, 25vw, 50rem);
           }
-        }
-      }
-    }
-  }
-}
-
-@media (min-width: $xxxl-breakpoint) {
-  .s-LRWhatIDoSection {
-    ul {
-      li {
-        h2 {
-          font-size: 13rem;
-          line-height: 8rem;
         }
       }
     }
@@ -197,27 +187,25 @@ function getScrollerId(id?: string) {
     ul {
       li {
         .li-content-wrapper {
-          --height: 7rem;
-          height: var(--height);
-          transition: all 0.5s $default-ease;
-
           &:hover,
           &:focus {
-            height: calc(var(--height) * 2.4);
+            height: calc(var(--height) * 3);
+            .description {
+              height: 100%;
+            }
           }
           .description {
             justify-content: flex-start;
 
             &-paddings-wrapper {
-              margin-top: 4rem;
+              margin-top: 8rem;
               text-align: left;
               justify-content: left;
               margin-left: 3rem;
             }
-          }
-          h2 {
-            font-size: 7rem;
-            line-height: 5rem;
+            &-text {
+              margin-right: 4.5rem;
+            }
           }
         }
       }
@@ -228,22 +216,15 @@ function getScrollerId(id?: string) {
 @media (max-width: $sm-breakpoint) {
   .s-LRWhatIDoSection {
     ul li .li-content-wrapper {
-      --height: 5rem;
-
       &:hover,
       &:focus {
-        height: calc(var(--height) * 3.5);
+        height: calc(var(--height) * 4.3);
       }
 
       .description-paddings-wrapper {
-        margin-top: 1.5rem;
+        margin-top: 2rem;
         margin-left: 2rem;
         margin-right: 1rem;
-      }
-
-      h2 {
-        font-size: 4rem;
-        line-height: 2rem;
       }
     }
   }
