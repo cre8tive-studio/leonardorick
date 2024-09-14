@@ -22,8 +22,8 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     icon: SvgoLogoVue,
     background: COLORS.mainDarkText,
     position: {
-      x: '-24cqw',
-      y: '-33cqh',
+      x: '-29cqw',
+      y: '-35cqh',
     },
     direction: -1,
   },
@@ -44,7 +44,7 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     icon: SvgoLogoPostman,
     background: '#FF6C37',
     position: {
-      x: '-17cqw',
+      x: '-23cqw',
       y: '-6cqh',
     },
     direction: 1,
@@ -56,8 +56,8 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     icon: SvgoLogoAngular,
     background: '#0F0F11',
     position: {
-      x: '21cqw',
-      y: '-30cqh',
+      x: '27cqw',
+      y: '-34cqh',
     },
     direction: 1,
     durationOffset: 2,
@@ -79,7 +79,7 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     icon: SvgoLogoThreeJs,
     background: COLORS.mainDarkText,
     position: {
-      x: '-16cqw',
+      x: '-19cqw',
       y: '18cqh',
     },
     direction: -1,
@@ -91,7 +91,7 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     icon: SvgoLogoNodeJs,
     background: '#468C45',
     position: {
-      x: '16cqw',
+      x: '21cqw',
       y: '-10cqh',
     },
     direction: -1,
@@ -103,8 +103,8 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     icon: SvgoLogoReact,
     background: '#222222',
     position: {
-      x: '-34cqw',
-      y: '-14cqh',
+      x: '-39cqw',
+      y: '-20cqh',
     },
     direction: -1,
     durationOffset: -1,
@@ -115,7 +115,7 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     icon: SvgoLogoGraphql,
     background: '#1B1B1B',
     position: {
-      x: '40cqw',
+      x: '46cqw',
       y: '-22cqh',
     },
     direction: 1,
@@ -127,8 +127,8 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     icon: SvgoLogoTypescript,
     background: '#3178C6',
     position: {
-      x: '-37.5cqw',
-      y: '11cqh',
+      x: '-41cqw',
+      y: '8cqh',
     },
     direction: 1,
     durationOffset: -1,
@@ -175,7 +175,7 @@ export const COMPETENCES: Record<CompetenceNameOptions, CompetenceModel> = {
     icon: SvgoLogoGIT,
     background: '#222115',
     position: {
-      x: '34cqw',
+      x: '42cqw',
       y: '0cqh',
     },
     direction: 1,

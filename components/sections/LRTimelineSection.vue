@@ -49,8 +49,10 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
   display: flex;
   flex-direction: column;
   justify-content: center;
+  height: fit-content;
+  min-height: 100vh;
+  margin-bottom: 10vh;
 
-  margin-bottom: 10vw;
   h1 {
     padding-inline: var(--lr-side-space);
     margin-bottom: 4rem;
@@ -65,7 +67,6 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
   }
 
   .timeline {
-    overlay: hidden;
     display: grid;
     grid-template-columns: 1fr 2fr;
 
@@ -79,7 +80,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
       position: relative;
       align-items: center;
       padding-inline: 1rem;
-      height: clamp(10rem, 8vw, 20rem);
+      height: clamp(8rem, 8vw, 20rem);
 
       &:has(~ .description:hover) {
         .overlay {

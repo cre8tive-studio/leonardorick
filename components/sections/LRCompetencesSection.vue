@@ -10,6 +10,7 @@
       <LRWorkClock
         :containers-query="'.phrase-scroll-marker'"
         :base-height="BASE_HEIGHT"
+        :should-pin="shouldPin"
         @set-container-height="setContainerHeight"
       />
       <div
@@ -26,7 +27,7 @@
         </div>
       </div>
     </div>
-    <div>
+    <div v-if="shouldPin">
       <div
         v-for="index of containersCount"
         :key="index"
@@ -50,17 +51,23 @@ const mainContainer = ref<HTMLDivElement>();
 const phraseScrollMarkers = ref<HTMLDivElement[] | undefined>();
 const containersCount = ref(0);
 
+const { isMobile } = useDevice();
+
+const shouldPin = computed(() => !isMobile);
+
 onMounted(() => {
   /**
    * sticky main content on view until the whole wrapper is out of screen
    */
-  ScrollTrigger.create({
-    id: SCROLL_TRIGGER_IDS.COMPETENECES_PIN,
-    trigger: '.s-LRCompetencesSection',
-    pin: mainContainer.value,
-    start: 'top top',
-    end: 'bottom bottom',
-  });
+  if (shouldPin.value) {
+    ScrollTrigger.create({
+      id: SCROLL_TRIGGER_IDS.COMPETENECES_PIN,
+      trigger: '.s-LRCompetencesSection',
+      pin: mainContainer.value,
+      start: 'top top',
+      end: 'bottom bottom',
+    });
+  }
 
   /**
    * timeline for
@@ -148,18 +155,18 @@ onUnmounted(() => {
 });
 
 async function setContainerHeight(count: number, max: number) {
-  if (!section.value) return;
+  if (!section.value || !shouldPin.value) return;
 
   // the container hight is always fixed on the maxium size plus a offset so it doesn't
   // end right exactly when the text in the middle fniishes
-  const offset = BASE_HEIGHT - 10;
-  section.value.style.setProperty('height', `${BASE_HEIGHT * max + offset}vh`);
+  const offset = BASE_HEIGHT - 20;
+  section.value.style.setProperty('height', `${BASE_HEIGHT * max + offset}svh`);
 
   containersCount.value = count;
   await nextTick();
   if (!phraseScrollMarkers.value) return;
   for (const container of phraseScrollMarkers.value) {
-    container.style.setProperty('height', `${BASE_HEIGHT}vh`);
+    container.style.setProperty('height', `${BASE_HEIGHT}svh`);
   }
 }
 
@@ -171,6 +178,7 @@ function getName(element: HTMLElement): CompetenceNameOptions {
 <style scoped lang="scss">
 .s-LRCompetencesSection {
   display: flex;
+  margin-bottom: 10vh;
 
   .phrase-scroll-marker:not(.main-container) {
     // uncomment border to understand markers of each line on LRWorkCLock
@@ -189,7 +197,7 @@ function getName(element: HTMLElement): CompetenceNameOptions {
     justify-content: center;
     .orbit {
       position: absolute;
-      --size: 5.5rem;
+      --size: clamp(3rem, 4vw, 15rem);
       .floating-icon-wrapper {
         background-color: $main-dark-text;
         display: flex;
@@ -217,24 +225,6 @@ function getName(element: HTMLElement): CompetenceNameOptions {
       &[data-icon='threejs'] svg {
         top: 3px;
         left: 3px;
-      }
-    }
-  }
-}
-@media (min-width: 1950px) {
-  .s-LRCompetencesSection {
-    .main-container {
-      .orbit {
-        --size: 7rem;
-      }
-    }
-  }
-}
-@media (max-width: $sm-breakpoint) {
-  .s-LRCompetencesSection {
-    .main-container {
-      .orbit {
-        --size: 3rem;
       }
     }
   }

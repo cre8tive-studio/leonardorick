@@ -18,6 +18,7 @@ import { DEFAULTS } from '~/utils/constants/defaults';
 import { dateDifference } from '~/utils/js-utilities';
 interface Props {
   containersQuery: string;
+  shouldPin: boolean;
 }
 interface Emits {
   (e: 'set-container-height', count: number, max: number): void;
@@ -26,7 +27,7 @@ interface Emits {
 const { personalInfo } = toRefs(useAppStore());
 const $t = useNuxtApp().$i18n.t;
 const $emit = defineEmits<Emits>();
-const { containersQuery } = defineProps<Props>();
+const { containersQuery, shouldPin } = defineProps<Props>();
 
 const paragraphs = ref<HTMLParagraphElement[]>();
 
@@ -73,18 +74,20 @@ onUnmounted(() => {
     trigger.kill(true);
   }
 });
+
 async function setAnimateWordsEntering() {
   await nextTick();
   const containers = Array.from(document.querySelectorAll(containersQuery));
-  for (const [index, p] of getValidParagraphs().entries()) {
-    if (!containers || !containers[index]) return;
 
+  for (const [index, p] of getValidParagraphs().entries()) {
     gsap.killTweensOf(p);
     gsap.set(p, { scale: 1 - (scaleOffset[index] || 0.1) });
+
+    if (!containers || !containers[index] || !shouldPin) continue;
+
     const tween = gsap.fromTo(
       p,
       {
-        // translateY: `${10 * (index + 1)}cqh`,
         translateY: '100cqh',
         opacity: 0,
       },
@@ -101,12 +104,12 @@ async function setAnimateWordsEntering() {
         opacity: 1,
       }
     );
-
     if (tween.scrollTrigger) {
       scrollTriggers.push(tween.scrollTrigger);
     }
   }
 }
+
 function getText(value: number, label: string) {
   return value ? getFormattedValueAndLabel(value, label) : '';
 }
@@ -172,17 +175,17 @@ async function setContainerHeight() {
   justify-content: flex-start;
   color: $highlight;
   position: relative;
-  height: 400px;
-  margin-bottom: 50px;
+  height: clamp(15rem, 25vw, 40rem);
+  margin-bottom: 10vw;
 
   h2 {
-    font-size: max(1vw, 1rem);
+    font-size: clamp(1rem, 1vw, 3rem);
     white-space: nowrap;
   }
   p {
     white-space: nowrap;
-    font-size: max(min(3.5vw, 6rem), 2rem);
-    line-height: max(min(3.5vw, 6rem), 2rem);
+    font-size: clamp(2rem, 3.5vw, 6rem);
+    line-height: clamp(2rem, 3.5vw, 6rem);
   }
 }
 </style>
