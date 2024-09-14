@@ -67,7 +67,7 @@ function animateTitleOverflow() {
       id: SCROLL_TRIGGER_IDS.NAME_MAIN_TEXT,
       trigger: mainSection.value,
       start: 'top top',
-      end: () => (mainSection.value?.offsetWidth || 0) * 0.093,
+      end: () => (mainSection.value?.offsetWidth || 0) * 0.095,
       pin: nameTitle.value,
       scrub: true,
     },

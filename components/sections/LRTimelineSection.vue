@@ -52,7 +52,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
 
   margin-bottom: 10vw;
   h1 {
-    padding-inline: var(--lr-side-space);
+    padding-inline: var(--lr-large-side-space);
     margin-bottom: 4rem;
   }
 
@@ -106,7 +106,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
     .time {
       display: flex;
       text-transform: uppercase;
-      padding-left: var(--lr-side-space);
+      padding-left: var(--lr-large-side-space);
       border-bottom: 1px solid $blue-3;
       span {
         position: relative;
@@ -118,7 +118,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      padding-right: var(--lr-side-space);
+      padding-right: var(--lr-large-side-space);
       border-bottom: 1px solid $blue-3;
 
       .description-title {
@@ -148,7 +148,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
       &-time {
         display: flex;
         align-items: center;
-        padding-left: var(--lr-side-space);
+        padding-left: var(--lr-large-side-space);
       }
 
       &-description {
@@ -170,7 +170,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
   }
 
   .timeline-footer {
-    padding-inline: var(--lr-side-space);
+    padding-inline: var(--lr-large-side-space);
     display: flex;
     align-items: center;
     justify-content: flex-end;

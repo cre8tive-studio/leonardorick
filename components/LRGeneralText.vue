@@ -65,7 +65,7 @@ function init() {
       scrollTrigger: {
         id: scrollTriggerId.value,
         trigger: tag,
-        start: 'top 93%',
+        start: 'top 90%',
         end: 'top 42%',
         scrub: true,
       },
@@ -101,6 +101,7 @@ function setMetadata() {
   & > * {
     pointer-events: none;
     span {
+      display: inline !important;
       pointer-events: auto;
     }
   }

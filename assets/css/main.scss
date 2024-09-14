@@ -1,5 +1,5 @@
 :root {
-  --lr-side-space: 12rem;
+  --lr-large-side-space: clamp(12rem, 9vw, 16rem);
 }
 /**
 * buttons
@@ -27,12 +27,9 @@
     @extend .section-h1;
   }
   p {
-    font-size: 1.5rem; /* 24px */
-    line-height: 2rem; /* 32px */
-    // todo: maybe this should be inside the comopnent LRGeneralsText
-    > * {
-      display: inline !important;
-    }
+    font-size: clamp(2.1rem, 4.3vw, 12rem);
+    line-height: clamp(2.6rem, 4.5vw, 13rem);
+    letter-spacing: clamp(0.1rem, 0.3vh, 0.3rem);
   }
 }
 /**
@@ -47,62 +44,44 @@
 }
 
 .lr-section,
-.lr-section-page,
 .lr-section-bottom,
+.lr-section-page,
 .lr-section-page-paddings {
-  padding: 1rem;
   width: 100vw;
-  &-no-paddings {
-    padding: 0;
-  }
+  max-width: 3450px;
+}
+
+.lr-section-page,
+.lr-section-page-paddings {
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+.lr-section,
+.lr-section-bottom {
+  padding-top: 2rem;
+
+  padding-inline: clamp(1rem, 4vw, 4rem);
 }
 
 .lr-section-page {
   // svg handles mobile problem that 100vh
   // actually considers the navigation bar
   height: 100svh;
+
+  &-no-paddings {
+    padding: 0;
+    padding-inline: 0 !important;
+  }
 }
 
 .lr-section-bottom {
   padding-top: 0;
+  padding-bottom: 3rem;
 }
 
 @media (min-width: $lg-breakpoint) {
-  /**
-    * wrappers
-    */
-  .wrapper-default-generals-text {
-    p {
-      font-size: min(4vw, 6rem);
-      line-height: min(4vw, 6rem);
-      letter-spacing: 0.3rem;
-    }
-  }
-
-  /**
-    * sections
-    */
-  .lr-section,
-  .lr-section-bottom {
-    padding-top: 2rem;
-    padding-right: 4rem;
-    padding-left: 4rem;
-    max-width: 3450px;
-  }
-
   .lr-section-page,
   .lr-section-page-paddings {
-    padding-inline: var(--lr-side-space);
-    max-width: 3450px;
-
-    &-no-paddings {
-      padding-right: 0;
-      padding-left: 0;
-    }
-  }
-
-  .lr-section-bottom {
-    padding-top: 0;
-    padding-bottom: 3rem;
+    padding-inline: var(--lr-large-side-space);
   }
 }
