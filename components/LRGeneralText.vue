@@ -66,7 +66,7 @@ function init() {
         id: scrollTriggerId.value,
         trigger: tag,
         start: 'top 90%',
-        end: 'top 42%',
+        end: 'top 28%',
         scrub: true,
       },
       opacity: 0.3,
