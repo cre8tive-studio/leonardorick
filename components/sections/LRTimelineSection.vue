@@ -52,23 +52,26 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
 
   margin-bottom: 10vw;
   h1 {
-    padding-inline: var(--lr-large-side-space);
+    padding-inline: var(--lr-side-space);
     margin-bottom: 4rem;
   }
 
   .timeline-entry {
     // this is the magic that makes the:hover do not select all
-    // siblings and only the one on the same level
+    // siblings and only the one on the same level. It's basicaly the nantive
+    // html way of using a <template> so the div itself can be considered
+    // as replaced by it's content
     display: contents;
   }
 
   .timeline {
+    overlay: hidden;
     display: grid;
     grid-template-columns: 1fr 2fr;
 
-    font-size: min(2.5vw, 6rem);
-    line-height: min(2.5vw, 6rem);
-    letter-spacing: 0.3rem;
+    font-size: clamp(1.2rem, 2.5vw, 6rem);
+    line-height: clamp(1.8rem, 2.8vw, 6.4rem);
+    letter-spacing: clamp(0.1rem, 0.3vh, 0.3rem);
 
     .time,
     .description {
@@ -76,7 +79,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
       position: relative;
       align-items: center;
       padding-inline: 1rem;
-      height: 8rem;
+      height: clamp(10rem, 8vw, 20rem);
 
       &:has(~ .description:hover) {
         .overlay {
@@ -106,7 +109,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
     .time {
       display: flex;
       text-transform: uppercase;
-      padding-left: var(--lr-large-side-space);
+      padding-left: var(--lr-side-space);
       border-bottom: 1px solid $blue-3;
       span {
         position: relative;
@@ -118,12 +121,12 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      padding-right: var(--lr-large-side-space);
+      padding-right: var(--lr-side-space);
       border-bottom: 1px solid $blue-3;
 
-      .description-title {
+      h3.description-title {
+        margin-bottom: 0.5rem;
         position: relative;
-        margin-bottom: 1rem;
         transition: opacity 0.3s $default-ease;
       }
 
@@ -131,6 +134,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
         @extend .lr-text-body-1;
         position: relative;
         color: $main-dark-text-dark;
+        width: 100%;
       }
     }
     .overlay {
@@ -148,7 +152,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
       &-time {
         display: flex;
         align-items: center;
-        padding-left: var(--lr-large-side-space);
+        padding-left: var(--lr-side-space);
       }
 
       &-description {
@@ -157,10 +161,9 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
         align-items: flex-start;
         justify-content: center;
         h3 {
-          margin-bottom: 1rem;
-          font-size: min(1.7vw, 4rem);
-          line-height: min(1.7vw, 4rem);
-          letter-spacing: 0.2rem;
+          margin-bottom: 0.5rem;
+          font-size: clamp(1rem, 1.7vw, 4rem);
+          line-height: clamp(1rem, 1.7vw, 4rem);
         }
         h4 {
           visibility: hidden;
@@ -170,12 +173,13 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
   }
 
   .timeline-footer {
-    padding-inline: var(--lr-large-side-space);
+    @extend .lr-section-page-paddings;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     margin-top: 2rem;
     color: $main-dark-text-darker;
+    text-align: right;
     a {
       padding: 1rem;
       padding-right: 0;

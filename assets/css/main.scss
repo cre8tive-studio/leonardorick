@@ -1,5 +1,5 @@
 :root {
-  --lr-large-side-space: clamp(12rem, 9vw, 16rem);
+  --lr-side-space: clamp(1rem, 5vw, 4rem);
 }
 /**
 * buttons
@@ -53,14 +53,14 @@
 
 .lr-section-page,
 .lr-section-page-paddings {
-  padding-inline: clamp(1rem, 4vw, 2rem);
+  padding-inline: var(--lr-side-space);
 }
 
 .lr-section,
 .lr-section-bottom {
   padding-top: 2rem;
 
-  padding-inline: clamp(1rem, 4vw, 4rem);
+  padding-inline: var(--lr-side-space);
 }
 
 .lr-section-page {
@@ -82,6 +82,6 @@
 @media (min-width: $lg-breakpoint) {
   .lr-section-page,
   .lr-section-page-paddings {
-    padding-inline: var(--lr-large-side-space);
+    --lr-side-space: clamp(12rem, 9vw, 16rem);
   }
 }
