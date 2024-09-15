@@ -47,7 +47,10 @@ watch(lang, async () => {
   setHomeView(res.$recommendations, res.$quotes, res.$experiences, res.$generals);
 });
 
-onMounted(async () => {
+/**
+ * using onMounted was causing the images to not render, so then, we run this before mounting
+ */
+onBeforeMount(async () => {
   if (!$personalInfo.value || !$recommendations.value || !$quotes.value || !$experiences.value || !$generals.value) {
     isContentErrored.value = true;
     return;
