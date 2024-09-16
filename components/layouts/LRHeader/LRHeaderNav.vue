@@ -100,11 +100,7 @@ const handleLogout = async () => {
       font-weight: 700;
 
       cursor: pointer;
-      // text-transform: uppercase;
-
-      option {
-        text-transform: none;
-      }
+      text-transform: uppercase;
 
       &:focus {
         outline: 0;

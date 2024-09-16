@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <LRMainErrorSection
+    title="error_title_empty_page"
+    subtitle="error_subtitle_login"
+  />
+  <div v-if="false">
     <form @submit.prevent="handleSubmit">
       <div>
         <select v-model="loginType">

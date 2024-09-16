@@ -1,5 +1,8 @@
 <template>
-  <h1>{{ $t('music_page') }}</h1>
+  <LRMainErrorSection
+    title="error_title_empty_page"
+    subtitle="error_subtitle_music"
+  />
   <ClientOnly>
     <div v-if="session">
       <div v-if="musicPageLoaded">

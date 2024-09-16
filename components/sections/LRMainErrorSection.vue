@@ -1,30 +1,35 @@
 <template>
   <div class="s-LRMainErrorSection lr-section-page">
-    <div>
-      <h1 class="section-h1">{{ $t('main_error_title') }} :(</h1>
-      <h2>{{ $t('main_error_subtitle') }}</h2>
-    </div>
+    <h1 class="section-h1">{{ props.title ? $t(props.title) : $t('error_title_home') }}</h1>
+    <h2>{{ props.subtitle ? $t(props.subtitle) : $t('error_subtitle_home') }}</h2>
   </div>
-  <div class="lr-section-page"></div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+interface Props {
+  title?: string;
+  subtitle?: string;
+}
+const props = defineProps<Props>();
+</script>
 
 <style scoped lang="scss">
 .s-LRMainErrorSection {
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: center;
+  padding-bottom: clamp(1rem, 7vw, 7rem);
 
   div {
     display: flex;
     flex-direction: column;
     text-align: center;
-    padding-bottom: 7rem;
   }
   h2 {
-    letter-spacing: 0.3rem;
-    padding-inline: 8rem;
+    @extend .lr-text--label-2;
+    padding-inline: clamp(1rem, 7vw, 10rem);
   }
 }
 </style>
