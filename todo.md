@@ -9,7 +9,6 @@ About me related to who is reading https://billysweeney.com/
 |- add a query parameter that defines who is reading
 |- also copy the logic for the mobile menu, its very fluid
 
-Create 'wip' page to music and login
 Hack github contribution chart
 
 fix magnetic hover and footer animation after changing language
