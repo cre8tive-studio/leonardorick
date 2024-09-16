@@ -49,46 +49,8 @@
 </template>
 
 <script setup lang="ts">
-import SvgoSpotify from '~/assets/icons/spotify.svg';
-import SvgoGithub from '~/assets/icons/github.svg';
-import SvgoLinkedin from '~/assets/icons/linkedin.svg';
-import SvgoStackoverflow from '~/assets/icons/stackoverflow.svg';
-import { useAppStore } from '~/store';
-import type { PersonalInfoModel } from '~/types/personal-info.model';
-
-const { personalInfo } = toRefs(useAppStore());
-
 const lis = ref<HTMLLIElement[]>();
-
-const email = computed(() => personalInfo.value?.email || '');
-
-const linksUrls = personalInfo.value?.links || ({} as PersonalInfoModel['links']);
-const links = [
-  {
-    link: linksUrls.linkedin,
-    svg: SvgoLinkedin,
-    text: 'LinkedIn',
-    funTitle: 'Serious me',
-  },
-  {
-    link: linksUrls.github,
-    svg: SvgoGithub,
-    text: 'GitHub',
-    funTitle: 'I hacked the contribution history chart',
-  },
-  {
-    link: linksUrls.stackoverflow,
-    svg: SvgoStackoverflow,
-    text: 'StackOverflow',
-    funTitle: 'Until ChatGPT destroys it',
-  },
-  {
-    link: linksUrls.spotify,
-    svg: SvgoSpotify,
-    text: 'Spotify',
-    funTitle: "I also sing when I'm not coding",
-  },
-];
+const { links, email } = useLinks();
 </script>
 <style scoped lang="scss">
 .c-LRFooter {

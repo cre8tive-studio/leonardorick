@@ -53,6 +53,7 @@
     <form class="language-select-form">
       <select
         lr-cursor
+        @change="$emit('routeSelected')"
         v-model="lang"
       >
         <option value="en">{{ $t('english') }}</option>
@@ -99,7 +100,11 @@ const handleLogout = async () => {
       font-weight: 700;
 
       cursor: pointer;
-      text-transform: uppercase;
+      // text-transform: uppercase;
+
+      option {
+        text-transform: none;
+      }
 
       &:focus {
         outline: 0;

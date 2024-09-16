@@ -26,8 +26,4 @@ const { isContentLoaded } = toRefs(useAppStore());
     z-index: 1;
   }
 }
-@media (min-width: $lg-breakpoint) {
-  .l-default {
-  }
-}
 </style>

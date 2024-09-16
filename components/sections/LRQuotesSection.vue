@@ -106,21 +106,22 @@ function selectRandomQuote() {
       white-space: nowrap;
 
       position: relative;
-      font-size: min(12vw, 12rem);
-      line-height: min(3vw, 3rem);
+      font-size: clamp(2rem, 12vw, 12rem);
+      line-height: clamp(1rem, 3vw, 3rem);
 
       // tricky to not brak line on the span. I want the quote to allways be on the
       // side of the last word so making the span 0 width makes it happen. TO fix the height
       // we force the line height to be lower
       // // It was not enough
       &:not(.right) {
-        top: 28px;
+        top: clamp(0.8rem, 2vw, 4rem);
         left: -5px;
       }
       &.right {
         width: 0;
-        left: -5px;
-        top: 42px;
+        // left: clamp(-5px);
+        left: clamp(0.1rem, 2vw, 1rem);
+        top: clamp(1.1rem, 3vw, 4rem);
       }
     }
   }
