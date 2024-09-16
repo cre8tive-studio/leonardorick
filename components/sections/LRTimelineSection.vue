@@ -1,7 +1,7 @@
 <template>
   <div class="s-LRTimelineSection lr-section-page lr-section-page-no-paddings">
     <h1 class="section-h1">{{ $t('history') }}</h1>
-    <section class="timeline">
+    <section class="timeline lr-text--body-2">
       <div
         v-for="(experience, index) in experiences"
         :key="index"
@@ -50,7 +50,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
   flex-direction: column;
   justify-content: center;
   height: fit-content;
-  min-height: 100vh;
+  min-height: 100svh;
   margin-bottom: 10vh;
 
   h1 {
@@ -69,10 +69,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
   .timeline {
     display: grid;
     grid-template-columns: 1fr 2fr;
-
-    font-size: clamp(1.2rem, 2.5vw, 6rem);
-    line-height: clamp(1.8rem, 2.8vw, 6.4rem);
-    letter-spacing: clamp(0.1rem, 0.3vh, 0.3rem);
+    @extend .lr-text--body-2;
 
     .time,
     .description {
@@ -132,9 +129,9 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
       }
 
       h4 {
-        @extend .lr-text-body-1;
-        position: relative;
+        @extend .lr-text--body-1;
         color: $main-dark-text-dark;
+        position: relative;
         width: 100%;
       }
     }

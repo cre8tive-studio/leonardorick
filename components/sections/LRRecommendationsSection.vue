@@ -21,7 +21,7 @@
               <p class="author">
                 {{ recommendation.author?.name }}
               </p>
-              <p class="author author-description">
+              <p class="author-description">
                 {{ recommendation.author.description }}
               </p>
             </div>
@@ -49,7 +49,7 @@
             <div
               ref="arrow"
               class="arrow"
-            ></div>
+            />
           </div>
         </div>
 
@@ -79,9 +79,10 @@ onMounted(() => {
    */
   ScrollTrigger.create({
     id: SCROLL_TRIGGER_IDS.RECOMMENDATIONS_PIN_IMAGE,
-    trigger: '.s-LRRecommendationsSection',
+    trigger: '.images-col',
+    endTrigger: '.s-LRRecommendationsSection',
     pin: '.images-col',
-    start: 'top top',
+    start: 'center center',
     pinSpacing: false,
     end: 'bottom bottom',
   });
@@ -90,12 +91,12 @@ onMounted(() => {
    * animate left arrow that points to the quote
    */
   scrollTriggers = ScrollTrigger.batch('.recommendation', {
-    start: 'top 45%',
+    start: 'top 50%',
     onEnter: (_targets, triggers) => {
       const index = parseInt(triggers[0]?.trigger?.getAttribute('lr-index') || '0');
       if (!index || !arrow.value) return;
 
-      gsap.to(arrow.value, { yPercent: 490 * index });
+      gsap.to(arrow.value, { y: getImageWrapperHeight() * index });
       gsap.to('.img-wrapper', { opacity: 0.3, scale: 0.9 });
       gsap.to(`.img-wrapper:nth-child(${index + 1})`, { opacity: 1, scale: 1 });
     },
@@ -103,7 +104,7 @@ onMounted(() => {
       const index = parseInt(triggers[0]?.trigger?.getAttribute('lr-index') || '0');
       if (!index || !arrow.value) return;
 
-      gsap.to(arrow.value, { yPercent: 490 * (index - 1) });
+      gsap.to(arrow.value, { y: getImageWrapperHeight() * (index - 1) });
       gsap.to('.img-wrapper', { opacity: 0.3, scale: 0.9 });
       gsap.to(`.img-wrapper:nth-child(${index})`, { opacity: 1, scale: 1 });
     },
@@ -116,37 +117,35 @@ onUnmounted(() => {
     trigger.kill(true);
   }
 });
+
+function getImageWrapperHeight() {
+  const imageWrapper = document.querySelector('.img-wrapper');
+  const imageCol = document.querySelector('.images-col');
+  if (!imageWrapper || !imageCol) return 0;
+  return imageWrapper.clientHeight + parseFloat(getComputedStyle(imageCol).gap);
+}
 </script>
 
 <style scoped lang="scss">
 .s-LRRecommendationsSection {
   display: flex;
   flex-direction: column;
-  position: relative;
+  height: fit-content;
 
-  --height: calc(70vh);
-  position: relative;
-  &.lr-section-page {
-    height: calc(var(--height) * 3);
-  }
-
-  .section-h1 {
-    position: absolute;
-    margin-bottom: 0;
-  }
+  --container-margin-top: clamp(6rem, 4vw, 20rem);
 
   .recommendations {
+    min-height: 100svh;
     flex: 1;
     display: flex;
     justify-content: space-between;
-    gap: 8rem;
-    margin-top: 6rem;
-    max-width: 165rem;
+    gap: clamp(1.8rem, 6vw, 16rem);
+    margin-top: var(--container-margin-top);
+    max-width: clamp(40rem, 85vw, 200rem);
+    position: relative;
 
     .quote-col {
-      font-size: min(3vw, 6rem);
-      line-height: min(3vw, 6rem);
-      letter-spacing: 0.3rem;
+      @extend .lr-text--body-2;
       display: flex;
       flex-direction: column;
 
@@ -155,7 +154,6 @@ onUnmounted(() => {
         flex: 1;
         display: flex;
         align-items: center;
-        max-height: 1000px;
 
         &:first-child {
           border-top: 1px solid $blue-3;
@@ -169,11 +167,12 @@ onUnmounted(() => {
 
         .content {
           display: flex;
-          gap: 1rem;
+          gap: clamp(0.2rem, 1vw, 1rem);
+          padding-block: clamp(2rem, 2vh, 4rem);
           b {
             height: 100%;
-            font-size: 12rem;
-            line-height: 10rem;
+            font-size: clamp(3.5rem, 8vw, 14rem);
+            line-height: clamp(2.5rem, 6vw, 12rem);
             color: $highlight;
           }
           .text-content {
@@ -181,13 +180,13 @@ onUnmounted(() => {
             flex-direction: column;
 
             .recommendation-text {
-              margin-bottom: 3rem;
+              margin-bottom: clamp(1.2rem, 5vw, 3rem);
             }
             .author {
-              font-size: 1rem;
-              line-height: 1.8rem;
+              @extend .lr-text--body-1;
             }
             .author-description {
+              @extend .lr-text--label-1;
               color: $main-dark-text-dark;
             }
           }
@@ -196,43 +195,53 @@ onUnmounted(() => {
     }
 
     .images-col-container {
+      --min-image-size: 4.5rem;
+      --image-size: clamp(var(--min-image-size), 7vw, 30rem);
+      --image-space: clamp(1rem, 4vw, 35rem);
+      --margin-top: calc(var(--container-margin-top) + var(--image-size) / 2);
+
       position: relative;
-      height: 100%;
-      min-width: 10rem;
+      min-width: var(--min-image-size);
       border: 2px solid transparent;
       display: flex;
       flex-direction: column;
+      margin-top: var(--margin-top);
 
       .images-col-wrapper {
         position: relative;
         flex: 1;
-        display: flex;
-        align-items: center;
 
         .images-col {
           width: 100% !important; // to avoid gsap changing it :p
           position: absolute;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          gap: var(--image-space);
+
           .arrow {
+            --height: clamp(0.8rem, 1.2vw - 0.3rem, 3rem);
             position: absolute;
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent;
-            border-right: 15px solid $highlight;
-            top: 0;
-            left: -40px;
-            top: calc(8rem / 2 - 1rem); // height if the imgage divided by 2 minus the .img-wrapper border
+            border-top: var(--height) solid transparent;
+            border-bottom: var(--height) solid transparent;
+            border-right: var(--height) solid $highlight;
+            left: calc(var(--image-size) / 3 * -1);
+            top: calc(
+              var(--image-size) / 2 - var(--height)
+            ); // height if the imgage divided by 2 minus the arrow height
           }
 
           .img-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1rem;
-            width: 8rem;
-            height: 8rem;
+            width: var(--image-size);
+            height: var(--image-size);
+            min-height: var(--image-size);
             border-radius: 50%;
             overflow: hidden;
             opacity: 0.3;
-            scale: 0.9;
+            scale: 0.8;
             &:first-child {
               opacity: 1;
               scale: 1;

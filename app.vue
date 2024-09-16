@@ -49,16 +49,15 @@ watch(lang, async () => {
 
 /**
  * using onMounted was causing the images to not render, so then, we run this before mounting
+ * using onbeforeMount was also givin an error when changing languages:
+ * TypeError: Cannot read properties of null (reading 'insertBefore')
  */
-onBeforeMount(async () => {
-  if (!$personalInfo.value || !$recommendations.value || !$quotes.value || !$experiences.value || !$generals.value) {
-    isContentErrored.value = true;
-    return;
-  }
-
+if (!$personalInfo.value || !$recommendations.value || !$quotes.value || !$experiences.value || !$generals.value) {
+  isContentErrored.value = true;
+} else {
   personalInfo.value = $personalInfo.value;
   await setHomeView($recommendations.value, $quotes.value, $experiences.value, $generals.value);
-});
+}
 
 async function setHomeView(
   rcs: RecommendationModel[],

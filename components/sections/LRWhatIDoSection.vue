@@ -11,7 +11,7 @@
             <div class="li-content-wrapper">
               <div class="description">
                 <span class="description-paddings-wrapper">
-                  <span class="description-text lr-text-body-1">
+                  <span class="description-text lr-text--body-1">
                     {{ item.description }}
                   </span>
                 </span>
