@@ -111,7 +111,7 @@ async function setAnimateWordsEntering() {
 }
 
 function getText(value: number, label: string) {
-  return value ? getFormattedValueAndLabel(value, label) : '';
+  return value || label === 'second' ? getFormattedValueAndLabel(value, label) : '';
 }
 
 function getFormattedValueAndLabel(value: number, label: string) {
@@ -176,7 +176,7 @@ async function setContainerHeight() {
   color: $highlight;
   position: relative;
   height: clamp(15rem, 25vw, 40rem);
-  margin-bottom: 10vw;
+  margin-bottom: 8vw;
 
   h2 {
     font-size: clamp(1rem, 1vw, 3rem);
