@@ -176,7 +176,7 @@ async function setContainerHeight() {
   color: $highlight;
   position: relative;
   height: clamp(15rem, 25vw, 40rem);
-  margin-bottom: 8vw;
+  margin-bottom: 8.5vw;
 
   h2 {
     font-size: clamp(1rem, 1vw, 3rem);

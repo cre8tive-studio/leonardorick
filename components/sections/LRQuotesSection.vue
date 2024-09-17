@@ -24,27 +24,27 @@ onMounted(() => {
 
   selectRandomQuote();
 
-  // const tl = gsap.timeline({
-  //   scrollTrigger: {
-  //     trigger: '.s-LRQuotesSection',
-  //     once: true,
-  //     start: 'top center',
-  //   },
-  //   repeat: -1,
-  //   // might be needed if scrollTrigger is removed. but for now,
-  //   // just delaying the animation repetition worked well.
-  //   // repeatDelay: 7
-  // });
-  // tl.to('.s-LRQuotesSection', {
-  //   opacity: 0,
-  //   repeat: 1,
-  //   yoyo: true,
-  //   delay: 6,
-  //   duration: 3,
-  //   onRepeat: () => {
-  //     selectRandomQuote();
-  //   },
-  // });
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '.s-LRQuotesSection',
+      once: true,
+      start: 'top center',
+    },
+    repeat: -1,
+    // might be needed if scrollTrigger is removed. but for now,
+    // just delaying the animation repetition worked well.
+    // repeatDelay: 7
+  });
+  tl.to('.s-LRQuotesSection', {
+    opacity: 0,
+    repeat: 1,
+    yoyo: true,
+    delay: 6,
+    duration: 3,
+    onRepeat: () => {
+      selectRandomQuote();
+    },
+  });
 });
 
 function selectRandomQuote() {
@@ -74,7 +74,7 @@ function selectRandomQuote() {
   }
   // a big quote. Uncomment below and comment splice so
   // you can test if things fit properly on the screen
-  selectedQuote.value = quotesClone[2];
+  // selectedQuote.value = quotesClone[2];
 }
 </script>
 
