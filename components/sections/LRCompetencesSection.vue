@@ -45,7 +45,7 @@ import type { CompetenceNameOptions } from '~/types/competences.model';
 import { COMPETENCES } from '~/utils/constants/competences';
 import { SCROLL_TRIGGER_IDS } from '~/utils/constants/scroll-trigger-ids';
 
-const BASE_HEIGHT = 120;
+const BASE_HEIGHT = 90;
 const section = ref<HTMLDivElement>();
 const mainContainer = ref<HTMLDivElement>();
 const phraseScrollMarkers = ref<HTMLDivElement[] | undefined>();

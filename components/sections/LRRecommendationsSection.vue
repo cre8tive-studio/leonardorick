@@ -132,7 +132,7 @@ function getImageWrapperHeight() {
   flex-direction: column;
   height: fit-content;
 
-  --container-margin-top: clamp(6rem, 4vw, 20rem);
+  --container-margin-top: clamp(4rem, 4vw, 20rem);
 
   .recommendations {
     min-height: 100svh;

@@ -32,3 +32,8 @@
   line-height: clamp(1.5rem, 3.6vw, 8rem);
   letter-spacing: clamp(0.1rem, 0.3vh, 0.3rem);
 }
+
+.lr-text--body-3 {
+  font-size: clamp(2rem, 7vw, 7rem);
+  line-height: clamp(2.5rem, 6vw, 7.5rem);
+}

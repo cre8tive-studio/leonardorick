@@ -6,13 +6,6 @@
       <h3 v-if="selectedQuote?.label">{{ selectedQuote.label }}</h3>
     </div>
   </div>
-  <div
-    id="container"
-    class="wtf"
-  >
-    <span id="text1"></span>
-    <span id="text2"></span>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -31,27 +24,27 @@ onMounted(() => {
 
   selectRandomQuote();
 
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: '.s-LRQuotesSection',
-      once: true,
-      start: 'top center',
-    },
-    repeat: -1,
-    // might be needed if scrollTrigger is removed. but for now,
-    // just delaying the animation repetition worked well.
-    // repeatDelay: 7
-  });
-  tl.to('.s-LRQuotesSection', {
-    opacity: 0,
-    repeat: 1,
-    yoyo: true,
-    delay: 6,
-    duration: 3,
-    onRepeat: () => {
-      selectRandomQuote();
-    },
-  });
+  // const tl = gsap.timeline({
+  //   scrollTrigger: {
+  //     trigger: '.s-LRQuotesSection',
+  //     once: true,
+  //     start: 'top center',
+  //   },
+  //   repeat: -1,
+  //   // might be needed if scrollTrigger is removed. but for now,
+  //   // just delaying the animation repetition worked well.
+  //   // repeatDelay: 7
+  // });
+  // tl.to('.s-LRQuotesSection', {
+  //   opacity: 0,
+  //   repeat: 1,
+  //   yoyo: true,
+  //   delay: 6,
+  //   duration: 3,
+  //   onRepeat: () => {
+  //     selectRandomQuote();
+  //   },
+  // });
 });
 
 function selectRandomQuote() {
@@ -81,7 +74,7 @@ function selectRandomQuote() {
   }
   // a big quote. Uncomment below and comment splice so
   // you can test if things fit properly on the screen
-  // selectedQuote.value = quotesClone[9];
+  selectedQuote.value = quotesClone[2];
 }
 </script>
 
@@ -92,11 +85,10 @@ function selectRandomQuote() {
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 4rem;
+  gap: clamp(1.5rem, 6vw, 4rem);
 
   h1 {
-    font-size: min(7vw, 7rem);
-    line-height: min(7vw, 7rem);
+    @extend .lr-text--body-3;
     letter-spacing: 0.3rem;
     font-weight: 500;
     span {
@@ -114,19 +106,19 @@ function selectRandomQuote() {
       // we force the line height to be lower
       // // It was not enough
       &:not(.right) {
-        top: clamp(0.8rem, 2vw, 4rem);
-        left: -5px;
+        top: clamp(0.4rem, 1.5vw, 4rem);
+        left: calc(clamp(0.1rem, 1vw, 0.7rem) * -1);
       }
       &.right {
         width: 0;
         // left: clamp(-5px);
-        left: clamp(0.1rem, 2vw, 1rem);
-        top: clamp(1.1rem, 3vw, 4rem);
+        left: clamp(0.05rem, 1vw, 1rem);
+        top: clamp(0.8rem, 3vw, 3.5rem);
       }
     }
   }
   h2 {
-    font-size: 1.5rem;
+    @extend .lr-text--body-2;
     font-style: italic;
   }
 

@@ -2,7 +2,7 @@ $default-ease: cubic-bezier(0.49, 0.225, 0.175, 0.86);
 
 // if want to use the css approach, add the class on elements
 .lr-fade-opacity {
-  --lr-fade-opacity-animation-start: 8vh;
+  --lr-fade-opacity-animation-start: 30vh;
   --lr-fade-opacity-animation-end: 60vh;
   color: $main-dark-text-darker;
   background-clip: text;
