@@ -16,7 +16,7 @@
             lr-magnetic-hover
             @click="openExternalLink(link.link)"
           >
-            <div class="overlay">{{ link.funTitle }}</div>
+            <div class="overlay">{{ $t(link.funTitle) }}</div>
             <NuxtLink
               :to="link.link"
               target="_blank"
@@ -94,11 +94,11 @@ const { links, email } = useLinks();
     }
 
     .overlay {
+      @extend .lr-text--body-1;
       transform: scaleY(0);
       height: 100%;
       width: 100%;
       position: absolute;
-      font-size: 1.4rem;
       top: 0;
       left: 0;
 

@@ -160,8 +160,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
         justify-content: center;
         h3 {
           margin-bottom: 0.5rem;
-          font-size: clamp(1rem, 1.7vw, 4rem);
-          line-height: clamp(1rem, 1.7vw, 4rem);
+          @extend .lr-text--body-1-half;
         }
         h4 {
           visibility: hidden;

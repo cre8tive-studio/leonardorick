@@ -11,8 +11,6 @@ About me related to who is reading https://billysweeney.com/
 
 Hack github contribution chart
 
-fix magnetic hover and footer animation after changing language
-
 # RESPONSIVENES
 
 - copy margins and breakpoints of https://minhpham.design/

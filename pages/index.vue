@@ -8,7 +8,7 @@
     <LRCompetencesSection />
     <LRRecommendationsSection />
     <LRQuotesSection :key="refreshKey" />
-    <LRFooterController v-if="!isMobile" />
+    <LRFooterController v-if="isLg" />
     <LRMobileFooter v-else />
   </template>
 
@@ -21,7 +21,7 @@
 import { useAppStore } from '~/store';
 
 const { loaded, isContentLoaded, isContentErrored } = toRefs(useAppStore());
-const { isMobile } = useDevice();
+const { isLg } = useCssBreakpoints();
 
 const refreshKey = ref(0);
 watch(isContentLoaded, () => {

@@ -8,14 +8,10 @@
       <slot />
     </main>
 
-    <LRFooter v-if="isContentLoaded" />
+    <LRFooter />
   </div>
 </template>
-<script setup lang="ts">
-import { useAppStore } from '~/store';
-
-const { isContentLoaded } = toRefs(useAppStore());
-</script>
+<script setup lang="ts"></script>
 <style scoped lang="scss">
 .l-default {
   position: relative;

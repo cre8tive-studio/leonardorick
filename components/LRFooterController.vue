@@ -12,17 +12,20 @@ import { SCROLL_TRIGGER_IDS } from '~/utils/constants/scroll-trigger-ids';
 const footerController = ref<HTMLDivElement>();
 
 let tl: GSAPTimeline | null;
+let footer: HTMLDivElement | null;
+let footerItems: HTMLLIElement[] | null;
+const footerSpacerSelector = '.c-LRFooter .left-spacer';
 
 onMounted(() => {
-  const footer = document.querySelector('.c-LRFooter');
-  const footerItems = document.querySelectorAll('.c-LRFooter li');
+  footer = document.querySelector('.c-LRFooter') as HTMLDivElement;
+  footerItems = Array.from(document.querySelectorAll('.c-LRFooter li')) as HTMLLIElement[];
 
   tl = gsap.timeline({
     scrollTrigger: {
       id: SCROLL_TRIGGER_IDS.FOOTER,
       trigger: '.c-LRFooterController',
       start: 'top+=25% bottom',
-      end: 'bottom-=10% bottom',
+      end: 'bottom-=15% bottom',
       scrub: true,
       onLeave: () => {
         footer?.setAttribute('activated', 'true');
@@ -30,23 +33,28 @@ onMounted(() => {
           li.setAttribute('lr-magnetic-hover', 'false');
         }
       },
-      onEnterBack: () => {
-        footer?.setAttribute('activated', 'false');
-        for (const li of footerItems || []) {
-          li.setAttribute('lr-magnetic-hover', 'true');
-        }
-      },
+      onEnterBack: () => hideFooter(),
     },
   });
 
-  tl.to(footer, {
-    yoyo: true,
-    scale: 1.2,
-    marginBottom: '2rem',
-  });
+  tl.fromTo(
+    footer,
+    {
+      scale: 1,
+      marginBottom: '0rem',
+    },
+    {
+      yoyo: true,
+      scale: 1.2,
+      marginBottom: '2.5rem',
+    }
+  );
 
-  tl.to(
-    '.c-LRFooter .left-spacer',
+  tl.fromTo(
+    footerSpacerSelector,
+    {
+      width: '0vw',
+    },
     {
       width: '20vw',
     },
@@ -59,7 +67,23 @@ onMounted(() => {
   }
 });
 
+function hideFooter() {
+  if (!footer || !footerItems || !footerItems.length) return;
+  footer.setAttribute('activated', 'false');
+  for (const li of footerItems) {
+    li.setAttribute('lr-magnetic-hover', 'true');
+  }
+}
+
+function animateOut() {
+  hideFooter();
+  const tl = gsap.timeline();
+  tl.to(footer, { scale: 1, marginBottom: '0rem' });
+  tl.to(footerSpacerSelector, { width: 0 }, '<');
+}
+
 onUnmounted(() => {
+  animateOut();
   tl?.kill();
   ScrollTrigger.getById(SCROLL_TRIGGER_IDS.FOOTER)?.kill(true);
 });

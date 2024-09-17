@@ -109,9 +109,6 @@ const useAnimations = () => {
   }
 
   function scrollHandler(e: Event) {
-    // if (!shouldLoadThreeSecondary.value && window.scrollY > THREE_SECOND_LAYER_ACTIVATE_SCROLL_POSITION) {
-    //   shouldLoadThreeSecondary.value = true;
-    // }
     cursor.listeners.scroll(e);
   }
 
