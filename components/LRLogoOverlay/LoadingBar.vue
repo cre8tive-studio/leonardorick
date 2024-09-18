@@ -19,7 +19,7 @@ defineExpose({ loadingBar });
 
 <style lang="scss" scoped>
 .c-LoadingBar {
-  height: 0.5rem;
+  height: clamp(0.1rem, 1.3vw, 0.4rem);
   width: 0;
   background-color: $highlight;
   transition: width 0.5s ease-in-out;
