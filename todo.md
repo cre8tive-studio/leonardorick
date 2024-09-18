@@ -1,7 +1,5 @@
 # BUGS OR FEATURES REQUIRED BEFORE RESPONSIVENESS FIX
 
-clamp size of loading bar on top
-
 - Understand why sometimes minutes and seconds are stickying together
 - show '0 seconds'
 
