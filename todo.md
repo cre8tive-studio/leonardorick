@@ -1,6 +1,7 @@
 # BUGS OR FEATURES REQUIRED BEFORE RESPONSIVENESS FIX
 
-Improve Experience Clock
+Hide header and footer if scrolled bottom. Show again if scrolled top;
+|-- do this with header: https://gsap.com/community/forums/topic/39286-scrolltrigger-lenis-problem/
 
 - Understand why sometimes minutes and seconds are stickying together
 - show '0 seconds'
@@ -13,21 +14,12 @@ Hack github contribution chart
 
 # RESPONSIVENES
 
-- copy margins and breakpoints of https://minhpham.design/
-- decrease a bit max sisze width of screens
-- fix and enable lenis in mobile
 - Add animations support for firefox and safari
-- validate home error message on mobile
-- validate margins and space between each section on all sizes
-- Fonts
-  --|\_ try to see if the timeline overlay h3 should be the same size as the footer overlay
 
 # FEATURES THAT I REALLY WANT
 
 create a nice console.log signature like https://hontran.dev/
 |-- something like "can I ask why your enakking on my website? :D. If you have any questions about something that was implemented here in this website, just drop me a message on linkein "
-
-do this with header: https://gsap.com/community/forums/topic/39286-scrolltrigger-lenis-problem/
 
 - setup header items animation on hover on both mobile and normal screens like https://minhpham.design/
 
