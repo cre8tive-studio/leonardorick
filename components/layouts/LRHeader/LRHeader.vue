@@ -43,8 +43,10 @@ import useCssBreakpoints from '~/composables/use-css-breakpoints';
 
 import { useAppStore } from '~/store';
 import useHideOnScroll from '~/composables/animations/use-hide-on-scroll';
+import { useAnimationStore } from '~/store/animation';
 
 const { lang } = toRefs(useAppStore());
+const { isHideOnScrollBlocked } = toRefs(useAnimationStore());
 const { isLg } = useCssBreakpoints();
 
 const mobileMenu = ref<HTMLDivElement>();
@@ -62,15 +64,16 @@ const closeSequence: TimelineDefinition = [
   ['.burger-button span', { rotate: 0 }, { at: '<' }],
 ];
 
+useHideOnScroll(['.c-LRHeader']);
+
 watch(isLg, () => {
   isMobileMenuVisible.value = false;
 });
 
-useHideOnScroll(['.c-LRHeader']);
-
 function toggleMobileMenu() {
   isMobileMenuVisible.value = !isMobileMenuVisible.value;
   isMobileMenuVisible.value ? timeline(openSequence) : timeline(closeSequence);
+  isHideOnScrollBlocked.value = isMobileMenuVisible.value;
 }
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <nav class="c-LRHeaderNav">
-    <ul class="pb-3 flex flex-col gap-4">
+    <ul class="mb-3 flex flex-col gap-4">
       <li>
         <NuxtLink
           lr-cursor
@@ -50,16 +50,9 @@
         </template>
       </ClientOnly>
     </ul>
-    <form class="language-select-form">
-      <select
-        lr-cursor
-        @change="$emit('routeSelected')"
-        v-model="lang"
-      >
-        <option value="en">{{ $t('english') }}</option>
-        <option value="pt-BR">{{ $t('portuguese') }}</option>
-      </select>
-    </form>
+    <div class="p-2 test">
+      <LRLanguageToggle />
+    </div>
   </nav>
 </template>
 
@@ -80,38 +73,25 @@ const handleLogout = async () => {
 
 <style scoped lang="scss">
 .c-LRHeaderNav {
+  display: flex;
+  flex-direction: column;
+
   li {
     a,
     button {
       text-transform: uppercase;
       font-weight: 700;
-      padding: 8px;
+      padding: 0.5rem;
       border-radius: 8px;
       cursor: none;
-    }
-  }
-  .language-select-form {
-    select {
-      background: transparent;
-      border-radius: 8px;
-      text-align: left;
-
-      height: 35px;
-      font-weight: 700;
-
-      cursor: pointer;
-      text-transform: uppercase;
-
-      &:focus {
-        outline: 0;
-      }
     }
   }
 }
 
 @media (min-width: $lg-breakpoint) {
-  .c-LRHeaderNav .language-select-form select {
+  .c-LRHeaderNav {
     text-align: right;
+    align-items: flex-end;
   }
 }
 </style>

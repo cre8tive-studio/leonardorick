@@ -18,6 +18,7 @@ interface AnimationStoreModel {
   isCursorActivated: boolean;
   isMagneticHoverActivated: boolean;
   isScrollEnabled: boolean;
+  isHideOnScrollBlocked: boolean;
 }
 
 export const useAnimationStore = defineStore('animationStore', () => {
@@ -39,6 +40,7 @@ export const useAnimationStore = defineStore('animationStore', () => {
     isCursorActivated: false,
     isMagneticHoverActivated: false,
     isScrollEnabled: true,
+    isHideOnScrollBlocked: false,
   });
 
   return {

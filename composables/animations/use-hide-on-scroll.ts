@@ -4,8 +4,9 @@ import { useAppStore } from '~/store';
 import { useAnimationStore } from '~/store/animation';
 
 const useHideOnScroll = (classes: string[]) => {
+  const { isHideOnScrollBlocked } = toRefs(useAnimationStore());
   const toBlockHeight = ref(0);
-  const isHideOnScrollBlocked = ref(false);
+  const blocked = ref(false);
   const route = useRoute();
   const { loaded } = toRefs(useAppStore());
 
@@ -42,16 +43,16 @@ const useHideOnScroll = (classes: string[]) => {
     const scrollHeight = document.body.offsetHeight - window.innerHeight;
     toBlockHeight.value = scrollHeight - window.screen.height * 1.1;
 
-    isHideOnScrollBlocked.value = false;
+    blocked.value = false;
     endOfPageTrigger?.kill(true);
     endOfPageTrigger = ScrollTrigger.create({
       start: () => toBlockHeight.value,
       onEnter: () => {
-        isHideOnScrollBlocked.value = true;
+        blocked.value = true;
       },
 
       onLeaveBack: () => {
-        isHideOnScrollBlocked.value = false;
+        blocked.value = false;
       },
     });
   }
@@ -62,7 +63,7 @@ const useHideOnScroll = (classes: string[]) => {
     unwatch();
   });
 
-  watch(isHideOnScrollBlocked, () => animate());
+  watch(blocked, () => animate());
 
   watch(
     () => route.path,
@@ -70,7 +71,9 @@ const useHideOnScroll = (classes: string[]) => {
   );
 
   function animate() {
-    gsap.to(classes, { autoAlpha: direction === 1 && !isFirstScroll && !isHideOnScrollBlocked.value ? 0 : 1 });
+    gsap.to(classes, {
+      autoAlpha: direction === 1 && !isFirstScroll && !blocked.value && !isHideOnScrollBlocked.value ? 0 : 1,
+    });
     isFirstScroll = false;
   }
 
