@@ -1,7 +1,7 @@
 <template>
   <div class="s-LRTimelineSection lr-section-page lr-section-page-no-paddings">
     <h1 class="section-h1">{{ $t('history') }}</h1>
-    <section class="timeline lr-text--body-2">
+    <section class="timeline">
       <div
         v-for="(experience, index) in experiences"
         :key="index"
