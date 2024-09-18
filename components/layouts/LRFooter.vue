@@ -49,8 +49,11 @@
 </template>
 
 <script setup lang="ts">
+import useHideOnScroll from '~/composables/animations/use-hide-on-scroll';
+
 const lis = ref<HTMLLIElement[]>();
 const { links, email } = useLinks();
+useHideOnScroll(['.c-LRFooter']);
 </script>
 <style scoped lang="scss">
 .c-LRFooter {

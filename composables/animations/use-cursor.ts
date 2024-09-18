@@ -10,10 +10,13 @@ const cursorOuterOriginalState = {
   height: 48,
 };
 
+let isStuck = false;
+
 let lastScrolledY = 0;
 let lastScrolledX = 0;
 let buttons = 0;
 let lastTargetBox: DOMRect;
+let lastTargetEl: HTMLElement;
 
 const elementsToFocus = new Set<HTMLElement>();
 
@@ -55,6 +58,10 @@ const useCursor = () => {
     cursor.x -= lastScrolledX;
     lastScrolledX = window.scrollX;
     cursor.x += lastScrolledX;
+
+    if (isStuck) {
+      animateCursorEnter(lastTargetEl);
+    }
   }
 
   function mousemoveHandler(e: MouseEvent) {
@@ -98,6 +105,8 @@ const useCursor = () => {
     if (!activated.value || !cursorOuter.value || !targetEl) return;
     const targetBox = targetEl.getBoundingClientRect();
     lastTargetBox = targetBox;
+    lastTargetEl = targetEl;
+    isStuck = true;
 
     // ANIMATION 2;
     gsap.killTweensOf(cursorOuter.value);
@@ -114,6 +123,7 @@ const useCursor = () => {
 
   function animateCursorLeave() {
     if (!activated.value || !cursorOuter.value) return;
+    isStuck = false;
     gsap.to(cursorOuter.value, {
       duration: 0.2,
       width: cursorOuterOriginalState.width,
@@ -131,6 +141,8 @@ const useCursor = () => {
     if (elToFocus) {
       animateCursorEnter(elToFocus);
     }
+
+    if (isStuck) return;
 
     // ANIMATION 1;
     gsap.to(cursorOuter.value, {

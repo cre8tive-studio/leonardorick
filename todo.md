@@ -1,7 +1,6 @@
 # BUGS OR FEATURES REQUIRED BEFORE RESPONSIVENESS FIX
 
-Hide header and footer if scrolled bottom. Show again if scrolled top;
-|-- do this with header: https://gsap.com/community/forums/topic/39286-scrolltrigger-lenis-problem/
+clamp size of loading bar on top
 
 - Understand why sometimes minutes and seconds are stickying together
 - show '0 seconds'

@@ -42,6 +42,7 @@ import type { TimelineDefinition } from 'motion';
 import useCssBreakpoints from '~/composables/use-css-breakpoints';
 
 import { useAppStore } from '~/store';
+import useHideOnScroll from '~/composables/animations/use-hide-on-scroll';
 
 const { lang } = toRefs(useAppStore());
 const { isLg } = useCssBreakpoints();
@@ -50,10 +51,6 @@ const mobileMenu = ref<HTMLDivElement>();
 const isMobileMenuVisible = ref(false);
 
 const localeRoute = computed(() => (r: string) => lang.value === 'en' ? r : `${r}?locale=${lang.value}`);
-
-watch(isLg, () => {
-  isMobileMenuVisible.value = false;
-});
 
 const openSequence: TimelineDefinition = [
   ['.mobile-menu', { scaleY: [0, 1] }],
@@ -64,6 +61,12 @@ const closeSequence: TimelineDefinition = [
   ['.mobile-menu', { scaleY: [1, 0] }],
   ['.burger-button span', { rotate: 0 }, { at: '<' }],
 ];
+
+watch(isLg, () => {
+  isMobileMenuVisible.value = false;
+});
+
+useHideOnScroll(['.c-LRHeader']);
 
 function toggleMobileMenu() {
   isMobileMenuVisible.value = !isMobileMenuVisible.value;
