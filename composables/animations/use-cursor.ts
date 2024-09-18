@@ -1,7 +1,5 @@
 import { gsap } from 'gsap';
 import { useAnimationStore } from '~/store/animation';
-// todo implement stuck state
-let isStuck = false;
 
 const cursor = {
   x: -100,
@@ -15,10 +13,13 @@ const cursorOuterOriginalState = {
 let lastScrolledY = 0;
 let lastScrolledX = 0;
 let buttons = 0;
+let lastTargetBox: DOMRect;
+
 const elementsToFocus = new Set<HTMLElement>();
 
 const useCursor = () => {
   const { cursorOuter, cursorInner, isCursorActivated: activated } = toRefs(useAnimationStore());
+  const route = useRoute();
 
   function activate() {
     if (!cursorOuter.value) return;
@@ -26,6 +27,18 @@ const useCursor = () => {
 
     activated.value = true;
   }
+
+  watch(
+    () => route.path,
+    () => {
+      if (!activated.value || !cursorOuter.value) return;
+      gsap.to(cursorOuter.value, {
+        duration: 0,
+        x: lastTargetBox.x,
+        y: lastTargetBox.y,
+      });
+    }
+  );
 
   function setCursorOuterOriginalState() {
     if (!cursorOuter.value) return;
@@ -61,12 +74,12 @@ const useCursor = () => {
     if (e.buttons !== buttons) {
       buttons = e.buttons;
       if (e.buttons === 0) {
-        animateMouseDown();
+        handlePointerUp();
       }
     }
   }
 
-  function handlePointerUp(_e: PointerEvent) {
+  function handlePointerUp(_e?: PointerEvent) {
     if (!cursorInner.value) return;
     gsap.to(cursorInner.value, { scale: 1, duration: 0.2 });
   }
@@ -81,17 +94,12 @@ const useCursor = () => {
     cursor.y = e.pageY;
   }
 
-  function animateMouseDown() {
-    if (!cursorInner.value) return;
-    gsap.to(cursorInner.value, { scale: 1, duration: 0.2 });
-  }
-
   function animateCursorEnter(targetEl: HTMLElement) {
-    if (!activated.value || !cursorOuter.value || !targetEl || isStuck) return;
+    if (!activated.value || !cursorOuter.value || !targetEl) return;
     const targetBox = targetEl.getBoundingClientRect();
+    lastTargetBox = targetBox;
 
     // ANIMATION 2;
-    isStuck = true;
     gsap.killTweensOf(cursorOuter.value);
     gsap.to(cursorOuter.value, {
       duration: 0.2,
@@ -106,12 +114,10 @@ const useCursor = () => {
 
   function animateCursorLeave() {
     if (!activated.value || !cursorOuter.value) return;
-    isStuck = false;
     gsap.to(cursorOuter.value, {
       duration: 0.2,
       width: cursorOuterOriginalState.width,
       height: cursorOuterOriginalState.width,
-      // opacity: 0.7,
       borderRadius: '50%',
     });
   }
@@ -126,14 +132,12 @@ const useCursor = () => {
       animateCursorEnter(elToFocus);
     }
 
-    if (!isStuck) {
-      // ANIMATION 1;
-      gsap.to(cursorOuter.value, {
-        duration: 0.5,
-        x: cursor.x - cursorOuterOriginalState.width / 2,
-        y: cursor.y - cursorOuterOriginalState.height / 2,
-      });
-    }
+    // ANIMATION 1;
+    gsap.to(cursorOuter.value, {
+      duration: 0.5,
+      x: cursor.x - cursorOuterOriginalState.width / 2,
+      y: cursor.y - cursorOuterOriginalState.height / 2,
+    });
   }
 
   function shiftSet(set: Set<HTMLElement>) {
