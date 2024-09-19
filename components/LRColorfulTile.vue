@@ -12,6 +12,7 @@
         <div
           v-for="index in 850"
           :key="index"
+          :id="`${index}`"
           class="square"
         ></div>
       </div>
@@ -89,10 +90,11 @@ onMounted(() => {
         position: relative;
         min-width: 5rem;
         height: 5rem;
-        border: 1px solid rgba(#fff, 0.25);
+        border: 1px solid rgba($main-dark-text, 0.25);
 
         transition-duration: 1500ms;
-        &:hover {
+        &:hover,
+        &.hovered {
           transition-duration: 0ms;
           &:nth-child(4n) {
             background-color: var(--tiles-color-2);

@@ -6,6 +6,8 @@
     />
     <div class="wrapper-default-generals-text lr-section-page-paddings pointer-events-none">
       <LRGeneralText
+        @mousemove="mousemoveHandler"
+        ref="generalText"
         v-if="experienceContent"
         :key="refreshKey"
         :info="experienceContent"
@@ -18,6 +20,7 @@
 import { useAppStore } from '~/store';
 import { COLORS } from '~/utils/constants/colors';
 import { DEFAULTS } from '~/utils/constants/defaults';
+import LRGeneralText from '~/components/LRGeneralText.vue';
 
 interface Props {
   refreshKey: number;
@@ -25,6 +28,7 @@ interface Props {
 defineProps<Props>();
 
 const { generals, personalInfo } = toRefs(useAppStore());
+const generalText = ref<InstanceType<typeof LRGeneralText>>();
 
 const experienceYears = computed(
   () =>
@@ -39,6 +43,23 @@ const experienceContent = computed(() => {
 });
 const colors = [COLORS.blue1, COLORS.blue2, COLORS.blue3, COLORS.blue4, COLORS.blue5];
 const tilesBackgroundColor = COLORS.mainDarkBg;
+
+let lastUnder: Element;
+function mousemoveHandler(e: MouseEvent) {
+  if (!generalText.value?.self) return;
+  generalText.value.self.style.visibility = 'hidden';
+
+  const $under = document.elementFromPoint(e.clientX, e.clientY);
+  if ($under) {
+    if (lastUnder && lastUnder.id !== $under.id) {
+      lastUnder.classList.remove('hovered');
+    }
+    $under.classList.add('hovered');
+    lastUnder = $under;
+  }
+
+  generalText.value.self.style.visibility = 'visible';
+}
 </script>
 
 <style scoped lang="scss">

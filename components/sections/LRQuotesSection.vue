@@ -85,7 +85,7 @@ function selectRandomQuote() {
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: clamp(1.5rem, 6vw, 4rem);
+  gap: clamp(1.5rem, 5vw, 3.5rem);
 
   h1 {
     @extend .lr-text--body-3;

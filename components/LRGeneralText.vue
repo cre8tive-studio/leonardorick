@@ -1,26 +1,32 @@
 <template>
   <div
-    v-for="paragraph in info.data"
-    :key="paragraph.id"
+    ref="self"
     class="c-LRGeneralText"
+    @mousemove="$emit('mousemove', $event)"
   >
-    <component
-      :is="paragraph.htmlTag"
-      :id="`id-${paragraph.id}`"
-      ref="tags"
-      :aria-label="paragraphsFullText[paragraph.id]?.fullText"
+    <div
+      v-for="paragraph in info.data"
+      :key="paragraph.id"
     >
-      <template v-if="paragraph.text.length > 1">
-        <span
-          v-for="(segment, sindex) in paragraph.text"
-          :key="sindex"
-          :class="{ bold: segment.bold }"
-        >
-          {{ segment.text }}
-        </span>
-      </template>
-      <template v-else> {{ paragraph.text[0]?.text }}</template>
-    </component>
+      <component
+        :is="paragraph.htmlTag"
+        :id="`id-${paragraph.id}`"
+        ref="tags"
+        :aria-label="paragraphsFullText[paragraph.id]?.fullText"
+      >
+        <template v-if="paragraph.text.length > 1">
+          <span
+            ref="text"
+            v-for="(segment, sindex) in paragraph.text"
+            :key="sindex"
+            :class="{ bold: segment.bold }"
+          >
+            {{ segment.text }}
+          </span>
+        </template>
+        <template v-else> {{ paragraph.text[0]?.text }}</template>
+      </component>
+    </div>
   </div>
 </template>
 
@@ -38,10 +44,13 @@ interface ComponentParagraphInfo {
   fullText: string;
   animation?: any;
 }
-const tags = ref<HTMLElement[]>();
 const { info } = defineProps<Props>();
-const paragraphsFullText: Record<string, ComponentParagraphInfo> = reactive({});
+const tags = ref<HTMLElement[]>();
+const self = ref<HTMLDivElement>();
 
+defineExpose({ self });
+
+const paragraphsFullText: Record<string, ComponentParagraphInfo> = reactive({});
 const scrollTriggerId = computed(() => SCROLL_TRIGGER_IDS.GENERALS + info.id);
 
 onMounted(async () => {
@@ -59,7 +68,7 @@ function init() {
     const text = new SplitType(tag, {
       types: 'words,chars',
     });
-    // gsap.killTweensOf(tag);
+    gsap.killTweensOf(tag);
     // todo set how animations happens based on animationType defined in payload
     gsap.from(text.chars, {
       scrollTrigger: {

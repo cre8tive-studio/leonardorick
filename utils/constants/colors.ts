@@ -5,7 +5,7 @@ export const COLORS = {
 
   // Palette
   blue1: '#060615',
-  blue2: '#060b2e',
+  blue2: '#0A1656',
   blue3: '#003f4a',
   blue4: '#0093dd',
   blue5: '#07eee4',
