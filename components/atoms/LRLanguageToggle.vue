@@ -1,13 +1,16 @@
 <template>
-  <div class="c-LRLanguageToggle">
-    <SvgoFlagUnitedKingdom filled />
-    <SvgoFlagBrazil filled />
-    <div
-      class="toggle"
-      :class="lang"
-      @click="toggleLanguage"
-    />
-  </div>
+  <!-- adding client-only fixed the bug that the toggle was always starting with english -->
+  <ClientOnly>
+    <div class="c-LRLanguageToggle">
+      <SvgoFlagUnitedKingdom filled />
+      <SvgoFlagBrazil filled />
+      <div
+        class="toggle"
+        :class="lang"
+        @click="toggleLanguage"
+      />
+    </div>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
