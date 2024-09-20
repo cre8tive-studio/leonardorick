@@ -39,7 +39,7 @@ onMounted(() => {
     // tweak to perfect align large ball
     left: -2.5px;
     top: -2.5px;
-    --size: 48px; // this value overrites use-cursor cursorOuterOriginalState
+    --size: var(--lr-outer-cursor-size); // this value overrites use-cursor cursorOuterOriginalState
     border: 3px solid $highlight;
   }
   &--small {

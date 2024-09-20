@@ -1,5 +1,7 @@
+import { COLORS } from '~/utils/constants/colors';
 import { gsap } from 'gsap';
 import { useAnimationStore } from '~/store/animation';
+import { useAppStore } from '~/store';
 
 const cursor = {
   x: -100,
@@ -10,25 +12,192 @@ const cursorOuterOriginalState = {
   height: 48,
 };
 
-let isStuck = false;
+const MOUSE_TEXT_TIMEOUT = 10000;
+const SCROLL_DOWN_TEXT_KEY = 'scroll_down';
+const CURSOR_WORD_CLASS = 'cursor-word';
+let scrollDownTimeout: NodeJS.Timeout | null;
+let scrollDownAgainTimeout: NodeJS.Timeout | null;
+let addTextTimeout: NodeJS.Timeout | null;
+let removeTextTimeout: NodeJS.Timeout | null;
 
 let lastScrolledY = 0;
 let lastScrolledX = 0;
 let buttons = 0;
 let lastTargetBox: DOMRect;
 let lastTargetEl: HTMLElement;
+let lastMouseTextEl: HTMLElement | null;
+let removedWithoutAddAgain = false;
+// each different text we want to add should have a
+// block flag to we don't overwide the text with
+// another while it's still working it's logic
+let mouseTextScrollCallToActionStarted = false;
+let mouseTextScrollCallToActionFinished = false;
 
 const elementsToFocus = new Set<HTMLElement>();
 
 const useCursor = () => {
+  const $t = useNuxtApp().$i18n.t;
   const { cursorOuter, cursorInner, isCursorActivated: activated } = toRefs(useAnimationStore());
+  const { lang } = toRefs(useAppStore());
   const route = useRoute();
+  const text = ref('');
+  let isStuck = ref(false);
+  let scrollDownText = $t(SCROLL_DOWN_TEXT_KEY); // todo: translate
 
   function activate() {
     if (!cursorOuter.value) return;
     setCursorOuterOriginalState();
+    listenToMouseText();
+    addScrollCallToAction();
 
     activated.value = true;
+  }
+
+  function listenToMouseText() {
+    const unwwatch = watch(lang, () => {
+      if (!mouseTextScrollCallToActionFinished) {
+        scrollDownText = $t(SCROLL_DOWN_TEXT_KEY);
+        if (mouseTextScrollCallToActionStarted) {
+          text.value = scrollDownText;
+        } else {
+          addScrollCallToAction();
+        }
+      } else {
+        unwwatch();
+      }
+    });
+
+    watch(isStuck, () => {
+      if (!cursorOuter.value || !lastMouseTextEl || mouseTextScrollCallToActionFinished) return;
+
+      if (isStuck.value) {
+        lastMouseTextEl.style.opacity = '0';
+        addCursorOuterBorder();
+      } else {
+        lastMouseTextEl.style.opacity = '1';
+        cursorOuter.value.style.border = 'none';
+      }
+    });
+
+    watch(text, () => {
+      if (!cursorOuter.value) return;
+      if (text.value) {
+        const t = text.value + ' ';
+        const mouseTextEl = document.createElement('div');
+        mouseTextEl.classList.add(CURSOR_WORD_CLASS);
+        const numChars = t.length; // number of characters
+        const radius = 28; // radius of the circle
+        const offsetAngle = Math.PI; // 45 degrees in radians
+
+        for (const [index, char] of [...t].entries()) {
+          const charEl = document.createElement('span');
+          const angle = (index / numChars) * 2 * Math.PI + offsetAngle; // angle in radians
+
+          charEl.innerHTML = char === ' ' ? '&nbsp;' : char;
+
+          // Calculate position based on angle
+          const x = radius * Math.cos(angle);
+          const y = radius * Math.sin(angle);
+
+          // Set custom properties for styling
+          charEl.style.setProperty('--x', `${x}px`);
+          charEl.style.setProperty('--y', `${y}px`);
+          charEl.style.setProperty('--rotate', `${(angle * 180) / Math.PI + 90}deg`);
+          mouseTextEl.appendChild(charEl);
+        }
+        addMouseText(mouseTextEl);
+      } else {
+        removeMouseText(true);
+      }
+    });
+  }
+
+  function addMouseText(mouseTextEl: HTMLElement) {
+    if (!cursorOuter.value) return;
+
+    mouseTextEl.style.opacity = '0';
+    if (lastMouseTextEl) {
+      lastMouseTextEl.style.opacity = '0';
+    }
+    cursorOuter.value.appendChild(mouseTextEl);
+
+    if (addTextTimeout) clearTimeout(addTextTimeout);
+    addTextTimeout = setTimeout(() => {
+      if (!cursorOuter.value) return;
+
+      if (!removedWithoutAddAgain && lastMouseTextEl) {
+        cursorOuter.value.removeChild(lastMouseTextEl);
+      }
+
+      if (!isStuck.value) {
+        mouseTextEl.style.opacity = '1';
+        cursorOuter.value.style.border = 'none';
+      }
+      lastMouseTextEl = mouseTextEl;
+      removedWithoutAddAgain = false;
+    }, 300);
+  }
+
+  function removeMouseText(del = false) {
+    if (!lastMouseTextEl || removedWithoutAddAgain) return;
+    lastMouseTextEl.style.opacity = '0';
+
+    removedWithoutAddAgain = true;
+    if (removeTextTimeout) clearTimeout(removeTextTimeout);
+    removeTextTimeout = setTimeout(() => {
+      if (!cursorOuter.value) return;
+
+      lastMouseTextEl && cursorOuter.value.removeChild(lastMouseTextEl);
+      addCursorOuterBorder();
+
+      if (del) {
+        lastMouseTextEl = null;
+      }
+    }, 300);
+  }
+
+  function addScrollCallToAction() {
+    if (scrollDownTimeout) clearTimeout(scrollDownTimeout);
+
+    // the first time we wait 10 secons to show  the call to action. If
+    // it was already started but the user didn't scrolled enough yet,
+    // we show it quickly until he reaches a point where we don't show
+    // it anymore
+    scrollDownTimeout = setTimeout(() => {
+      mouseTextScrollCallToActionStarted = true;
+      text.value = scrollDownText;
+      scrollDownTimeout = clearAndDeleteTimeout(scrollDownTimeout);
+    }, MOUSE_TEXT_TIMEOUT);
+  }
+
+  function removeScrollCallToAction() {
+    if (!mouseTextScrollCallToActionFinished) {
+      // close to the point where the color explodes below the LR icon
+      if (window.scrollY > 160) {
+        scrollDownTimeout = clearAndDeleteTimeout(scrollDownTimeout);
+        scrollDownAgainTimeout = clearAndDeleteTimeout(scrollDownAgainTimeout);
+        text.value = '';
+        mouseTextScrollCallToActionStarted = false;
+        mouseTextScrollCallToActionFinished = true;
+      } else if (mouseTextScrollCallToActionStarted && window.scrollY > lastScrolledY) {
+        removeMouseText();
+        clearAndDeleteTimeout(scrollDownAgainTimeout);
+        scrollDownAgainTimeout = setTimeout(() => {
+          // we can be sure that lastMouseTextEl is 'scroll down' because
+          // blockMouseTextScrolCallToAction is true
+          if (lastMouseTextEl && mouseTextScrollCallToActionStarted) {
+            addMouseText(lastMouseTextEl);
+          }
+          // cant be lower than 300 because that's the ease
+          // we use all around the  mouse text animation
+        }, MOUSE_TEXT_TIMEOUT / 10 + 300);
+      }
+    }
+  }
+
+  function addCursorOuterBorder() {
+    if (!cursorOuter.value) return;
+    cursorOuter.value.style.border = `3px solid ${COLORS.highlight}`;
   }
 
   watch(
@@ -51,6 +220,8 @@ const useCursor = () => {
   }
 
   function scrollHandler(_e: Event) {
+    removeScrollCallToAction();
+
     cursor.y -= lastScrolledY;
     lastScrolledY = window.scrollY;
     cursor.y += lastScrolledY;
@@ -59,7 +230,7 @@ const useCursor = () => {
     lastScrolledX = window.scrollX;
     cursor.x += lastScrolledX;
 
-    if (isStuck) {
+    if (isStuck.value) {
       animateCursorEnter(lastTargetEl);
     }
   }
@@ -71,7 +242,7 @@ const useCursor = () => {
       if (!elementsToFocus.has(el)) {
         elementsToFocus.add(el);
       }
-    } else {
+    } else if (isStuck.value) {
       animateCursorLeave();
     }
 
@@ -106,7 +277,7 @@ const useCursor = () => {
     const targetBox = targetEl.getBoundingClientRect();
     lastTargetBox = targetBox;
     lastTargetEl = targetEl;
-    isStuck = true;
+    isStuck.value = true;
 
     // ANIMATION 2;
     gsap.killTweensOf(cursorOuter.value);
@@ -123,7 +294,8 @@ const useCursor = () => {
 
   function animateCursorLeave() {
     if (!activated.value || !cursorOuter.value) return;
-    isStuck = false;
+    isStuck.value = false;
+    console.log('wtf?');
     gsap.to(cursorOuter.value, {
       duration: 0.2,
       width: cursorOuterOriginalState.width,
@@ -142,7 +314,7 @@ const useCursor = () => {
       animateCursorEnter(elToFocus);
     }
 
-    if (isStuck) return;
+    if (isStuck.value) return;
 
     // ANIMATION 1;
     gsap.to(cursorOuter.value, {

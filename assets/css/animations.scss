@@ -1,3 +1,7 @@
+:root {
+  --lr-outer-cursor-size: 48px;
+}
+
 $default-ease: cubic-bezier(0.49, 0.225, 0.175, 0.86);
 
 // if want to use the css approach, add the class on elements
@@ -22,6 +26,35 @@ $default-ease: cubic-bezier(0.49, 0.225, 0.175, 0.86);
   @keyframes scroll-reveal {
     to {
       background-size: 100% 100%;
+    }
+  }
+}
+
+.cursor-word {
+  text-transform: uppercase;
+  color: $highlight;
+  font-weight: 600;
+  transform-origin: 50%;
+  height: var(--lr-outer-cursor-size);
+  font-size: 0.9rem;
+  animation: rotate 2.5s linear infinite;
+
+  border-radius: 50%;
+  transition: opacity 0.3s $default-ease;
+  span {
+    position: absolute;
+    transform: translate(var(--x), var(--y)) rotate(var(--rotate));
+    /* Adjust anchoring point to center bottom, so the characteraligns around the circle */
+    left: 43%;
+    top: 26%;
+  }
+
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
     }
   }
 }

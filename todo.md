@@ -25,19 +25,15 @@ If you want to check some nice code structures check my packages project, were I
 
 # FEATURES FOR LATER
 
-create # urls so I can jump right to the place I want
+change main deploy to nuxtHub
+|--change cloudinary images to nuxtHub
 
-Add scrolldown around the cursor
+create # urls so I can jump right to the place I want
 
 add another transition timing on :hover so it can close faster than it opens on both contact footter and what i do sections (like seen in the css video 5 tips)
 
 stop caching images with useFetch
 |- old note: understand the differnce between useFetch and $fetch because apperently I need to use $fetch after ssr is generated
-
-change main deploy to nuxtHub
-|--change cloudinary images to nuxtHub
-
-Add an icon on each footer link indicating that it will open another tab
 
 - understand how can I properly set posthog api key to only accept requests from specific hosts
 

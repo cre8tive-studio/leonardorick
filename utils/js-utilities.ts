@@ -78,3 +78,11 @@ export function dateDifference(startDate: Date, endDate: Date) {
 export function openExternalLink(link: string, target = '_blank') {
   open(link, target);
 }
+
+export function clearAndDeleteTimeout(timeout: NodeJS.Timeout | null) {
+  if (timeout) {
+    clearTimeout(timeout);
+    timeout = null;
+  }
+  return timeout;
+}
