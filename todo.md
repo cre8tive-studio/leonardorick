@@ -42,3 +42,15 @@ Improve magnetic
 - Fix magnetic items keeping on active state
 - improve sticky button to do not rely on a padding and consider the cursor outer
 - Magnetic to animate out only when the intersection between the icon and the round circle ends. This way I don't need the mouseleave listener. For that I need to understand better the intersection API
+
+add music section and login once appwrite allow transactions
+
+- https://github.com/appwrite/appwrite/issues/2788
+- https://appwrite.io/threads/1096798213350109184
+
+change lang logic to be a path /pt-BR so all routes can be generated properly without needing to go to backend
+update cloudinary migrate-db so it do not duplicate images in the target endpoint
+
+improve content with tiniwow: https://tinywow.com/write/content-improver
+
+Adicionar o logo da enoresa no histórico

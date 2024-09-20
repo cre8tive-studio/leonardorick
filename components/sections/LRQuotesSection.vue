@@ -74,7 +74,7 @@ function selectRandomQuote() {
   }
   // a big quote. Uncomment below and comment splice so
   // you can test if things fit properly on the screen
-  // selectedQuote.value = quotesClone[2];
+  // selectedQuote.value = quotesClone[11];
 }
 </script>
 
@@ -86,6 +86,9 @@ function selectRandomQuote() {
   justify-content: center;
   text-align: center;
   gap: clamp(1.5rem, 5vw, 3.5rem);
+  margin-bottom: 10vh;
+  margin-top: 10svh;
+  height: 110svh;
 
   h1 {
     @extend .lr-text--body-3;
