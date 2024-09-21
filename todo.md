@@ -10,14 +10,6 @@ Hack github contribution chart
 
 - Add animations support for firefox and safari
 
-# FEATURES THAT I REALLY WANT
-
-create a nice console.log signature like https://hontran.dev/
-|-- something like "can I ask why your enakking on my website? :D. If you have any questions about something that was implemented here in this website, just drop me a message on linkein "
-
-Improve readme readme: This project is my experience lab, I just add things here for trying out stuff so that's why the structure and coding might not be as organized as you would expect in a real project. In real life we never to that much of different animations and try to repeat more stuff, here I just went crazy and did everything I always wanted! It's all about 1) How many maintainence is needed in the code (this project is not intended to keep changing), 2) how many developers are going to touch the code (only me) and 3) focus on what really matters (perfecsionism is not always a good thing)
-If you want to check some nice code structures check my packages project, were I create some helper functions for my projects
-
 # FEATURES FOR LATER
 
 change main deploy to nuxtHub

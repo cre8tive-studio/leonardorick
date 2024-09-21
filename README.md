@@ -1,57 +1,22 @@
-# Nuxt 3 Minimal Starter
+# Leonardo Rick personal portifolio
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+| Home |
+| ---- |
+|      |
 
 ## Setup
 
-Make sure to install the dependencies:
-
 ```bash
-# yarn
-yarn install
-
-# npm
-npm install
-
-# pnpm
 pnpm install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`
-
-```bash
 npm run dev
 ```
 
-## Production
+Make sure to check .env.example to check the necessary variables needed to run the probject.
 
-Build the application for production:
+### Note
 
-```bash
-npm run build
-```
+This project is my experimental playground where I try out different things, so the structure and coding may not be as organized as you would expect in a real project. In real life, we don't usually use so many different animations and tend to repeat things more. But here, I went all out and did everything I've always wanted to do!
 
-Locally preview production build:
+The main focus here is on three things: 1) the amount of maintenance required in the code (this project is not meant to be constantly changed), 2) the number of developers working on the code (just me), and 3) concentrating on what truly matters (perfectionism isn't always necessary).
 
-```bash
-npm run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
-
-## Test
-
-```bash
-npm run test
-```
-
-Setup following [this amazing tutorial](https://dev.to/tao/adding-vitest-to-nuxt-3-2023-lpa)
-
-### ORGANIZE LATER::::
-
-todo: add necessary information here
-
-on every animations composable, never add anything on the root of the composable.
-We should be able to call this composable from wherever we want to do anything animation related
+If you're interested in checking out some well-structured code, take a look at my github and the [js-libs](https://github.com/LeonardoRick/js-libs) project where I create helper functions for my projects.

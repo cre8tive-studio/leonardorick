@@ -1,7 +1,14 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
+import { useAppStore } from '~/store';
+import { COLORS } from '~/utils/constants/colors';
 
 export default defineNuxtPlugin(async (_nuxtApp) => {
+  const { environment, baseUrl } = useRuntimeConfig().public;
+  const { personalInfo } = toRefs(useAppStore());
+
+  printConsoleIntroduction(environment, baseUrl, personalInfo.value?.links.linkedin);
+
   const { getCurrentSession, initSettings } = useAppwrite();
   let initializerClientError = null;
   try {
@@ -23,3 +30,15 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
     },
   };
 });
+
+function printConsoleIntroduction(env: string, baseUrl: string, linkedin?: string) {
+  if (!isProduction(env)) return;
+
+  console.log(
+    `%c${baseUrl}%c\nOh, so you thought you could sneak onto my website undetected, huh? Nice try! 😏\nBut seriously, If you have any questions about the features on this website, feel free to shoot me a message on LinkedIn: ${linkedin}.%c\nSincerely,%c\nLeonardo Rick`,
+    'font-size: 1.5rem; font-weight:bold; padding: 16px; padding-bottom: 0px;',
+    `font-size: 12px; color: ${COLORS.mainDarkText}; padding-right: 200px; padding-bottom: 16px; padding-left: 16px`,
+    'font-size: 12px; padding-left: 16px;',
+    'font-size: 12px; font-weight: 700; padding-left: 16px;'
+  );
+}

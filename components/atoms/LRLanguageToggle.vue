@@ -34,6 +34,7 @@ function toggleLanguage() {
 
 <style scoped lang="scss">
 .c-LRLanguageToggle {
+  width: fit-content;
   position: relative;
   --height: 20px;
   --width: 56px;
