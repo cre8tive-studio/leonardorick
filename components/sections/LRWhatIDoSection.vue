@@ -112,6 +112,8 @@ function getScrollerId(id?: string) {
   flex-direction: column;
   justify-content: center;
 
+  margin-bottom: 5svh;
+
   ul {
     width: 100%;
     display: flex;
@@ -119,10 +121,10 @@ function getScrollerId(id?: string) {
     li {
       .li-content-wrapper {
         position: relative;
-        --height: clamp(4.5rem, 8.5vw, 16rem);
+        --height: clamp(4.5rem, 9vw, 16rem);
         height: var(--height);
 
-        transition: all 0.5s $default-ease;
+        transition: all 0.8s $default-ease;
 
         :deep(.char) {
           // this will affect the speed of the gsap animation as well
@@ -130,7 +132,10 @@ function getScrollerId(id?: string) {
         }
 
         &:hover {
+          // add different transition on hover to close it faster than it opens
+          transition: all 0.4s $default-ease;
           .description {
+            transition: all 0.4s $default-ease;
             height: 140%;
           }
 
@@ -159,7 +164,7 @@ function getScrollerId(id?: string) {
           justify-content: flex-end;
           align-items: center;
           background-color: rgba($highlight-2, 0.8);
-          transition: height 0.5s $default-ease;
+          transition: height 0.8s $default-ease;
           overflow: hidden;
 
           @extend .lr-section-page-paddings;
@@ -201,7 +206,7 @@ function getScrollerId(id?: string) {
             justify-content: flex-start;
 
             &-paddings-wrapper {
-              margin-top: 8rem;
+              margin-top: 5rem;
               text-align: left;
               justify-content: left;
               margin-left: 3rem;
