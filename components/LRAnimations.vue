@@ -1,6 +1,5 @@
 <template>
   <LRCursor />
-  <LRLogoOverlay />
   <FluidBackground />
   <ThreeLeonardoRick />
 </template>

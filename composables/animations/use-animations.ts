@@ -16,7 +16,7 @@ const useAnimations = () => {
   const { isMobile } = useDevice();
   const {
     loadingBarRef,
-    logoOverlayRef,
+    overlayRef,
     cubeLoaderContainerRef,
     isOverlayCompleteHidden,
     isLRModelLoaded,
@@ -137,7 +137,7 @@ const useAnimations = () => {
 
   function hideOverlay() {
     isScrollEnabled.value = false;
-    if (!logoOverlayRef.value || !loadingBarRef.value || !cubeLoaderContainerRef.value) {
+    if (!overlayRef.value || !loadingBarRef.value || !cubeLoaderContainerRef.value) {
       isScrollEnabled.value = true;
       return;
     }
@@ -155,7 +155,7 @@ const useAnimations = () => {
         opacity: 0,
       })
       // hide overlay completly
-      .to(logoOverlayRef.value, {
+      .to(overlayRef.value, {
         duration: 2,
         opacity: 0,
         onStart: () => {
@@ -166,9 +166,9 @@ const useAnimations = () => {
           isScrollEnabled.value = true;
         },
         onComplete: () => {
-          if (logoOverlayRef.value) {
+          if (overlayRef.value) {
             // Once the animation is complete, set the display to 'none'
-            logoOverlayRef.value.style.display = 'none';
+            overlayRef.value.style.display = 'none';
             isOverlayCompleteHidden.value = true;
           }
         },

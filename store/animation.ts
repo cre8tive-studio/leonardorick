@@ -11,7 +11,7 @@ interface AnimationStoreModel {
   fluidCanvas: HTMLCanvasElement | undefined;
   logoCanvas: HTMLCanvasElement | undefined;
   loadingBarRef: HTMLDivElement | undefined;
-  logoOverlayRef: HTMLDivElement | undefined;
+  overlayRef: HTMLDivElement | undefined;
   cubeLoaderContainerRef: HTMLDivElement | undefined;
   cursorOuter: HTMLDivElement | undefined;
   cursorInner: HTMLDivElement | undefined;
@@ -33,7 +33,7 @@ export const useAnimationStore = defineStore('animationStore', () => {
     fluidCanvas: undefined,
     logoCanvas: undefined,
     loadingBarRef: undefined,
-    logoOverlayRef: undefined,
+    overlayRef: undefined,
     cubeLoaderContainerRef: undefined,
     cursorOuter: undefined,
     cursorInner: undefined,

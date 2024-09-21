@@ -1,7 +1,7 @@
 <template>
   <div
-    id="logoOverlay"
-    ref="logoOverlay"
+    id="overlay"
+    ref="overlay"
     aria-hidden="true"
     class="fixed h-full w-full"
   >
@@ -24,21 +24,21 @@ import { useAnimationStore } from '~/store/animation';
 /**
  * ~ loading
  */
-const { loadingBarRef, logoOverlayRef, cubeLoaderContainerRef, loadingProgress, loadingTotal } = toRefs(
+const { loadingBarRef, overlayRef, cubeLoaderContainerRef, loadingProgress, loadingTotal } = toRefs(
   useAnimationStore()
 );
-const logoOverlay = ref();
+const overlay = ref();
 const loadingBarComponent = ref();
 const cubeLoaderContainer = ref();
 onMounted(() => {
   loadingBarRef.value = loadingBarComponent.value.loadingBar;
-  logoOverlayRef.value = logoOverlay.value;
+  overlayRef.value = overlay.value;
   cubeLoaderContainerRef.value = cubeLoaderContainer.value;
 });
 </script>
 
 <style scoped lang="scss">
-#logoOverlay {
+#overlay {
   z-index: 50;
   top: 0;
   left: 0;

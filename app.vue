@@ -1,5 +1,6 @@
 <template>
   <NuxtRouteAnnouncer />
+  <LROverlay />
   <ClientOnly>
     <LRAnimations />
   </ClientOnly>
