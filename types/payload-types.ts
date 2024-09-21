@@ -82,7 +82,7 @@ export interface Person {
   id: string;
   name: string;
   description: string;
-  image: string | Media;
+  image: Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -92,4 +92,11 @@ export interface Quote {
   author?: string;
   updatedAt: string;
   createdAt: string;
+}
+
+export interface Company {
+  id: string;
+  name: string;
+  site: string;
+  image: Media;
 }

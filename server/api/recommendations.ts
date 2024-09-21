@@ -14,6 +14,7 @@ export default defineEventHandler(async (event) => {
           recommendation
           order
           author {
+            id
             name
             description
             image {

@@ -10,6 +10,8 @@ const cursor = {
 const cursorOuterOriginalState = {
   width: 48,
   height: 48,
+  top: '-2.5px',
+  left: '-2.5px',
 };
 
 const MOUSE_TEXT_TIMEOUT = 10000;
@@ -125,7 +127,7 @@ const useCursor = () => {
     addTextTimeout = setTimeout(() => {
       if (!cursorOuter.value) return;
 
-      if (!removedWithoutAddAgain && lastMouseTextEl) {
+      if (!removedWithoutAddAgain && lastMouseTextEl && cursorOuter.value.contains(lastMouseTextEl)) {
         cursorOuter.value.removeChild(lastMouseTextEl);
       }
 
@@ -147,7 +149,10 @@ const useCursor = () => {
     removeTextTimeout = setTimeout(() => {
       if (!cursorOuter.value) return;
 
-      lastMouseTextEl && cursorOuter.value.removeChild(lastMouseTextEl);
+      if (lastMouseTextEl && cursorOuter.value.contains(lastMouseTextEl)) {
+        cursorOuter.value.removeChild(lastMouseTextEl);
+      }
+
       addCursorOuterBorder();
 
       if (del) {
@@ -217,6 +222,9 @@ const useCursor = () => {
     const boundingClientRect = cursorOuter.value.getBoundingClientRect();
     cursorOuterOriginalState.width = boundingClientRect.width;
     cursorOuterOriginalState.height = boundingClientRect.height;
+    const style = getComputedStyle(cursorOuter.value);
+    cursorOuterOriginalState.top = style.top;
+    cursorOuterOriginalState.left = style.left;
   }
 
   function scrollHandler(_e: Event) {
@@ -236,15 +244,7 @@ const useCursor = () => {
   }
 
   function mousemoveHandler(e: MouseEvent) {
-    const el = e.target as HTMLElement;
-    const attr = el.attributes.getNamedItem('lr-cursor');
-    if (attr) {
-      if (!elementsToFocus.has(el)) {
-        elementsToFocus.add(el);
-      }
-    } else if (isStuck.value) {
-      animateCursorLeave();
-    }
+    handleLrCursorFocus(e);
 
     updateCursorPosition(e);
     // handle click and drag not triggering pointerup
@@ -254,6 +254,19 @@ const useCursor = () => {
       if (e.buttons === 0) {
         handlePointerUp();
       }
+    }
+  }
+
+  function handleLrCursorFocus(e: MouseEvent) {
+    const el = e.target as HTMLElement;
+    const attr = el.attributes.getNamedItem('lr-cursor');
+    if (attr) {
+      const toFocus = (el.querySelector('[lr-cursor-inner]') as HTMLElement) || el;
+      if (!elementsToFocus.has(toFocus)) {
+        elementsToFocus.add(toFocus);
+      }
+    } else if (isStuck.value) {
+      animateCursorLeave();
     }
   }
 
@@ -287,6 +300,8 @@ const useCursor = () => {
       y: targetBox.y + window.scrollY,
       width: targetBox.width,
       height: targetBox.height,
+      top: 0,
+      left: 0,
       opacity: 1,
       borderRadius: getComputedStyle(targetEl).borderRadius,
     });
@@ -300,6 +315,11 @@ const useCursor = () => {
       width: cursorOuterOriginalState.width,
       height: cursorOuterOriginalState.width,
       borderRadius: '50%',
+      onComplete: () => {
+        if (!cursorOuter.value) return;
+        cursorOuter.value.style.top = cursorOuterOriginalState.top;
+        cursorOuter.value.style.left = cursorOuterOriginalState.left;
+      },
     });
   }
 

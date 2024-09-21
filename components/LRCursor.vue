@@ -37,15 +37,15 @@ onMounted(() => {
   // opacity: 0.7; // overwritten in use-cursor
   &--large {
     // tweak to perfect align large ball
-    left: -2.5px;
-    top: -2.5px;
+    top: var(--lr-outer-cursor-offset);
+    left: var(--lr-outer-cursor-offset);
     --size: var(--lr-outer-cursor-size); // this value overrites use-cursor cursorOuterOriginalState
     border: 3px solid $highlight;
   }
   &--small {
     // tweak to perfect align middle ball
-    left: -1.9px;
     top: -1.9px;
+    left: -1.9px;
     --size: 16px;
     background: $highlight;
     transform: translate(-50%, -50%);

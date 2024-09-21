@@ -1,14 +1,14 @@
 <template>
   <!-- adding client-only fixed the bug that the toggle was always starting with english -->
   <ClientOnly>
-    <div
-      lr-cursor
-      class="c-LRLanguageToggle"
-      @click="toggleLanguage"
-    >
-      <SvgoFlagUnitedKingdom filled />
-      <SvgoFlagBrazil filled />
+    <div class="c-LRLanguageToggle">
+      <div class="flags-container">
+        <SvgoFlagUnitedKingdom filled />
+        <SvgoFlagBrazil filled />
+      </div>
       <div
+        lr-cursor
+        @click="toggleLanguage"
         class="toggle"
         :class="lang"
       />
@@ -34,51 +34,47 @@ function toggleLanguage() {
 
 <style scoped lang="scss">
 .c-LRLanguageToggle {
-  --border: 3px;
-  --height: calc(21px + var(--border));
-  height: var(--height);
-  width: calc(56px + var(--border));
-  border-radius: var(--height);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  border-bottom: var(--border) solid transparent;
-  border-right: var(--border) solid transparent;
-  > * {
-    pointer-events: none; // allow lr-cursor to work properly
-  }
+  --height: 20px;
+  --width: 56px;
+  .flags-container {
+    height: var(--height);
+    width: var(--width);
+    border-radius: var(--height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 
-  &:hover {
     svg {
-      filter: none;
+      height: 140%;
+      width: 140%;
+      position: relative;
+      scale: 1.1;
+      filter: grayscale(1);
+      transition: filter 0.3s $default-ease;
     }
 
-    .toggle {
-      background-color: $main-dark-text;
+    &:has(~ .toggle:hover) {
+      svg {
+        filter: none;
+      }
     }
   }
-  svg {
-    height: 140%;
-    width: 140%;
-    position: relative;
-    scale: 1.1;
-    filter: grayscale(1);
-    transition: filter 0.3s $default-ease;
-  }
+
   .toggle {
+    cursor: pointer;
     position: absolute;
 
-    top: 0;
-    height: 100%;
-    width: 59%;
+    height: calc(var(--height) + 10px);
+    aspect-ratio: 1;
+    top: 50%;
+    transform: translateY(-50%);
 
-    border-radius: 10px;
+    border-radius: 50%;
     transition: background-color 0.3s $default-ease, all 0.5s $default-ease;
-    left: 41%;
-    right: 41%;
+    left: 45%;
+    right: 45%;
     background-color: $secoundary-dark-text;
 
     &.en {
@@ -86,6 +82,10 @@ function toggleLanguage() {
     }
     &.pt-BR {
       left: 0;
+    }
+
+    &:hover {
+      background-color: $main-dark-text;
     }
   }
 }

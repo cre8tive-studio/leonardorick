@@ -28,7 +28,7 @@
         </ul>
       </div>
       <div class="second-column flex-1 flex flex-col">
-        <h2>{{ $t('footer_message') }}</h2>
+        <h2>{{ $t('footer_message') }}!</h2>
         <div class="email">
           <h4 class="relative">Email</h4>
           <div class="email__overlay">
@@ -46,6 +46,7 @@
       </div>
     </div>
   </footer>
+  <LRRightsReserved />
 </template>
 
 <script setup lang="ts">

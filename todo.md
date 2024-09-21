@@ -23,9 +23,6 @@ If you want to check some nice code structures check my packages project, were I
 change main deploy to nuxtHub
 |--change cloudinary images to nuxtHub
 
-stop caching images with useFetch
-|- old note: understand the differnce between useFetch and $fetch because apperently I need deto use $fetch after ssr is generated
-
 - understand how can I properly set posthog api key to only accept requests from specific hosts
 
 add music section and login once appwrite allow transactions
@@ -36,10 +33,6 @@ add music section and login once appwrite allow transactions
 change lang logic to be a path /pt-BR so all routes can be generated properly without needing to go to backend
 
 improve content with tiniwow: https://tinywow.com/write/content-improver
-
-Adicionar o logo da empresa no timelineSection
-
-Hide the header and footer when page is loading (super master overlay)
 
 Improve magnetic
 

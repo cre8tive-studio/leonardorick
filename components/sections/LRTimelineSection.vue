@@ -24,7 +24,22 @@
             <h4 aria-hidden="true">[hidden]</h4>
           </div>
 
-          <h4>{{ experience.company }}</h4>
+          <div class="company">
+            <ClientOnly>
+              <NuxtLink
+                lr-cursor
+                :to="experience.company.site"
+                target="_blank"
+              >
+                <NuxtImg
+                  v-if="experience.companyImage"
+                  :src="experience.companyImage"
+                  :alt="`${experience.company.name} company image`"
+                />
+              </NuxtLink>
+            </ClientOnly>
+            <h4>{{ experience.company.name }}</h4>
+          </div>
         </div>
       </div>
     </section>
@@ -44,6 +59,7 @@
 import { useAppStore } from '~/store';
 
 const { personalInfo, experiences } = toRefs(useAppStore());
+
 const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
 </script>
 
@@ -80,13 +96,14 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
       position: relative;
       align-items: center;
       padding-inline: 1rem;
-      height: clamp(8rem, 8vw, 20rem);
+      height: clamp(9rem, 8vw, 20rem);
 
       &:has(~ .description:hover) {
         .overlay {
           transform: scaleY(1);
         }
       }
+
       &:hover {
         + .description {
           .overlay {
@@ -103,6 +120,13 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
         }
         .description-title {
           opacity: 0;
+        }
+
+        + .description /* time:hover + .description .company img */,
+        & /* description:hover .company img */ {
+          .company img {
+            filter: none;
+          }
         }
       }
     }
@@ -131,14 +155,41 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
         transition: opacity 0.3s $default-ease;
       }
 
-      h4 {
-        @extend .lr-text--body-1;
-        color: $main-dark-text-hsl-dark;
-        position: relative;
-        width: 100%;
+      .company {
+        display: flex;
+        align-items: center;
+        gap: clamp(0.7rem, 3vw, 1.2rem);
+        a {
+          cursor: pointer;
+          width: fit-content;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.7rem;
+          border-radius: 50%;
+          img {
+            pointer-events: none; // for lr-cursor
+            --size: clamp(1.8rem, 2vw, 3rem);
+            opacity: 0.9;
+            min-height: var(--size);
+            min-width: var(--size);
+            max-height: var(--size);
+            max-width: var(--size);
+            display: block;
+            transition: filter 0.3s $default-ease;
+            filter: contrast(300%) grayscale(1);
+          }
+        }
+        h4 {
+          @extend .lr-text--body-1;
+          color: $main-dark-text-hsl-dark;
+          position: relative;
+          width: 100%;
+        }
       }
     }
     .overlay {
+      pointer-events: none; // for lr-cursor
       position: absolute;
       top: 0;
       left: 0;
@@ -162,7 +213,8 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
         align-items: flex-start;
         justify-content: center;
         h3 {
-          margin-bottom: 0.5rem;
+          // inverted clamp !!
+          margin-bottom: calc(3rem - clamp(0.5rem, 3.5vw, 3rem));
           @extend .lr-text--body-1-half;
         }
         h4 {

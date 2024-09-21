@@ -12,7 +12,17 @@ export default defineEventHandler(async (event) => {
       Experiences(locale: $locale) {
         docs {
           id
-          company
+          company {
+            id
+            name
+            country
+            site
+            image {
+              cloudinary {
+                secure_url
+              }
+            }
+          }
           title
           funTitle
           year

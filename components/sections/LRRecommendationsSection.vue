@@ -254,7 +254,7 @@ function getImageWrapperHeight() {
               height: 100%;
               width: 100%;
               object-fit: cover;
-              filter: grayscale(1) contrast(1.2);
+              filter: contrast(1.2) grayscale(1);
             }
           }
         }
