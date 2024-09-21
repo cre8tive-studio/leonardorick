@@ -187,7 +187,7 @@ function getImageWrapperHeight() {
             }
             .author-description {
               @extend .lr-text--label-1;
-              color: $main-dark-text-dark;
+              color: $main-dark-text-hsl-dark;
             }
           }
         }

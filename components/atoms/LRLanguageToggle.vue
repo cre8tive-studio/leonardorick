@@ -1,13 +1,16 @@
 <template>
   <!-- adding client-only fixed the bug that the toggle was always starting with english -->
   <ClientOnly>
-    <div class="c-LRLanguageToggle">
+    <div
+      lr-cursor
+      class="c-LRLanguageToggle"
+      @click="toggleLanguage"
+    >
       <SvgoFlagUnitedKingdom filled />
       <SvgoFlagBrazil filled />
       <div
         class="toggle"
         :class="lang"
-        @click="toggleLanguage"
       />
     </div>
   </ClientOnly>
@@ -33,19 +36,30 @@ function toggleLanguage() {
 
 <style scoped lang="scss">
 .c-LRLanguageToggle {
-  --height: 21px;
+  --border: 3px;
+  --height: calc(21px + var(--border));
   height: var(--height);
-  width: 55px;
+  width: calc(57px + var(--border));
   border-radius: var(--height);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+  border-bottom: var(--border) solid transparent;
+  border-right: var(--border) solid transparent;
+  > * {
+    pointer-events: none; // allow lr-cursor to work properly
+  }
 
   &:hover {
     svg {
       filter: none;
+    }
+
+    .toggle {
+      background-color: $main-dark-text;
     }
   }
   svg {
@@ -61,13 +75,14 @@ function toggleLanguage() {
 
     top: 0;
     height: 100%;
-    width: 58%;
-    cursor: pointer;
+    width: 59%;
+
     border-radius: 10px;
-    background-color: $main-dark-text;
     transition: background-color 0.3s $default-ease, all 0.5s $default-ease;
     left: 45%;
     right: 45%;
+    background-color: $secoundary-dark-text;
+
     &.en {
       right: 0;
     }

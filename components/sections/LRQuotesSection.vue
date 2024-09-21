@@ -128,7 +128,7 @@ function selectRandomQuote() {
   h3 {
     position: relative;
     top: 0.25rem;
-    color: $main-dark-text-dark;
+    color: $main-dark-text-hsl-dark;
   }
 }
 </style>

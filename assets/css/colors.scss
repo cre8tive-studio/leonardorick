@@ -1,6 +1,7 @@
 $main-dark-bg: #060615;
 $main-dark-text: #fffdf8;
 $secoundary-dark-bg: #060b2e;
+$secoundary-dark-text: #808080;
 
 // pallete
 $blue-1: #060615;
@@ -20,9 +21,9 @@ $main-dark-text-hsl: hsl(43 100% 99%);
 $main-dark-text-hsl-angle: 43;
 $main-dark-text-hsl-saturation: 100%;
 $main-dark-text-hsl-lightness: 99%;
-$main-dark-text-dark: hsl(
+$main-dark-text-hsl-dark: hsl(
   #{$main-dark-text-hsl-angle} #{$main-dark-text-hsl-saturation} #{$main-dark-text-hsl-lightness} / 0.4
 );
-$main-dark-text-darker: hsl(
+$main-dark-text-hsl-darker: hsl(
   #{$main-dark-text-hsl-angle} #{$main-dark-text-hsl-saturation} #{$main-dark-text-hsl-lightness} / 0.3
 );

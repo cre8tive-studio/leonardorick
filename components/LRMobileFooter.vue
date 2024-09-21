@@ -61,7 +61,7 @@ const { links, email } = useLinks();
 
       a {
         font-size: 0.8rem;
-        color: $main-dark-text-dark;
+        color: $main-dark-text-hsl-dark;
       }
     }
   }

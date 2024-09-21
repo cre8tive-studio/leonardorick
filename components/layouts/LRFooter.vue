@@ -154,7 +154,7 @@ useHideOnScroll(['.c-LRFooter']);
       }
 
       a {
-        color: $main-dark-text-dark;
+        color: $main-dark-text-hsl-dark;
       }
 
       &:hover {

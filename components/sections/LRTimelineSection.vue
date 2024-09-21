@@ -130,7 +130,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
 
       h4 {
         @extend .lr-text--body-1;
-        color: $main-dark-text-dark;
+        color: $main-dark-text-hsl-dark;
         position: relative;
         width: 100%;
       }
@@ -175,7 +175,7 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
     align-items: center;
     justify-content: flex-end;
     margin-top: 2rem;
-    color: $main-dark-text-darker;
+    color: $main-dark-text-hsl-darker;
     text-align: right;
     a {
       padding: 1rem;

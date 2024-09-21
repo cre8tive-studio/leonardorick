@@ -1,13 +1,14 @@
 <template>
   <nav class="c-LRHeaderNav">
-    <ul class="mb-3 flex flex-col gap-4">
+    <ul>
       <li>
         <NuxtLink
           lr-cursor
           :to="localeRoute('/')"
           @click="$emit('routeSelected')"
         >
-          Home
+          <span>Home</span>
+          <span>Home</span>
         </NuxtLink>
       </li>
       <li>
@@ -16,7 +17,8 @@
           :to="localeRoute('/music')"
           @click="$emit('routeSelected')"
         >
-          {{ $t('music') }}
+          <span>{{ $t('music') }}</span>
+          <span>{{ $t('music') }}</span>
         </NuxtLink>
       </li>
       <ClientOnly>
@@ -26,7 +28,8 @@
             :to="localeRoute('/login')"
             @click="$emit('routeSelected')"
           >
-            {{ $t('login') }}
+            <span>{{ $t('login') }}</span>
+            <span>{{ $t('login') }}</span>
           </NuxtLink>
         </li>
         <template v-else>
@@ -44,7 +47,8 @@
               lr-cursor
               @click="handleLogout"
             >
-              {{ $t('logout') }}
+              <span>{{ $t('logout') }}</span>
+              <span>{{ $t('logout') }}</span>
             </button>
           </li>
         </template>
@@ -60,6 +64,8 @@
 import { useAppStore } from '~/store';
 
 defineEmits(['routeSelected']);
+const route = useRoute();
+console.log('route.path', route.path);
 
 const { logout } = useAppwrite();
 const { lang, session } = toRefs(useAppStore());
@@ -73,17 +79,62 @@ const handleLogout = async () => {
 
 <style scoped lang="scss">
 .c-LRHeaderNav {
+  --gap: 0.25rem;
   display: flex;
   flex-direction: column;
+  gap: var(--gap);
 
-  li {
-    a,
-    button {
-      text-transform: uppercase;
-      font-weight: 700;
-      padding: 0.5rem;
-      border-radius: 8px;
-      cursor: none;
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    align-items: flex-start;
+    li {
+      a,
+      button {
+        --padding: 0.5rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        padding: var(--padding);
+        border-radius: 8px;
+        cursor: none;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow: hidden;
+
+        &:hover:not(.router-link-active) {
+          span {
+            &:nth-child(1) {
+              transform: translateY(0);
+            }
+            &:nth-child(2) {
+              transform: translateY(-160%);
+            }
+          }
+        }
+
+        span {
+          pointer-events: none; // allow lr-cursor to work smoothly
+          line-height: 1;
+          transition: transform 0.3s $default-ease;
+
+          &:nth-child(1) {
+            transform: translateY(160%);
+          }
+          &:nth-child(2):not(.selected) {
+            position: absolute;
+            right: 0;
+            padding-right: var(--padding);
+          }
+        }
+
+        &:not(.router-link-active) {
+          span:nth-child(2) {
+            color: $secoundary-dark-text;
+          }
+        }
+      }
     }
   }
 }
@@ -92,6 +143,9 @@ const handleLogout = async () => {
   .c-LRHeaderNav {
     text-align: right;
     align-items: flex-end;
+    ul {
+      align-items: flex-end;
+    }
   }
 }
 </style>
