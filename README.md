@@ -2,7 +2,7 @@
 
 | Home |
 | ---- |
-|      |
+|![image](https://github.com/user-attachments/assets/c5ade323-da52-4fcd-b999-50bced1655e8)|
 
 ## Setup
 
