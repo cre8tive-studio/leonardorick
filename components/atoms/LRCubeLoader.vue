@@ -17,8 +17,9 @@
 
 <style scoped lang="scss">
 .sk-cube-grid {
-  width: 64px;
-  height: 64px;
+  --cube-size: clamp(32px, 10vw, 64px);
+  width: var(--cube-size);
+  height: var(--cube-size);
   margin: 100px auto;
 }
 
