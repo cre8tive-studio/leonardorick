@@ -34,12 +34,10 @@ const useAnimations = () => {
 
   async function activate() {
     const LRModelTimeout = setLRModelTimeout();
-    const unwatch = watch(isLRModelLoaded, () => {
-      if (isLRModelLoaded.value) {
-        clearTimeout(LRModelTimeout);
-        hideOverlay();
-        unwatch();
-      }
+
+    useWhenReady(isLRModelLoaded, () => {
+      clearTimeout(LRModelTimeout);
+      hideOverlay();
     });
 
     if (!isWebglSupported()) {

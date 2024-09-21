@@ -1,5 +1,8 @@
 <template>
-  <div class="s-LRWhatIDoSection lr-section-page lr-section-page-no-paddings">
+  <div
+    id="what-i-do"
+    class="s-LRWhatIDoSection lr-section-page lr-section-page-no-paddings"
+  >
     <div class="flex flex-col gap-4">
       <h1 class="lr-section-page-paddings section-h1">{{ whatIDoTItle?.title }}</h1>
       <div class="flex">

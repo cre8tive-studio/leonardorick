@@ -1,5 +1,8 @@
 <template>
-  <div class="s-ExperienceTextSection lr-section-page lr-section-page-no-paddings relative">
+  <div
+    id="experience"
+    class="s-ExperienceTextSection lr-section-page lr-section-page-no-paddings relative"
+  >
     <LRColorfulTile
       :colors="colors"
       :background-color="tilesBackgroundColor"

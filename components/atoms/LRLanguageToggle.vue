@@ -21,7 +21,6 @@ import { useAppStore } from '~/store';
 import type { LanguageOptions } from '~/utils/constants/languages';
 
 const { lang } = toRefs(useAppStore());
-const $emit = defineEmits<{ (e: 'change'): void }>();
 
 const invertedLanguage: Record<LanguageOptions, LanguageOptions> = {
   en: 'pt-BR',
@@ -30,7 +29,6 @@ const invertedLanguage: Record<LanguageOptions, LanguageOptions> = {
 
 function toggleLanguage() {
   lang.value = invertedLanguage[lang.value];
-  $emit('change');
 }
 </script>
 
@@ -39,7 +37,7 @@ function toggleLanguage() {
   --border: 3px;
   --height: calc(21px + var(--border));
   height: var(--height);
-  width: calc(57px + var(--border));
+  width: calc(56px + var(--border));
   border-radius: var(--height);
   display: flex;
   align-items: center;
@@ -63,8 +61,8 @@ function toggleLanguage() {
     }
   }
   svg {
-    height: 130%;
-    width: 130%;
+    height: 140%;
+    width: 140%;
     position: relative;
     scale: 1.1;
     filter: grayscale(1);
@@ -79,8 +77,8 @@ function toggleLanguage() {
 
     border-radius: 10px;
     transition: background-color 0.3s $default-ease, all 0.5s $default-ease;
-    left: 45%;
-    right: 45%;
+    left: 41%;
+    right: 41%;
     background-color: $secoundary-dark-text;
 
     &.en {

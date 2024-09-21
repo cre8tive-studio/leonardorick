@@ -64,11 +64,12 @@
 import { useAppStore } from '~/store';
 
 defineEmits(['routeSelected']);
-const route = useRoute();
-console.log('route.path', route.path);
 
 const { logout } = useAppwrite();
 const { lang, session } = toRefs(useAppStore());
+
+// be ware that this is overwriting all route params and hashes. This usually is intended but if we want to keep some
+// query param we need to improve this logic to use <useRoute()>.fullPath or something similar.
 const localeRoute = computed(() => (r: string) => lang.value === 'en' ? r : `${r}?locale=${lang.value}`);
 const handleLogout = async () => {
   if (confirm('Are you sure you want to logout?')) {

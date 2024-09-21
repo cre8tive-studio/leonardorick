@@ -1,5 +1,8 @@
 <template>
-  <div class="s-LRRecommendationsSection lr-section-page lr-section-page-no-paddings">
+  <div
+    id="recommendations"
+    class="s-LRRecommendationsSection lr-section-page lr-section-page-no-paddings"
+  >
     <h1 class="lr-section-page-paddings section-h1">{{ $t('what_they_said') }}</h1>
     <div class="lr-section-page-paddings recommendations">
       <div class="quote-col">

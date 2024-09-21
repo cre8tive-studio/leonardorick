@@ -15,6 +15,11 @@ export default defineNuxtConfig({
     // '/': { redirect: '/home'}
     '/test': { ssr: false },
   },
+  router: {
+    options: {
+      scrollBehaviorType: 'smooth',
+    },
+  },
 
   // todo think about a better approach until cloudflare supports runtimeconfig
   // https://github.com/unjs/nitro/issues/272

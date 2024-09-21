@@ -295,7 +295,6 @@ const useCursor = () => {
   function animateCursorLeave() {
     if (!activated.value || !cursorOuter.value) return;
     isStuck.value = false;
-    console.log('wtf?');
     gsap.to(cursorOuter.value, {
       duration: 0.2,
       width: cursorOuterOriginalState.width,

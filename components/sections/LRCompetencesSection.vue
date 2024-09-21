@@ -1,5 +1,6 @@
 <template>
   <div
+    id="competences"
     ref="section"
     class="s-LRCompetencesSection lr-section-page"
   >

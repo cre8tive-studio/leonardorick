@@ -1,7 +1,6 @@
 # BUGS OR FEATURES REQUIRED BEFORE RESPONSIVENESS FIX
 
 - Understand why sometimes minutes and seconds are stickying together
-- show '0 seconds'
 
 About me related to who is reading https://billysweeney.com/
 |- add a query parameter that defines who is reading
@@ -28,8 +27,6 @@ If you want to check some nice code structures check my packages project, were I
 change main deploy to nuxtHub
 |--change cloudinary images to nuxtHub
 
-create # urls so I can jump right to the place I want
-
 add another transition timing on :hover so it can close faster than it opens on both contact footter and what i do sections (like seen in the css video 5 tips)
 
 stop caching images with useFetch
@@ -53,4 +50,4 @@ update cloudinary migrate-db so it do not duplicate images in the target endpoin
 
 improve content with tiniwow: https://tinywow.com/write/content-improver
 
-Adicionar o logo da enoresa no histórico
+Adicionar o logo da empresa no timelineSection

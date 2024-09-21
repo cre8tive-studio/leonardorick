@@ -20,7 +20,10 @@ const useLang = (i18n?: i18nModel) => {
   // we just want this watch to be settle one time.
   watch(lang, () => {
     locale.value = lang.value;
-    router.push({ query: { locale: lang.value } });
+    // we explecitly remove #hashes here since it's more intuitive to the user
+    // to navigate to the hash only once. If we want to keep the hash on the url
+    // just add query: {...}, hash: route.hash
+    router.push({ query: { ...route.query, locale: lang.value } });
   });
 };
 

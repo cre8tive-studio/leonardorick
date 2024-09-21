@@ -3,6 +3,10 @@ import { ScrollTrigger } from 'gsap/all';
 import { useAppStore } from '~/store';
 import { useAnimationStore } from '~/store/animation';
 
+/**
+ * used to hide some header, footer or any side
+ * information while the user is scrolling
+ */
 const useHideOnScroll = (classes: string[]) => {
   const { isHideOnScrollBlocked } = toRefs(useAnimationStore());
   const toBlockHeight = ref(0);
@@ -57,11 +61,7 @@ const useHideOnScroll = (classes: string[]) => {
     });
   }
 
-  const unwatch = watch(loaded, () => {
-    if (!loaded.value) return;
-    setTimeout(() => setEndOfPageTrigger(), 0);
-    unwatch();
-  });
+  useWhenReady(loaded, () => setTimeout(() => setEndOfPageTrigger(), 0));
 
   watch(blocked, () => animate());
 

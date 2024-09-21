@@ -1,5 +1,8 @@
 <template>
-  <div class="s-LRQuotesSection lr-section-page">
+  <div
+    id="quotes"
+    class="s-LRQuotesSection lr-section-page"
+  >
     <h1><span>“</span>{{ selectedQuote?.quote }}<span class="right">”</span></h1>
     <div class="flex items-center justify-center gap-2">
       <h2>{{ selectedQuote?.author }}</h2>

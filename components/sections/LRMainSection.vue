@@ -41,10 +41,7 @@ onMounted(() => {
   if (nameTitle.value) {
     runAnimations();
   } else {
-    watchOnce(loaded, async () => {
-      await nextTick();
-      runAnimations();
-    });
+    useWhenReady(loaded, runAnimations, { isNextTick: true });
   }
 });
 
