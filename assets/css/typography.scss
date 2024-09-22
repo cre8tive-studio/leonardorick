@@ -11,7 +11,7 @@
   margin-bottom: clamp(1.2rem, 2.9vw, 5rem);
 }
 
-.lr-text--label-1-half {
+.lr-text--label-0-half {
   font-size: clamp(0.7rem, 1vw, 1rem);
   line-height: clamp(1.1rem, 1.6vw, 2rem);
 }
@@ -25,6 +25,12 @@
   font-size: clamp(0.8rem, 1.5vw, 1.7rem);
   line-height: clamp(1.2rem, 2vw, 2.5rem);
   letter-spacing: clamp(0.2rem, 1vw, 0.3rem);
+}
+
+.lr-text--body-0-half {
+  font-size: clamp(0.9rem, 1.3vw, 1.3rem);
+  line-height: clamp(1.4rem, 1.8vw, 2rem);
+  letter-spacing: clamp(0.1rem, 0.1vh, 0.2rem);
 }
 
 .lr-text--body-1 {

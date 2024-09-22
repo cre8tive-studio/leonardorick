@@ -7,7 +7,7 @@
       :colors="colors"
       :background-color="tilesBackgroundColor"
     />
-    <div class="wrapper-default-generals-text lr-section-page-paddings pointer-events-none">
+    <div class="wrapper-default-generals-text lr-section-page-paddings pointer-events-none h-full">
       <LRGeneralText
         @mousemove="mousemoveHandler"
         ref="generalText"

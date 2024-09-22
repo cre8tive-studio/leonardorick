@@ -12,7 +12,12 @@ const currentYear = new Date().getFullYear();
   padding-bottom: 1rem;
   width: 100%;
   text-align: left;
-  @extend .lr-text--label-1-half;
+  @extend .lr-text--label-0-half;
   color: $main-dark-text-hsl-dark;
+}
+@media (max-width: $lg-breakpoint) {
+  .c-LRRightsReserved {
+    text-align: center;
+  }
 }
 </style>

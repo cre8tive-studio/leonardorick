@@ -93,7 +93,10 @@ const handleLogout = async () => {
     li {
       a,
       button {
-        --padding: 0.5rem;
+        --padding: 0.5rem; // used in .cursor-rolling-menu-item
+        --translate: 160%; // used in .cursor-rolling-menu-item
+        @extend .cursor-rolling-menu-item;
+
         text-transform: uppercase;
         font-weight: 700;
         padding: var(--padding);
@@ -101,40 +104,6 @@ const handleLogout = async () => {
         cursor: none;
         display: flex;
         flex-direction: column;
-        position: relative;
-        overflow: hidden;
-
-        &:hover:not(.router-link-active) {
-          span {
-            &:nth-child(1) {
-              transform: translateY(0);
-            }
-            &:nth-child(2) {
-              transform: translateY(-160%);
-            }
-          }
-        }
-
-        span {
-          pointer-events: none; // allow lr-cursor to work smoothly
-          line-height: 1;
-          transition: transform 0.3s $default-ease;
-
-          &:nth-child(1) {
-            transform: translateY(160%);
-          }
-          &:nth-child(2):not(.selected) {
-            position: absolute;
-            right: 0;
-            padding-right: var(--padding);
-          }
-        }
-
-        &:not(.router-link-active) {
-          span:nth-child(2) {
-            color: $secoundary-dark-text;
-          }
-        }
       }
     }
   }

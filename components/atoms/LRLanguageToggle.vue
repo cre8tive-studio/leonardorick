@@ -67,7 +67,7 @@ function toggleLanguage() {
     cursor: pointer;
     position: absolute;
 
-    height: calc(var(--height) + 10px);
+    height: calc(var(--height) + 11px);
     aspect-ratio: 1;
     top: 50%;
     transform: translateY(-50%);

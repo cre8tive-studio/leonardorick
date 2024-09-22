@@ -13,12 +13,7 @@ body,
 
 html {
   color: $main-dark-text;
-
-  /* HIDE SCROLLBAR */
-  /* Internet Explorer 10+ */
-  -ms-overflow-style: none;
-  /* Firefox */
-  scrollbar-width: none;
+  @extend .hide-scrollbar;
 }
 html::-webkit-scrollbar {
   /* Safari and Chrome */

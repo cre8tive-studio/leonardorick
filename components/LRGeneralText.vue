@@ -34,9 +34,10 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import SplitType from 'split-type';
-import type { GeneralsModel } from '../types/generals.model';
 import { getGeneralsFullText } from '~/utils/parsers/generals.parser';
 import { SCROLL_TRIGGER_IDS } from '~/utils/constants/scroll-trigger-ids';
+import type { GeneralsModel } from '../types/generals.model';
+
 interface Props {
   info: GeneralsModel;
 }
@@ -75,7 +76,7 @@ function init() {
         id: scrollTriggerId.value,
         trigger: tag,
         start: 'top 80%',
-        end: 'top 28%',
+        end: 'top 38%',
         scrub: true,
       },
       opacity: 0.3,
