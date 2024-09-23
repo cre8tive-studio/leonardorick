@@ -2,7 +2,7 @@
 import { HEAD } from './utils/analytics/head';
 import pkg from './package.json';
 
-const { VUE_APP_NITRO_PRESET: preset, VUE_APP_BASE_URL: baseUrl } = process.env;
+const { NITRO_PRESET: preset, VUE_APP_BASE_URL: baseUrl } = process.env;
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
