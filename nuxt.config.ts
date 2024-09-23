@@ -1,5 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { HEAD } from './utils/analytics/head';
+import pkg from './package.json';
+
 const { VUE_APP_NITRO_PRESET: preset, VUE_APP_BASE_URL: baseUrl } = process.env;
 
 export default defineNuxtConfig({
@@ -20,23 +22,19 @@ export default defineNuxtConfig({
       scrollBehaviorType: 'smooth',
     },
   },
-
   // todo think about a better approach until cloudflare supports runtimeconfig
   // https://github.com/unjs/nitro/issues/272
   // https://nitro.unjs.io/deploy/providers/cloudflare
   // https://github.com/nuxt/nuxt/issues/14011
   runtimeConfig: {
     // Private env variables that is only available on the server
-    stripeSecretKey: process.env.VUE_APP_STRIPE_SECRET_KEY,
+    stripeSecretKey: process.env.STRIPE_SECRET_KEY,
     appwrite: {
-      apiKey: process.env.VUE_APP_APPWRITE_SECRET_KEY,
-
-      allowedEmailsCollection: process.env.VUE_APP_APPWRITE_ALLOWED_EMAILS_COLLECTION,
-      demosCollection: process.env.VUE_APP_APPWRITE_DEMOS_COLLECTION,
-
+      apiKey: process.env.APPWRITE_SECRET_KEY,
+      allowedEmailsCollection: process.env.APPWRITE_ALLOWED_EMAILS_COLLECTION,
+      demosCollection: process.env.APPWRITE_DEMOS_COLLECTION,
       settingsDocument: process.env.VUE_APP_APPWRITE_SETTINGS_DOCUMENT,
-
-      bucketId: process.env.VUE_APP_APPWRITE_STORAGE,
+      bucketId: process.env.APPWRITE_STORAGE,
     },
     // public env virables that are also available to client
     public: {
@@ -60,6 +58,7 @@ export default defineNuxtConfig({
         host: process.env.VUE_APP_POSTHOG_HOST,
       },
       baseUrl,
+      clientVersion: pkg.version,
     },
   },
   components: [
@@ -113,7 +112,7 @@ export default defineNuxtConfig({
     sourceMapsUploadOptions: {
       org: process.env.VUE_APP_SENTRY_ORG,
       project: process.env.VUE_APP_SENTRY_PROJECT,
-      authToken: process.env.VUE_APP_SENTRY_AUTH_TOKEN,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
     },
   },
   image: {

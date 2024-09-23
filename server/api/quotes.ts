@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const { locale } = getQuery(event);
   const formatedLocale = getFormattedLocale(locale);
 
-  const url = process.env.VUE_APP_PAYLOAD_GRAPHQL_URL as string;
+  const url = process.env.PAYLOAD_GRAPHQL_URL as string;
   const query = gql`
     query ($locale: LocaleInputType!) {
       Quotes(locale: $locale, limit: 100) {

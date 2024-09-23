@@ -6,7 +6,7 @@ import { getFormattedLocale } from '../utils/get-formatted-locale';
 export default defineEventHandler(async (event) => {
   const { locale } = getQuery(event);
   const formatedLocale = getFormattedLocale(locale);
-  const url = process.env.VUE_APP_PAYLOAD_GRAPHQL_URL as string;
+  const url = process.env.PAYLOAD_GRAPHQL_URL as string;
   const query = gql`
     query Experiences($locale: LocaleInputType!) {
       Experiences(locale: $locale) {
