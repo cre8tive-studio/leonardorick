@@ -4,10 +4,10 @@ import { useAppStore } from '~/store';
 import { COLORS } from '~/utils/constants/colors';
 
 export default defineNuxtPlugin(async (_nuxtApp) => {
-  const { environment, baseUrl } = useRuntimeConfig().public;
+  const { environment, baseUrl, clientVersion } = useRuntimeConfig().public;
   const { personalInfo } = toRefs(useAppStore());
 
-  printConsoleIntroduction(environment, baseUrl, personalInfo.value?.links.linkedin);
+  printConsoleIntroduction(environment, baseUrl, clientVersion, personalInfo.value?.links.linkedin);
 
   const { getCurrentSession, initSettings } = useAppwrite();
   let initializerClientError = null;
@@ -31,7 +31,8 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
   };
 });
 
-function printConsoleIntroduction(env: string, baseUrl: string, linkedin?: string) {
+function printConsoleIntroduction(env: string, baseUrl: string, clientVersion: string, linkedin?: string) {
+  console.log('Version:', clientVersion);
   if (!isProduction(env)) return;
 
   console.log(
