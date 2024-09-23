@@ -1,6 +1,6 @@
 import { gsap } from 'gsap';
 import { useAnimationStore } from '~/store/animation';
-import { isStringTrue } from '@leonardorick/utils';
+import { isAttrActivatedOnElement } from '~/utils/js-utilities';
 
 interface MagneticChildReferenceModel {
   element: HTMLElement | SVGElement | null;
@@ -42,7 +42,7 @@ const useMagneticHover = () => {
   function handleCursorEnter(this: HTMLElement) {
     const self = this as HTMLElement;
     const ref = magneticChildrenReferences.get(self);
-    if (ref && isMagneticHoverActivatedOnElement(self)) {
+    if (ref && isAttrActivatedOnElement(self, 'lr-magnetic-hover')) {
       hoveredEls.push(self);
       lastHoveredEl.value = self;
       magneticChildrenReferences.set(self, { ...ref, shouldAnimatateIn: true, shouldAnimateOut: false });
@@ -64,24 +64,10 @@ const useMagneticHover = () => {
     const self = this as HTMLElement;
     const ref = magneticChildrenReferences.get(self);
 
-    if (ref && isMagneticHoverActivatedOnElement(self)) {
+    if (ref && isAttrActivatedOnElement(self, 'lr-magnetic-hover')) {
       lastHoveredEl.value = self;
       magneticChildrenReferences.set(self, { ...ref, shouldAnimatateIn: true, shouldAnimateOut: false });
     }
-  }
-
-  /**
-   * Check if the magnetic hover is enabled on an element. If we don't specify anything,
-   *it should be enabled. That's why '' (empty string) should return true. Ex:
-   * <li
-   *  lr-magnetic-hover
-   * > ...
-   * @param element
-   * @returns {boolean} value indicating the magnetic hover is enabled or not on this component
-   */
-  function isMagneticHoverActivatedOnElement(element: HTMLElement): boolean {
-    const attr = element.getAttribute('lr-magnetic-hover');
-    return attr === '' || isStringTrue(attr);
   }
 
   function rafCallback() {

@@ -1,19 +1,11 @@
-# BUGS OR FEATURES REQUIRED BEFORE RESPONSIVENESS FIX
+# FEATURES I REALLY WANT
 
-About me related to who is reading https://billysweeney.com/
-|- add a query parameter that defines who is reading
-|- also copy the logic for the mobile menu, its very fluid
-
-Hack github contribution chart
-
-# RESPONSIVENES
-
-- Add animations support for firefox and safari
-
-# FEATURES FOR LATER
+change lang logic to be a path /pt-BR so all routes can be generated properly without needing to go to backend
 
 change main deploy to nuxtHub
 |--change cloudinary images to nuxtHub
+
+# FEATURES FOR LATER
 
 - understand how can I properly set posthog api key to only accept requests from specific hosts
 
@@ -21,10 +13,6 @@ add music section and login once appwrite allow transactions
 
 - https://github.com/appwrite/appwrite/issues/2788
 - https://appwrite.io/threads/1096798213350109184
-
-change lang logic to be a path /pt-BR so all routes can be generated properly without needing to go to backend
-
-improve content with tiniwow: https://tinywow.com/write/content-improver
 
 Improve magnetic
 

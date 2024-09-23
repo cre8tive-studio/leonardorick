@@ -4,8 +4,9 @@
   >
     <NuxtLink
       lr-magnetic-hover
+      lr-cursor
       class="home-logo main-hover-button h-fit hidden lg:flex"
-      :to="localeRoute('/')"
+      :to="localeRoute('index')"
     >
       <SvgoLeonardorick />
     </NuxtLink>
@@ -41,18 +42,16 @@ import { timeline } from 'motion';
 import type { TimelineDefinition } from 'motion';
 import useCssBreakpoints from '~/composables/use-css-breakpoints';
 
-import { useAppStore } from '~/store';
 import useHideOnScroll from '~/composables/animations/use-hide-on-scroll';
 import { useAnimationStore } from '~/store/animation';
+import { useAppStore } from '~/store';
 
-const { lang } = toRefs(useAppStore());
 const { isHideOnScrollBlocked } = toRefs(useAnimationStore());
+const { localeRoute } = toRefs(useAppStore());
 const { isLg } = useCssBreakpoints();
 
 const mobileMenu = ref<HTMLDivElement>();
 const isMobileMenuVisible = ref(false);
-
-const localeRoute = computed(() => (r: string) => lang.value === 'en' ? r : `${r}?locale=${lang.value}`);
 
 const openSequence: TimelineDefinition = [
   ['.mobile-menu', { scaleY: [0, 1] }],
@@ -79,14 +78,18 @@ function toggleMobileMenu() {
 
 <style scoped lang="scss">
 .c-LRHeader {
+  @extend .lr-text--body-0-half;
+
   .home-logo {
     height: 7rem;
     width: 7rem;
     cursor: none;
     align-items: center;
     justify-content: center;
+    border-radius: 50%;
 
     svg {
+      pointer-events: none; // for lr-cursor
       height: 3rem;
       width: 3rem;
       pointer-events: none;

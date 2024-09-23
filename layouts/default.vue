@@ -19,7 +19,7 @@
   flex-direction: column;
   align-items: center;
   &__header-container {
-    z-index: 1;
+    z-index: 10; // allow z-index from 1-9 in the content of the slot
   }
 }
 </style>

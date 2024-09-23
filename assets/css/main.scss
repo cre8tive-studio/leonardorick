@@ -38,8 +38,8 @@
     @extend .section-h1;
   }
   p {
-    font-size: clamp(2rem, 4.3vw, 12rem);
-    line-height: clamp(2.5rem, 4.5vw, 13rem);
+    font-size: clamp(1.8rem, 4.3vw, 12rem);
+    line-height: clamp(2.35rem, 4.5vw, 13rem);
     letter-spacing: clamp(0.1rem, 0.3vh, 0.3rem);
   }
 }

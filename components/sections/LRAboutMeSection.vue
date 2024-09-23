@@ -3,7 +3,7 @@
     id="about-me"
     class="s-LRAboutMeSection lr-section-page lr-section-page-no-paddings"
   >
-    <h1 class="lr-section-page-paddings section-h1">{{ $t('about_me') }}</h1>
+    <h1 class="title lr-section-page-paddings section-h1">{{ $t('about_me') }}</h1>
     <div class="options-wrapper lr-section-page-paddings">
       <nav
         ref="optionsNav"
@@ -29,8 +29,28 @@
     </div>
     <div class="about-me-text wrapper-default-generals-text lr-section-page-paddings">
       <LRGeneralText
-        v-if="anyone"
+        v-if="recruiters && selectedOption === 'recruiters'"
         :key="refreshKey"
+        :info="recruiters"
+      />
+      <LRGeneralText
+        v-else-if="engineers && selectedOption === 'engineers'"
+        :key="refreshKey + 1"
+        :info="engineers"
+      />
+      <LRGeneralText
+        v-else-if="designers && selectedOption === 'designers'"
+        :key="refreshKey + 2"
+        :info="designers"
+      />
+      <LRGeneralText
+        v-else-if="productManagers && selectedOption === 'product-managers'"
+        :key="refreshKey + 3"
+        :info="productManagers"
+      />
+      <LRGeneralText
+        v-else-if="anyone"
+        :key="refreshKey + 4"
         :info="anyone"
       />
     </div>
@@ -44,13 +64,20 @@ interface Props {
   refreshKey: number;
 }
 defineProps<Props>();
+const ABOUT_ME_KEY_OPTIONS = ['anyone', 'recruiters', 'engineers', 'designers', 'product-managers'] as const;
+export type AboutMeKeyOptions = (typeof ABOUT_ME_KEY_OPTIONS)[number];
+function isAboutMeKey(key: any): key is AboutMeKeyOptions {
+  return ABOUT_ME_KEY_OPTIONS.includes(key as AboutMeKeyOptions);
+}
 
-const { generals } = toRefs(useAppStore());
+const SCROLL_OFFSET = 7;
+const route = useRoute();
+const { generals, experienceYears } = toRefs(useAppStore());
 const optionsNav = ref<HTMLDivElement>();
-const selectedOption = ref('anyone');
+const selectedOption = ref<AboutMeKeyOptions>(isAboutMeKey(route.query.c) ? route.query.c : 'anyone');
 const scrolled = ref(0);
 
-const options = [
+const options: { label: string; value: AboutMeKeyOptions }[] = [
   { label: 'for_anyone', value: 'anyone' },
   { label: 'recruiters', value: 'recruiters' },
   { label: 'engineers', value: 'engineers' },
@@ -59,12 +86,27 @@ const options = [
 ];
 
 const menuScrolled = computed(() => {
-  return scrolled.value > 7;
+  return scrolled.value > SCROLL_OFFSET;
 });
 
 const anyone = computed(() => generals.value.find((general) => general.key === 'about-me'));
+const recruiters = computed(() => {
+  const value = generals.value.find((general) => general.key === 'about-me-recruiters');
+  if (!value) return;
 
-function selectOption(option: string) {
+  // replacement of template tags
+  for (const item of value.data) {
+    for (const text of item.text) {
+      text.text = text.text.replace('{years}', experienceYears.value.toString());
+    }
+  }
+  return value;
+});
+const engineers = computed(() => generals.value.find((general) => general.key === 'about-me-engineers'));
+const designers = computed(() => generals.value.find((general) => general.key === 'about-me-designers'));
+const productManagers = computed(() => generals.value.find((general) => general.key === 'about-me-product-managers'));
+
+function selectOption(option: AboutMeKeyOptions) {
   selectedOption.value = option;
 }
 
@@ -79,8 +121,16 @@ function menuScrollHandler() {
 .s-LRAboutMeSection {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   overflow-x: hidden; // for the shadows
+
+  padding-top: 30svh; // padding-instead of margint to allow .shadow do grow
+  padding-bottom: 25svh; // padding-instead of margint to allow .shadow do grow
+  min-height: 100svh;
+  height: fit-content;
+
+  .title {
+    z-index: 1;
+  }
 
   .options-wrapper {
     position: relative;
@@ -96,7 +146,7 @@ function menuScrollHandler() {
 
       .shadow {
         width: 150px;
-        height: 180%;
+        height: 550%;
         top: 50%;
         translate: 0 -50%;
         position: absolute;
@@ -130,7 +180,7 @@ function menuScrollHandler() {
         padding: var(--padding);
         border-radius: 8px;
         min-width: fit-content;
-        cursor: pointer;
+        cursor: none;
 
         &:first-child {
           padding-left: 0;

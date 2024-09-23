@@ -23,7 +23,7 @@ const useLang = (i18n?: i18nModel) => {
     // we explecitly remove #hashes here since it's more intuitive to the user
     // to navigate to the hash only once. If we want to keep the hash on the url
     // just add query: {...}, hash: route.hash
-    router.push({ query: { ...route.query, locale: lang.value } });
+    router.push({ query: { ...route.query, locale: lang.value === 'en' ? undefined : lang.value } });
   });
 };
 

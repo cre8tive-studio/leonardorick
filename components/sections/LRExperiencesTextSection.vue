@@ -22,7 +22,6 @@
 <script setup lang="ts">
 import { useAppStore } from '~/store';
 import { COLORS } from '~/utils/constants/colors';
-import { DEFAULTS } from '~/utils/constants/defaults';
 import LRGeneralText from '~/components/LRGeneralText.vue';
 
 interface Props {
@@ -30,13 +29,9 @@ interface Props {
 }
 defineProps<Props>();
 
-const { generals, personalInfo } = toRefs(useAppStore());
+const { generals, experienceYears } = toRefs(useAppStore());
 const generalText = ref<InstanceType<typeof LRGeneralText>>();
 
-const experienceYears = computed(
-  () =>
-    new Date().getFullYear() - new Date(personalInfo.value?.startWorkingDate || DEFAULTS.startWorkingDate).getFullYear()
-);
 const experienceContent = computed(() => {
   const experience = structuredClone(toRaw(generals.value.find((general) => general.key === 'experience')));
   if (experience) {

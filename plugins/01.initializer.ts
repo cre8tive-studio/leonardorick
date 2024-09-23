@@ -51,10 +51,10 @@ type FetchFunction =
 
 const _fetchInitialData = async (locale: LanguageOptions, f: FetchFunction) => {
   const res = await Promise.all([
-    f<RecommendationModel[]>(localeRoute('/api/recommendations', locale)),
-    f<QuoteModel[]>(localeRoute('/api/quotes', locale)),
-    f<GeneralsModel[]>(localeRoute('/api/generals', locale)),
-    f<ExperienceModel[]>(localeRoute('/api/experiences', locale)),
+    f<RecommendationModel[]>(apiLocalized('/api/recommendations', locale)),
+    f<QuoteModel[]>(apiLocalized('/api/quotes', locale)),
+    f<GeneralsModel[]>(apiLocalized('/api/generals', locale)),
+    f<ExperienceModel[]>(apiLocalized('/api/experiences', locale)),
   ]);
 
   const [$recommendations, $quotes, $generals, $experiences] = res.map((item) =>
@@ -71,4 +71,8 @@ function fetchPersonalInfo() {
 // Type guard to check if the fetch function returns a data object or not
 function isDataWrapper<T>(result: any): result is { data: T } {
   return result && Object.prototype.hasOwnProperty.call(result, 'data');
+}
+
+export function apiLocalized(route: string, locale?: string) {
+  return `${route}${locale ? `?locale=${locale}` : ''}`;
 }

@@ -39,6 +39,8 @@
               v-for="recommendation in recommendations"
               :key="recommendation.id"
               class="img-wrapper"
+              lr-cursor
+              @click="openExternalLink(recommendation.author.linkedIn)"
             >
               <ClientOnly>
                 <NuxtImg
@@ -213,6 +215,7 @@ function getImageWrapperHeight() {
       .images-col-wrapper {
         position: relative;
         flex: 1;
+        @extend .lr-safe-pointer-events-none; // for lr-cursor
 
         .images-col {
           width: 100% !important; // to avoid gsap changing it :p
@@ -245,6 +248,8 @@ function getImageWrapperHeight() {
             overflow: hidden;
             opacity: 0.3;
             scale: 0.8;
+            cursor: none;
+
             &:first-child {
               opacity: 1;
               scale: 1;
@@ -255,6 +260,7 @@ function getImageWrapperHeight() {
               width: 100%;
               object-fit: cover;
               filter: contrast(1.2) grayscale(1);
+              pointer-events: none; // for lr-cursor
             }
           }
         }

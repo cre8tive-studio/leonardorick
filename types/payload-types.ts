@@ -82,6 +82,7 @@ export interface Person {
   id: string;
   name: string;
   description: string;
+  linkedIn: string;
   image: Media;
   updatedAt: string;
   createdAt: string;

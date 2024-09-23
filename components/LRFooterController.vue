@@ -31,6 +31,7 @@ onMounted(() => {
         footer?.setAttribute('activated', 'true');
         for (const li of footerItems || []) {
           li.setAttribute('lr-magnetic-hover', 'false');
+          li.setAttribute('lr-cursor', 'false');
         }
       },
       onEnterBack: () => hideFooter(),
@@ -72,6 +73,7 @@ function hideFooter() {
   footer.setAttribute('activated', 'false');
   for (const li of footerItems) {
     li.setAttribute('lr-magnetic-hover', 'true');
+    li.setAttribute('lr-cursor', 'true');
   }
 }
 

@@ -1,3 +1,4 @@
+import { DEFAULTS } from '~/utils/constants/defaults';
 import { useAnimationStore } from './animation';
 import type { StoreModel } from '~/types/store.model';
 
@@ -22,9 +23,23 @@ export const useAppStore = defineStore('store', () => {
 
   const loaded = computed(() => state.isContentLoaded && animationsStore.isLRModelLoaded);
 
+  const experienceYears = computed(
+    () =>
+      new Date().getFullYear() -
+      new Date(state.personalInfo?.startWorkingDate || DEFAULTS.startWorkingDate).getFullYear()
+  );
+
+  const route = useRoute();
+  const localeRoute = computed(() => (r: string) => ({
+    name: r,
+    query: { ...route.query, locale: state.lang === 'en' ? undefined : state.lang },
+  }));
+
   return {
     ...toRefs(state),
+    experienceYears,
     loaded,
+    localeRoute,
     // add needed functions here
   };
 });

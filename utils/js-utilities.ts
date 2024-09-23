@@ -1,4 +1,7 @@
+import { isStringTrue } from '@leonardorick/utils';
+
 export function localeRoute(route: string, locale?: string) {
+  console.log(route, locale);
   return `${route}${locale ? `?locale=${locale}` : ''}`;
 }
 
@@ -85,4 +88,19 @@ export function clearAndDeleteTimeout(timeout: NodeJS.Timeout | null) {
     timeout = null;
   }
   return timeout;
+}
+
+/**
+ * Check if the attribute is enabled on an element. If we don't specify anything,
+ *it should be enabled. That's why '' (empty string) should return true. Ex:
+ * <li
+ *  lr-magnetic-hover
+ * lr-cursor="true"
+ * > ...
+ * @param element
+ * @returns {boolean} value indicating the magnetic hover is enabled or not on this component
+ */
+export function isAttrActivatedOnElement(element: HTMLElement, attribute: string): boolean {
+  const attr = element.getAttribute(attribute);
+  return attr === '' || isStringTrue(attr);
 }

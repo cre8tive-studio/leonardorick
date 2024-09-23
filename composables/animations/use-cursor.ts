@@ -259,8 +259,7 @@ const useCursor = () => {
 
   function handleLrCursorFocus(e: MouseEvent) {
     const el = e.target as HTMLElement;
-    const attr = el.attributes.getNamedItem('lr-cursor');
-    if (attr) {
+    if (isAttrActivatedOnElement(el, 'lr-cursor')) {
       const toFocus = (el.querySelector('[lr-cursor-inner]') as HTMLElement) || el;
       if (!elementsToFocus.has(toFocus)) {
         elementsToFocus.add(toFocus);

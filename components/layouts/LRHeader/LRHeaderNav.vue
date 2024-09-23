@@ -4,7 +4,7 @@
       <li>
         <NuxtLink
           lr-cursor
-          :to="localeRoute('/')"
+          :to="localeRoute('index')"
           @click="$emit('routeSelected')"
         >
           <span>Home</span>
@@ -14,7 +14,7 @@
       <li>
         <NuxtLink
           lr-cursor
-          :to="localeRoute('/music')"
+          :to="localeRoute('music')"
           @click="$emit('routeSelected')"
         >
           <span>{{ $t('music') }}</span>
@@ -25,7 +25,7 @@
         <li v-if="!session">
           <NuxtLink
             lr-cursor
-            :to="localeRoute('/login')"
+            :to="localeRoute('login')"
             @click="$emit('routeSelected')"
           >
             <span>{{ $t('login') }}</span>
@@ -36,7 +36,7 @@
           <li>
             <NuxtLink
               lr-cursor
-              :to="localeRoute('/profile')"
+              :to="localeRoute('profile')"
               @click="$emit('routeSelected')"
             >
               Profile
@@ -66,11 +66,8 @@ import { useAppStore } from '~/store';
 defineEmits(['routeSelected']);
 
 const { logout } = useAppwrite();
-const { lang, session } = toRefs(useAppStore());
+const { localeRoute, session } = toRefs(useAppStore());
 
-// be ware that this is overwriting all route params and hashes. This usually is intended but if we want to keep some
-// query param we need to improve this logic to use <useRoute()>.fullPath or something similar.
-const localeRoute = computed(() => (r: string) => lang.value === 'en' ? r : `${r}?locale=${lang.value}`);
 const handleLogout = async () => {
   if (confirm('Are you sure you want to logout?')) {
     await logout();
@@ -80,7 +77,7 @@ const handleLogout = async () => {
 
 <style scoped lang="scss">
 .c-LRHeaderNav {
-  --gap: 0.25rem;
+  --gap: clamp(0.25rem, 0.8vw, 0.5rem);
   display: flex;
   flex-direction: column;
   gap: var(--gap);

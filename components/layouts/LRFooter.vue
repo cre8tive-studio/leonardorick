@@ -14,6 +14,7 @@
             ref="lis"
             class="main-hover-button"
             lr-magnetic-hover
+            lr-cursor
             @click="openExternalLink(link.link)"
           >
             <div class="overlay">{{ $t(link.funTitle) }}</div>
@@ -37,6 +38,7 @@
           </div>
 
           <a
+            lr-cursor
             class="relative"
             href="mailto:leonardo@lanytecologia.com.br"
           >
@@ -78,6 +80,7 @@ useHideOnScroll(['.c-LRFooter']);
     font-size: 2rem;
     position: relative;
     pointer-events: auto;
+    border-radius: 50%;
     a {
       position: relative;
       height: 100%;
@@ -85,6 +88,7 @@ useHideOnScroll(['.c-LRFooter']);
       display: flex;
       align-items: center;
       justify-content: center;
+      pointer-events: none; // for lr-cursor
 
       svg {
         height: 32px;
@@ -145,6 +149,7 @@ useHideOnScroll(['.c-LRFooter']);
     h2 {
       margin: 1rem;
       margin-block: 0.7rem;
+      padding-left: 0.5rem; // align email lr-cursor
     }
     .email {
       font-size: 1.2rem;
@@ -152,9 +157,13 @@ useHideOnScroll(['.c-LRFooter']);
 
       h4 {
         transition: opacity 0.3s $default-ease;
+        padding-left: 0.5rem; // align email lr-cursor
       }
 
       a {
+        cursor: none;
+        padding: 0.5rem; // align email lr-cursor
+        border-radius: 12px;
         color: $main-dark-text-hsl-dark;
       }
 
@@ -219,9 +228,8 @@ useHideOnScroll(['.c-LRFooter']);
 
     li {
       width: 70px;
-      a {
-        cursor: none;
-      }
+      cursor: none;
+
       span {
         opacity: 0;
         pointer-events: none;

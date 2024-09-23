@@ -17,6 +17,7 @@ export default defineEventHandler(async (event) => {
             id
             name
             description
+            linkedIn
             image {
               cloudinary {
                 secure_url
