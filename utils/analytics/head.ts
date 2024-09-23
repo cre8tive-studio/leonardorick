@@ -1,35 +1,39 @@
 import type { LanguageOptions } from '../constants/languages';
 
-const path = import.meta.server ? process.env.VUE_APP_BASE_URL : window.location.href.split('?')[0];
+let url = import.meta.server ? process.env.VUE_APP_BASE_URL : window.location.href.split('?')[0];
+
+// if the last char is not a '/', then we add it
+if (url && url[url.length - 1] !== '/') {
+  url += '/';
+}
 
 const defaultInfo = {
   title: 'Leonardo Rick - Software Engineer',
   description: 'Leonardo Rick Portfolio',
-  url: 'https://leonardorick.com',
-  ogImage: `${path}/meta/og-image.png`,
+  url,
+  ogImage: `${url}/meta/og-image.png`,
 };
 
 const musicInfo = {
   title: 'Leonardo Rick - Singer & Songwriter',
   description: 'Leonardo Rick Music Portifolio',
-  url: 'https://leonardorick.com/music',
-  ogImage: `${path}/meta/og-image-music.png`,
+  url: `${url}music`,
+  ogImage: `${url}meta/og-image-music.png`,
 };
 
 const defaultBrInfo = {
   title: 'Leonardo Rick - Engenheiro de Software',
   description: 'Portifólio de Leonardo Rick',
-  url: 'https://leonardorick.com',
-  ogImage: `${path}/meta/og-image.png`,
+  url: `${url}`,
+  ogImage: `${url}meta/og-image.png`,
 };
 
 const musicBrInfo = {
   title: 'Leonardo Rick - Cantor e Compositor',
   description: 'Portifólio Musical de Leonardo Rick',
-  url: 'https://leonardorick.com/music',
-  ogImage: `${path}/meta/og-image-music.png`,
+  url: `${url}music`,
+  ogImage: `${url}meta/og-image-music.png`,
 };
-
 /**
  * add external scripts here. if it's inside public folder just add it like
  * /imports/some.js considering a /imports folder inside public/ folder
