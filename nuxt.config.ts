@@ -81,8 +81,10 @@ export default defineNuxtConfig({
     'nuxt-svgo',
     '@nuxtjs/device',
     '@vesp/nuxt-fontawesome',
+    '@sentry/nuxt/module',
   ],
   // so we can identify which type of device the user is using
+  // track deprecation warning: https://github.com/nuxt/nuxt/issues/29121
   device: {
     refreshOnResize: true,
   },
@@ -97,7 +99,6 @@ export default defineNuxtConfig({
     // some imports that are commonly used to be included automatically as nuxt do with much others
     autoImports: ['defineStore', ['defineStore', 'definePiniaStore']],
   },
-
   i18n: {
     vueI18n: './i18n.config.ts',
     locales: ['en', 'pt-BR'],
@@ -108,22 +109,27 @@ export default defineNuxtConfig({
     detectBrowserLanguage: false,
     baseUrl,
   },
-
+  sentry: {
+    sourceMapsUploadOptions: {
+      org: process.env.VUE_APP_SENTRY_ORG,
+      project: process.env.VUE_APP_SENTRY_PROJECT,
+      authToken: process.env.VUE_APP_SENTRY_AUTH_TOKEN,
+    },
+  },
   image: {
     quality: 100,
     formats: ['webp'],
     domains: ['https://res.cloudinary.com/'],
   },
-
   app: {
     head: HEAD.en.default,
   },
-
   vite: {
     assetsInclude: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.gif', '**/*.ico', '**/*.bin', '**/*.gltf', '**/*.glb'],
     css: {
       preprocessorOptions: {
         scss: {
+          api: 'modern-compiler',
           additionalData: "@import '@/assets/css/_imports.scss';",
         },
       },
@@ -167,6 +173,11 @@ export default defineNuxtConfig({
         },
       }
     : {}),
+  // todo: remove - https://github.com/nuxt/nuxt/issues/14124
+  sourcemap: {
+    server: false,
+    client: false,
+  },
   // https://answers.netlify.com/t/javascript-heap-out-of-memory-when-trying-to-build-a-nuxt-app/93138/14?u=leonardorick
 
   compatibilityDate: '2024-07-18',

@@ -2,7 +2,7 @@
  * SENTRY CLIENT SIDE CONFIGURATION
  * setup done following this guide: https://www.lichter.io/articles/nuxt3-sentry-recipe/
  */
-import * as Sentry from '@sentry/vue';
+import * as Sentry from '@sentry/nuxt';
 
 export default defineNuxtPlugin((nuxtApp) => {
   const router = useRouter();
@@ -18,15 +18,10 @@ export default defineNuxtPlugin((nuxtApp) => {
   if (isProduction(environment)) {
     Sentry.init({
       debug: false,
-      app: nuxtApp.vueApp,
+      // app: nuxtApp.vueApp as unknown as any,
       dsn: sentry.dsn,
       environment,
-      integrations: [
-        new Sentry.BrowserTracing({
-          routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-        }),
-        new Sentry.Replay(),
-      ],
+      integrations: [Sentry.browserTracingIntegration({ router }), Sentry.replayIntegration()],
       // Change all to 1.0 when testing
       tracesSampleRate: 0.2,
       replaysSessionSampleRate: 0.2,
