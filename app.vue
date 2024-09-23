@@ -28,7 +28,7 @@ const {
   $fetchInitialData,
   $initializerClientError,
 } = nuxtApp;
-const { isContentLoaded, isContentErrored, lang, recommendations, experiences, quotes, generals, personalInfo } =
+const { isContentLoaded, isContentErrored, lang, recommendations, experiences, quotes, generals, personalInfo, cache } =
   toRefs(useAppStore());
 
 const { getCachedImage } = useCachedImage();
@@ -41,12 +41,25 @@ if ($initializerClientError) {
 
 watch(lang, async () => {
   isContentLoaded.value = false;
+  const c = cache.value[lang.value];
+
+  if (c.recommendations.length && c.quotes.length && c.experiences.length && c.generals.length) {
+    setHomeView(c.recommendations, c.quotes, c.experiences, c.generals);
+    return;
+  }
+
   const res = await $fetchInitialData();
   if (!res.$recommendations || !res.$quotes || !res.$experiences || !res.$generals) {
     isContentErrored.value = true;
     return;
   }
   setHomeView(res.$recommendations, res.$quotes, res.$experiences, res.$generals);
+  cache.value[lang.value] = {
+    recommendations: res.$recommendations,
+    quotes: res.$quotes,
+    generals: res.$generals,
+    experiences: res.$experiences,
+  };
 });
 
 /**

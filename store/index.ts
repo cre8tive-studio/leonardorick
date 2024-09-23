@@ -1,5 +1,5 @@
-import { DEFAULTS } from '~/utils/constants/defaults';
 import { useAnimationStore } from './animation';
+import { DEFAULTS } from '~/utils/constants/defaults';
 import type { StoreModel } from '~/types/store.model';
 
 export const useAppStore = defineStore('store', () => {
@@ -19,6 +19,20 @@ export const useAppStore = defineStore('store', () => {
     },
     isContentLoaded: false,
     isContentErrored: false,
+    cache: {
+      en: {
+        recommendations: [],
+        quotes: [],
+        generals: [],
+        experiences: [],
+      },
+      'pt-BR': {
+        recommendations: [],
+        quotes: [],
+        generals: [],
+        experiences: [],
+      },
+    },
   });
 
   const loaded = computed(() => state.isContentLoaded && animationsStore.isLRModelLoaded);

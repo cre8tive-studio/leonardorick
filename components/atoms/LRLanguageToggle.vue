@@ -8,9 +8,9 @@
       </div>
       <div
         lr-cursor
-        @click="toggleLanguage"
         class="toggle"
         :class="lang"
+        @click="toggleLanguage"
       />
     </div>
   </ClientOnly>
@@ -64,7 +64,7 @@ function toggleLanguage() {
   }
 
   .toggle {
-    cursor: pointer;
+    cursor: none;
     position: absolute;
 
     height: calc(var(--height) + 11px);

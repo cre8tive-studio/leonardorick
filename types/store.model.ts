@@ -4,8 +4,15 @@ import type { RecommendationModel } from './recommendation-model';
 import type { SettingsClientModel } from './settings.model';
 import type { GeneralsModel } from './generals.model';
 import type { PersonalInfoModel } from './personal-info.model';
-import type { LanguageOptions } from '~/utils/constants/languages';
 import type { ExperienceModel } from './experience.model';
+import type { LanguageOptions } from '~/utils/constants/languages';
+
+interface CacheModel {
+  recommendations: RecommendationModel[];
+  quotes: QuoteModel[];
+  experiences: ExperienceModel[];
+  generals: GeneralsModel[];
+}
 
 export interface StoreModel {
   recommendations: RecommendationModel[];
@@ -20,6 +27,7 @@ export interface StoreModel {
     jwt: string;
     expire: number;
   };
+  cache: Record<LanguageOptions, CacheModel>;
   isContentLoaded: boolean;
   isContentErrored: boolean;
 }

@@ -10,7 +10,7 @@ if (url && url[url.length - 1] !== '/') {
 const defaultInfo = {
   title: 'Leonardo Rick - Software Engineer',
   description: 'Leonardo Rick Portfolio',
-  url,
+  url: url || '',
   ogImage: `${url}/meta/og-image.png`,
 };
 
