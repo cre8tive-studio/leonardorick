@@ -1,5 +1,5 @@
-import { COLORS } from '~/utils/constants/colors';
 import { gsap } from 'gsap';
+import { COLORS } from '~/utils/constants/colors';
 import { useAnimationStore } from '~/store/animation';
 import { useAppStore } from '~/store';
 
@@ -302,6 +302,7 @@ const useCursor = () => {
       top: 0,
       left: 0,
       opacity: 1,
+      borderWidth: '4px',
       borderRadius: getComputedStyle(targetEl).borderRadius,
     });
   }
@@ -314,6 +315,7 @@ const useCursor = () => {
       width: cursorOuterOriginalState.width,
       height: cursorOuterOriginalState.width,
       borderRadius: '50%',
+      borderWidth: '3px',
       onComplete: () => {
         if (!cursorOuter.value) return;
         cursorOuter.value.style.top = cursorOuterOriginalState.top;

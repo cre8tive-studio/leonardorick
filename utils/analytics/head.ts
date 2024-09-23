@@ -1,33 +1,33 @@
 import type { LanguageOptions } from '../constants/languages';
 
-const path = process.env.VUE_APP_BASE_URL;
+const path = import.meta.server ? process.env.VUE_APP_BASE_URL : window.location.host;
 
 const defaultInfo = {
   title: 'Leonardo Rick - Software Engineer',
   description: 'Leonardo Rick Portfolio',
   url: 'https://leonardorick.com',
-  ogImage: `${path}/assets/meta/og-image.png`,
+  ogImage: `${path}/meta/og-image.png`,
 };
 
 const musicInfo = {
   title: 'Leonardo Rick - Singer & Songwriter',
   description: 'Leonardo Rick Music Portifolio',
   url: 'https://leonardorick.com/music',
-  ogImage: `${path}/assets/meta/og-image-music.png`,
+  ogImage: `${path}/meta/og-image-music.png`,
 };
 
 const defaultBrInfo = {
   title: 'Leonardo Rick - Engenheiro de Software',
   description: 'Portifólio de Leonardo Rick',
   url: 'https://leonardorick.com',
-  ogImage: `${path}/assets/meta/og-image.png`,
+  ogImage: `${path}/meta/og-image.png`,
 };
 
 const musicBrInfo = {
   title: 'Leonardo Rick - Cantor e Compositor',
   description: 'Portifólio Musical de Leonardo Rick',
   url: 'https://leonardorick.com/music',
-  ogImage: `${path}/assets/meta/og-image-music.png`,
+  ogImage: `${path}/meta/og-image-music.png`,
 };
 
 /**

@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { HEAD } from './utils/analytics/head';
+// todo: uncomment when fixed: https://github.com/nuxt/ui/issues/1366
+// import { HEAD } from './utils/analytics/head';
 import pkg from './package.json';
 
 const { NITRO_PRESET: preset, VUE_APP_BASE_URL: baseUrl } = process.env;
@@ -121,9 +122,10 @@ export default defineNuxtConfig({
     formats: ['webp'],
     domains: ['https://res.cloudinary.com/'],
   },
-  app: {
-    head: HEAD.en.default,
-  },
+  // todo: uncomment when fixed: https://github.com/nuxt/ui/issues/1366
+  // app: {
+  //   head: HEAD.en.default,
+  // },
   vite: {
     assetsInclude: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.gif', '**/*.ico', '**/*.bin', '**/*.gltf', '**/*.glb'],
     css: {
