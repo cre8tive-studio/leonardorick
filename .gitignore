@@ -25,3 +25,5 @@ logs
 
 # deployment services
 .netlify
+
+.data

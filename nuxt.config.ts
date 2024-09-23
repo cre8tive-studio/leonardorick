@@ -81,6 +81,7 @@ export default defineNuxtConfig({
     '@nuxtjs/device',
     '@vesp/nuxt-fontawesome',
     '@sentry/nuxt/module',
+    '@nuxthub/core',
   ],
   // so we can identify which type of device the user is using
   // track deprecation warning: https://github.com/nuxt/nuxt/issues/29121
