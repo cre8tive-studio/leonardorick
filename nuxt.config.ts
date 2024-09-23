@@ -84,6 +84,9 @@ export default defineNuxtConfig({
     '@sentry/nuxt/module',
     '@nuxthub/core',
   ],
+  hub: {
+    remote: true,
+  },
   // so we can identify which type of device the user is using
   // track deprecation warning: https://github.com/nuxt/nuxt/issues/29121
   device: {
