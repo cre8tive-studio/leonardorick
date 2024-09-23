@@ -1,6 +1,6 @@
 import type { LanguageOptions } from '../constants/languages';
 
-const path = import.meta.server ? process.env.VUE_APP_BASE_URL : window.location.host;
+const path = import.meta.server ? process.env.VUE_APP_BASE_URL : window.location.href.split('?')[0];
 
 const defaultInfo = {
   title: 'Leonardo Rick - Software Engineer',
