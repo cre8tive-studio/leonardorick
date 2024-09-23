@@ -64,7 +64,7 @@ onMounted(() => {
 
   if (footerController.value && footer) {
     footerController.value.style.height = getComputedStyle(footer).height;
-    footerController.value.style.scale = '1.2';
+    footerController.value.style.transform = 'scaleY(1.2)';
   }
 });
 

@@ -1,5 +1,11 @@
 # FEATURES I REALLY WANT
 
+fix posthog
+
+Check if scss is being cleaned up
+
+Add some message if payload takes to much time to run
+
 change lang logic to be a path /pt-BR so all routes can be generated properly without needing to go to backend
 
 change main deploy to nuxtHub
