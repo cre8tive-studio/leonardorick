@@ -47,8 +47,8 @@
         </div>
       </div>
     </div>
+    <LRRightsReserved class="rights" />
   </footer>
-  <LRRightsReserved />
 </template>
 
 <script setup lang="ts">
@@ -205,6 +205,12 @@ useHideOnScroll(['.c-LRFooter']);
     transition: opacity 0.3s $default-ease;
     opacity: 1;
   }
+  .rights {
+    padding-bottom: 0;
+    margin-top: 0;
+    position: relative;
+    top: 2vh;
+  }
 
   /**
   * footer is activated when we reach the end of the page
@@ -238,6 +244,10 @@ useHideOnScroll(['.c-LRFooter']);
 
     .left-spacer {
       width: 0;
+    }
+
+    .rights {
+      opacity: 0;
     }
   }
 }

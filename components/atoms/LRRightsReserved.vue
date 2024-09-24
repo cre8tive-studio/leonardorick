@@ -8,14 +8,14 @@ const currentYear = new Date().getFullYear();
 
 <style scoped lang="scss">
 .c-LRRightsReserved {
-  margin-top: 5vh;
+  margin-top: 3vh;
   padding-bottom: 1rem;
-  width: 100%;
+  width: 100% !important;
   text-align: left;
   @extend .lr-text--label-0-half;
   color: $main-dark-text-hsl-dark;
 }
-@media (max-width: $lg-breakpoint) {
+@media screen and (max-width: $lg-breakpoint) {
   .c-LRRightsReserved {
     text-align: center;
   }

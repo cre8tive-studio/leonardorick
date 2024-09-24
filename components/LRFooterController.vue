@@ -24,8 +24,8 @@ onMounted(() => {
     scrollTrigger: {
       id: SCROLL_TRIGGER_IDS.FOOTER,
       trigger: '.c-LRFooterController',
-      start: 'top+=25% bottom',
-      end: 'bottom-=15% bottom',
+      start: 'top bottom',
+      end: 'top+=30% bottom',
       scrub: true,
       onLeave: () => {
         footer?.setAttribute('activated', 'true');
@@ -64,7 +64,7 @@ onMounted(() => {
 
   if (footerController.value && footer) {
     footerController.value.style.height = getComputedStyle(footer).height;
-    footerController.value.style.transform = 'scaleY(1.2)';
+    // footerController.value.style.transform = 'scaleY(1.1)';
   }
 });
 
@@ -79,9 +79,9 @@ function hideFooter() {
 
 function animateOut() {
   hideFooter();
-  const tl = gsap.timeline();
-  tl.to(footer, { scale: 1, marginBottom: '0rem' });
-  tl.to(footerSpacerSelector, { width: 0 }, '<');
+  const tl2 = gsap.timeline();
+  tl2.to(footer, { scale: 1, marginBottom: '0rem' });
+  tl2.to(footerSpacerSelector, { width: 0 }, '<');
 }
 
 onUnmounted(() => {
@@ -92,6 +92,7 @@ onUnmounted(() => {
 </script>
 <style scoped lang="scss">
 .c-LRFooterController {
-  height: 30vh; // override on javascript
+  transform-origin: bottom;
+  height: 30vh; // override on javascript above
 }
 </style>
