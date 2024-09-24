@@ -54,12 +54,6 @@ watch(lang, async () => {
     return;
   }
   setHomeView(res.$recommendations, res.$quotes, res.$experiences, res.$generals);
-  cache.value[lang.value] = {
-    recommendations: res.$recommendations,
-    quotes: res.$quotes,
-    generals: res.$generals,
-    experiences: res.$experiences,
-  };
 });
 
 /**
@@ -84,6 +78,13 @@ async function setHomeView(
   quotes.value = qts;
   generals.value = gnrs;
   experiences.value = exps;
+
+  cache.value[lang.value] = {
+    recommendations: rcs,
+    quotes: qts,
+    generals: gnrs,
+    experiences: exps,
+  };
 
   for (const rc of recommendations.value) {
     rc.authorImage = await getCachedImage(rc.author.id, rc.author.image.cloudinary?.secure_url);

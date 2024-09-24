@@ -13,9 +13,6 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
   let initializerClientError = null;
   try {
     gsap.registerPlugin(ScrollTrigger);
-    // i18n somehow doesn't work inside a server plugin so we
-    // can only use this on client plugings
-    useLang(_nuxtApp.$i18n);
 
     const session = await getCurrentSession(true);
     if (session) {
@@ -32,9 +29,11 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
 });
 
 function printConsoleIntroduction(env: string, baseUrl: string, clientVersion: string, linkedin?: string) {
+  // eslint-disable-next-line no-console
   console.log('Version:', clientVersion);
   if (!isProduction(env)) return;
 
+  // eslint-disable-next-line no-console
   console.log(
     `%c${baseUrl}%c\nOh, so you thought you could sneak onto my website undetected, huh? Nice try! 😏\nBut seriously, If you have any questions about the features on this website, feel free to shoot me a message on LinkedIn: ${linkedin}.%c\nSincerely,%c\nLeonardo Rick`,
     'font-size: 1.5rem; font-weight:bold; padding: 16px; padding-bottom: 0px;',

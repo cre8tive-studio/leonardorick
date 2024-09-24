@@ -22,6 +22,8 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
   const { query } = useRoute();
   const locale = (query?.locale as LanguageOptions) || 'en';
 
+  useLang(_nuxtApp.$i18n as i18nModel);
+
   const {
     $recommendations: recommendations,
     $quotes: quotes,
@@ -30,8 +32,6 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
   } = await _fetchInitialData(locale, useFetch);
 
   const personalInfo = await fetchPersonalInfo();
-
-  (_nuxtApp.$i18n as i18nModel).locale.value = locale;
 
   return {
     provide: {

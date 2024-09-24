@@ -38,12 +38,12 @@ let mouseTextScrollCallToActionFinished = false;
 const elementsToFocus = new Set<HTMLElement>();
 
 const useCursor = () => {
-  const $t = useNuxtApp().$i18n.t;
+  const { t: $t } = useI18n();
   const { cursorOuter, cursorInner, isCursorActivated: activated } = toRefs(useAnimationStore());
   const { lang } = toRefs(useAppStore());
   const route = useRoute();
   const text = ref('');
-  let isStuck = ref(false);
+  const isStuck = ref(false);
   let scrollDownText = $t(SCROLL_DOWN_TEXT_KEY); // todo: translate
 
   function activate() {

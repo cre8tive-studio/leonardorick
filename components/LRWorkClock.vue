@@ -25,7 +25,7 @@ interface Emits {
 }
 
 const { personalInfo } = toRefs(useAppStore());
-const $t = useNuxtApp().$i18n.t;
+const { t: $t } = useI18n();
 const $emit = defineEmits<Emits>();
 const { containersQuery, shouldPin } = defineProps<Props>();
 
