@@ -25,7 +25,7 @@ onMounted(() => {
       id: SCROLL_TRIGGER_IDS.FOOTER,
       trigger: '.c-LRFooterController',
       start: 'top bottom',
-      end: 'top+=30% bottom',
+      end: 'bottom-=15% bottom',
       scrub: true,
       onLeave: () => {
         footer?.setAttribute('activated', 'true');

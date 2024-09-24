@@ -7,15 +7,16 @@
     <div class="options-wrapper lr-section-page-paddings">
       <nav
         ref="optionsNav"
-        @scroll="menuScrollHandler"
         class="options"
+        @scroll="menuScrollHandler"
       >
         <button
+          v-for="option in options"
+          :key="option.value"
           lr-cursor
           class="option"
           :class="{ selected: selectedOption === option.value }"
           @click="selectOption(option.value)"
-          v-for="option in options"
         >
           <span>{{ $t(option.label) }}</span>
           <span>{{ $t(option.label) }}</span>
@@ -64,6 +65,9 @@ interface Props {
   refreshKey: number;
 }
 defineProps<Props>();
+
+const $emit = defineEmits(['change']);
+
 const ABOUT_ME_KEY_OPTIONS = ['anyone', 'recruiters', 'engineers', 'designers', 'product-managers'] as const;
 export type AboutMeKeyOptions = (typeof ABOUT_ME_KEY_OPTIONS)[number];
 function isAboutMeKey(key: any): key is AboutMeKeyOptions {
@@ -108,6 +112,7 @@ const productManagers = computed(() => generals.value.find((general) => general.
 
 function selectOption(option: AboutMeKeyOptions) {
   selectedOption.value = option;
+  $emit('change', option);
 }
 
 function menuScrollHandler() {
