@@ -1,12 +1,12 @@
 import { request, gql } from 'graphql-request';
 
-import type { ExperiencesResponse } from '~/types/graphql-queries/experiences-response';
 import { getFormattedLocale } from '../utils/get-formatted-locale';
+import type { ExperiencesResponse } from '~/types/graphql-queries/experiences-response';
 
 export default defineEventHandler(async (event) => {
   const { locale } = getQuery(event);
   const formatedLocale = getFormattedLocale(locale);
-  const url = process.env.PAYLOAD_GRAPHQL_URL as string;
+  const { payloadGraphQLUrl: url } = useRuntimeConfig();
   const query = gql`
     query Experiences($locale: LocaleInputType!) {
       Experiences(locale: $locale) {

@@ -6,7 +6,7 @@ import { parseGenerals } from '~/utils/parsers/generals.parser';
 export default defineEventHandler(async (event) => {
   const { locale } = getQuery(event);
   const formatedLocale = getFormattedLocale(locale);
-  const url = process.env.PAYLOAD_GRAPHQL_URL as string;
+  const { payloadGraphQLUrl: url } = useRuntimeConfig();
   const query = gql`
     query ($locale: LocaleInputType!) {
       Generals(locale: $locale) {

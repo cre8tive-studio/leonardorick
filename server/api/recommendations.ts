@@ -5,8 +5,7 @@ import { getFormattedLocale } from '../utils/get-formatted-locale';
 export default defineEventHandler(async (event) => {
   const { locale } = getQuery(event);
   const formatedLocale = getFormattedLocale(locale);
-  const env = event.context.cloudflare?.env || process.env || {};
-  const url = env.PAYLOAD_GRAPHQL_URL as string;
+  const { payloadGraphQLUrl: url } = useRuntimeConfig();
   const query = gql`
     query ($locale: LocaleInputType!) {
       Recommendations(locale: $locale) {
