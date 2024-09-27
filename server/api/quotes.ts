@@ -5,8 +5,8 @@ import type { QuotesResponse } from '../../types/graphql-queries/quotes-response
 export default defineEventHandler(async (event) => {
   const { locale } = getQuery(event);
   const formatedLocale = getFormattedLocale(locale);
+  const { payloadGraphQLUrl: url } = useRuntimeConfig();
 
-  const url = process.env.PAYLOAD_GRAPHQL_URL as string;
   const query = gql`
     query ($locale: LocaleInputType!) {
       Quotes(locale: $locale, limit: 100) {

@@ -30,6 +30,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // Private env variables that is only available on the server
     stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    payloadGraphQLUrl: process.env.PAYLOAD_GRAPHQL_URL,
     appwrite: {
       apiKey: process.env.APPWRITE_SECRET_KEY,
       allowedEmailsCollection: process.env.APPWRITE_ALLOWED_EMAILS_COLLECTION,
