@@ -31,3 +31,19 @@ If you're interested in checking out some well-structured code, take a look at m
 - Chrome
 - Firefox
 - Safari
+
+### Language Logic
+
+Using only i18n route logic to control the language was a little bit bad for experience because I didn't wanted the user to go back to the start of the page everytime the language changes. So what I did was to use a combination of both query and path parameters. The query parameters takes precedence if defined.
+
+The URL might end up very weird as /pt-BR (being translated to english) or /?locale=pt-BR being translate but I prefered that beacuse I could take the benefits of both approaches. Using the path route I'm able to generate the SSR version of the website for all routes and using the query parameter I can refresh the page without scrolling top.
+
+### Cloudlfare
+
+Cloudflare currently do not support process.env in some vue contexts so be sure to always use useRuntimeConfig
+
+- https://github.com/nuxt-hub/core/issues/297
+
+For reidrect rules to work, your endpoints must be with proxy enabled
+
+- https://community.cloudflare.com/t/301-redirect-page-rule-not-working/591595/10

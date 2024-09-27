@@ -1,6 +1,6 @@
 # FEATURES I REALLY WANT
 
-fix posthog
+recreate scroll triggers from recommendations and competences when text change. Maybe the footer should work better doing the same
 
 Check if scss is being cleaned up
 
@@ -19,6 +19,7 @@ add music section and login once appwrite allow transactions
 
 - https://github.com/appwrite/appwrite/issues/2788
 - https://appwrite.io/threads/1096798213350109184
+- remember that cloudflare proxy might affect the url in staging if it's not working
 
 Improve magnetic
 
@@ -27,3 +28,5 @@ Improve magnetic
 - Magnetic to animate out only when the intersection between the icon and the round circle ends. This way I don't need the mouseleave listener. For that I need to understand better the intersection API
 
 - Understand why sometimes minutes and seconds are stickying together (very odd bug probably going to leave like this)
+
+- better SEO https://nuxtseo.com/nuxt-seo/getting-started/installation
