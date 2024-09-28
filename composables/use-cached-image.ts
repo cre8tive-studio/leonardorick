@@ -10,18 +10,20 @@ const useCachedImage = () => {
   const { cacheImage, getCachedImage: getCachedImageFromStore } = useImagesStore();
 
   async function getCachedImage(id: string, url: string | undefined) {
-    const image = getCachedImageFromStore(id);
-    if (image) {
-      return URL.createObjectURL(image);
+    const localUrl = getCachedImageFromStore(id);
+    if (localUrl) {
+      return localUrl;
     }
 
     if (url) {
       try {
-        const data = await $fetch<Blob>(url);
+        const blob = await $fetch<Blob>(url);
+        const data = URL.createObjectURL(blob);
         cacheImage(id, data);
 
-        return URL.createObjectURL(data);
+        return data;
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error(e);
         return placeHolderImage();
       }
