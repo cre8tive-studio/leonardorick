@@ -1,10 +1,4 @@
 import { isStringTrue } from '@leonardorick/utils';
-
-export function localeRoute(route: string, locale?: string) {
-  console.log(route, locale);
-  return `${route}${locale ? `?locale=${locale}` : ''}`;
-}
-
 export function bypass() {}
 
 export function getRandomInt(max: number, startNumber = 0) {

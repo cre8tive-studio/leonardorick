@@ -1,7 +1,5 @@
 # FEATURES I REALLY WANT
 
-recreate scroll triggers from recommendations and competences when text change. Maybe the footer should work better doing the sames
-
 Check if scss is being cleaned up
 
 Add some message if payload takes to much time to run

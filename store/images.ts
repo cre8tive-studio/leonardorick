@@ -1,12 +1,12 @@
 interface AnimationStoreModel {
-  [id: string]: Blob;
+  [id: string]: string;
 }
 
 export const useImagesStore = defineStore('imagesStore', () => {
   const state = reactive<AnimationStoreModel>({});
 
-  function cacheImage(id: string, blob: Blob) {
-    state[id] = blob;
+  function cacheImage(id: string, localUrl: string) {
+    state[id] = localUrl;
   }
 
   function getCachedImage(id: string) {
