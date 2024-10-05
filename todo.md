@@ -1,6 +1,6 @@
 # FEATURES I REALLY WANT
 
-recreate scroll triggers from recommendations and competences when text change. Maybe the footer should work better doing the same
+recreate scroll triggers from recommendations and competences when text change. Maybe the footer should work better doing the sames
 
 Check if scss is being cleaned up
 
@@ -30,3 +30,5 @@ Improve magnetic
 - Understand why sometimes minutes and seconds are stickying together (very odd bug probably going to leave like this)
 
 - better SEO https://nuxtseo.com/nuxt-seo/getting-started/installation
+
+- Limit IP's that can call Payload CMS
