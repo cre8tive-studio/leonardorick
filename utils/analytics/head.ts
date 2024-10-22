@@ -45,6 +45,9 @@ const SCRIPTS = {
 const _DEFAULT_HEAD = {
   ...SCRIPTS,
   title: defaultInfo.title,
+  htmlAttrs: {
+    lang: 'en' as LanguageOptions,
+  },
   meta: [
     { name: 'description', content: defaultInfo.description },
 
@@ -59,13 +62,16 @@ const _DEFAULT_HEAD = {
     { hid: 'twitter:description', name: 'twitter:description', content: defaultInfo.description },
     { hid: 'twitter:image', name: 'twitter:image', content: defaultInfo.ogImage },
   ],
-  chartset: 'utf-8',
+  charset: 'utf-8',
   link: [{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }],
 };
 
 const _BR_HEAD = {
   ...SCRIPTS,
   title: defaultBrInfo.title,
+  htmlAttrs: {
+    lang: 'pt-BR' as LanguageOptions,
+  },
   meta: [
     { name: 'description', content: defaultBrInfo.description },
 
@@ -80,13 +86,16 @@ const _BR_HEAD = {
     { hid: 'twitter:description', name: 'twitter:description', content: defaultBrInfo.description },
     { hid: 'twitter:image', name: 'twitter:image', content: defaultBrInfo.ogImage },
   ],
-  chartset: 'utf-8',
+  charset: 'utf-8',
   link: [{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }],
 };
 
 const MUSIC_HEAD = {
   ...SCRIPTS,
   title: musicInfo.title,
+  htmlAttrs: {
+    lang: 'en' as LanguageOptions,
+  },
   meta: [
     { name: 'description', content: musicInfo.description },
 
@@ -101,13 +110,16 @@ const MUSIC_HEAD = {
     { hid: 'twitter:description', name: 'twitter:description', content: musicInfo.description },
     { hid: 'twitter:image', name: 'twitter:image', content: musicInfo.ogImage },
   ],
-  chartset: 'utf-8',
+  charset: 'utf-8',
   link: [{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }],
 };
 
 const BR_MUSIC_HEAD = {
   ...SCRIPTS,
   title: musicBrInfo.title,
+  htmlAttrs: {
+    lang: 'pt-BR' as LanguageOptions,
+  },
   meta: [
     { name: 'description', content: musicBrInfo.description },
 
@@ -122,7 +134,7 @@ const BR_MUSIC_HEAD = {
     { hid: 'twitter:description', name: 'twitter:description', content: musicBrInfo.description },
     { hid: 'twitter:image', name: 'twitter:image', content: musicBrInfo.ogImage },
   ],
-  chartset: 'utf-8',
+  charset: 'utf-8',
   link: [{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }],
 };
 
@@ -141,9 +153,12 @@ export type RoutesHeadOptions = (typeof ROUTES_HEAD_OPTIONS)[number];
 type HeadOptions = {
   [key in LanguageOptions]: {
     [route in RoutesHeadOptions]: {
+      htmlAttrs: {
+        lang: LanguageOptions;
+      };
       title: string;
       meta: { hid?: string; name?: string; property?: string; content: string }[];
-      chartset: string;
+      charset: string;
       link: { rel: string; href: string }[];
     };
   };
