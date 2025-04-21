@@ -126,7 +126,7 @@ function toggleMobileMenu() {
   }
 
   .mobile-menu {
-    background-color: $secoundary-dark-bg;
+    background-color: $secondary-dark-bg;
     position: absolute;
 
     top: 0;

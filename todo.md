@@ -1,13 +1,19 @@
 # FEATURES I REALLY WANT
 
+Create mobile version of music page
+
+create animation for showing elements of the song card
+
+Create a single file centralizing the configurations in staging 1 Password
+
+Add pnpm and mono repo
+Change cloudinary images to nuxtHub
+
 Check if scss is being cleaned up
 
-Add some message if payload takes to much time to run
+Create a page similar to that pages that serves as presentation card (for instagram link)
 
-change lang logic to be a path /pt-BR so all routes can be generated properly without needing to go to backend
-
-change main deploy to nuxtHub
-|--change cloudinary images to nuxtHub
+Change lang logic to be a path /pt-BR so all routes can be generated properly without needing to go to backend
 
 # FEATURES FOR LATER
 
@@ -18,12 +24,6 @@ add music section and login once appwrite allow transactions
 - https://github.com/appwrite/appwrite/issues/2788
 - https://appwrite.io/threads/1096798213350109184
 - remember that cloudflare proxy might affect the url in staging if it's not working
-
-Improve magnetic
-
-- Fix magnetic items keeping on active state
-- improve sticky button to do not rely on a padding and consider the cursor outer
-- Magnetic to animate out only when the intersection between the icon and the round circle ends. This way I don't need the mouseleave listener. For that I need to understand better the intersection API
 
 - Understand why sometimes minutes and seconds are stickying together (very odd bug probably going to leave like this)
 

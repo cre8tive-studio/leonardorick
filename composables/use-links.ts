@@ -6,7 +6,7 @@ import { useAppStore } from '~/store';
 import type { PersonalInfoModel } from '~/types/personal-info.model';
 
 const useLinks = () => {
-  const { personalInfo, lang } = toRefs(useAppStore());
+  const { personalInfo } = toRefs(useAppStore());
   const linksUrls = personalInfo.value?.links || ({} as PersonalInfoModel['links']);
 
   const links = [

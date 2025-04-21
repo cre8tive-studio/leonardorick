@@ -14,7 +14,8 @@ const useServerAppwrite = () => {
   const { appwrite, public: publicConfig } = useRuntimeConfig();
   const { allowedEmailsCollection, demosCollection, bucketId } = appwrite;
   const { appwrite: publicAppwrite } = publicConfig;
-  const { endpoint, project, databaseId, usersCollection, settingsCollection, settingsDocument } = publicAppwrite;
+  const { endpoint, project, databaseId, usersCollection, settingsCollection, releasesCollection, settingsDocument } =
+    publicAppwrite;
 
   if (!serverClient) {
     serverClient = new ServerClient();
@@ -72,6 +73,7 @@ const useServerAppwrite = () => {
       users: usersCollection,
       allowedEmails: allowedEmailsCollection,
       demos: demosCollection,
+      releases: releasesCollection,
     },
 
     // functions

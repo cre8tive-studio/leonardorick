@@ -60,9 +60,11 @@
     "stripe": "^13.11.0",
     "three": "^0.166.1",
     "tweakpane": "^4.0.4",
-    "url": "^0.11.4"
+    "url": "^0.11.4",
+    "wavesurfer.js": "^7.9.4"
   },
   "overrides": {
     "vue": "latest"
-  }
+  },
+  "packageManager": "pnpm@9.15.6+sha256.5bf88eca1e818b973b9359a16e57405177c7a9b8177b9125d587577311786e64"
 }

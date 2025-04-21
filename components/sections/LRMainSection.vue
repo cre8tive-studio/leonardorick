@@ -24,12 +24,11 @@
 </template>
 
 <script setup lang="ts">
-import { useAppStore } from '~/store';
 import SplitType from 'split-type';
 import { gsap } from 'gsap';
-import { watchOnce } from '@vueuse/core';
-import { SCROLL_TRIGGER_IDS } from '~/utils/constants/scroll-trigger-ids';
 import { ScrollTrigger } from 'gsap/all';
+import { useAppStore } from '~/store';
+import { SCROLL_TRIGGER_IDS } from '~/utils/constants/scroll-trigger-ids';
 
 const { loaded, personalInfo } = toRefs(useAppStore());
 const mainSection = ref<HTMLDivElement>();

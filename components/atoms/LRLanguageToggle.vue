@@ -76,7 +76,7 @@ function toggleLanguage() {
     transition: background-color 0.3s $default-ease, all 0.5s $default-ease;
     left: 45%;
     right: 45%;
-    background-color: $secoundary-dark-text;
+    background-color: $secondary-dark-text;
 
     &.en {
       right: 0;

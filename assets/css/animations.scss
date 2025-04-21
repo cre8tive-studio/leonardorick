@@ -85,7 +85,7 @@ $default-ease: cubic-bezier(0.49, 0.225, 0.175, 0.86);
 
   &:not(.router-link-active):not(.selected) {
     span:nth-child(2) {
-      color: $secoundary-dark-text;
+      color: $secondary-dark-text;
     }
   }
 }

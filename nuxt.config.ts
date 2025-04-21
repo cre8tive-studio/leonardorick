@@ -49,6 +49,7 @@ export default defineNuxtConfig({
         usersCollection: process.env.VUE_APP_APPWRITE_USERS_COLLECTION,
         upvotesCollection: process.env.VUE_APP_APPWRITE_UPVOTES_COLLECTION,
         settingsCollection: process.env.VUE_APP_APPWRITE_SETTINGS_COLLECTION,
+        releasesCollection: process.env.VUE_APP_APPWRITE_RELEASES_COLLECTION,
         settingsDocument: process.env.VUE_APP_APPWRITE_SETTINGS_DOCUMENT,
         databaseId: process.env.VUE_APP_APPWRITE_DATABASE,
       },
@@ -92,7 +93,7 @@ export default defineNuxtConfig({
   // fontawesome icons
   fontawesome: {
     icons: {
-      solid: ['plus'],
+      solid: ['plus', 'play', 'pause'],
     },
     component: 'fa',
   },
