@@ -23,10 +23,6 @@ export default defineNuxtConfig({
       scrollBehaviorType: 'smooth',
     },
   },
-  // todo think about a better approach until cloudflare supports runtimeconfig
-  // https://github.com/unjs/nitro/issues/272
-  // https://nitro.unjs.io/deploy/providers/cloudflare
-  // https://github.com/nuxt/nuxt/issues/14011
   runtimeConfig: {
     // Private env variables that is only available on the server
     stripeSecretKey: process.env.STRIPE_SECRET_KEY,
@@ -122,7 +118,7 @@ export default defineNuxtConfig({
     quality: 100,
     formats: ['webp'],
     dir: 'assets/images',
-    domains: ['https://res.cloudinary.com/'],
+    domains: ['https://res.cloudinary.com/', 'https://fra.cloud.appwrite.io/'],
   },
   // todo: uncomment when fixed: https://github.com/nuxt/ui/issues/1366
   // app: {
