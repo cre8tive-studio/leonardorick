@@ -2,7 +2,7 @@
   "name": "nuxt-app",
   "private": true,
   "type": "module",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "scripts": {
     "build": "nuxt build",
     "clean-build": "rm -rf .nuxt dist .output .netlify server/dist && npm run build",
