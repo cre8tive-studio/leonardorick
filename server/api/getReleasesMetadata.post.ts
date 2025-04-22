@@ -5,6 +5,7 @@ import type { ReleaseModel } from '~/types/release.model';
 const { databases, databaseId, collections } = useServerAppwrite();
 
 export default defineEventHandler(async () => {
+  console.log('databaseId', databaseId, 'collection.releases', collections.releases);
   const query = await databases.listDocuments<ReleaseModel>(databaseId, collections.releases);
 
   return query.documents.map((release) => ({
