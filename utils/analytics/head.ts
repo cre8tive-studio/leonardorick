@@ -1,6 +1,6 @@
 import type { LanguageOptions } from '../constants/languages';
 
-let url = import.meta.server ? process.env.VUE_APP_BASE_URL : window.location.href.split('?')[0];
+let url = import.meta.client ? window.location.href.split('?')[0] : process.env.VUE_APP_BASE_URL;
 
 // if the last char is not a '/', then we add it
 if (url && url[url.length - 1] !== '/') {

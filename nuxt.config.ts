@@ -1,6 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-// todo: uncomment when fixed: https://github.com/nuxt/ui/issues/1366
-// import { HEAD } from './utils/analytics/head';
+import { HEAD } from './utils/analytics/head';
 import pkg from './package.json';
 
 const { NITRO_PRESET: preset, VUE_APP_BASE_URL: baseUrl } = process.env;
@@ -118,13 +117,19 @@ export default defineNuxtConfig({
     quality: 100,
     formats: ['webp'],
     dir: 'assets/images',
-    ...(preset === 'netlify' ? { provider: 'netlify' } : {}),
-    domains: ['https://res.cloudinary.com/', 'https://fra.cloud.appwrite.io/'],
+    ...(preset === 'netlify'
+      ? {
+          provider: 'netlify',
+          netlify: {
+            baseURl: `${baseUrl}/${process.env.NETLIFY_IMAGES_URL}`,
+          },
+        }
+      : {}),
+    domains: ['https://res.cloudinary.com/'],
   },
-  // todo: uncomment when fixed: https://github.com/nuxt/ui/issues/1366
-  // app: {
-  //   head: HEAD.en.default,
-  // },
+  app: {
+    head: HEAD.en.default,
+  },
   vite: {
     assetsInclude: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.gif', '**/*.ico', '**/*.bin', '**/*.gltf', '**/*.glb'],
     css: {
