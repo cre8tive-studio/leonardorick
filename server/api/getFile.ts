@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const { fileId } = await readBody(event);
 
   try {
-    return storage.getFileDownload(bucketId, fileId);
+    return storage.getFileDownload(bucketId, fileId).then(Buffer.from);
   } catch (err: any) {
     throw createGenericError(err.message);
   }

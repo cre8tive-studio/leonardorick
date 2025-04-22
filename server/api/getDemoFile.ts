@@ -3,8 +3,7 @@ import { createGenericError } from '../utils/errors';
 import useServerAppwrite from '~/composables/use-server-appwrite';
 import type { DemoModel } from '~/types/demo.model';
 
-const { databases, databaseId, collections, storage, bucketId, getUser, getSettings } =
-  useServerAppwrite();
+const { databases, databaseId, collections, storage, bucketId, getUser, getSettings } = useServerAppwrite();
 
 // we use a dynamic url just for the purpose of separating the calls. If we keep the same path
 // for all songs, when we try to cache this call, all requests will be cahed as the same and it will
@@ -42,7 +41,7 @@ export default defineEventHandler(async (event) => {
       throw createGenericError(`Demo ${number} not found`);
     }
 
-    return storage.getFileDownload(bucketId, query.documents[0].fileId);
+    return storage.getFileDownload(bucketId, query.documents[0].fileId).then(Buffer.from);
   } catch (err: any) {
     throw createGenericError(err.message);
   }

@@ -94,7 +94,7 @@ const getSession = async () => {
     });
 
     initSettings(data);
-    return await auth.createEmailSession(email.value, password.value);
+    return await auth.createEmailPasswordSession(email.value, password.value);
   } catch (error) {
     // todo: setup modal error
     console.error(error);
