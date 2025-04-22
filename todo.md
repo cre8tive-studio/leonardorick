@@ -1,5 +1,7 @@
 # FEATURES I REALLY WANT
 
+Add Qonto experience
+
 Create multiple components for different audio cards and modularize it
 
 - It will make it easier for everything later

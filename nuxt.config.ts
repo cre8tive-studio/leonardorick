@@ -117,15 +117,8 @@ export default defineNuxtConfig({
     quality: 100,
     formats: ['webp'],
     dir: 'assets/images',
-    ...(preset === 'netlify'
-      ? {
-          provider: 'netlify',
-          netlify: {
-            baseURl: `${baseUrl}/${process.env.NETLIFY_IMAGES_URL}`,
-          },
-        }
-      : {}),
-    domains: ['https://res.cloudinary.com/'],
+    provider: 'ipx',
+    domains: ['https://res.cloudinary.com/', 'https://fra.cloud.appwrite.io/'],
   },
   app: {
     head: HEAD.en.default,
