@@ -5,6 +5,7 @@ import useServerAppwrite from '~/composables/use-server-appwrite';
 const { users, queryAllowedEmail, getAuthUserWithEmail, getSettings } = useServerAppwrite();
 
 export default defineEventHandler(async (event) => {
+  console.log('Request method:', event.node.req.method);
   const { email } = await readBody(event);
 
   try {
