@@ -138,7 +138,7 @@ async function updateVotesCallback() {
 }
 
 async function loadReleases() {
-  $fetch<AudioModel[]>('/api/getReleasesMetadata').then(async (data) => {
+  $fetch<AudioModel[]>('/api/getReleasesMetadata', { method: 'POST' }).then(async (data) => {
     releases.value = data;
     const featured = releases.value.find((release) => release.featured) as AudioModel;
     if (featured) {
