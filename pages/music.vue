@@ -75,7 +75,7 @@ import type { AudioModel } from '~/types/audio.model';
 const nuxtApp = useNuxtApp();
 
 const { session } = toRefs(useAppStore());
-const { settings, getJWT, getUpvotes, updateVotes } = useAppwrite();
+const { settings, getJWT, getUpvotes, updateVotes, getReleasesMetadata } = useAppwrite();
 const { request } = useRequest();
 
 const demos = ref<DemoClientModel[]>([]);
@@ -138,7 +138,7 @@ async function updateVotesCallback() {
 }
 
 async function loadReleases() {
-  $fetch<AudioModel[]>('/api/getReleasesMetadata', { method: 'POST' }).then(async (data) => {
+  getReleasesMetadata().then(async (data) => {
     releases.value = data;
     const featured = releases.value.find((release) => release.featured) as AudioModel;
     if (featured) {

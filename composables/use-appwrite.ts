@@ -5,7 +5,10 @@ import type { UserModel } from '~/types/user.model';
 import type { UpvotesModel, UpvotesClientModel } from '~/types/upvotes.model';
 import { parseUpvotes } from '~/utils/parsers/upvotes.parser';
 import { parseSettings } from '~/utils/parsers/settings.parser';
+import { parseReleases } from '~/utils/parsers/releases.parser';
 import { isNotExpired, getExpireTime } from '~/utils/js-utilities';
+import type { ReleaseModel } from '~/types/release.model';
+import type { AudioModel } from '~/types/audio.model';
 export { ID } from 'appwrite';
 
 let account: Account;
@@ -14,8 +17,16 @@ const client = new Client();
 
 const useAppwrite = () => {
   const { appwrite } = useRuntimeConfig().public;
-  const { endpoint, project, databaseId, usersCollection, upvotesCollection, settingsCollection, settingsDocument } =
-    appwrite;
+  const {
+    endpoint,
+    project,
+    databaseId,
+    usersCollection,
+    upvotesCollection,
+    settingsCollection,
+    releasesCollection,
+    settingsDocument,
+  } = appwrite;
 
   const { session: storedSession, settings, lastJWT } = toRefs(useAppStore());
 
@@ -68,6 +79,10 @@ const useAppwrite = () => {
     return databases.listDocuments<UpvotesModel>(databaseId, upvotesCollection).then(parseUpvotes);
   };
 
+  const getReleasesMetadata = async (): Promise<AudioModel[]> => {
+    return databases.listDocuments<ReleaseModel>(databaseId, releasesCollection).then(parseReleases);
+  };
+
   const updateVotes = async (demoNumber: number, votes: string[]) => {
     return databases.updateDocument(databaseId, upvotesCollection, demoNumber.toString(), {
       votes,
@@ -106,6 +121,7 @@ const useAppwrite = () => {
     getJWT,
     getUser,
     getUpvotes,
+    getReleasesMetadata,
 
     initSettings,
     updateVotes,
