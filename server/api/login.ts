@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
         await users.delete(user.$id);
         throw createGenericError('trying to login with a user not allowed!');
       }
-      // if user is not on allowed emails but  also not on appwrite, we do nothing
+      // if user is not on allowed emails but also not on appwrite, we do nothing
       // and let the appwrrite client side trying to login to handle the error
     }
   } catch (err: any) {

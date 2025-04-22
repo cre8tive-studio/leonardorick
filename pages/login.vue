@@ -55,7 +55,6 @@ import { useAppStore } from '~/store';
 
 const store = useAppStore();
 const { auth, initSettings } = useAppwrite();
-const { request } = useRequest();
 const router = useRouter();
 const { session: storedSession } = toRefs(store);
 
@@ -86,17 +85,15 @@ const handleSubmit = async () => {
 
 const getSession = async () => {
   try {
-    const { error, data } = await request<SettingsModel>(`/api/${loginType.value}`, {
-      email: email.value,
-      password: password.value,
+    const data = await $fetch<SettingsModel>(`/api/${loginType.value}`, {
+      method: 'POST',
+      body: {
+        email: email.value,
+        password: password.value,
+      },
     });
 
-    if (error.value) {
-      throw error.value;
-    }
-
-    initSettings(data.value);
-
+    initSettings(data);
     return await auth.createEmailSession(email.value, password.value);
   } catch (error) {
     // todo: setup modal error
