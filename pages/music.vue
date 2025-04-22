@@ -153,6 +153,11 @@ async function setLoggedInformation() {
     upvotes.value = await getUpvotes();
 
     request<DemoClientModel[]>('/api/getDemosMetadata', undefined, true).then(async ({ data }) => {
+      if (!data.value) {
+        demosLoaded.value = true;
+        return;
+      }
+
       demos.value = data.value;
       demosLoaded.value = true;
       setUpvotesAvailable();

@@ -21,6 +21,11 @@ export default defineEventHandler(async (event) => {
   const { availableDemos } = await getUser(userId);
   const availableDemosReady = availableDemos.filter((demo) => demosReady.includes(demo));
 
+  if (!availableDemosReady.length) {
+    // this condition should never happen, that's why we will trhow an error here
+    throw createGenericError('User has no available demo or available user available demos are not ready');
+  }
+
   try {
     const query = await databases.listDocuments<DemoModel>(databaseId, collections.demos, [
       Query.equal('number', availableDemosReady),
