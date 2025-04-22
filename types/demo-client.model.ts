@@ -1,7 +1,9 @@
 export interface DemoClientModel {
-  coverImg: any | null;
+  id: string;
+  fileId: string;
+  imageUrl: any | null;
   title: string;
   description?: string;
   number: number;
-  demoUrl: string | null;
+  audioUrl: string | null;
 }

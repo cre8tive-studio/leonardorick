@@ -2,10 +2,15 @@ import { Query } from 'node-appwrite';
 import { createGenericError } from '../utils/errors';
 import useServerAppwrite from '~/composables/use-server-appwrite';
 import type { DemoModel } from '~/types/demo.model';
+import { DemoClientModel } from '~/types/demo-client.model';
 
 const { databases, databaseId, collections, getUser, getSettings } = useServerAppwrite();
 
 export default defineEventHandler(async (event) => {
+  if (!event.context.auth) {
+    throw createGenericError('Request require authentication');
+  }
+
   const { userId } = event.context.auth;
 
   if (!userId) {
@@ -21,13 +26,16 @@ export default defineEventHandler(async (event) => {
       Query.equal('number', availableDemosReady),
     ]);
     return query.documents.map((demo) => ({
+      id: demo.$id,
       // todo in the future return the image cover of the demo if it exists
-      coverImg: null,
+      imageUrl: null,
       title: demo.title,
       description: demo.description,
       number: demo.number,
-      file: null,
-    }));
+      votes: demo.votes,
+      fileId: demo.fileId,
+      audioUrl: null,
+    })) as DemoClientModel[];
   } catch (err: any) {
     throw createGenericError(err.message);
   }

@@ -1,6 +1,12 @@
 # FEATURES I REALLY WANT
 
+Create multiple components for different audio cards and modularize it
+
+- It will make it easier for everything later
+
 Create mobile version of music page
+
+Increase a bit non-featured song name
 
 create animation for showing elements of the song card
 

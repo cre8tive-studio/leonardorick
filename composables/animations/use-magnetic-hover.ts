@@ -11,6 +11,9 @@ interface MagneticChildReferenceModel {
 // be careful with this because it was not developed in a way that allow multiple usages.
 // I honestly just found this solution could reach what I want but this composible probably
 // should only be used once
+
+// ? be aware that with this solution, the only buttons that can work are the ones that are attached to the DOM before this function runs
+// ? and is never removed. The buttons on other pages that are navigated after this activation will not have listeners set
 const useMagneticHover = () => {
   const { isMagneticHoverActivated: activated } = toRefs(useAnimationStore());
   const magneticChildrenReferences = new WeakMap<Element, MagneticChildReferenceModel>();

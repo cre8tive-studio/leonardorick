@@ -28,7 +28,7 @@ let buttons = 0;
 let lastTargetBox: DOMRect;
 let lastTargetEl: HTMLElement;
 let lastMouseTextEl: HTMLElement | null;
-let removedWithoutAddAgain = false;
+let removedTextAndDidNotAddAgain = false;
 // each different text we want to add should have a
 // block flag to we don't overwide the text with
 // another while it's still working it's logic
@@ -44,19 +44,49 @@ const useCursor = () => {
   const route = useRoute();
   const text = ref('');
   const isStuck = ref(false);
-  let scrollDownText = $t(SCROLL_DOWN_TEXT_KEY); // todo: translate
+  let scrollDownText = $t(SCROLL_DOWN_TEXT_KEY);
+
+  let unwatchTranslateMouseText: ReturnType<typeof watch>;
+
+  const isHomePage = computed(() => route.path === '/');
+
+  watch(
+    () => route.path,
+    () => {
+      // we only show the text on the mouse if the user opens the app in the home page. Also,
+      // if he changes the page from home, we remove the listener and the logic to add it.
+      if (!isHomePage.value) {
+        mouseTextScrollCallToActionFinished = true;
+        scrollDownTimeout = clearAndDeleteTimeout(scrollDownTimeout);
+      }
+
+      if (!activated.value || !cursorOuter.value) return;
+
+      // fix navigating making lr-cursor to lose focus
+      gsap.to(cursorOuter.value, {
+        duration: 0,
+        x: lastTargetBox.x,
+        y: lastTargetBox.y,
+      });
+    }
+  );
 
   function activate() {
     if (!cursorOuter.value) return;
     setCursorOuterOriginalState();
-    listenToMouseText();
-    addScrollCallToAction();
+
+    if (isHomePage.value) {
+      watchMouseTextToTranslate();
+      addScrollCallToAction();
+    }
 
     activated.value = true;
   }
 
-  function listenToMouseText() {
-    const unwwatch = watch(lang, () => {
+  function watchMouseTextToTranslate() {
+    if (unwatchTranslateMouseText) unwatchTranslateMouseText();
+
+    unwatchTranslateMouseText = watch(lang, () => {
       if (!mouseTextScrollCallToActionFinished) {
         scrollDownText = $t(SCROLL_DOWN_TEXT_KEY);
         if (mouseTextScrollCallToActionStarted) {
@@ -65,7 +95,7 @@ const useCursor = () => {
           addScrollCallToAction();
         }
       } else {
-        unwwatch();
+        unwatchTranslateMouseText();
       }
     });
 
@@ -127,7 +157,7 @@ const useCursor = () => {
     addTextTimeout = setTimeout(() => {
       if (!cursorOuter.value) return;
 
-      if (!removedWithoutAddAgain && lastMouseTextEl && cursorOuter.value.contains(lastMouseTextEl)) {
+      if (!removedTextAndDidNotAddAgain && lastMouseTextEl && cursorOuter.value.contains(lastMouseTextEl)) {
         cursorOuter.value.removeChild(lastMouseTextEl);
       }
 
@@ -136,15 +166,15 @@ const useCursor = () => {
         cursorOuter.value.style.border = 'none';
       }
       lastMouseTextEl = mouseTextEl;
-      removedWithoutAddAgain = false;
+      removedTextAndDidNotAddAgain = false;
     }, 300);
   }
 
   function removeMouseText(del = false) {
-    if (!lastMouseTextEl || removedWithoutAddAgain) return;
+    if (!lastMouseTextEl || removedTextAndDidNotAddAgain) return;
     lastMouseTextEl.style.opacity = '0';
 
-    removedWithoutAddAgain = true;
+    removedTextAndDidNotAddAgain = true;
     if (removeTextTimeout) clearTimeout(removeTextTimeout);
     removeTextTimeout = setTimeout(() => {
       if (!cursorOuter.value) return;
@@ -162,6 +192,12 @@ const useCursor = () => {
   }
 
   function addScrollCallToAction() {
+    if (!isHomePage.value) {
+      mouseTextScrollCallToActionFinished = true;
+      scrollDownTimeout = clearAndDeleteTimeout(scrollDownTimeout);
+      return;
+    }
+
     if (scrollDownTimeout) clearTimeout(scrollDownTimeout);
 
     // the first time we wait 10 secons to show  the call to action. If
@@ -175,7 +211,7 @@ const useCursor = () => {
     }, MOUSE_TEXT_TIMEOUT);
   }
 
-  function removeScrollCallToAction() {
+  function checkIfShouldRemoveScrollCallToAction() {
     if (!mouseTextScrollCallToActionFinished) {
       // close to the point where the color explodes below the LR icon
       if (window.scrollY > 160) {
@@ -186,16 +222,17 @@ const useCursor = () => {
         mouseTextScrollCallToActionFinished = true;
       } else if (mouseTextScrollCallToActionStarted && window.scrollY > lastScrolledY) {
         removeMouseText();
+        // if the user scrolled down but not enough and the text has been,
+        // already added we just add it again right away
         clearAndDeleteTimeout(scrollDownAgainTimeout);
         scrollDownAgainTimeout = setTimeout(() => {
-          // we can be sure that lastMouseTextEl is 'scroll down' because
-          // blockMouseTextScrolCallToAction is true
           if (lastMouseTextEl && mouseTextScrollCallToActionStarted) {
             addMouseText(lastMouseTextEl);
           }
           // cant be lower than 300 because that's the ease
-          // we use all around the  mouse text animation
-        }, MOUSE_TEXT_TIMEOUT / 10 + 300);
+          // we use all around the  mouse text animation. usually values
+          // lower than 1300 are not behaving very well
+        }, 1000 + 300);
       }
     }
   }
@@ -204,18 +241,6 @@ const useCursor = () => {
     if (!cursorOuter.value) return;
     cursorOuter.value.style.border = `3px solid ${COLORS.highlight}`;
   }
-
-  watch(
-    () => route.path,
-    () => {
-      if (!activated.value || !cursorOuter.value) return;
-      gsap.to(cursorOuter.value, {
-        duration: 0,
-        x: lastTargetBox.x,
-        y: lastTargetBox.y,
-      });
-    }
-  );
 
   function setCursorOuterOriginalState() {
     if (!cursorOuter.value) return;
@@ -228,7 +253,7 @@ const useCursor = () => {
   }
 
   function scrollHandler(_e: Event) {
-    removeScrollCallToAction();
+    checkIfShouldRemoveScrollCallToAction();
 
     cursor.y -= lastScrolledY;
     lastScrolledY = window.scrollY;

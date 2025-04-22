@@ -23,6 +23,21 @@
   }
 }
 
+.simple-action-button {
+  border-radius: 50%;
+  transition: scale 0.3s $default-ease, color, 0.3s $default-ease;
+  cursor: none;
+  color: $main-dark-text-hsl-darker;
+
+  &:hover {
+    color: $main-dark-text;
+    scale: 1.2;
+  }
+  > * {
+    pointer-events: none; // for lr-cursor;
+  }
+}
+
 .wrapper-default-generals-text {
   position: relative;
   display: flex;

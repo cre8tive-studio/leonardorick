@@ -46,6 +46,7 @@
     <div class="timeline-footer">
       {{ $t('work_more_information') }}
       <NuxtLink
+        class="simple-action-button"
         lr-cursor
         target="_blank"
         :to="linkedinUrl"
@@ -235,17 +236,8 @@ const linkedinUrl = computed(() => personalInfo.value?.links.linkedin || '');
     text-align: right;
     a {
       padding: 1.1rem;
-      border-radius: 50%;
-      transition: scale 0.3s $default-ease;
-      cursor: none;
-      &:hover {
-        color: $main-dark-text;
-        scale: 1.2;
-      }
 
       svg {
-        pointer-events: none; // for lr-cursor
-        transition: color 0.3s $default-ease;
         height: 20px;
         width: 20px;
       }

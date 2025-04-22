@@ -49,8 +49,9 @@ const useLeonardoRick = () => {
 
   const { isMobile } = useDevice();
   const store = useAnimationStore();
-  const { logoCanvas, isEnteringAnimationFinished, isLRModelLoaded, loadingProgress, loadingTotal } = toRefs(store);
+  const { isEnteringAnimationFinished, isLRModelLoaded, loadingProgress, loadingTotal } = toRefs(store);
   const { fluidExplosion } = useFluid();
+  const route = useRoute();
 
   const activated = ref(false);
 
@@ -213,6 +214,7 @@ const useLeonardoRick = () => {
     if (controls) {
       controls.enableZoom = false;
     }
+
     /**
      * RENDERER
      */
@@ -239,6 +241,7 @@ const useLeonardoRick = () => {
     setupCamera(camera);
     setupPane(isDebug);
 
+    animateEnteringIfnotOnHome();
     activated.value = true;
   }
 
@@ -293,6 +296,28 @@ const useLeonardoRick = () => {
   /**
    * private methods
    */
+
+  function animateEnteringIfnotOnHome() {
+    if (route.path !== '/') {
+      animateEntering();
+    } else {
+      const unwatch = watch(
+        () => route.path,
+        () => {
+          if (isEnteringAnimationFinished.value) {
+            unwatch();
+            return;
+          }
+
+          if (route.path !== '/') {
+            animateEntering();
+            unwatch();
+          }
+        }
+      );
+    }
+  }
+
   function getDirectionalLight(): DirectionalLight {
     const light = new DirectionalLight('#ffffff', 10);
     light.castShadow = true;
@@ -778,6 +803,7 @@ const useLeonardoRick = () => {
     lights,
     lightTarget,
     cursor,
+    animateEntering,
   };
 };
 

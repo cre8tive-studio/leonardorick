@@ -7,6 +7,7 @@
     "build": "nuxt build",
     "clean-build": "rm -rf .nuxt dist .output .netlify server/dist && npm run build",
     "dev": "nuxt dev",
+    "start": "nuxt dev",
     "dev-host": "nuxt dev host 0.0.0.0",
     "serve": "nuxt dev",
     "generate": "nuxt generate",
@@ -42,7 +43,7 @@
   "dependencies": {
     "@leonardorick/three": "^1.0.78",
     "@leonardorick/utils": "^0.0.29",
-    "@nuxt/image": "^1.8.0",
+    "@nuxt/image": "^1.10.0",
     "@nuxtjs/device": "^3.2.4",
     "@pinia/nuxt": "^0.4.11",
     "@sentry/nuxt": "^8.31.0",

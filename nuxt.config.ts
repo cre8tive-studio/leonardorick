@@ -121,6 +121,7 @@ export default defineNuxtConfig({
   image: {
     quality: 100,
     formats: ['webp'],
+    dir: 'assets/images',
     domains: ['https://res.cloudinary.com/'],
   },
   // todo: uncomment when fixed: https://github.com/nuxt/ui/issues/1366

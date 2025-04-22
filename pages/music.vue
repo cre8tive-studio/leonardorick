@@ -1,76 +1,105 @@
 <template>
-  <LRMainErrorSection
-    title="error_title_empty_page"
-    subtitle="error_subtitle_music"
-  />
-  <ClientOnly>
-    <div v-if="session">
-      <div v-if="musicPageLoaded">
-        <p>votes available: {{ upvotesAvailable }}</p>
-        <div
-          v-for="demo in demos"
-          :key="demo.number"
-          class="border border-gray-300 p-4 m-4"
-        >
-          <h2>{{ demo.title }}</h2>
-          <p>votes: {{ upvotes[demo.number]?.length }}</p>
-          <div class="flex gap-4">
-            <button
-              :disabled="upvotesAvailable < 1"
-              class="bg-neutral-400 [&:not(:disabled)]:hover:bg-neutral-500 p-2 disabled:cursor-not-allowed"
-              @click="addVote(demo.number)"
-            >
-              vote
-            </button>
+  <div class="music-page">
+    <ClientOnly>
+      <h1 class="lr-text--body-3 mt-12 mb-12">{{ $t('song_page_featured_title') }}</h1>
+      <LRAudioCardFeatured
+        v-if="featuredRelease"
+        class="featured"
+        :audio="featuredRelease"
+      />
 
-            <button
-              :disabled="upvotesAvailable === demosMaxVotes"
-              class="bg-neutral-400 [&:not(:disabled)]:hover:bg-neutral-500 p-2 disabled:cursor-not-allowed"
-              @click="removeVote(demo.number)"
-            >
-              remove vote
-            </button>
-          </div>
-          <audio
-            v-if="demo.demoUrl"
-            :id="'demo-' + demo.number"
-            ref="demoAudioRefs"
-            :src="demo.demoUrl"
-            controls
-            @play="playAudio(demo.number)"
-          />
-          <div v-else-if="filesLoading">Loading demo player...</div>
-          <div v-else>Unable to load demo player for this demo. Try again latter</div>
-        </div>
+      <h2 class="lr-text--body-2 mt-12 mb-6">{{ $t('song_page_original_songs_title') }}</h2>
+      <div class="releases">
+        <LRAudioCard
+          v-for="release of remainingReleases"
+          :key="release.id"
+          :audio="release"
+        />
       </div>
-      <div v-else>Loading demos metadata...</div>
-    </div>
-  </ClientOnly>
+
+      <h2 class="lr-text--body-2 mt-12 mb-6">{{ $t('song_page_previews_title') }}</h2>
+      <div>Comming later...</div>
+
+      <div v-if="session">
+        <div v-if="demosLoaded">
+          <p>votes available: {{ upvotesAvailable }}</p>
+          <div
+            v-for="demo in demos"
+            :key="demo.number"
+            class="border border-gray-300 p-4 m-4"
+          >
+            <h2>{{ demo.title }}</h2>
+            <p>votes: {{ upvotes[demo.number]?.length }}</p>
+            <div class="flex gap-4">
+              <button
+                :disabled="upvotesAvailable < 1"
+                class="bg-neutral-400 [&:not(:disabled)]:hover:bg-neutral-500 p-2 disabled:cursor-not-allowed"
+                @click="addVote(demo.number)"
+              >
+                vote
+              </button>
+
+              <button
+                :disabled="upvotesAvailable === demosMaxVotes"
+                class="bg-neutral-400 [&:not(:disabled)]:hover:bg-neutral-500 p-2 disabled:cursor-not-allowed"
+                @click="removeVote(demo.number)"
+              >
+                remove vote
+              </button>
+            </div>
+            <audio
+              v-if="demo.audioUrl"
+              :id="demo.id"
+              ref="demoRefs"
+              :src="demo.audioUrl"
+              controls
+              @play="playAudio(demo.id)"
+            />
+            <div v-else-if="demosLoading">Loading demo player...</div>
+            <div v-else>Unable to load demo player for this demo. Try again latter</div>
+          </div>
+        </div>
+        <div v-else>Loading demos metadata...</div>
+      </div>
+    </ClientOnly>
+  </div>
 </template>
 <script lang="ts" setup>
 import type { DemoClientModel } from '../types/demo-client.model';
 import type { UpvotesClientModel } from '../types/upvotes.model';
 import { useAppStore } from '../store/index';
 import { getExpireTime } from '../utils/js-utilities';
+
+import type { AudioModel } from '~/types/audio.model';
+
 const nuxtApp = useNuxtApp();
-const musicPageLoaded = ref(false);
+
 const { session } = toRefs(useAppStore());
 const { settings, getJWT, getUpvotes, updateVotes } = useAppwrite();
 const { request } = useRequest();
+
 const demos = ref<DemoClientModel[]>([]);
-const demoAudioRefs = ref<HTMLAudioElement[]>([]);
+const demoRefs = ref<HTMLAudioElement[]>([]);
+
+const releases = ref<AudioModel[]>([]);
+const featuredRelease = ref<AudioModel>();
+
 const upvotes = ref<UpvotesClientModel>({});
 const demosLoadedCount = ref(0);
 const upvotesAvailable = ref(0);
 const userId = ref('');
 
-const filesLoading = computed(() => demosLoadedCount.value < demos.value.length);
+const demosLoading = computed(() => demosLoadedCount.value < demos.value.length);
 const demosMaxVotes = computed(() => (settings.value ? demos.value.length * settings.value.upvotesMultiplier : 0));
 
+const remainingReleases = computed(() => releases.value.filter((release) => !release.featured));
+const demosLoaded = ref(false);
+
+loadReleases();
 setLoggedInformation();
 
-function playAudio(demoNumber: number) {
-  demoAudioRefs.value.filter((ref) => ref.id !== `demo-${demoNumber}`).forEach((audio) => audio.pause());
+function playAudio(audioId: string) {
+  demoRefs.value.filter((ref) => ref.id !== audioId).forEach((audio) => audio.pause());
 }
 
 function setUpvotesAvailable() {
@@ -108,6 +137,16 @@ async function updateVotesCallback() {
   setUpvotesAvailable();
 }
 
+async function loadReleases() {
+  $fetch<AudioModel[]>('/api/getReleasesMetadata').then(async (data) => {
+    releases.value = data;
+    const featured = releases.value.find((release) => release.featured) as AudioModel;
+    if (featured) {
+      featuredRelease.value = featured;
+    }
+  });
+}
+
 async function setLoggedInformation() {
   if (session.value) {
     userId.value = session.value.userId;
@@ -115,7 +154,7 @@ async function setLoggedInformation() {
 
     request<DemoClientModel[]>('/api/getDemosMetadata', undefined, true).then(async ({ data }) => {
       demos.value = data.value;
-      musicPageLoaded.value = true;
+      demosLoaded.value = true;
       setUpvotesAvailable();
 
       for (const demo of demos.value) {
@@ -158,17 +197,17 @@ async function setLoggedInformation() {
         })
           .then(({ data: demoFile, error }) => {
             if (demoFile.value) {
-              demo.demoUrl = URL.createObjectURL(demoFile.value.blob);
+              demo.audioUrl = URL.createObjectURL(demoFile.value.blob);
               demosLoadedCount.value += 1;
             }
 
             if (error.value) {
-              demo.demoUrl = null;
+              demo.audioUrl = null;
               demosLoadedCount.value += 1;
             }
           })
           .catch(() => {
-            demo.demoUrl = null;
+            demo.audioUrl = null;
             demosLoadedCount.value += 1;
           });
       }
@@ -176,4 +215,21 @@ async function setLoggedInformation() {
   }
 }
 </script>
-<style lang="scss"></style>
+<style lang="scss" scoped>
+h1 {
+  max-width: 1200px;
+  text-align: center;
+}
+
+.music-page {
+  padding-bottom: 64px;
+}
+
+.featured {
+  margin: 0 auto;
+}
+
+.releases {
+  display: flex;
+}
+</style>
