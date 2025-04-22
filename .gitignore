@@ -25,5 +25,5 @@ logs
 
 # deployment services
 .netlify
-
+.wrangler
 .data
