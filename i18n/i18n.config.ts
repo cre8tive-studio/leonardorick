@@ -1,5 +1,5 @@
-import EN from './utils/i18n/en.json';
-import PT_BR from './utils/i18n/pt-BR.json';
+import EN from './locales/en.json';
+import PT_BR from './locales/pt-BR.json';
 
 export default defineI18nConfig(() => ({
   legacy: false,
