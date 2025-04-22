@@ -7,6 +7,7 @@
       ref="featuredReleaseImageEl"
       :src="audio.imageUrl"
       :placeholder="placeholder"
+      preload
     />
     <div
       v-if="shouldShowMediaOverlay"
