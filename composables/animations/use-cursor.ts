@@ -60,7 +60,7 @@ const useCursor = () => {
         scrollDownTimeout = clearAndDeleteTimeout(scrollDownTimeout);
       }
 
-      if (!activated.value || !cursorOuter.value) return;
+      if (!activated.value || !cursorOuter.value || !lastTargetBox) return;
 
       // fix navigating making lr-cursor to lose focus
       gsap.to(cursorOuter.value, {

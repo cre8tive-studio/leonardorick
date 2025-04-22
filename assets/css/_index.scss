@@ -3,7 +3,7 @@
 * global classes that will be applied but never extended into other
 * components. If you need your classes to be @extended, use main.scss
 */
-@import './_imports.scss'; // this file store all others scss
+@use 'colors' as *;
 
 html,
 body,

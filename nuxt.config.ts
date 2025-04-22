@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     // todo remove this after nuxt 4 release
     compatibilityVersion: 4,
   },
-  css: ['~/assets/css/index.scss'],
+  css: ['~/assets/css/_index.scss'],
 
   routeRules: {
     // redirects goes here
@@ -134,7 +134,7 @@ export default defineNuxtConfig({
       preprocessorOptions: {
         scss: {
           api: 'modern-compiler',
-          additionalData: "@import '@/assets/css/_imports.scss';",
+          additionalData: "@use '@/assets/css/_imports' as *;",
         },
       },
     },

@@ -1,6 +1,6 @@
-@import '@/assets/css/colors.scss';
-@import '@/assets/css/sizes.scss';
-@import '@/assets/css/fonts.scss';
-@import '@/assets/css/animations.scss';
-@import '@/assets/css/main.scss';
-@import '@/assets/css/typography.scss';
+@forward '_colors';
+@forward '_sizes';
+@forward '_fonts';
+@forward '_animations';
+@forward '_main';
+@forward '_typography';
