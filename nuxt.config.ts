@@ -118,6 +118,7 @@ export default defineNuxtConfig({
     quality: 100,
     formats: ['webp'],
     dir: 'assets/images',
+    ...(preset === 'netlify' ? { provider: 'netlify' } : {}),
     domains: ['https://res.cloudinary.com/', 'https://fra.cloud.appwrite.io/'],
   },
   // todo: uncomment when fixed: https://github.com/nuxt/ui/issues/1366
