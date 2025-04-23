@@ -286,6 +286,9 @@ const useCursor = () => {
     const el = e.target as HTMLElement;
     if (isAttrActivatedOnElement(el, 'lr-cursor')) {
       const toFocus = (el.querySelector('[lr-cursor-inner]') as HTMLElement) || el;
+
+      if (toFocus.tagName === 'BUTTON' && (toFocus as HTMLButtonElement).disabled) return;
+
       if (!elementsToFocus.has(toFocus)) {
         elementsToFocus.add(toFocus);
       }

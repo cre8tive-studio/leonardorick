@@ -10,12 +10,14 @@
  * @param options
  *  - isNexttick: to run on next vue tick
  */
-const useWhenready = (source: globalThis.Ref, callback: () => void, { isNextTick = false } = {}) => {
-  if (source.value) {
+type Source = globalThis.Ref | (() => any);
+
+const useWhenready = (source: Source, callback: () => void, { isNextTick = false } = {}) => {
+  if (isDefined(source)) {
     callback();
   } else {
     const unwatch = watch(source, () => {
-      if (source.value) {
+      if (isDefined(source)) {
         if (isNextTick) {
           nextTick(() => {
             callback();
@@ -29,5 +31,12 @@ const useWhenready = (source: globalThis.Ref, callback: () => void, { isNextTick
     });
   }
 };
+
+function isDefined(source: Source): boolean {
+  if (isRef(source)) {
+    return !!source.value;
+  }
+  return typeof source === 'function' ? Boolean(source()) : false;
+}
 
 export default useWhenready;
