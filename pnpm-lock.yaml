@@ -10,10 +10,10 @@ importers:
     dependencies:
       '@leonardorick/three':
         specifier: ^1.0.78
-        version: 1.0.78(@leonardorick/utils@0.0.29)(three@0.166.1)
+        version: 1.0.78(@leonardorick/utils@0.0.30)(three@0.166.1)
       '@leonardorick/utils':
-        specifier: ^0.0.29
-        version: 0.0.29
+        specifier: ^0.0.30
+        version: 0.0.30
       '@nuxt/image':
         specifier: ^1.10.0
         version: 1.10.0(@netlify/blobs@8.2.0)(db0@0.3.2)(ioredis@5.6.1)(magicast@0.3.5)
@@ -112,7 +112,7 @@ importers:
         specifier: ^0.166.0
         version: 0.166.0
       '@vesp/nuxt-fontawesome':
-        specifier: ^1.1.0
+        specifier: ^1.2.1
         version: 1.2.1(magicast@0.3.5)
       '@vue-macros/nuxt':
         specifier: ^1.12.2
@@ -927,8 +927,8 @@ packages:
       '@leonardorick/utils': '>=0.0.27'
       three: '>=0.166.1'
 
-  '@leonardorick/utils@0.0.29':
-    resolution: {integrity: sha512-BKXd1L1vfdEljbolWDQgpT792Sa1FyO/rX8aK5LgIO8uZ/pEojYs1GK1ZFOC+8Zi+c9JzgMLGFWmMBbEXX1/zw==}
+  '@leonardorick/utils@0.0.30':
+    resolution: {integrity: sha512-u/H020dHQIVyIRbO1MYqMVShddR/e4M0wgXMdLpZ4H0y/pttlApSWXO5MmHGgfzImXZ0aQFC6jypPDGKfg8Mtg==}
 
   '@mapbox/node-pre-gyp@1.0.11':
     resolution: {integrity: sha512-Yhlar6v9WQgUp/He7BdgzOz8lqMQ8sU+jkCq7Wx8Myc5YFJLbEe7lgui/V7G1qB1DJykHSGwreceSaD60Y0PUQ==}
@@ -7871,12 +7871,12 @@ snapshots:
 
   '@kwsites/promise-deferred@1.1.1': {}
 
-  '@leonardorick/three@1.0.78(@leonardorick/utils@0.0.29)(three@0.166.1)':
+  '@leonardorick/three@1.0.78(@leonardorick/utils@0.0.30)(three@0.166.1)':
     dependencies:
-      '@leonardorick/utils': 0.0.29
+      '@leonardorick/utils': 0.0.30
       three: 0.166.1
 
-  '@leonardorick/utils@0.0.29': {}
+  '@leonardorick/utils@0.0.30': {}
 
   '@mapbox/node-pre-gyp@1.0.11':
     dependencies:

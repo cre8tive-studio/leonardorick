@@ -4,6 +4,9 @@ export const COLORS = {
   secondaryDarkBg: '#060b2e',
   secondaryDarkText: '#808080',
 
+  darkText3: '#4b4b4b',
+  darkText4: '#383838',
+
   // Palette
   blue1: '#060615',
   blue2: '#0A1656',

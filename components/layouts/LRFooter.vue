@@ -3,6 +3,8 @@
     activated="false"
     class="c-LRFooter lr-section-bottom w-full fixed bottom-0 hidden lg:flex flex-col items-center"
   >
+    <LRVolumeSlider v-if="shouldShowVolumeSlider" />
+
     <div class="separator" />
     <div class="flex w-full">
       <div class="flex-1 flex flex-row">
@@ -47,6 +49,7 @@
         </div>
       </div>
     </div>
+
     <LRRightsReserved class="rights" />
   </footer>
 </template>
@@ -54,9 +57,13 @@
 <script setup lang="ts">
 import useHideOnScroll from '~/composables/animations/use-hide-on-scroll';
 
+const route = useRoute();
+
 const lis = ref<HTMLLIElement[]>();
 const { links, email } = useLinks();
 useHideOnScroll(['.c-LRFooter']);
+
+const shouldShowVolumeSlider = computed(() => route.path === '/music');
 </script>
 <style scoped lang="scss">
 .c-LRFooter {

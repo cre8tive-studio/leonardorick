@@ -98,3 +98,9 @@ export function isAttrActivatedOnElement(element: HTMLElement, attribute: string
   const attr = element.getAttribute(attribute);
   return attr === '' || isStringTrue(attr);
 }
+
+export function localStorageClientSetItem(key: string, value: string) {
+  if (import.meta.client) {
+    localStorage.setItem(key, value);
+  }
+}

@@ -6,13 +6,7 @@
     />
     <div class="content">
       <div class="content__text">
-        <h2 class="">{{ audio.name }}</h2>
-        <h3
-          v-if="audio.featured"
-          class="lr-text--body-1"
-        >
-          {{ $t('song_page_featured_description') }}
-        </h3>
+        <h2 class="lr-text--body-1">{{ audio.name }}</h2>
       </div>
 
       <LRWavePlayer
@@ -45,8 +39,6 @@ useCachedFile({ fileId: audio.fileId }).then(({ data: audioFile }) => {
 
 <style scoped lang="scss">
 .audio {
-  --box-shadow06: 6px 6px 12px #060607, -3px -3px 12px #17181a, inset 3px 3px 8px #202024, inset -4px -4px 8px #151618;
-
   height: 250px;
   width: fit-content;
   padding-inline: 24px;
@@ -57,7 +49,7 @@ useCachedFile({ fileId: audio.fileId }).then(({ data: audioFile }) => {
   align-items: center;
   justify-content: center;
 
-  box-shadow: var(--box-shadow06);
+  box-shadow: $box-shadow-elevation-1;
   border-radius: 7px;
   transition: opacity 0.3s $default-ease;
 

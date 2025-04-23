@@ -29,7 +29,7 @@
     "@types/jest": "^29.5.13",
     "@types/node": "^18.19.50",
     "@types/three": "^0.166.0",
-    "@vesp/nuxt-fontawesome": "^1.1.0",
+    "@vesp/nuxt-fontawesome": "^1.2.1",
     "@vue-macros/nuxt": "^1.12.2",
     "eslint-plugin-no-autofix": "^2.1.0",
     "eslint-plugin-vitest": "^0.3.26",
@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@leonardorick/three": "^1.0.78",
-    "@leonardorick/utils": "^0.0.29",
+    "@leonardorick/utils": "^0.0.30",
     "@nuxt/image": "^1.10.0",
     "@nuxtjs/device": "^3.2.4",
     "@pinia/nuxt": "^0.4.11",

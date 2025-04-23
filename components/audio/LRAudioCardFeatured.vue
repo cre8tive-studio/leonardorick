@@ -14,7 +14,6 @@
       </div>
 
       <LRWavePlayer
-        v-if="audioUrl"
         :audio-url="audioUrl"
         @audioprocess="rotateBackground"
       />
@@ -51,7 +50,6 @@ useCachedFile({ fileId: audio.fileId }).then(({ data: audioFile }) => {
 
 <style scoped lang="scss">
 .audio {
-  --box-shadow06: 6px 6px 12px #060607, -3px -3px 12px #17181a, inset 3px 3px 8px #202024, inset -4px -4px 8px #151618;
   --background-rotation: 0;
 
   height: 400px;
@@ -65,7 +63,7 @@ useCachedFile({ fileId: audio.fileId }).then(({ data: audioFile }) => {
   justify-content: center;
 
   overflow: hidden;
-  box-shadow: var(--box-shadow06);
+  box-shadow: $box-shadow-elevation-1;
   border-radius: 7px;
   transition: opacity 0.3s $default-ease;
 

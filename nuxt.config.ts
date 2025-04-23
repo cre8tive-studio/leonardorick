@@ -88,7 +88,7 @@ export default defineNuxtConfig({
   // fontawesome icons
   fontawesome: {
     icons: {
-      solid: ['plus', 'play', 'pause'],
+      solid: ['plus', 'play', 'pause', 'volume-xmark', 'volume-off', 'volume-low', 'volume-high'],
     },
     component: 'fa',
   },
