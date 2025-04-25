@@ -30,14 +30,14 @@ import { normalize, denormalize } from '@leonardorick/utils';
 import { useAudioStore } from '~/store/audio';
 import { localStorageClientSetItem } from '~/utils/js-utilities';
 
-const headEl = ref<HTMLDivElement>();
-const bodyEl = ref<HTMLDivElement>();
 const BODY_HEIGHT = 120;
 const HEAD_HEIGHT = 35;
 const MAX = BODY_HEIGHT - HEAD_HEIGHT / 2;
 
 const { volume } = toRefs(useAudioStore());
 
+const headEl = ref<HTMLDivElement>();
+const bodyEl = ref<HTMLDivElement>();
 const bodyRect = ref<DOMRect>();
 
 const icon = computed(() => {
@@ -58,7 +58,7 @@ onMounted(() => {
 
 function mousedown() {
   document.addEventListener('mousemove', mousemove);
-  document.addEventListener('mouseup', mouseup);
+  window.addEventListener('mouseup', mouseup);
 }
 
 function mousemove(e: MouseEvent) {
@@ -76,11 +76,15 @@ function mouseup() {
   document.removeEventListener('mousemove', mousemove);
   document.removeEventListener('mouseup', mouseup);
 }
+
+onUnmounted(() => {
+  document.removeEventListener('mousemove', mousemove);
+  document.removeEventListener('mouseup', mouseup);
+});
 </script>
 
 <style scoped lang="scss">
 .volume-slider {
-  pointer-events: auto;
   position: absolute;
   right: 0;
   bottom: 0;
@@ -105,6 +109,7 @@ function mouseup() {
 }
 
 .slider-head {
+  pointer-events: auto;
   --head-height: 0; // defined via js
   width: var(--head-height);
   height: var(--head-height);

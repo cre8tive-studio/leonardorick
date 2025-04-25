@@ -14,6 +14,7 @@
           class="waveform flex-1"
         />
       </div>
+
       <LRPlayButton
         :wave="wave"
         @play="playPause"
@@ -32,9 +33,13 @@ import { gsap } from 'gsap';
 import { useAudioStore } from '~/store/audio';
 import { COLORS } from '~/utils/constants/colors';
 
+type SizeOptions = 'sm' | 'md';
+
+type Sizes = Record<SizeOptions, Partial<Record<BreakpointOptions | 'default', number | undefined>>>;
+
 interface Props {
   audioUrl: string;
-  size?: 'sm' | 'md';
+  size?: SizeOptions;
 }
 
 interface Emits {
@@ -49,6 +54,8 @@ const audioStore = useAudioStore();
 const { waves, volume } = toRefs(audioStore);
 const { addWaveOnList } = audioStore;
 
+const breakpoints = useCssBreakpoints();
+
 const waveContainerEl = ref<HTMLDivElement>();
 const waveformEl = ref<HTMLDivElement>();
 const wave = ref<WaveSurfer>();
@@ -56,10 +63,33 @@ const wave = ref<WaveSurfer>();
 const duration = ref('0:00');
 const currentTime = ref('0:00');
 
-const isMd = computed(() => size === 'md');
+const sizes: { height: Sizes; width: Sizes } = {
+  height: {
+    sm: {
+      default: 40,
+    },
+    md: {
+      default: 90,
+      lg: 90,
+      xl: 160,
+      xxl: 190,
+      xxxl: 190,
+    },
+  },
+  width: {
+    sm: {
+      default: 180,
+    },
+    md: {
+      default: undefined,
+    },
+  },
+};
 
-const height = isMd.value ? 90 : 40;
-const width = isMd.value ? undefined : 180;
+const height = breakpoints.current.value
+  ? sizes.height[size][breakpoints.current.value] || sizes.height[size].default
+  : sizes.height[size].default;
+const width = sizes.width[size].default;
 
 onMounted(() => {
   waveContainerEl.value?.style.setProperty('--wave-container-height', `${height}px`);
@@ -69,6 +99,15 @@ onMounted(() => {
     () => audioUrl,
     () => createWaveSurfer()
   );
+});
+
+watch(breakpoints.current, () => {
+  if (!wave.value || !waveContainerEl.value || !breakpoints.current.value) return;
+  const h = sizes.height[size][breakpoints.current.value];
+  if (h) {
+    wave.value.setOptions({ height: h });
+    waveContainerEl.value.style.setProperty('--wave-container-height', `${h}px`);
+  }
 });
 
 function createWaveSurfer() {

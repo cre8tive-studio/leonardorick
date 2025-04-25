@@ -40,5 +40,8 @@
     "what_they_said": "What they said",
     "welcome": "Welcome",
     "work_more_information": "for more details about each job check my linkedIn",
-    "year": "Year | Years"
+    "year": "Year | Years",
+    "alt": {
+        "cover_image": "Song cover image: {songName}"
+    }
 }

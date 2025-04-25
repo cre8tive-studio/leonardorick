@@ -2,7 +2,7 @@
   "name": "nuxt-app",
   "private": true,
   "type": "module",
-  "version": "1.0.32",
+  "version": "1.0.33",
   "scripts": {
     "build": "nuxt build",
     "clean-build": "rm -rf .nuxt dist .output .netlify server/dist && npm run build",
@@ -52,6 +52,7 @@
     "graphql-request": "^6.1.0",
     "gsap": "^3.12.5",
     "lenis": "^1.1.13",
+    "localforage": "^1.10.0",
     "motion": "^10.18.0",
     "node-appwrite": "^16.0.0",
     "pinia": "^2.2.2",

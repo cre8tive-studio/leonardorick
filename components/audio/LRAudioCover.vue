@@ -3,12 +3,17 @@
     class="image-container"
     :class="size"
   >
-    <NuxtImg
-      ref="featuredReleaseImageEl"
-      :src="audio.imageUrl"
-      :placeholder="placeholder"
-      preload
-    />
+    <transition
+      name="image-fade"
+      mode="out-in"
+    >
+      <NuxtImg
+        :key="imageUrl"
+        :src="imageUrl"
+        :alt="$t('alt.cover_image', { songName: audio.name })"
+        preload
+      />
+    </transition>
     <div
       v-if="shouldShowMediaOverlay"
       class="media-overlay"
@@ -19,8 +24,8 @@
 </template>
 
 <script setup lang="ts">
+import localforage from 'localforage';
 import type { AudioModel } from '~/types/audio.model';
-import placeholder from '~/assets/images/empty-cover.png';
 
 interface Props {
   audio: AudioModel;
@@ -29,27 +34,69 @@ interface Props {
 
 const { audio, size = 'md' } = defineProps<Props>();
 
+const dbId = computed(() => `${audio.id}-image`);
 const shouldShowMediaOverlay = computed(() => size === 'sm' && (audio.appleMusic || audio.spotify));
+const imageUrl = ref('/empty-cover.jpg');
+
+onMounted(async () => {
+  if (!audio.imageUrl) return;
+
+  const blob = await localforage.getItem<Blob>(dbId.value);
+
+  if (!blob) {
+    const newBlob = await $fetch<Blob>(audio.imageUrl);
+    localforage.setItem(dbId.value, newBlob);
+    imageUrl.value = URL.createObjectURL(newBlob);
+  } else {
+    imageUrl.value = URL.createObjectURL(blob);
+  }
+});
 </script>
 
 <style scoped lang="scss">
+.image-fade-enter-active,
+.image-fade-leave-active {
+  transition: all 0.3s $default-ease;
+}
+
+.image-fade-enter-from,
+.image-fade-leave-to {
+  opacity: 0;
+}
+
 .image-container {
   --box-shadow03: 6px 6px 12px #151618, -6px -6px 12px #202024;
   position: relative;
-  height: 85%;
+  min-width: 150px;
+  max-width: 550px;
+  max-height: 550px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   img {
-    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
     border-radius: 50%;
     outline: 10px solid #1a1d21;
     box-shadow: var(--box-shadow03);
   }
 
   &.md {
-    height: 85%;
+    height: 75%;
   }
 
   &.sm {
     height: 65%;
+  }
+
+  .image {
+    opacity: 0.5;
+    transition: opacity 0.4s ease-in-out;
+
+    &.loaded {
+      opacity: 1;
+    }
   }
 
   .media-overlay {
@@ -72,6 +119,36 @@ const shouldShowMediaOverlay = computed(() => size === 'sm' && (audio.appleMusic
       background-color: rgba(0, 0, 0, 0.8);
       opacity: 1;
     }
+  }
+}
+
+@media (max-width: $xl-breakpoint) {
+  .image-container {
+    &.sm {
+      height: 45%;
+    }
+
+    &.md {
+      width: 80%;
+      margin-bottom: 12px;
+    }
+  }
+}
+
+@media (max-width: $sm-breakpoint) {
+  .image-container.md {
+    width: 260px;
+    height: 260px;
+
+    img {
+      height: 100%;
+      width: 100%;
+      max-width: unset;
+    }
+  }
+  .image-container.sm {
+    width: 160px;
+    height: 160px;
   }
 }
 </style>

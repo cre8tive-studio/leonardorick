@@ -1,11 +1,19 @@
+import localforage from 'localforage';
 import { getExpireTime } from '../utils/js-utilities';
 
 interface Props {
   fileId: string;
 }
-
-const useCachedFile = ({ fileId }: Props) => {
+// This composable has two levels of composables:
+// 1. IndexedDB with localForage that caches data on users browswer
+// 2. Nuxt getCachedData that caches HTTP calls
+const useCachedFile = async ({ fileId }: Props) => {
   const nuxtApp = useNuxtApp();
+
+  const file = await localforage.getItem<Blob>(fileId);
+  if (file) {
+    return new Promise<{ data: globalThis.Ref<{ blob: Blob }> }>((resolve) => resolve({ data: ref({ blob: file }) }));
+  }
 
   return useFetch('/api/getFile', {
     method: 'post',
@@ -14,8 +22,9 @@ const useCachedFile = ({ fileId }: Props) => {
       fileId,
     },
     responseType: 'blob',
+    // transform don't run on cached data
     transform(input: Blob) {
-      // transform don't run on cached data
+      localforage.setItem(fileId, input);
       return {
         blob: input,
         expire: getExpireTime(60),

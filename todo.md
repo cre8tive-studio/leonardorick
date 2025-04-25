@@ -1,10 +1,14 @@
 # FEATURES I REALLY WANT
 
-Add Qonto experience
+- Setup staging and production environments on appwrite
+- Add Qonto experience
 
 Create mobile version of music page
 
 Increase a bit non-featured song name
+
+// todo: replace with @nuxtjs/localforage when compatible with composition: https://nuxt.com/modules/localforage
+|--- can't use nuxt-3-localforage because it gives problem on the global imports such as $t
 
 create animation for showing elements of the song card
 

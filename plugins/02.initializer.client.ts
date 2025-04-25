@@ -1,5 +1,6 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
+import localforage from 'localforage';
 import { useAppStore } from '~/store';
 import { COLORS } from '~/utils/constants/colors';
 
@@ -15,6 +16,8 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
     gsap.registerPlugin(ScrollTrigger);
 
     const session = await getCurrentSession(true);
+    localforage.setDriver(localforage.INDEXEDDB);
+
     if (session) {
       await initSettings();
     }

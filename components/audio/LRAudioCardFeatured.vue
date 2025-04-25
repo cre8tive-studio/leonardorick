@@ -8,7 +8,7 @@
     <div class="content">
       <div class="content__text">
         <h2 class="">{{ audio.name }}</h2>
-        <h3 class="lr-text--body-1">
+        <h3 class="lr-text--body-1 mb-2">
           {{ $t('song_page_featured_description') }}
         </h3>
       </div>
@@ -46,15 +46,21 @@ useCachedFile({ fileId: audio.fileId }).then(({ data: audioFile }) => {
     audioUrl.value = URL.createObjectURL(audioFile.value.blob);
   }
 });
+
+onUnmounted(() => {
+  if (audioUrl.value) URL.revokeObjectURL(audioUrl.value);
+});
 </script>
 
 <style scoped lang="scss">
 .audio {
   --background-rotation: 0;
 
-  height: 400px;
   width: fit-content;
+  overflow-x: hidden; //because of ::before background it exceeds the page width
+
   position: relative;
+  flex-direction: column;
 
   display: flex;
   gap: 48px;
@@ -82,7 +88,7 @@ useCachedFile({ fileId: audio.fileId }).then(({ data: audioFile }) => {
     content: '';
     background: url(~/assets/images/disco_bg_2.png);
     position: absolute;
-    width: 160%;
+    width: 161%;
     z-index: -1;
     aspect-ratio: 1 / 1;
     left: -57%;
@@ -97,6 +103,41 @@ useCachedFile({ fileId: audio.fileId }).then(({ data: audioFile }) => {
   :deep(.media) {
     position: relative;
     left: -8px;
+  }
+}
+
+@media (min-width: $xl-breakpoint) {
+  .audio {
+    min-height: 75vh;
+    flex-direction: row;
+  }
+}
+
+@media (max-width: $sm-breakpoint) {
+  .audio {
+    gap: 16px;
+    padding-inline: 32px;
+    margin-inline: 0;
+    .content {
+      gap: 8px;
+    }
+  }
+}
+
+@media (max-width: $xl-breakpoint) {
+  .audio {
+    padding-block: 24px;
+    .content {
+      width: 100%;
+    }
+
+    &::before {
+      left: -60%;
+      background-size: 122% auto;
+      width: 261%;
+      left: -81%;
+      top: -40%;
+    }
   }
 }
 </style>

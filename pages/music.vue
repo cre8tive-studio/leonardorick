@@ -1,7 +1,7 @@
 <template>
-  <div class="music-page">
+  <div class="music-page lr-section-page-paddings">
     <ClientOnly>
-      <h1 class="lr-text--body-3 mt-12 mb-12">{{ $t('song_page_featured_title') }}</h1>
+      <h1 class="lr-text--body-3 mt-12 mb-12 mx-auto">{{ $t('song_page_featured_title') }}</h1>
       <LRAudioCardFeatured
         v-if="featuredRelease"
         class="featured"
@@ -9,7 +9,7 @@
       />
 
       <h2 class="lr-text--body-2 mt-12 mb-6">{{ $t('song_page_original_songs_title') }}</h2>
-      <div class="releases">
+      <div class="audio-list">
         <LRAudioCard
           v-for="release of remainingReleases"
           :key="release.id"
@@ -222,8 +222,15 @@ async function setLoggedInformation() {
 </script>
 <style lang="scss" scoped>
 h1 {
+  text-align: left;
   max-width: 1200px;
   text-align: center;
+  margin-block: 24px;
+  margin-bottom: 48px;
+}
+
+h2 {
+  margin: 24px;
 }
 
 .music-page {
@@ -232,9 +239,42 @@ h1 {
 
 .featured {
   margin: 0 auto;
+  margin-bottom: 48px;
 }
 
-.releases {
-  display: flex;
+.audio-list {
+  display: grid;
+  grid-template-columns: min-content;
+  justify-content: center;
+  gap: 16px;
+  margin-inline: 16px;
+}
+
+@media (min-width: $sm-breakpoint) {
+  h1 {
+    text-align: center;
+  }
+
+  .audio-list {
+    gap: 32px;
+  }
+}
+
+@media (min-width: $md-breakpoint) {
+  .audio-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: $xxl-breakpoint) {
+  h1 {
+    margin-bottom: 48px;
+  }
+}
+
+@media (min-width: $xxxl-breakpoint) {
+  .audio-list {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }
 </style>

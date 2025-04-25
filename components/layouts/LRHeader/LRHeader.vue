@@ -78,6 +78,7 @@ function toggleMobileMenu() {
 
 <style scoped lang="scss">
 .c-LRHeader {
+  $sm-header-height: 45px;
   @extend .lr-text--body-0-half;
 
   .home-logo {
@@ -105,8 +106,8 @@ function toggleMobileMenu() {
     justify-content: center;
     gap: 0.25rem;
 
-    height: 55px;
-    width: 55px;
+    height: $sm-header-height;
+    width: $sm-header-height;
     border-radius: 27.5px;
     background-color: $main-dark-text;
 

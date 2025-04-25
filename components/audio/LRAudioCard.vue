@@ -35,17 +35,21 @@ useCachedFile({ fileId: audio.fileId }).then(({ data: audioFile }) => {
     audioUrl.value = URL.createObjectURL(audioFile.value.blob);
   }
 });
+
+onUnmounted(() => {
+  if (audioUrl.value) URL.revokeObjectURL(audioUrl.value);
+});
 </script>
 
 <style scoped lang="scss">
 .audio {
   height: 250px;
-  width: fit-content;
   padding-inline: 24px;
   background-color: $main-dark-bg;
 
   display: flex;
   gap: 24px;
+
   align-items: center;
   justify-content: center;
 
@@ -60,6 +64,12 @@ useCachedFile({ fileId: audio.fileId }).then(({ data: audioFile }) => {
     h2 {
       text-align: left;
     }
+  }
+}
+@media (max-width: $lg-breakpoint) {
+  .audio {
+    height: 450px;
+    flex-direction: column;
   }
 }
 </style>

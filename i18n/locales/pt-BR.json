@@ -40,5 +40,8 @@
     "what_they_said": "O que eles disseram",
     "welcome": "Bem vindo",
     "work_more_information": "Para mais detalhes sobre cada trabalho veja meu linkedIn",
-    "year": "Ano | Anos"
+    "year": "Ano | Anos",
+    "alt": {
+        "cover_image": "Imagem da capa da música: {songName}"
+    }
 }
