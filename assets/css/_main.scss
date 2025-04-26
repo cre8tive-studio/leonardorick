@@ -9,12 +9,10 @@
 
 .hide-scrollbar {
   /* HIDE SCROLLBAR */
-  /* Internet Explorer 10+ */
-  -ms-overflow-style: none;
-  /* Firefox */
-  scrollbar-width: none;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; // /* Firefox */
 
-  ::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     display: none; // Safari and Chrome mobile
   }
 }
@@ -78,7 +76,7 @@
 .lr-section-bottom,
 .lr-section-page,
 .lr-section-page-paddings {
-  width: 100vw;
+  width: 100%; // keep it instead of 100svw: https://polypane.app/blog/strategies-for-dealing-with-horizontal-overflows/
   max-width: 3450px;
 }
 

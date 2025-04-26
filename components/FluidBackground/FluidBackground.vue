@@ -16,7 +16,7 @@ onMounted(() => {
 </script>
 <style scoped lang="scss">
 canvas {
-  width: 100vw;
+  width: 100%;
   height: 100svh;
   background-color: transparent;
   position: fixed;

@@ -62,9 +62,8 @@ const route = useRoute();
 const lis = ref<HTMLLIElement[]>();
 const { links, email } = useLinks();
 useHideOnScroll(['.c-LRFooter']);
-const { isLg } = useCssBreakpoints();
 
-const shouldShowVolumeSlider = computed(() => route.path === '/music' && isLg.value);
+const shouldShowVolumeSlider = computed(() => route.path === '/music');
 </script>
 <style scoped lang="scss">
 .c-LRFooter {

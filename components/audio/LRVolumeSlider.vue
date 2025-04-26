@@ -53,10 +53,12 @@ onMounted(() => {
   bodyEl.value.style.setProperty('--body-height', `${BODY_HEIGHT}px`);
   headEl.value.style.setProperty('--head-height', `${HEAD_HEIGHT}px`);
   headEl.value.style.top = `${denormalize(volume.value, MAX, { inverted: true })}px`;
-  bodyRect.value = bodyEl.value.getBoundingClientRect();
 });
 
 function mousedown() {
+  if (!bodyEl.value) return;
+
+  bodyRect.value = bodyEl.value.getBoundingClientRect();
   document.addEventListener('mousemove', mousemove);
   window.addEventListener('mouseup', mouseup);
 }

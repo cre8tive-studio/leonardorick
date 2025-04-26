@@ -9,6 +9,8 @@
     >
       <NuxtImg
         :key="imageUrl"
+        height="500"
+        width="500"
         :src="imageUrl"
         :alt="$t('alt.cover_image', { songName: audio.name })"
         preload
@@ -67,9 +69,10 @@ onMounted(async () => {
 .image-container {
   --box-shadow03: 6px 6px 12px #151618, -6px -6px 12px #202024;
   position: relative;
-  min-width: 150px;
-  max-width: 550px;
+  min-width: 170px;
+  max-width: min(550px, 100%);
   max-height: 550px;
+  height: 75%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,14 +83,6 @@ onMounted(async () => {
     border-radius: 50%;
     outline: 10px solid #1a1d21;
     box-shadow: var(--box-shadow03);
-  }
-
-  &.md {
-    height: 75%;
-  }
-
-  &.sm {
-    height: 65%;
   }
 
   .image {
@@ -124,14 +119,16 @@ onMounted(async () => {
 
 @media (max-width: $xl-breakpoint) {
   .image-container {
-    &.sm {
-      height: 45%;
-    }
-
     &.md {
       width: 80%;
       margin-bottom: 12px;
     }
+  }
+}
+
+@media (max-width: $lg-breakpoint) {
+  .image-container.sm {
+    height: 45%;
   }
 }
 

@@ -9,15 +9,12 @@ html,
 body,
 #__nuxt {
   margin: 0;
+  overflow-x: hidden;
 }
 
 html {
   color: $main-dark-text;
   @extend .hide-scrollbar;
-}
-html::-webkit-scrollbar {
-  /* Safari and Chrome */
-  display: none;
 }
 
 /* CHANGE TEXT HIGHLIGHT */
@@ -55,4 +52,10 @@ body {
 
 .lenis.lenis-smooth iframe {
   pointer-events: none;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }

@@ -6,7 +6,7 @@
     />
     <div class="content">
       <div class="content__text">
-        <h2 class="lr-text--body-1">{{ audio.name }}</h2>
+        <h2 class="lr-text--body-1 mb-2">{{ audio.name }}</h2>
       </div>
 
       <LRWavePlayer
@@ -70,6 +70,12 @@ onUnmounted(() => {
   .audio {
     height: 450px;
     flex-direction: column;
+  }
+}
+
+@media (max-width: $sm-breakpoint) {
+  .audio {
+    height: 340px;
   }
 }
 </style>

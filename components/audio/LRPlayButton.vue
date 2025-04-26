@@ -89,4 +89,11 @@ useWhenReady(
   color: gray;
   pointer-events: none;
 }
+
+@media (max-width: $sm-breakpoint) {
+  .play-audio-button {
+    height: 45px;
+    width: 45px;
+  }
+}
 </style>
