@@ -50,7 +50,7 @@ const { audio, size = 'md' } = defineProps<Props>();
 
 const shouldShowMediaOverlay = computed(() => size === 'sm' && (audio?.appleMusic || audio?.spotify));
 
-const imageUrl = ref('/empty-cover.jpg');
+const imageUrl = ref('/images/empty-cover.jpg');
 
 const loaded = ref(false);
 useWhenReady(
@@ -104,6 +104,7 @@ useWhenReady(
     max-height: 100%;
     border-radius: 50%;
     outline: 10px solid #1a1d21;
+    overflow: hidden;
     box-shadow: var(--box-shadow03);
   }
 

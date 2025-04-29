@@ -48,6 +48,11 @@ For reidrect rules to work, your endpoints must be with proxy enabled
 
 - https://community.cloudflare.com/t/301-redirect-page-rule-not-working/591595/10
 
+#### Test Prouction Deploy
+
+1. Make sure to add `NITRO_PRESET=cloudflare_pages` on .env
+2. run `npx nuxt build && npx wrangler pages dev dist`
+
 ### Known Bugs
 
 - If you run the app in a small screen theres a hydration missmatch warning in the console because the generated pages uses the desktop header that don't appear in small screens. I guess it's not a bug but it's worth mentioning that it's normal to happen.

@@ -102,7 +102,7 @@ onUnmounted(() => {
 
   &::before {
     content: '';
-    background: url(~/assets/images/disco_bg_2.png);
+    background: url(/images/disco_bg_2.png);
     position: absolute;
     width: 164%;
     z-index: -1;

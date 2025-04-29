@@ -108,7 +108,6 @@ export default defineNuxtConfig({
   image: {
     quality: 100,
     formats: ['webp'],
-    dir: 'assets/images',
     provider: 'ipx',
     domains: ['https://res.cloudinary.com/', 'https://fra.cloud.appwrite.io/'],
   },
