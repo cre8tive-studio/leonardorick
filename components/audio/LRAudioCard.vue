@@ -10,7 +10,6 @@
       </div>
 
       <LRWavePlayer
-        v-if="audioUrl"
         :audio-url="audioUrl"
         size="sm"
       />

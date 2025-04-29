@@ -1,7 +1,7 @@
 <template>
   <div class="s-LRMainErrorSection lr-section-page">
-    <h1 class="section-h1">{{ props.title ? $t(props.title) : $t('error_title_home') }}</h1>
-    <h2>{{ props.subtitle ? $t(props.subtitle) : $t('error_subtitle_home') }}</h2>
+    <h1 class="section-h1">{{ props.title ? $t(props.title) : $t('error.title_home') }}</h1>
+    <h2>{{ props.subtitle ? $t(props.subtitle) : $t('error.subtitle_home') }}</h2>
   </div>
 </template>
 

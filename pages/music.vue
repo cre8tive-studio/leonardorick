@@ -3,23 +3,20 @@
     <ClientOnly>
       <h1 class="lr-text--body-3 mt-12 mb-12 mx-auto">{{ $t('song_page_featured_title') }}</h1>
       <LRAudioCardFeatured
-        v-if="featuredRelease"
         class="featured"
         :audio="featuredRelease"
       />
 
-      <h2 class="lr-text--body-2 mt-12 mb-6">{{ $t('song_page_original_songs_title') }}</h2>
-      <div class="audio-list">
+      <h2 class="lr-text--body-2 m-6 mt-12 mb-6">{{ $t('song_page_original_songs_title') }}</h2>
+
+      <div class="audio-list mb-24">
         <LRAudioCard
           v-for="release of remainingReleases"
           :key="release.id"
           :audio="release"
         />
       </div>
-
-      <h2 class="lr-text--body-2 mt-12 mb-6">{{ $t('song_page_previews_title') }}</h2>
-      <div>Comming later...</div>
-
+      <div class="divider height-1"></div>
       <div v-if="session">
         <div v-if="demosLoaded">
           <p>votes available: {{ upvotesAvailable }}</p>
@@ -61,7 +58,37 @@
         </div>
         <div v-else>Loading demos metadata...</div>
       </div>
+      <div
+        v-else
+        class="previews-blocked"
+      >
+        <h2 class="lr-text--body-2">{{ $t('song_page_previews_title') }}</h2>
+        <div class="content">
+          <SvgoLock />
+          <h3 class="lr-text--body-1">{{ $t('exclusive_access_for_supporters') }}</h3>
+          <div class="flex gap-6">
+            <button
+              lr-cursor
+              class="lr-button"
+              @click="shouldShowModal = true"
+            >
+              {{ $t('join_supporters') }}
+            </button>
+            <NuxtLink
+              lr-cursor
+              class="lr-button lr-button-secondary"
+              :to="localeRoute('login')"
+            >
+              {{ $t('login') }}
+            </NuxtLink>
+          </div>
+        </div>
+      </div>
     </ClientOnly>
+    <LRHowItWorksModal
+      :should-show-modal="shouldShowModal"
+      @close="shouldShowModal = false"
+    />
   </div>
 </template>
 <script lang="ts" setup>
@@ -71,10 +98,11 @@ import { useAppStore } from '../store/index';
 import { getExpireTime } from '../utils/js-utilities';
 
 import type { AudioModel } from '~/types/audio.model';
+import LRHowItWorksModal from '~/components/modal/LRHowItWorksModal.vue';
 
 const nuxtApp = useNuxtApp();
 
-const { session } = toRefs(useAppStore());
+const { localeRoute, session } = toRefs(useAppStore());
 const { settings, getJWT, getUpvotes, updateVotes, getReleasesMetadata } = useAppwrite();
 const { request } = useRequest();
 
@@ -88,6 +116,7 @@ const upvotes = ref<UpvotesClientModel>({});
 const demosLoadedCount = ref(0);
 const upvotesAvailable = ref(0);
 const userId = ref('');
+const shouldShowModal = ref(false);
 
 const demosLoading = computed(() => demosLoadedCount.value < demos.value.length);
 const demosMaxVotes = computed(() => (settings.value ? demos.value.length * settings.value.upvotesMultiplier : 0));
@@ -229,10 +258,6 @@ h1 {
   margin-bottom: 48px;
 }
 
-h2 {
-  margin: 24px;
-}
-
 .music-page {
   padding-bottom: 64px;
 }
@@ -248,6 +273,39 @@ h2 {
   justify-content: center;
   gap: 16px;
   margin-inline: 16px;
+}
+
+.divider {
+  background-color: $main-dark-text;
+  height: 2px;
+  border-radius: 1px;
+  margin-bottom: 96px;
+  box-shadow: $box-shadow-elevation-1;
+}
+
+.previews-blocked {
+  width: 100%;
+  background-color: $main-dark-bg;
+  box-shadow: $box-shadow-elevation-1;
+  border-radius: 7px;
+  border: 1px solid $dark-text-3;
+  padding: 32px;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+
+    svg {
+      width: 80px;
+      height: 80px;
+    }
+
+    button {
+      cursor: none;
+    }
+  }
 }
 
 @media (min-width: $sm-breakpoint) {

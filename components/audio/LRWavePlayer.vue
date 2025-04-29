@@ -35,7 +35,9 @@ import { COLORS } from '~/utils/constants/colors';
 
 type SizeOptions = 'sm' | 'md';
 
-type Sizes = Record<SizeOptions, Partial<Record<BreakpointOptions | 'default', number | undefined>>>;
+type Sizes = Record<SizeOptions, (number | undefined)[]>;
+
+type SizeMap = { height: Sizes; width: Sizes };
 
 interface Props {
   audioUrl: string;
@@ -63,54 +65,84 @@ const wave = ref<WaveSurfer>();
 const duration = ref('0:00');
 const currentTime = ref('0:00');
 
-const sizes: { height: Sizes; width: Sizes } = {
+const sizes: SizeMap = {
   height: {
-    sm: {
-      default: 40,
-    },
-    md: {
-      default: 90,
-      lg: 90,
-      xl: 160,
-      xxl: 190,
-      xxxl: 190,
-    },
+    sm: [40, 40, 40, 40, 70, 90],
+    md: [90, 90, 90, 160, 190, 190],
   },
+  // width behaves like min-width
   width: {
-    sm: {
-      default: 180,
-    },
-    md: {
-      default: undefined,
-    },
+    sm: [180, 180, 180, 180, 180, 180],
+    md: [undefined, undefined, undefined, 300, 300, 300],
   },
 };
-
-const height = breakpoints.current.value
-  ? sizes.height[size][breakpoints.current.value] || sizes.height[size].default
-  : sizes.height[size].default;
-const width = sizes.width[size].default;
+const bpIndex = computed(() => BREAKPOINT_OPTIONS.indexOf(breakpoints.current.value || 'lg'));
 
 onMounted(() => {
-  waveContainerEl.value?.style.setProperty('--wave-container-height', `${height}px`);
-  waveContainerEl.value?.style.setProperty('--wave-container-width', `${width}px`);
+  const height = sizes.height[size][bpIndex.value];
+  const width = sizes.width[size][bpIndex.value];
+
+  setStyleVar('height', height);
+  updateWaveMinWidth(width);
 
   useWhenReady(
     () => audioUrl,
-    () => createWaveSurfer()
+    () => createWaveSurfer(height, width)
   );
 });
 
 watch(breakpoints.current, () => {
-  if (!wave.value || !waveContainerEl.value || !breakpoints.current.value) return;
-  const h = sizes.height[size][breakpoints.current.value];
-  if (h) {
-    wave.value.setOptions({ height: h });
-    waveContainerEl.value.style.setProperty('--wave-container-height', `${h}px`);
+  if (!waveContainerEl.value || !breakpoints.current.value) return;
+
+  const height = sizes.height[size][bpIndex.value];
+  const width = sizes.width[size][bpIndex.value];
+
+  if (wave.value) {
+    wave.value.setOptions({ height });
   }
+
+  setStyleVar('height', height);
+  updateWaveMinWidth(width);
 });
 
-function createWaveSurfer() {
+function updateWaveMinWidth(width?: number) {
+  if (!wave.value) {
+    if (!waveContainerEl.value) return;
+    if (!width || getComputedWidth() >= width) {
+      setStyleVar('width', undefined); // if computed is higher than width we set it to 100%
+    } else {
+      setStyleVar('width', width);
+    }
+
+    return;
+  }
+
+  const computed = getComputedWidth();
+  const w = width && width > computed ? width : computed;
+  if (wave.value.getWidth() < w) {
+    wave.value.setOptions({ width: w });
+    if (width) {
+      setStyleVar('width', width);
+    }
+  }
+}
+
+function getComputedWidth() {
+  if (!waveContainerEl.value) return 0;
+  return parseInt(getComputedStyle(waveContainerEl.value).width.replace('px', ''));
+}
+
+function setStyleVar(orientation: 'width' | 'height', value?: number) {
+  if (!waveContainerEl.value) return;
+
+  if (value) {
+    waveContainerEl.value.style.setProperty(`--wave-container-${orientation}`, `${value}px`);
+  } else {
+    waveContainerEl.value.style.setProperty(`--wave-container-${orientation}`, '100%');
+  }
+}
+
+function createWaveSurfer(height?: number, width?: number) {
   const ctx = document.createElement('canvas').getContext('2d');
   if (!ctx) {
     throw new Error('Failed to get 2D context');
@@ -125,7 +157,6 @@ function createWaveSurfer() {
 
   const wavesurfer = WaveSurfer.create({
     height,
-    width,
     cursorWidth: 5,
     barWidth: 2,
     barHeight: 0.7,
@@ -148,7 +179,7 @@ function createWaveSurfer() {
 
     const placeholder = waveContainerEl.value.querySelector<HTMLElement>('.wave-placeholder');
     if (!placeholder) return;
-    duration.value = formatTime(wavesurfer.getDuration());
+    duration.value = formatSongTime(wavesurfer.getDuration());
     const tl = gsap.timeline();
 
     tl.to(placeholder, {
@@ -157,24 +188,20 @@ function createWaveSurfer() {
         if (!waveContainerEl.value || !waveformEl.value || !placeholder) return;
         placeholder.style.display = 'none';
         waveformEl.value.style.display = 'block';
+        updateWaveMinWidth(width);
       },
     });
 
     tl.to(waveformEl.value, {
       opacity: 1,
       delay: 0.1, // 100ms delay
-      onComplete: () => {
-        if (!waveformEl.value) return;
-
-        waveformEl.value.style.display = 'block';
-      },
     });
   });
 
   wavesurfer.on('audioprocess', () => {
     wavesurfer.setVolume(volume.value);
     const current = wavesurfer.getCurrentTime();
-    currentTime.value = formatTime(current);
+    currentTime.value = formatSongTime(current);
     $emit('audioprocess', current);
   });
   addWaveOnList(wavesurfer);
@@ -198,7 +225,7 @@ function play() {
   wave.value.play();
 }
 
-function formatTime(time?: number) {
+function formatSongTime(time?: number) {
   if (!time) return '0:00';
   return [
     Math.floor((time % 3600) / 60), // minutes
@@ -210,7 +237,7 @@ function formatTime(time?: number) {
 <style scoped lang="scss">
 .wave-container {
   --wave-container-height: 0;
-  --wave-container-width: 0;
+  --wave-container-width: 100%;
   height: var(--wave-container-height);
   flex: 1;
   display: flex;
@@ -220,7 +247,7 @@ function formatTime(time?: number) {
 
 .waveform {
   display: none;
-  opacity: 0;
+  opacity: 0; // updated with gsap
 }
 
 .wave-timers {
@@ -231,7 +258,7 @@ function formatTime(time?: number) {
 
 .wave-placeholder {
   height: calc(var(--wave-container-height) - 30px);
-  width: 100%;
+  width: var(--wave-container-width);
 
   display: flex;
   align-items: end;
@@ -256,7 +283,7 @@ function formatTime(time?: number) {
     background-position: 0% 0%;
   }
   100% {
-    background-position: 100% 0%;
+    background-position: -100% 0%;
   }
 }
 </style>

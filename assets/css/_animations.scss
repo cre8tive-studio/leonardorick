@@ -6,6 +6,12 @@
 }
 
 $default-ease: cubic-bezier(0.49, 0.225, 0.175, 0.86);
+$skeleton-gradient: linear-gradient(
+  90deg,
+  rgba(255, 255, 255, 0.1) 25%,
+  rgba(255, 255, 255, 0.2) 50%,
+  rgba(255, 255, 255, 0.1) 75%
+);
 
 // if want to use the css approach, add the class on elements
 .lr-fade-opacity {
@@ -91,6 +97,43 @@ $default-ease: cubic-bezier(0.49, 0.225, 0.175, 0.86);
     }
   }
 }
+
+.base-loader {
+  background: $skeleton-gradient;
+  animation: shimmer 2s infinite;
+  background-size: 200% 100%;
+}
+
+.text-loader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .skeleton {
+    @extend .base-loader;
+
+    border-radius: 6px;
+  }
+
+  .title {
+    height: 40px;
+  }
+
+  .subtitle {
+    width: 50%;
+    height: 25px;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 // Mobile was really weird leaving the hvoer state while scrolling so we completely
 // disable the effect on mobile! That's it :)
 @media (hover: hover) {

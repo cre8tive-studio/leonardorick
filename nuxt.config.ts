@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     // todo remove this after nuxt 4 release
     compatibilityVersion: 4,
   },
-  css: ['~/assets/css/_index.scss'],
+  css: ['~/assets/css/_index.scss', '@fortawesome/fontawesome-svg-core/styles.css'],
 
   routeRules: {
     // redirects goes here
@@ -77,20 +77,12 @@ export default defineNuxtConfig({
     '@nuxt/image',
     'nuxt-svgo',
     '@nuxtjs/device',
-    '@vesp/nuxt-fontawesome',
     '@sentry/nuxt/module',
   ],
   // so we can identify which type of device the user is using
   // track deprecation warning: https://github.com/nuxt/nuxt/issues/29121
   device: {
     refreshOnResize: true,
-  },
-  // fontawesome icons
-  fontawesome: {
-    icons: {
-      solid: ['plus', 'play', 'pause', 'volume-xmark', 'volume-off', 'volume-low', 'volume-high'],
-    },
-    component: 'fa',
   },
   pinia: {
     // some imports that are commonly used to be included automatically as nuxt do with much others

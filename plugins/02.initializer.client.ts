@@ -13,10 +13,13 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
   const { getCurrentSession, initSettings } = useAppwrite();
   let initializerClientError = null;
   try {
+    // gsap
     gsap.registerPlugin(ScrollTrigger);
-
-    const session = await getCurrentSession(true);
+    // localforage driver
     localforage.setDriver(localforage.INDEXEDDB);
+
+    // appwrite session
+    const session = await getCurrentSession(true);
 
     if (session) {
       await initSettings();

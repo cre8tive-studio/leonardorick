@@ -47,3 +47,7 @@ Cloudflare currently do not support process.env in some vue contexts so be sure 
 For reidrect rules to work, your endpoints must be with proxy enabled
 
 - https://community.cloudflare.com/t/301-redirect-page-rule-not-working/591595/10
+
+### Known Bugs
+
+- If you run the app in a small screen theres a hydration missmatch warning in the console because the generated pages uses the desktop header that don't appear in small screens. I guess it's not a bug but it's worth mentioning that it's normal to happen.

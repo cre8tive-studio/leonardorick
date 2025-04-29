@@ -6,9 +6,9 @@ import type { i18nModel } from '~/types/i18n.model';
 import type { PersonalInfoModel } from '~/types/personal-info.model';
 import type { QuoteModel } from '~/types/quote.model';
 import type { RecommendationModel } from '~/types/recommendation-model';
-import type { LanguageOptions } from '~/utils/constants/languages';
+import { type LanguageOptions } from '~/utils/constants/languages';
 
-export default defineNuxtPlugin(async (_nuxtApp) => {
+export default defineNuxtPlugin(async (nuxtApp) => {
   const fetchInitialData = async () => {
     // we can't use lang from store the first time this function is called
     // because there the client plugin hasn't run yet on server. Which means
@@ -22,7 +22,7 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
   const { query } = useRoute();
   const locale = (query?.locale as LanguageOptions) || 'en';
 
-  useLang(_nuxtApp.$i18n as i18nModel);
+  useLang(nuxtApp.$i18n as i18nModel);
 
   const {
     $recommendations: recommendations,

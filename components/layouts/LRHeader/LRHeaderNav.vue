@@ -39,7 +39,8 @@
               :to="localeRoute('profile')"
               @click="$emit('routeSelected')"
             >
-              Profile
+              <span>{{ $t('profile') }}</span>
+              <span>{{ $t('profile') }}</span>
             </NuxtLink>
           </li>
           <li>

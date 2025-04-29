@@ -4,7 +4,7 @@
  */
 import * as Sentry from '@sentry/nuxt';
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin((_nuxtApp) => {
   const router = useRouter();
   const {
     public: { baseUrl, environment, sentry },

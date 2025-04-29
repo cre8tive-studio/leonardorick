@@ -59,9 +59,13 @@ useWhenReady(
   height: 70px;
   width: 70px;
 
+  svg {
+    transition: color 0.3s $default-ease;
+  }
+
   &:disabled {
     svg {
-      color: $dark-text-3;
+      color: $dark-text-4;
     }
   }
 

@@ -1,20 +1,34 @@
 # FEATURES I REALLY WANT
 
+- check if theres a way to add an email verification on the stripe payment page
+- remove email from allowed emails if users ends subscription
+- block access to demos if user stops paying
+- Allow file download
+
+- create modal
+  -info icon
+
+  - logout
+
+- create full local mocked envrionment for development
+-
+- multple language emails?
 - Setup staging and production environments on appwrite
 - Add Qonto experience
 
-Create mobile version of music page
+Add google login
 
-Increase a bit non-featured song name
-
-// todo: replace with @nuxtjs/localforage when compatible with composition: https://nuxt.com/modules/localforage
-|--- can't use nuxt-3-localforage because it gives problem on the global imports such as $t
-
-create animation for showing elements of the song card
+- Single payment of 1000 to unlock all demos and free access forever
 
 Create a single file centralizing the configurations in staging 1 Password
 
-Add pnpm and mono repo
+set language based on browsers preference
+|-- https://stackoverflow.com/questions/77430938/nuxt-3-i18n-browser-detection-not-working
+
+// todo: replace with @nuxtjs/localforage when compatible with composition: https://nuxt.com/modules/localforage
+|--- can't use nuxt-3-localforage because it gives problem on the global imports such as $t so i'm using localforage npm package directly
+
+Add pnpm and mono repo setup
 Change cloudinary images to nuxtHub
 
 Check if scss is being cleaned up

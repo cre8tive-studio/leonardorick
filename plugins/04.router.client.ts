@@ -3,7 +3,7 @@ import { useAppStore } from '~/store';
 import { useAnimationStore } from '~/store/animation';
 
 /**
- * Used to smoothly navigate to the @ (hash) relative element id when page is loading.
+ * Used to smoothly navigate to the # (hash) relative element id when page is loading.
  * This seems to run only on page loading. The thing that makes <nuxtLink hash navigation smooth is the setup
  * donen in nuxt.config.ts: https://nuxt.com/docs/guide/recipes/custom-routing#scroll-behavior-for-hash-links
  */

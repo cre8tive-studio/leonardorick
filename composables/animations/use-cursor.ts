@@ -319,6 +319,8 @@ const useCursor = () => {
     lastTargetEl = targetEl;
     isStuck.value = true;
 
+    const enoughHeight = targetBox.height > 21;
+
     // ANIMATION 2;
     gsap.killTweensOf(cursorOuter.value);
     gsap.to(cursorOuter.value, {
@@ -326,11 +328,11 @@ const useCursor = () => {
       x: targetBox.x + window.scrollX,
       y: targetBox.y + window.scrollY,
       width: targetBox.width,
-      height: targetBox.height,
-      top: 0,
+      height: enoughHeight ? targetBox.height : 1, // if the element is too small we underline instead of surrounding it
+      top: enoughHeight ? 0 : targetBox.height - 5,
       left: 0,
       opacity: 1,
-      borderWidth: '4px',
+      borderWidth: enoughHeight ? '4px' : '2px',
       borderRadius: getComputedStyle(targetEl).borderRadius,
     });
   }

@@ -12,7 +12,8 @@ import { COLORS } from '~/utils/constants/colors';
 const LR_TIMEOUT_SECONDS = 10;
 
 const useAnimations = () => {
-  const isDebug = !!Object.prototype.hasOwnProperty.call(useRoute().query, 'debug');
+  const route = useRoute();
+  const isDebug = !!Object.prototype.hasOwnProperty.call(route.query, 'debug');
   const { isMobile } = useDevice();
   const {
     loadingBarRef,
@@ -140,6 +141,10 @@ const useAnimations = () => {
     if (!overlayRef.value || !loadingBarRef.value || !cubeLoaderContainerRef.value) {
       isScrollEnabled.value = true;
       return;
+    }
+
+    if (route.path !== '/') {
+      overlayRef.value.style.display = 'none';
     }
 
     const tl = gsap.timeline();

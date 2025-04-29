@@ -18,7 +18,8 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/free-regular-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@nuxt/devtools": "latest",
     "@nuxt/test-utils": "^3.14.2",
     "@nuxtjs/color-mode": "^3.5.1",
@@ -30,7 +31,6 @@
     "@types/jest": "^29.5.13",
     "@types/node": "^18.19.50",
     "@types/three": "^0.166.0",
-    "@vesp/nuxt-fontawesome": "^1.2.1",
     "@vue-macros/nuxt": "^1.12.2",
     "eslint-plugin-no-autofix": "^2.1.0",
     "eslint-plugin-vitest": "^0.3.26",
@@ -42,6 +42,8 @@
     "vitest": "^0.34.6"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/vue-fontawesome": "^3.0.8",
     "@leonardorick/three": "^1.0.78",
     "@leonardorick/utils": "^0.0.30",
     "@nuxt/image": "^1.10.0",

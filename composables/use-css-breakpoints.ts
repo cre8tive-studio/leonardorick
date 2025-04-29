@@ -1,4 +1,5 @@
-export type BreakpointOptions = 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl';
+export const BREAKPOINT_OPTIONS = ['sm', 'md', 'lg', 'xl', 'xxl', 'xxxl'] as const;
+export type BreakpointOptions = (typeof BREAKPOINT_OPTIONS)[number];
 
 const useCssBreakpoints = () => {
   const isSm = ref(true);

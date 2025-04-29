@@ -2,6 +2,7 @@
 @use '_colors' as *;
 @use '_sizes' as *;
 @use '_typography' as *;
+@use '_shadows' as *;
 
 :root {
   --lr-side-space: clamp(1rem, 5vw, 4rem);
@@ -41,26 +42,60 @@
   }
 }
 
-.wrapper-default-generals-text {
-  position: relative;
+/**
+* forms
+*/
+
+.lr-form-container {
+  color: $main-dark-text;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 1rem;
+  padding-bottom: 48px;
 
-  .bold {
-    color: $highlight;
+  .container {
+    border: 1px solid $dark-text-3;
+    background-color: $main-dark-bg;
+    box-shadow: $box-shadow-elevation-1;
+    max-width: fit-content;
+    padding: 48px 32px;
+    border-radius: 12px;
+    min-width: 400px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin-bottom: 12px;
+
+    .text-input {
+      background-color: $main-dark-text;
+      width: 100%;
+      height: 32px;
+      border-radius: 4px;
+      padding: 12px;
+      color: $main-dark-bg;
+    }
   }
 
   h1 {
-    @extend .section-h1;
+    text-transform: uppercase;
   }
+
   p {
-    font-size: clamp(1.8rem, 4.3vw, 12rem);
-    line-height: clamp(2.35rem, 4.5vw, 13rem);
-    letter-spacing: clamp(0.1rem, 0.3vh, 0.3rem);
+    text-align: center;
+    font-size: 14px;
   }
 }
+
+@media (max-width: $sm-breakpoint) {
+  .lr-form-container .container {
+    min-width: 334px;
+  }
+}
+
 /**
   * layouts
   */
@@ -76,7 +111,7 @@
 .lr-section-bottom,
 .lr-section-page,
 .lr-section-page-paddings {
-  width: 100%; // keep it instead of 100svw: https://polypane.app/blog/strategies-for-dealing-with-horizontal-overflows/
+  width: 100svw; // ? keep in mind that this will bring problems if you show the scrollbar: https://polypane.app/blog/strategies-for-dealing-with-horizontal-overflows/
   max-width: 3450px;
 }
 
@@ -108,9 +143,38 @@
   padding-bottom: 3rem;
 }
 
+.lr-anchor {
+  text-decoration: underline;
+  cursor: none;
+}
+
 @media (min-width: $lg-breakpoint) {
   .lr-section-page,
   .lr-section-page-paddings {
     --lr-side-space: clamp(12rem, 9vw, 16rem);
+  }
+}
+
+/**
+* others
+*/
+.wrapper-default-generals-text {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+
+  .bold {
+    color: $highlight;
+  }
+
+  h1 {
+    @extend .section-h1;
+  }
+  p {
+    font-size: clamp(1.8rem, 4.3vw, 12rem);
+    line-height: clamp(2.35rem, 4.5vw, 13rem);
+    letter-spacing: clamp(0.1rem, 0.3vh, 0.3rem);
   }
 }

@@ -17,7 +17,7 @@ const {
 } = useServerAppwrite();
 
 export default defineEventHandler(async (event) => {
-  const { email, password } = await readBody(event);
+  const { email, password, name: registerName } = await readBody(event);
 
   // if appwrite user already exists, or user on database alwready exists we don't want to create again
   const user = await getAuthUserWithEmail(email);
@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
     throw createGenericError('User not allowed');
   }
 
-  const { $id: uid } = await createUser(email, password);
+  const { $id: uid } = await createUser(email, password, registerName);
   const { stripeId, name, verified, availableDemos, subscriptionId } = allowedEmail;
 
   try {
@@ -62,10 +62,10 @@ export default defineEventHandler(async (event) => {
   }
 });
 
-const createUser = async (email: string, password: string) => {
+const createUser = async (email: string, password: string, name: string) => {
   try {
     // undefined so we don't need to send the phone number
-    return await users.create(ID.unique(), email, undefined, password);
+    return await users.create(ID.unique(), email, undefined, password, name);
   } catch (err: any) {
     throw createGenericError(err.message);
   }

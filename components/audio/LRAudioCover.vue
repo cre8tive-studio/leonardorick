@@ -12,15 +12,27 @@
         height="500"
         width="500"
         :src="imageUrl"
-        :alt="$t('alt.cover_image', { songName: audio.name })"
+        :alt="$t('alt.cover_image', { songName: audio?.name })"
         preload
+      />
+    </transition>
+    <transition
+      name="image-fade"
+      mode="out-in"
+    >
+      <div
+        v-if="!loaded"
+        class="loading-overlay"
       />
     </transition>
     <div
       v-if="shouldShowMediaOverlay"
       class="media-overlay"
     >
-      <LRMediaLinks :audio="audio" />
+      <LRMediaLinks
+        v-if="audio"
+        :audio="audio"
+      />
     </div>
   </div>
 </template>
@@ -30,29 +42,38 @@ import localforage from 'localforage';
 import type { AudioModel } from '~/types/audio.model';
 
 interface Props {
-  audio: AudioModel;
+  audio?: AudioModel;
   size?: 'sm' | 'md';
 }
 
 const { audio, size = 'md' } = defineProps<Props>();
 
-const dbId = computed(() => `${audio.id}-image`);
-const shouldShowMediaOverlay = computed(() => size === 'sm' && (audio.appleMusic || audio.spotify));
+const shouldShowMediaOverlay = computed(() => size === 'sm' && (audio?.appleMusic || audio?.spotify));
+
 const imageUrl = ref('/empty-cover.jpg');
 
-onMounted(async () => {
-  if (!audio.imageUrl) return;
+const loaded = ref(false);
+useWhenReady(
+  () => audio,
+  async () => {
+    if (!audio?.imageUrl) {
+      loaded.value = true;
+      return;
+    }
 
-  const blob = await localforage.getItem<Blob>(dbId.value);
+    const dbId = `${audio.id}-image`;
+    const blob = await localforage.getItem<Blob>(dbId);
 
-  if (!blob) {
-    const newBlob = await $fetch<Blob>(audio.imageUrl);
-    localforage.setItem(dbId.value, newBlob);
-    imageUrl.value = URL.createObjectURL(newBlob);
-  } else {
-    imageUrl.value = URL.createObjectURL(blob);
+    if (!blob) {
+      const newBlob = await $fetch<Blob>(audio.imageUrl);
+      localforage.setItem(dbId, newBlob);
+      imageUrl.value = URL.createObjectURL(newBlob);
+    } else {
+      imageUrl.value = URL.createObjectURL(blob);
+    }
+    loaded.value = true;
   }
-});
+);
 </script>
 
 <style scoped lang="scss">
@@ -76,6 +97,7 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  aspect-ratio: 1 / 1;
 
   img {
     max-width: 100%;
@@ -114,6 +136,16 @@ onMounted(async () => {
       background-color: rgba(0, 0, 0, 0.8);
       opacity: 1;
     }
+  }
+
+  .loading-overlay {
+    @extend .base-loader;
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
   }
 }
 

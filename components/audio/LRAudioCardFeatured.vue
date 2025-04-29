@@ -6,11 +6,21 @@
     <LRAudioCover :audio="audio" />
 
     <div class="content">
-      <div class="content__text">
+      <div
+        v-if="audio?.name"
+        class="content__text"
+      >
         <h2 class="">{{ audio.name }}</h2>
         <h3 class="lr-text--body-1 mb-2">
           {{ $t('song_page_featured_description') }}
         </h3>
+      </div>
+      <div
+        v-else
+        class="text-loader"
+      >
+        <div class="skeleton title"></div>
+        <div class="skeleton subtitle mb-2"></div>
       </div>
 
       <LRWavePlayer
@@ -28,7 +38,7 @@ import LRWavePlayer from './LRWavePlayer.vue';
 import type { AudioModel } from '~/types/audio.model';
 
 interface Props {
-  audio: AudioModel;
+  audio: AudioModel | undefined;
 }
 
 const { audio } = defineProps<Props>();
@@ -41,11 +51,17 @@ function rotateBackground(currentTime: number) {
   selfEl.value?.style.setProperty('--background-rotation', `${30 + currentTime * 10}deg`);
 }
 
-useCachedFile({ fileId: audio.fileId }).then(({ data: audioFile }) => {
-  if (audioFile.value) {
-    audioUrl.value = URL.createObjectURL(audioFile.value.blob);
+useWhenReady(
+  () => audio,
+  () => {
+    if (!audio) return;
+    useCachedFile({ fileId: audio.fileId }).then(({ data: audioFile }) => {
+      if (audioFile.value) {
+        audioUrl.value = URL.createObjectURL(audioFile.value.blob);
+      }
+    });
   }
-});
+);
 
 onUnmounted(() => {
   if (audioUrl.value) URL.revokeObjectURL(audioUrl.value);
@@ -88,7 +104,7 @@ onUnmounted(() => {
     content: '';
     background: url(~/assets/images/disco_bg_2.png);
     position: absolute;
-    width: 161%;
+    width: 164%;
     z-index: -1;
     aspect-ratio: 1 / 1;
     left: -57%;

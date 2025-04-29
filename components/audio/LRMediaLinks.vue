@@ -1,16 +1,25 @@
 <template>
   <div class="media">
-    <NuxtLink
-      v-for="link of links"
-      :key="link.link"
-      :class="link.customClass"
-      class="simple-action-button media-link"
-      lr-cursor
-      target="_blank"
-      :to="link.link"
+    <template v-if="loaded">
+      <NuxtLink
+        v-for="link of links"
+        :key="link.link"
+        :class="link.customClass"
+        class="simple-action-button media-link"
+        lr-cursor
+        target="_blank"
+        :to="link.link"
+      >
+        <component :is="link.svg" />
+      </NuxtLink>
+    </template>
+    <div
+      v-else
+      class="loading-container"
     >
-      <component :is="link.svg" />
-    </NuxtLink>
+      <div><span class="base-loader" /></div>
+      <div><span class="base-loader" /></div>
+    </div>
   </div>
 </template>
 
@@ -21,7 +30,7 @@ import SvgoSpotify from '~/assets/icons/spotify.svg';
 import SvgoAppleMusic from '~/assets/icons/apple-music.svg';
 
 interface Props {
-  audio: AudioModel;
+  audio?: AudioModel;
 }
 
 interface MediaLink {
@@ -31,20 +40,32 @@ interface MediaLink {
 }
 
 const { audio } = defineProps<Props>();
+const loaded = ref(false);
 const links: MediaLink[] = [];
 
-audio.spotify &&
-  links.push({
-    svg: SvgoSpotify,
-    link: audio.spotify,
-  });
+useWhenReady(
+  () => audio,
+  () => {
+    if (!audio) {
+      loaded.value = true;
+      return;
+    }
 
-audio.appleMusic &&
-  links.push({
-    svg: SvgoAppleMusic,
-    link: audio.appleMusic,
-    customClass: 'apple-music',
-  });
+    audio.spotify &&
+      links.push({
+        svg: SvgoSpotify,
+        link: audio.spotify,
+      });
+
+    audio.appleMusic &&
+      links.push({
+        svg: SvgoAppleMusic,
+        link: audio.appleMusic,
+        customClass: 'apple-music',
+      });
+    loaded.value = true;
+  }
+);
 </script>
 
 <style scoped lang="scss">
@@ -66,6 +87,21 @@ audio.appleMusic &&
     svg {
       height: 70%;
       width: 70%;
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    gap: 4px;
+    div {
+      height: 50px;
+      width: 50px;
+      span {
+        border-radius: 25%;
+        display: block;
+        height: 75%;
+        width: 75%;
+      }
     }
   }
 }
