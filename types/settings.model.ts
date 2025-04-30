@@ -12,6 +12,12 @@ export interface SettingsClientModel {
   // how many upvotes should be available to the user based on the number of
   // available demos. If its 2 and there are 10 demos, the user will have 20 votes
   upvotesMultiplier: number;
+  // how much I need to release the next song
+  moneyTarget: number;
+  // how much I have til the money target
+  savedAmount: number;
+  // currency of moneyTarget current
+  currency: 'EUR' | 'BRL';
 }
 
 export interface SettingsModel extends Models.Document, SettingsClientModel {}

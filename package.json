@@ -2,7 +2,7 @@
   "name": "nuxt-app",
   "private": true,
   "type": "module",
-  "version": "1.0.35",
+  "version": "1.0.36",
   "scripts": {
     "build": "nuxt build",
     "clean-build": "rm -rf .nuxt dist .output .netlify server/dist && npm run build",
@@ -45,7 +45,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@leonardorick/three": "^1.0.78",
-    "@leonardorick/utils": "^0.0.30",
+    "@leonardorick/utils": "^0.0.31",
     "@nuxt/image": "^1.10.0",
     "@nuxtjs/device": "^3.2.4",
     "@pinia/nuxt": "^0.4.11",

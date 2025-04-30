@@ -1,6 +1,17 @@
 # FEATURES I REALLY WANT
 
+find a way to add some padding in the top of the scrollable area of the modal so it do not touch the border when scrolling
+add emails on the modal
+add showing sidebar somehow inside the modal
+// add party emoji if the value was reached. And a tooltip saying (new release comming soon)
+fix transition on learn more button
+
 - check if theres a way to add an email verification on the stripe payment page
+
+  - Finish how it works modal with two email inputs and send the prefilled_email to checkout page
+    sound
+  - finish profile page
+
 - remove email from allowed emails if users ends subscription
 - block access to demos if user stops paying
 - Allow file download
@@ -10,7 +21,7 @@
 
   - logout
 
-- create full local mocked envrionment for development
+- create full local mocked envrionment for development!!!!!
 -
 - multple language emails?
 - Setup staging and production environments on appwrite

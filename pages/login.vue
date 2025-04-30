@@ -215,12 +215,11 @@ function changeLoginType() {
 
 async function handleSubmit() {
   const session = await getSession();
-  if (session) {
-    storedSession.value = session;
-    safeBack();
-  } else {
-    toast.error({ text: $t(`error.${loginType.value}`) });
+  if (!session) {
+    return;
   }
+  storedSession.value = session;
+  safeBack();
 }
 
 async function getSession() {
@@ -250,6 +249,7 @@ function goToStripe() {
 .login {
   p.forgot-password {
     text-align: right;
+    text-decoration: underline;
     display: flex;
     gap: 8px;
     cursor: none;

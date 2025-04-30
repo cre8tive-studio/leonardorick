@@ -24,6 +24,8 @@
     color: var(--main-dark-bg);
     transition: all 0.3s var(--default-ease);
     cursor: none;
+    display: flex;
+    align-items: center;
   }
 
   .lr-button-secondary {
@@ -45,7 +47,7 @@
     background-color: var(--main-dark-bg);
   }
 
-  .lr-button-secondary:not(:disabled):not([disabled]):active {
+  .lr-button:not(:disabled):not([disabled]):active {
     background-color: var(--secondary-dark-text);
     border-color: var(--secondary-dark-text);
   }

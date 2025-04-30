@@ -18,12 +18,9 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
     // localforage driver
     localforage.setDriver(localforage.INDEXEDDB);
 
-    // appwrite session
-    const session = await getCurrentSession(true);
-
-    if (session) {
-      await initSettings();
-    }
+    // appwritee
+    await getCurrentSession(true);
+    await initSettings();
   } catch (error) {
     initializerClientError = error;
   }

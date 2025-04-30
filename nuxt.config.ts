@@ -97,6 +97,9 @@ export default defineNuxtConfig({
     // will change the language to his preferred one
     detectBrowserLanguage: false,
     baseUrl,
+    bundle: {
+      optimizeTranslationDirective: false,
+    },
   },
   sentry: {
     sourceMapsUploadOptions: {

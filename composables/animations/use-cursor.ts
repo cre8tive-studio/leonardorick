@@ -319,7 +319,7 @@ const useCursor = () => {
     lastTargetEl = targetEl;
     isStuck.value = true;
 
-    const enoughHeight = targetBox.height > 21;
+    const enoughHeight = targetBox.height > 24;
 
     // ANIMATION 2;
     gsap.killTweensOf(cursorOuter.value);

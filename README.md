@@ -40,10 +40,6 @@ The URL might end up very weird as /pt-BR (being translated to english) or /?loc
 
 ### Cloudlfare
 
-Cloudflare currently do not support process.env in some vue contexts so be sure to always use useRuntimeConfig
-
-- https://github.com/nuxt-hub/core/issues/297
-
 For reidrect rules to work, your endpoints must be with proxy enabled
 
 - https://community.cloudflare.com/t/301-redirect-page-rule-not-working/591595/10

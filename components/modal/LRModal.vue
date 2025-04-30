@@ -1,41 +1,89 @@
 <template>
-  <Teleport to="body">
-    <Transition name="modal">
-      <div
-        v-if="shouldShowModal"
-        class="modal"
-        @click="close"
-      >
-        <div class="header">
+  <ClientOnly>
+    <teleport to="body">
+      <transition name="modal">
+        <div
+          v-if="shouldShowModal"
+          ref="modalEl"
+          class="modal"
+        >
+          <div class="header">
+            <div
+              lr-cursor
+              class="close"
+              @click="close"
+            >
+              <fa icon="close" />
+            </div>
+          </div>
           <div
-            lr-cursor
-            class="close"
-            @click="close"
+            ref="innerEl"
+            class="inner"
+            v-bind="attrs"
+            @click.stop
           >
-            <fa icon="close" />
+            <slot></slot>
           </div>
         </div>
-        <div
-          class="inner"
-          @click.stop
-        >
-          <slot></slot>
-        </div>
-      </div>
-    </Transition>
-  </Teleport>
+      </transition>
+    </teleport>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
+import Lenis from 'lenis';
+import { useAnimationStore } from '~/store/animation';
+
 interface Emits {
   (e: 'close'): void;
 }
 interface Props {
   shouldShowModal: boolean;
+  maxWidth: string;
 }
 
+const attrs = useAttrs();
 const $emit = defineEmits<Emits>();
-const { shouldShowModal } = defineProps<Props>();
+const { shouldShowModal, maxWidth } = defineProps<Props>();
+
+const { enableScroll, disableScroll } = useAnimationStore();
+
+const modalEl = ref<HTMLDivElement>();
+const innerEl = ref<HTMLDivElement>();
+const modalLenis = ref<Lenis>();
+// on mounted here is only the first time the modal opens, that's why
+// we need this logic around shouldSHowModal
+onMounted(() => {
+  watch(
+    () => shouldShowModal,
+    async (isOpen) => {
+      if (!import.meta.client) return;
+      await nextTick();
+
+      if (isOpen) {
+        // acts like onMounted
+        if (!innerEl.value) return;
+        innerEl.value.style.setProperty('--max-width', maxWidth);
+        disableScroll({ blockTogglingScroll: true });
+
+        modalLenis.value = new Lenis({
+          autoRaf: true,
+          duration: 1.4,
+          wrapper: innerEl.value,
+          content: innerEl.value,
+        });
+      } else {
+        enableScroll({ blockTogglingScroll: false });
+      }
+    },
+    { immediate: true }
+  );
+});
+
+onUnmounted(() => {
+  if (!modalLenis.value) return;
+  modalLenis.value.destroy();
+});
 
 function close() {
   $emit('close');
@@ -60,8 +108,8 @@ function close() {
   background-color: rgba($main-dark-bg, 0.22);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-
   z-index: 100;
+  transition: color 0.3s $default-ease;
 
   .header {
     width: 100%;
@@ -95,16 +143,19 @@ function close() {
       }
     }
   }
-  transition: color 0.3s $default-ease;
+
   .inner {
+    --max-width: 80%;
     height: 80vh;
-    width: 80vw;
+    width: var(--max-width);
+    overflow: auto;
+    box-sizing: border-box;
 
     border-radius: 25px;
     background-color: $main-dark-bg;
     box-shadow: $box-shadow-elevation-1;
 
-    padding: 32px;
+    padding: 32px 64px;
   }
 }
 
@@ -118,16 +169,23 @@ function close() {
   transition: 0.3s ease all;
 }
 
-@media (max-width: $sm-breakpoint) {
+@media (max-width: $md-breakpoint) {
   .modal {
     padding-inline: 16px;
+    .inner {
+      padding-inline: 32px;
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: $sm-breakpoint) {
+  .modal {
     .header {
       justify-content: flex-start;
     }
     .inner {
-      // width: 100vw;
       width: 100%;
-      // margin-inline: 16px;
     }
   }
 }

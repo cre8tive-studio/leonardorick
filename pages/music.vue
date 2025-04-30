@@ -298,8 +298,8 @@ h1 {
     gap: 24px;
 
     svg {
-      width: 80px;
-      height: 80px;
+      width: 40px;
+      height: 40px;
     }
 
     button {
@@ -321,6 +321,10 @@ h1 {
 @media (min-width: $md-breakpoint) {
   .audio-list {
     grid-template-columns: 1fr 1fr;
+  }
+  .previews-blocked .content .svg {
+    width: 80px;
+    height: 80px;
   }
 }
 

@@ -8,6 +8,9 @@
   --lr-side-space: clamp(1rem, 5vw, 4rem);
 }
 
+/**
+* scrollbar
+*/
 .hide-scrollbar {
   /* HIDE SCROLLBAR */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
@@ -17,6 +20,27 @@
     display: none; // Safari and Chrome mobile
   }
 }
+
+// if scrollbar is shown, it's like this:
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $highlight-2;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: $highlight-3;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 4px;
+}
+
 /**
 * buttons
 */

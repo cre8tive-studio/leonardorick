@@ -6,6 +6,7 @@
     "confirm_password": "Confirme a senha",
     "day": "Dia | Dias",
     "designers": "Designers",
+    "donate": "Contribua",
     "dont_have_account_sign_up": "Não tem uma conta?",
     "engineers": "Engenheiros",
     "english": "Inglês‎ ‎ ",
@@ -21,6 +22,7 @@
     "history": "Histórico",
     "hour": "Hora | Horas",
     "join_supporters": "Se torne um apoiador",
+    "learn_more": "Saiba mais",
     "link_expired": "O link expirou, por favor, tente novamente",
     "login": "Login",
     "logout": "Sair",
@@ -44,6 +46,7 @@
     "song_page_featured_title": "Ouça meu lançamento em destaque",
     "song_page_original_songs_title": "Minhas músicas autorais",
     "song_page_previews_title": "Minhas prévias",
+    "subscribe": "Inscreva-se",
     "subscribed": "Inscrito",
     "update": "Atualizar",
     "what_they_said": "O que eles disseram",
@@ -55,8 +58,9 @@
     },
     "error": {
         "generic": "Algo deu errado, tente novamente mais tarde",
-        "general_argument_invalid": "Senha inválida: A senha tem que ter entre 8 e 265 caractéres e não deve ser uma senha muito comum.",
-        "login": "Não foi possível fazer o login, confirme seu email e senha e tente novamente.",
+        "general_argument_invalid": "Algum campo está inválido: Confirme os valores e tente novamente",
+        "general_argument_invalid_email": "email inválido: O valor tem que ser um email no formato certo.",
+        "general_argument_invalid_password": "email inválido: O valor tem que ser um email no formato certo.",
         "please_fill_email": "Por favor, preencha seu email.",
         "signup": "Não foi possível cadastrar o usuário. Certifique-se que você já está inscrito e tente novamente.",
         "subtitle_home": "Você pode visitar a página de Música ou curtir o efeito do mouse. Desculpa por isso.",
@@ -64,7 +68,22 @@
         "subtitle_music": "Quando estiver, você vai poder ver mais informações a respeito das minhas músicas e como escutar elas antes de todo mundo.",
         "title_empty_page": "Essa pagina ainda não está pronta",
         "title_home": "Não foi possível carregar as informações da Home :(",
-        "user_not_found": "Email não cadastrado."
+        "user_not_found": "Email não cadastrado.",
+        "user_invalid_credentials": "Credenciais inválidas. Por favo, confirme o email e a senha."
+    },
+    "modal": {
+        "how_it_works": {
+            "title": "Como funciona",
+            "main_description_1": "Prévias são um presente especial para quem contribui e apoia meu trabalho.",
+            "main_description_2": "Sua generosidade torna possível que eu produza mais músicas com alta qualidade e, em troca, você terá acesso a conteúdo exclusivo e prévias antecipadas das minhas músicas.",
+            "know_more": {
+                "item_1": "Você se inscreve como um apoiador por um preço simbólico. 💸",
+                "item_2": "Você desbloqueia 3 Demos, músicas completas minhas voz & violão, que eu quero produzir. 🎛️",
+                "item_3": "A cada mês inscrito você desbloqueia mais uma Demo. 🎼",
+                "item_4": "Você pode votar nas músicas que mais gostar. 👍",
+                "item_5": "A música mais votada é a que eu vou produzir a seguir. 💽"
+            }
+        }
     },
     "success": {
         "recover_password": "Enviamos um link de recuperação para o seu e-mail. Altere a sua senha clicando nele.",

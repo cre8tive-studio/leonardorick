@@ -15,6 +15,8 @@ const useAnimations = () => {
   const route = useRoute();
   const isDebug = !!Object.prototype.hasOwnProperty.call(route.query, 'debug');
   const { isMobile } = useDevice();
+
+  const store = useAnimationStore();
   const {
     loadingBarRef,
     overlayRef,
@@ -22,8 +24,9 @@ const useAnimations = () => {
     isOverlayCompleteHidden,
     isLRModelLoaded,
     isLRModelTimedout,
-    isScrollEnabled,
-  } = toRefs(useAnimationStore());
+  } = toRefs(store);
+
+  const { enableScroll, disableScroll } = store;
 
   const lenis = useLenis();
   const fluid = useFluid();
@@ -137,9 +140,9 @@ const useAnimations = () => {
   }
 
   function hideOverlay() {
-    isScrollEnabled.value = false;
+    disableScroll();
     if (!overlayRef.value || !loadingBarRef.value || !cubeLoaderContainerRef.value) {
-      isScrollEnabled.value = true;
+      enableScroll();
       return;
     }
 
@@ -168,7 +171,7 @@ const useAnimations = () => {
           // so we can see the first color as the first colour is
           // possible to specify to be the same
           fluid.activate();
-          isScrollEnabled.value = true;
+          enableScroll();
         },
         onComplete: () => {
           if (overlayRef.value) {
