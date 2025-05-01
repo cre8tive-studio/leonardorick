@@ -23,7 +23,9 @@
         <div class="skeleton subtitle mb-2"></div>
       </div>
 
+      <!-- keep v-if audio.name as it affects the wave placeholder width computation -->
       <LRWavePlayer
+        v-if="audio?.name"
         :audio-url="audioUrl"
         @audioprocess="rotateBackground"
       />

@@ -266,15 +266,14 @@ function formatSongTime(time?: number) {
   gap: 4px;
   padding-block: 12px;
 
-  background: repeating-linear-gradient(to right, $dark-text-3 0px, $dark-text-3 3px, transparent 3px, transparent 6px);
-
-  background-size: 200% 100%;
-  animation: wave-loader-animation 20s linear infinite;
+  background: repeating-linear-gradient(to right, $dark-text-3 0%, $dark-text-3 50%, transparent 50%, transparent 100%);
+  background-size: 5px 100%;
+  animation: wave-loader-animation 17s linear infinite;
   border-radius: 6px;
   mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
 
   &.sm {
-    width: 180px;
+    min-width: 180px;
   }
 }
 
@@ -283,7 +282,7 @@ function formatSongTime(time?: number) {
     background-position: 0% 0%;
   }
   100% {
-    background-position: -100% 0%;
+    background-position: 100% 0%;
   }
 }
 </style>
