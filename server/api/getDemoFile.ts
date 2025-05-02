@@ -17,18 +17,24 @@ export default defineEventHandler(async (event) => {
   const { userId } = event.context.auth;
   const { number } = await readBody(event);
 
+  if (!number) {
+    throw createGenericError('Missing number of demo on request', 422);
+  }
+
   const { demosReady } = await getSettings();
 
   if (!demosReady.includes(number)) {
     return null;
   }
 
-  if (!number) {
-    throw createGenericError('Missing number of demo on request', 422);
-  }
-
   const { availableDemos } = await getUser(userId);
-  if (!availableDemos || availableDemos.length === 0 || !demosReady.includes(number)) {
+
+  if (
+    !availableDemos ||
+    availableDemos.length === 0 ||
+    !demosReady.includes(number) ||
+    !availableDemos.includes(number)
+  ) {
     throw createGenericError(`User not allowed to listen to requested demo ${number}`);
   }
 

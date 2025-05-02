@@ -19,16 +19,13 @@
       <button
         class="lr-anchor"
         lr-cursor
-        @click="learnMore = !learnMore"
+        @click="showLearnMoreContent = !showLearnMoreContent"
       >
         {{ $t('learn_more') }}
       </button>
 
       <transition name="open">
-        <div
-          v-if="learnMore"
-          class="learn-more-content"
-        >
+        <div v-if="showLearnMoreContent">
           <ol>
             <li>{{ $t('modal.how_it_works.know_more.item_1') }}</li>
             <li>{{ $t('modal.how_it_works.know_more.item_2') }}</li>
@@ -48,16 +45,53 @@
         <button
           lr-cursor
           class="lr-button lr-button-secondary"
+          @click="showSubscribeContent = !showSubscribeContent"
         >
           {{ $t('subscribe') }}
         </button>
       </div>
+      <transition name="open">
+        <form
+          v-if="showSubscribeContent"
+          class="flex flex-col items-center mb-8"
+          @submit.prevent="continueSubscription"
+        >
+          <div class="flex gap-4 mb-4">
+            <input
+              v-model="email"
+              lr-cursor
+              class="lr-text-input"
+              type="text"
+              placeholder="Email"
+              autocomplete="username"
+            />
+            <input
+              v-model="confirmEmail"
+              lr-cursor
+              class="lr-text-input"
+              type="text"
+              :placeholder="$t('confirm_email')"
+              autocomplete="username"
+            />
+          </div>
+          <button
+            lr-cursor
+            class="lr-button lr-button-secondary w-full"
+            type="submit"
+          >
+            {{ $t('continue') }}
+          </button>
+        </form>
+      </transition>
       <LRMoneyTarget class="money-target" />
     </div>
   </LRModal>
 </template>
 
 <script setup lang="ts">
+import { useAppStore } from '~/store';
+import { useToasterStore } from '~/store/toaster';
+
 interface Emits {
   (e: 'close'): void;
 }
@@ -69,7 +103,42 @@ interface Props {
 const $emit = defineEmits<Emits>();
 const { shouldShowModal } = defineProps<Props>();
 
-const learnMore = ref(false);
+const { t: $t } = useI18n();
+const { goToStripeSubscriptionPage } = useStripe();
+
+const toast = useToasterStore();
+const { lang } = toRefs(useAppStore());
+
+const showLearnMoreContent = ref(false);
+const showSubscribeContent = ref(false);
+
+const email = ref('');
+const confirmEmail = ref('');
+
+function continueSubscription() {
+  if (!email.value.trim() || !confirmEmail.value.trim()) {
+    toast.error({ text: $t('error.please_fill_email') });
+    return;
+  }
+
+  if (email.value.trim() !== confirmEmail.value.trim()) {
+    toast.error({ text: $t('error.match_email') });
+    return;
+  }
+
+  if (!validateEmail(email.value)) {
+    toast.error({ text: $t('error.general_argument_invalid_email') });
+    return;
+  }
+
+  goToStripeSubscriptionPage({ prefilled_email: email.value.trim(), locale: lang.value });
+  cleanForm();
+}
+
+function cleanForm() {
+  email.value = '';
+  confirmEmail.value = '';
+}
 
 function close() {
   $emit('close');

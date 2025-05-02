@@ -17,6 +17,7 @@ const cursorOuterOriginalState = {
 const MOUSE_TEXT_TIMEOUT = 10000;
 const SCROLL_DOWN_TEXT_KEY = 'scroll_down';
 const CURSOR_WORD_CLASS = 'cursor-word';
+const TO_FOCUS_TAGS_DISABLED = new Set(['BUTTON', 'INPUT']);
 let scrollDownTimeout: NodeJS.Timeout | null;
 let scrollDownAgainTimeout: NodeJS.Timeout | null;
 let addTextTimeout: NodeJS.Timeout | null;
@@ -287,7 +288,7 @@ const useCursor = () => {
     if (isAttrActivatedOnElement(el, 'lr-cursor')) {
       const toFocus = (el.querySelector('[lr-cursor-inner]') as HTMLElement) || el;
 
-      if (toFocus.tagName === 'BUTTON' && (toFocus as HTMLButtonElement).disabled) return;
+      if (TO_FOCUS_TAGS_DISABLED.has(toFocus.tagName) && (toFocus as HTMLButtonElement).disabled) return;
 
       if (!elementsToFocus.has(toFocus)) {
         elementsToFocus.add(toFocus);

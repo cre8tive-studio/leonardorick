@@ -30,7 +30,12 @@ export const useToasterStore = defineStore('toaster-store', () => {
 
     setTimeout(() => {
       state.toasts = state.toasts.filter((t) => t.id !== toast.id);
-    }, timeout ?? defaultTimeout);
+    }, timeout ?? getDefaultTimeout(text));
+  }
+
+  function getDefaultTimeout(text: string) {
+    // for each 20 characters we add 1 more second
+    return defaultTimeout + (text.length / 20) * 1000;
   }
   function success(payload: ToastPayload) {
     updateState(payload, 'success');

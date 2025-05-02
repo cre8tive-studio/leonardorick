@@ -6,15 +6,8 @@ import useServerAppwrite from '~/composables/use-server-appwrite';
 import useStripe from '~/composables/use-stripe';
 import { incrementAvailableDemos } from '~/utils/music';
 
-const {
-  databases,
-  databaseId,
-  collections,
-  queryAllowedEmail,
-  getUserWithEmail,
-  getSettings,
-  getUser,
-} = useServerAppwrite();
+const { databases, databaseId, collections, queryAllowedEmail, getUserWithEmail, getSettings, getUser } =
+  useServerAppwrite();
 
 const { stripe, getSubscription } = useStripe();
 
@@ -52,24 +45,18 @@ export default defineEventHandler(async (nuxtEvent) => {
   }
 
   const invoice = event.data.object as StripeInvoceObjectModel;
-  const {
-    customer_email: customerEmail,
-    customer_name: customerName,
-    customer,
-    subscription,
-  } = invoice;
+  const { customer_email: customerEmail, customer_name: customerName, customer, subscription } = invoice;
 
   // *********** check created variables exists *************
   if (!customerEmail || !customer) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Missing data',
+      statusMessage: 'Missing data: customer and Email',
     });
   }
 
   // *********** check if subscription is active *************
   const sub = await getSubscription(subscription);
-
   if (!sub || sub.status !== 'active') {
     throw createError({
       statusCode: 403,
@@ -113,12 +100,12 @@ export default defineEventHandler(async (nuxtEvent) => {
 });
 
 const getAvailableDemos = async (subscription: string, creating: boolean, userId?: string) => {
-  const { availableDemosCount, startDemosCount } = await getSettings();
-  let limit = startDemosCount;
+  const { startDemosCount, demosReady } = await getSettings();
   let previous: number[] = [];
+  let paidInvoicesCount = 0;
   if (!creating && userId) {
-    limit += (await stripe.invoices.list({ status: 'paid', subscription })).data.length - 1;
+    paidInvoicesCount += (await stripe.invoices.list({ status: 'paid', subscription })).data.length;
     ({ availableDemos: previous } = await getUser(userId));
   }
-  return incrementAvailableDemos({ total: availableDemosCount, previous, limit });
+  return incrementAvailableDemos({ previous, paidInvoicesCount, startDemosCount, demosReady });
 };

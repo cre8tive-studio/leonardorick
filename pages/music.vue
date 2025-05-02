@@ -1,5 +1,8 @@
 <template>
-  <div class="music-page lr-section-page-paddings">
+  <div
+    ref="musicPageEl"
+    class="music-page lr-section-page-paddings"
+  >
     <ClientOnly>
       <h1 class="lr-text--body-3 mt-12 mb-12 mx-auto">{{ $t('song_page_featured_title') }}</h1>
       <LRAudioCardFeatured
@@ -16,9 +19,13 @@
           :audio="release"
         />
       </div>
-      <div class="divider height-1"></div>
-      <div v-if="session">
-        <div v-if="demosLoaded">
+      <div class="divider height-1" />
+      <div
+        v-if="session"
+        ref="sessionEl"
+        class="logged-content"
+      >
+        <div v-if="demosMetadataLoaded">
           <p>votes available: {{ upvotesAvailable }}</p>
           <div
             v-for="demo in demos"
@@ -52,7 +59,7 @@
               controls
               @play="playAudio(demo.id)"
             />
-            <div v-else-if="demosLoading">Loading demo player...</div>
+            <div v-else-if="demoFilesLoaded">Loading demo player...</div>
             <div v-else>Unable to load demo player for this demo. Try again latter</div>
           </div>
         </div>
@@ -101,6 +108,7 @@ import type { AudioModel } from '~/types/audio.model';
 import LRHowItWorksModal from '~/components/modal/LRHowItWorksModal.vue';
 
 const nuxtApp = useNuxtApp();
+const route = useRoute();
 
 const { localeRoute, session } = toRefs(useAppStore());
 const { settings, getJWT, getUpvotes, updateVotes, getReleasesMetadata } = useAppwrite();
@@ -113,19 +121,45 @@ const releases = ref<AudioModel[]>([]);
 const featuredRelease = ref<AudioModel>();
 
 const upvotes = ref<UpvotesClientModel>({});
-const demosLoadedCount = ref(0);
+const demosFilesLoadedCount = ref(0);
 const upvotesAvailable = ref(0);
 const userId = ref('');
 const shouldShowModal = ref(false);
 
-const demosLoading = computed(() => demosLoadedCount.value < demos.value.length);
+const demoFilesLoaded = computed(() => demosFilesLoadedCount.value === demos.value.length);
 const demosMaxVotes = computed(() => (settings.value ? demos.value.length * settings.value.upvotesMultiplier : 0));
 
 const remainingReleases = computed(() => releases.value.filter((release) => !release.featured));
-const demosLoaded = ref(false);
+const demosMetadataLoaded = ref(false);
 
-loadReleases();
-setLoggedInformation();
+const sessionEl = ref<HTMLDivElement>();
+const musicPageEl = ref<HTMLDivElement>();
+const scrollToDemosTimeout = ref<NodeJS.Timeout>();
+
+onMounted(async () => {
+  loadReleases();
+  await setLoggedInformation();
+
+  // far from ideal solution but the only one I could find that works. On signup we observe the mutations on the screen until it's "stable"
+  // so we are able to scroll to the demos section and show the user what is there
+  if (route.query.login !== 'signup' || !musicPageEl.value) return;
+
+  const observer = new MutationObserver(() => {
+    // there's a lot of mutations going on  in sequence, we wait until no mutatation happens for some time and scroll
+    if (scrollToDemosTimeout.value) clearTimeout(scrollToDemosTimeout.value);
+    scrollToDemosTimeout.value = setTimeout(() => {
+      if (!sessionEl.value) return;
+      // You might want to debounce this or only run once
+      sessionEl.value.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+      observer.disconnect(); // Clean up after scrolling
+    }, 500);
+  });
+
+  observer.observe(musicPageEl.value, {
+    childList: true,
+    subtree: true,
+  });
+});
 
 function playAudio(audioId: string) {
   demoRefs.value.filter((ref) => ref.id !== audioId).forEach((audio) => audio.pause());
@@ -181,14 +215,14 @@ async function setLoggedInformation() {
     userId.value = session.value.userId;
     upvotes.value = await getUpvotes();
 
-    request<DemoClientModel[]>('/api/getDemosMetadata', undefined, true).then(async ({ data }) => {
-      if (!data.value) {
-        demosLoaded.value = true;
+    request<DemoClientModel[]>('/api/getDemosMetadata', { authenticated: true, cached: true }).then(async (data) => {
+      if (!data) {
+        demosMetadataLoaded.value = true;
         return;
       }
 
-      demos.value = data.value;
-      demosLoaded.value = true;
+      demos.value = data;
+      demosMetadataLoaded.value = true;
       setUpvotesAvailable();
 
       for (const demo of demos.value) {
@@ -232,17 +266,17 @@ async function setLoggedInformation() {
           .then(({ data: demoFile, error }) => {
             if (demoFile.value) {
               demo.audioUrl = URL.createObjectURL(demoFile.value.blob);
-              demosLoadedCount.value += 1;
+              demosFilesLoadedCount.value += 1;
             }
 
             if (error.value) {
               demo.audioUrl = null;
-              demosLoadedCount.value += 1;
+              demosFilesLoadedCount.value += 1;
             }
           })
           .catch(() => {
             demo.audioUrl = null;
-            demosLoadedCount.value += 1;
+            demosFilesLoadedCount.value += 1;
           });
       }
     });
@@ -306,6 +340,10 @@ h1 {
       cursor: none;
     }
   }
+}
+
+.logged-content {
+  scroll-margin: -1000px;
 }
 
 @media (min-width: $sm-breakpoint) {

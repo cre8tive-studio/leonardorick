@@ -16,7 +16,9 @@ Make sure to check .env.example to check the necessary variables needed to run t
 
 ### Note
 
-This project is my experimental playground where I try out different things, so the structure and coding may not be as organized as you would expect in a real project. In real life, we don't usually use so many different animations and tend to repeat things more. But here, I went all out and did everything I've always wanted to do!
+This project is my experimental playground where I try out different things, so the structure and coding may not be as organized as you would expect in a real project.
+
+In real life, we don't usually use so many different animations and implement the same thing in different ways. But here, I went all out and did everything I've always wanted to do!
 
 The main focus here is on three things:
 
@@ -52,3 +54,19 @@ For reidrect rules to work, your endpoints must be with proxy enabled
 ### Known Bugs
 
 - If you run the app in a small screen theres a hydration missmatch warning in the console because the generated pages uses the desktop header that don't appear in small screens. I guess it's not a bug but it's worth mentioning that it's normal to happen.
+-
+
+### Test stripe webhook
+
+1. [Connect on cli](https://docs.stripe.com/stripe-cli)
+2. [Create local listener](https://dashboard.stripe.com/test/webhooks/create?endpoint_location=local)
+   1. `stripe login`
+   2. `stripe listen --forward-to localhost:3000/api/stripeSubscriptionsWebhook`
+3. Go to the payments link, fill email and card and perform a payment.
+4. In stripe Dashboard go to the Developers --> Events.
+5. Find your event `invoice.payment_succeeded` (theres usually two for payment: `invoice.paid` and `invoice.payment_succeeded`)
+6. Scroll down and find CLI answers with webhook
+   ![alt text](assets/readme/stripe-cli-webhook.png)
+7. Copy the body of the payload and paste on postman
+8. Tweak your server to answer what you want and to develop the webhook
+

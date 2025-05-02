@@ -2,7 +2,7 @@ import { isStringTrue } from '@leonardorick/utils';
 export function bypass() {}
 
 export function getRandomInt(max: number, startNumber = 0) {
-  return Math.floor(Math.random() * max) + startNumber;
+  return Math.floor(Math.random() * (max - startNumber + 1)) + startNumber;
 }
 
 export function isNotExpired(time: number) {
@@ -110,4 +110,12 @@ export function formatTimeHmm(time?: number) {
   const minutes = Math.floor(time / 1000 / 60);
   const seconds = Math.floor((time / 1000) % 60);
   return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+export function validateEmail(email: string) {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
 }

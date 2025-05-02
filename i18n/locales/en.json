@@ -3,7 +3,9 @@
     "all_rights_reserved": "All Rights Reserved by Leonardo Rick. Made with 💙 in Lisbon, Portugal",
     "already_have_an_account": "Already have an account?",
     "being_nerd_for": "Being a nerd for",
+    "confirm_email": "Confirm email",
     "confirm_password": "Confirm password",
+    "continue": "continue",
     "day": "Day | Days",
     "designers": "Designers",
     "donate": "Donate",
@@ -58,11 +60,13 @@
     },
     "error": {
         "generic": "Something went wrong, please try again later",
+        "generic_payment": "Something went wrong with your payment. Contact support or try again.",
         "general_argument_invalid": "Some field is invalid. Confirm it and try again.",
         "general_argument_invalid_email": "Invalid email: Value must be a valid email address",
         "general_argument_invalid_password": "Invalid password: Password must be between 8 and 265 characters long, and should not be one of the commonly used password.",
         "login": "Unable to login, please check your email and password and try again.",
         "please_fill_email": "Please fill your email.",
+        "match_email": "Emails doesn't match",
         "signup": "Unable to signup. Make sure you are already subscribed and try again.",
         "subtitle_home": "You can navigate to the Music page or enjoy the mouse effect. Sorry about that.",
         "subtitle_login": "Once done, you'll be able to login and enjoy exclusive content related to my original songs.",
@@ -79,7 +83,7 @@
             "main_description_2": "Your generosity makes it possible for me to produce more Songs with great quality, and in return, you’ll unlock exclusive content and early previews of my songs. ",
             "know_more": {
                 "item_1": "You subscribe as a supporter for a symbolic price. 💸",
-                "item_2": "You unlock 3 Demos, full songs voice & guitar, that I'm planning to produce. 🎛️",
+                "item_2": "You unlock 3 Demos, full songs voice & guitar. 🎸",
                 "item_3": "Each month subscribed you unlock one more Demo. 🎼",
                 "item_4": "You are able to vote on the songs you've liked. 👍",
                 "item_5": "The most voted song is the one I'm going to produce next. 💽"
@@ -88,6 +92,7 @@
     },
     "success": {
         "recover_password": "We've sent a recovery link to your email. Please change your password by clicking on it.",
+        "payment_succeeded_start": "Payment succeeded! Now you are able to create your account with your registered email.",
         "password_updated": "Password reseted successfully"
     }
 }

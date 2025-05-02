@@ -9,27 +9,37 @@
             v-model="name"
             maxlength="30"
             lr-cursor
-            class="text-input"
+            class="lr-text-input"
             type="text"
             :placeholder="$t('name')"
           />
           <input
             v-model="email"
+            :disabled="emailDisabled"
             lr-cursor
-            class="text-input"
+            class="lr-text-input"
             type="text"
             placeholder="Email"
             autocomplete="username"
           />
           <div class="flex flex-col items-end">
-            <input
-              v-model="password"
-              lr-cursor
-              class="text-input mb-4"
-              type="password"
-              :placeholder="$t('password')"
-              autocomplete="current-password"
-            />
+            <div class="w-full relative password-wrapper mb-4">
+              <input
+                v-model="password"
+                lr-cursor
+                class="lr-text-input"
+                :type="passowrdType"
+                :placeholder="$t('password')"
+                autocomplete="current-password"
+              />
+              <div
+                lr-cursor
+                class="icon-wrapper"
+                @click="showPassword"
+              >
+                <fa :icon="showPasswordIcon" />
+              </div>
+            </div>
             <div v-if="loginType === 'login'">
               <p
                 lr-cursor
@@ -80,7 +90,10 @@
               {{ $t('login') }}
             </a>
           </p>
-          <div class="stripe">
+          <div
+            v-if="!checkoutId"
+            class="stripe"
+          >
             <i18n-t
               tag="p"
               keypath="make_sure_already_subscribed_signup"
@@ -89,7 +102,7 @@
                 <a
                   class="lr-anchor"
                   lr-cursor
-                  @click="goToStripe"
+                  @click="shouldShowModal = true"
                 >
                   {{ $t('subscribed') }}
                 </a>
@@ -127,15 +140,16 @@ import LRHowItWorksModal from '~/components/modal/LRHowItWorksModal.vue';
 type LoginType = 'login' | 'signup';
 
 const router = useRouter();
+const route = useRoute();
 const store = useAppStore();
 const { t: $t } = useI18n();
 
 const { auth, initSettings } = useAppwrite();
-const { safeBack } = useSafeBack();
 const { localeRoute } = store;
 const { session: storedSession } = toRefs(store);
 const toast = useToasterStore();
 const { handleError } = useHandleError();
+const { clientGetCheckoutValid } = useStripe();
 
 const forgotPasswordExpiresAt = useLocalStorage('forgot-password-expires-at', 0);
 const forgotPasswordDisabled = computed(() => forgotPasswordExpiresAt.value > 1);
@@ -145,7 +159,9 @@ const timer = computed(() => {
   return diff > 0 ? formatTimeHmm(diff) : '0:00';
 });
 
-const formDisabled = computed(() => (loginType.value === 'signup' && !name.value) || !email.value || !password.value);
+const formDisabled = computed(
+  () => (loginType.value === 'signup' && !name.value.trim()) || !email.value.trim() || !password.value.trim()
+);
 
 const email = ref('');
 const password = ref('');
@@ -153,6 +169,11 @@ const name = ref('');
 const loginType = ref<LoginType>('login');
 const interval = ref<NodeJS.Timeout>();
 const shouldShowModal = ref(false);
+const checkoutId = ref('');
+
+const emailDisabled = ref(false);
+const showPasswordIcon = ref<'eye' | 'eye-slash'>('eye-slash');
+const passowrdType = ref<'password' | 'text'>('password');
 
 const INVERTED_LOGIN_TYPE: Record<LoginType, LoginType> = {
   login: 'signup',
@@ -164,6 +185,7 @@ if (storedSession.value) {
 }
 
 onMounted(() => {
+  validateCheckout();
   if (forgotPasswordExpiresAt.value) {
     createTimerCountDown();
   }
@@ -173,10 +195,36 @@ onUnmounted(() => {
   clearInterval(interval.value);
 });
 
+function showPassword() {
+  showPasswordIcon.value = showPasswordIcon.value === 'eye' ? 'eye-slash' : 'eye';
+  passowrdType.value = passowrdType.value === 'password' ? 'text' : 'password';
+}
+
+async function validateCheckout() {
+  if (route.query.stripe_checkout_id) {
+    checkoutId.value = route.query.stripe_checkout_id as string;
+    loginType.value = 'signup';
+    try {
+      const { email: customerEmail, name: customerName } = await clientGetCheckoutValid(checkoutId.value);
+      email.value = customerEmail;
+      if (email.value) {
+        emailDisabled.value = true;
+      }
+
+      name.value = customerName;
+      toast.success({ text: $t('success.payment_succeeded_start') });
+    } catch {
+      toast.error({ text: $t('error.generic_payment') });
+      const { stripe_checkout_id: _s, ...rest } = route.query;
+      router.replace({ query: rest });
+    }
+  }
+}
+
 async function forgotPasswordStart() {
   if (forgotPasswordExpiresAt.value) return;
 
-  if (!email.value) {
+  if (!email.value.trim()) {
     toast.error({ text: $t('error.please_fill_email') });
     return;
   }
@@ -219,7 +267,7 @@ async function handleSubmit() {
     return;
   }
   storedSession.value = session;
-  safeBack();
+  router.replace(localeRoute('music', { query: { login: loginType.value } }));
 }
 
 async function getSession() {
@@ -227,9 +275,9 @@ async function getSession() {
     const data = await $fetch<SettingsModel>(`/api/${loginType.value}`, {
       method: 'POST',
       body: {
-        email: email.value,
+        email: email.value.trim(),
         password: password.value,
-        name: name.value,
+        name: name.value.trim(),
       },
     });
 
@@ -239,14 +287,39 @@ async function getSession() {
     handleError(e);
   }
 }
-
-function goToStripe() {
-  window.open(useRuntimeConfig().public.stripePaymentLink, '_blank');
-}
 </script>
 
 <style scoped lang="scss">
 .login {
+  .password-wrapper {
+    .icon-wrapper {
+      height: 28px;
+      width: 28px;
+      position: absolute;
+      top: 50%;
+      right: 6px;
+      transform: translateY(-50%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+    }
+    svg {
+      height: 60%;
+      width: 60%;
+      pointer-events: none;
+      color: $secondary-dark-bg;
+      opacity: 0.5;
+      transition: opacity 0.3s $default-ease;
+
+      &:hover,
+      &[data-icon='eye'] {
+        opacity: 1;
+      }
+    }
+  }
+
   p.forgot-password {
     text-align: right;
     text-decoration: underline;

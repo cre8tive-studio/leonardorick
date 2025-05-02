@@ -1,6 +1,10 @@
 # FEATURES I REALLY WANT
 
-find a way to add some padding in the top of the scrollable area of the modal so it do not touch the border when scrolling
+finda way to deprecate indexeddb cached data using updatedAt and saving it in the key of the cached value
+implement manual cache as suggested by chatGPT ||| Programming |||
+show all demos but disable the ones that should be disabled and add a tooltip saying that next month a new demo will be unlocked
+
+find a way to add some padding in the top of the scrollable area of the modal so it do not touch the border when scrollingL
 add emails on the modal
 add showing sidebar somehow inside the modal
 // add party emoji if the value was reached. And a tooltip saying (new release comming soon)

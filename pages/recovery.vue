@@ -17,7 +17,7 @@
             <input
               v-model="password"
               lr-cursor
-              class="text-input mb-4"
+              class="lr-text-input mb-4"
               type="password"
               :placeholder="$t('password')"
               autocomplete="current-password"
@@ -25,7 +25,7 @@
             <input
               v-model="confirmPassword"
               lr-cursor
-              class="text-input mb-4"
+              class="lr-text-input mb-4"
               type="password"
               :placeholder="$t('confirm_password')"
               autocomplete="current-password"

@@ -73,6 +73,7 @@ onMounted(() => {
           content: innerEl.value,
         });
       } else {
+        // acts like onUnmounted
         enableScroll({ blockTogglingScroll: false });
       }
     },

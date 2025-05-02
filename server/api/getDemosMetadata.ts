@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
   const availableDemosReady = availableDemos.filter((demo) => demosReady.includes(demo));
 
   if (!availableDemosReady.length) {
-    // this condition should never happen, that's why we will trhow an error here
+    // this condition should never happen, that's why we will throw an error here
     throw createGenericError('User has no available demo or available user available demos are not ready');
   }
 

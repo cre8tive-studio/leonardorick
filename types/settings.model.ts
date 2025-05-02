@@ -1,10 +1,6 @@
 import type { Models } from 'appwrite';
 
 export interface SettingsClientModel {
-  // the real number of demos that are available to the user that
-  // is incremented on each payment considering the startDemosCount
-  // and the amount of payments already made
-  availableDemosCount: number;
   // what are the demos that are ready to be shown to the user.
   demosReady: number[];
   // how many demos should be available to the user when he starts his account
