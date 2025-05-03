@@ -112,7 +112,7 @@ export default defineNuxtConfig({
     quality: 100,
     formats: ['webp'],
     provider: 'ipx',
-    domains: ['https://res.cloudinary.com/', 'https://fra.cloud.appwrite.io/'],
+    domains: ['https://res.cloudinary.com/', 'https://fra.cloud.appwrite.io/', 'https://appwrite.leonardorick.com'],
   },
   app: {
     head: HEAD.en.default,
