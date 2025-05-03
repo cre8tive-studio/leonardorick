@@ -25,72 +25,26 @@
         ref="sessionEl"
         class="logged-content"
       >
+        <h2 class="lr-text--body-2 mb-6">{{ $t('song_page_previews_title') }}</h2>
         <div v-if="demosMetadataLoaded">
           <p>votes available: {{ upvotesAvailable }}</p>
-          <div
-            v-for="demo in demos"
-            :key="demo.number"
-            class="border border-gray-300 p-4 m-4"
-          >
-            <h2>{{ demo.title }}</h2>
-            <p>votes: {{ upvotes[demo.number]?.length }}</p>
-            <div class="flex gap-4">
-              <button
-                :disabled="upvotesAvailable < 1"
-                class="bg-neutral-400 [&:not(:disabled)]:hover:bg-neutral-500 p-2 disabled:cursor-not-allowed"
-                @click="addVote(demo.number)"
-              >
-                vote
-              </button>
-
-              <button
-                :disabled="upvotesAvailable === demosMaxVotes"
-                class="bg-neutral-400 [&:not(:disabled)]:hover:bg-neutral-500 p-2 disabled:cursor-not-allowed"
-                @click="removeVote(demo.number)"
-              >
-                remove vote
-              </button>
-            </div>
-            <audio
-              v-if="demo.audioUrl"
-              :id="demo.id"
-              ref="demoRefs"
-              :src="demo.audioUrl"
-              controls
-              @play="playAudio(demo.id)"
+          <div class="audio-list">
+            <LRAudioCardDemo
+              v-for="demo in demos"
+              :key="demo.id"
+              :demo="demo"
             />
-            <div v-else-if="demoFilesLoaded">Loading demo player...</div>
-            <div v-else>Unable to load demo player for this demo. Try again latter</div>
           </div>
         </div>
-        <div v-else>Loading demos metadata...</div>
+        <div
+          v-else
+          class="loading-previews"
+        />
       </div>
-      <div
+      <LRPreviewsBlocked
         v-else
-        class="previews-blocked"
-      >
-        <h2 class="lr-text--body-2">{{ $t('song_page_previews_title') }}</h2>
-        <div class="content">
-          <SvgoLock />
-          <h3 class="lr-text--body-1">{{ $t('exclusive_access_for_supporters') }}</h3>
-          <div class="flex gap-6">
-            <button
-              lr-cursor
-              class="lr-button"
-              @click="shouldShowModal = true"
-            >
-              {{ $t('join_supporters') }}
-            </button>
-            <NuxtLink
-              lr-cursor
-              class="lr-button lr-button-secondary"
-              :to="localeRoute('login')"
-            >
-              {{ $t('login') }}
-            </NuxtLink>
-          </div>
-        </div>
-      </div>
+        @join-supporters-clicked="shouldShowModal = true"
+      />
     </ClientOnly>
     <LRHowItWorksModal
       :should-show-modal="shouldShowModal"
@@ -100,36 +54,31 @@
 </template>
 <script lang="ts" setup>
 import type { DemoClientModel } from '../types/demo-client.model';
-import type { UpvotesClientModel } from '../types/upvotes.model';
 import { useAppStore } from '../store/index';
-import { getExpireTime } from '../utils/js-utilities';
 
 import type { AudioModel } from '~/types/audio.model';
 import LRHowItWorksModal from '~/components/modal/LRHowItWorksModal.vue';
+import { useAudioStore } from '~/store/audio';
 
-const nuxtApp = useNuxtApp();
+const router = useRouter();
 const route = useRoute();
 
-const { localeRoute, session } = toRefs(useAppStore());
-const { settings, getJWT, getUpvotes, updateVotes, getReleasesMetadata } = useAppwrite();
+const { session } = toRefs(useAppStore());
+const { getUpvotes, getReleasesMetadata } = useAppwrite();
 const { request } = useRequest();
 
-const demos = ref<DemoClientModel[]>([]);
-const demoRefs = ref<HTMLAudioElement[]>([]);
+// todo: remove
+const audioStore = useAudioStore();
+const { demos, upvotesAvailable, upvotes } = toRefs(audioStore);
+const { setDemos } = audioStore;
 
 const releases = ref<AudioModel[]>([]);
 const featuredRelease = ref<AudioModel>();
-
-const upvotes = ref<UpvotesClientModel>({});
-const demosFilesLoadedCount = ref(0);
-const upvotesAvailable = ref(0);
-const userId = ref('');
 const shouldShowModal = ref(false);
 
-const demoFilesLoaded = computed(() => demosFilesLoadedCount.value === demos.value.length);
-const demosMaxVotes = computed(() => (settings.value ? demos.value.length * settings.value.upvotesMultiplier : 0));
-
-const remainingReleases = computed(() => releases.value.filter((release) => !release.featured));
+const remainingReleases = computed(() =>
+  releases.value.filter((release) => !release.featured).sort((a, b) => b.number - a.number)
+);
 const demosMetadataLoaded = ref(false);
 
 const sessionEl = ref<HTMLDivElement>();
@@ -153,7 +102,7 @@ onMounted(async () => {
       sessionEl.value.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
       observer.disconnect(); // Clean up after scrolling
       const { login: _, ...rest } = route.query;
-      route.query = rest;
+      router.replace({ query: rest });
     }, 500);
   });
 
@@ -162,45 +111,6 @@ onMounted(async () => {
     subtree: true,
   });
 });
-
-function playAudio(audioId: string) {
-  demoRefs.value.filter((ref) => ref.id !== audioId).forEach((audio) => audio.pause());
-}
-
-function setUpvotesAvailable() {
-  upvotesAvailable.value = demosMaxVotes.value;
-  demos.value.forEach((demo) => {
-    demoVotes(demo.number).forEach((voteId) => {
-      if (voteId === userId.value && upvotesAvailable.value > 0) {
-        upvotesAvailable.value -= 1;
-      }
-    });
-  });
-}
-
-function demoVotes(demoNumber: number): string[] {
-  return upvotes.value[demoNumber.toString()] || [];
-}
-
-function removeVote(demoNumber: number) {
-  const votes = demoVotes(demoNumber);
-  const index = votes.findIndex((voteId) => voteId === userId.value);
-  votes.splice(index, 1);
-  setUpvotesAvailable();
-  updateVotes(demoNumber, votes).then(updateVotesCallback);
-}
-
-function addVote(demoNumber: number) {
-  const votes = demoVotes(demoNumber);
-  votes.push(userId.value);
-  setUpvotesAvailable();
-  updateVotes(demoNumber, votes).then(updateVotesCallback);
-}
-
-async function updateVotesCallback() {
-  upvotes.value = await getUpvotes();
-  setUpvotesAvailable();
-}
 
 async function loadReleases() {
   getReleasesMetadata().then(async (data) => {
@@ -213,76 +123,18 @@ async function loadReleases() {
 }
 
 async function setLoggedInformation() {
-  if (session.value) {
-    userId.value = session.value.userId;
-    upvotes.value = await getUpvotes();
+  if (!session.value) return;
 
-    request<DemoClientModel[]>('/api/getDemosMetadata', { authenticated: true }).then(async (data) => {
-      if (!data) {
-        demosMetadataLoaded.value = true;
-        return;
-      }
+  upvotes.value = await getUpvotes();
 
-      demos.value = data;
+  request<DemoClientModel[]>('/api/getDemosMetadata', { authenticated: true }).then(async (data) => {
+    if (!data) {
       demosMetadataLoaded.value = true;
-      setUpvotesAvailable();
-
-      for (const demo of demos.value) {
-        useFetch('/api/getDemoFile', {
-          method: 'post',
-          // unique key to ensure that data fetching can be properly de-duplicated and not cached wrongly
-          key: demo.number.toString(),
-          body: {
-            number: demo.number,
-          },
-          headers: {
-            Authorization: await getJWT(),
-          },
-          responseType: 'blob',
-          transform(input: Blob) {
-            // transform don't run on cached data so we can be sure that
-            // this expire date iw always the last date that really
-            // called the API, and can use this value inside getChachedData
-            // to refresh the cahed demo file
-            return {
-              blob: input,
-              expire: getExpireTime(60),
-            };
-          },
-          getCachedData(key: string) {
-            // documented way to access cached data:
-            // https://github.com/nuxt/nuxt/issues/15445#issuecomment-1779361265
-            const cached = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
-            if (!cached) {
-              return null;
-            }
-
-            if (isNotExpired(cached.expire)) {
-              return cached;
-            }
-            // if you return nullish here --> refetch data
-            // if you return anything here, this will be used as the value
-            // reaching here is like returning undefined
-          },
-        })
-          .then(({ data: demoFile, error }) => {
-            if (demoFile.value) {
-              demo.audioUrl = URL.createObjectURL(demoFile.value.blob);
-              demosFilesLoadedCount.value += 1;
-            }
-
-            if (error.value) {
-              demo.audioUrl = null;
-              demosFilesLoadedCount.value += 1;
-            }
-          })
-          .catch(() => {
-            demo.audioUrl = null;
-            demosFilesLoadedCount.value += 1;
-          });
-      }
-    });
-  }
+      return;
+    }
+    setDemos(data);
+    demosMetadataLoaded.value = true;
+  });
 }
 </script>
 <style lang="scss" scoped>
@@ -319,29 +171,10 @@ h1 {
   box-shadow: $box-shadow-elevation-1;
 }
 
-.previews-blocked {
-  width: 100%;
-  background-color: $main-dark-bg;
-  box-shadow: $box-shadow-elevation-1;
-  border-radius: 7px;
-  border: 1px solid $dark-text-3;
-  padding: 32px;
-
-  .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 24px;
-
-    svg {
-      width: 40px;
-      height: 40px;
-    }
-
-    button {
-      cursor: none;
-    }
-  }
+.loading-previews {
+  @extend .base-loader;
+  height: 150px;
+  border-radius: 16px;
 }
 
 @media (min-width: $sm-breakpoint) {
@@ -357,10 +190,6 @@ h1 {
 @media (min-width: $md-breakpoint) {
   .audio-list {
     grid-template-columns: 1fr 1fr;
-  }
-  .previews-blocked .content .svg {
-    width: 80px;
-    height: 80px;
   }
 }
 

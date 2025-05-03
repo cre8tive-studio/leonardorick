@@ -12,7 +12,7 @@
         height="500"
         width="500"
         :src="imageUrl"
-        :alt="$t('alt.cover_image', { songName: audio?.name })"
+        :alt="$t('alt.cover_image', { songName: audio?.title })"
         preload
       />
     </transition>
@@ -38,11 +38,12 @@
 </template>
 
 <script setup lang="ts">
+import type { AudioCardSizeOptions } from '~/types/audio-card-size.options';
 import type { AudioModel } from '~/types/audio.model';
 
 interface Props {
   audio?: AudioModel;
-  size?: 'sm' | 'md';
+  size?: AudioCardSizeOptions;
 }
 
 const { audio, size = 'md' } = defineProps<Props>();
@@ -62,7 +63,9 @@ useWhenReady(
       return;
     }
 
-    imageUrl.value = URL.createObjectURL(await getCachedFile({ fileId: `${audio.id}-image`, url: audio.imageUrl }));
+    imageUrl.value = URL.createObjectURL(
+      await getCachedFile({ fileId: `${audio.id}-image`, url: audio.imageUrl, method: 'get' })
+    );
     loaded.value = true;
   }
 );

@@ -7,10 +7,10 @@
 
     <div class="content">
       <div
-        v-if="audio?.name"
+        v-if="audio?.title"
         class="content__text"
       >
-        <h2 class="">{{ audio.name }}</h2>
+        <h2 class="">{{ audio.title }}</h2>
         <h3 class="lr-text--body-1 mb-2">
           {{ $t('song_page_featured_description') }}
         </h3>
@@ -23,9 +23,9 @@
         <div class="skeleton subtitle mb-2"></div>
       </div>
 
-      <!-- keep v-if audio.name as it affects the wave placeholder width computation -->
+      <!-- keep v-if audio.title as it affects the wave placeholder width computation -->
       <LRWavePlayer
-        v-if="audio?.name"
+        v-if="audio?.title"
         :audio-url="audioUrl"
         @audioprocess="rotateBackground"
       />
@@ -59,7 +59,7 @@ useWhenReady(
   () => audio,
   () => {
     if (!audio) return;
-    getCachedFile({ fileId: audio.fileId }).then((blob) => {
+    getCachedFile({ fileId: audio.fileId, method: 'post' }).then((blob) => {
       if (blob) {
         audioUrl.value = URL.createObjectURL(blob);
       }

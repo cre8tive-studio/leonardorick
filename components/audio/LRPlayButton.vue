@@ -2,6 +2,7 @@
   <button
     lr-cursor
     class="play-audio-button"
+    :class="size"
     :disabled="disabled"
     @click="$emit('play')"
   >
@@ -18,9 +19,11 @@
 
 <script setup lang="ts">
 import type WaveSurfer from 'wavesurfer.js';
+import type { AudioCardSizeOptions } from '~/types/audio-card-size.options';
 
 interface Props {
   wave: WaveSurfer | undefined;
+  size: AudioCardSizeOptions;
 }
 interface Emits {
   (e: 'play'): void;
@@ -51,13 +54,23 @@ useWhenReady(
 
 <style scoped lang="scss">
 .play-audio-button {
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   border-radius: 50%;
   transition: all 0.3s $default-ease;
   height: 70px;
   width: 70px;
+
+  &.sm {
+    height: 45px;
+    width: 45px;
+    svg {
+      height: 20px;
+      width: 20px;
+    }
+  }
 
   svg {
     transition: color 0.3s $default-ease;
@@ -94,10 +107,14 @@ useWhenReady(
   pointer-events: none;
 }
 
-@media (max-width: $sm-breakpoint) {
-  .play-audio-button {
+@media (max-width: $md-breakpoint) {
+  .play-audio-buttons.sm {
     height: 45px;
     width: 45px;
+    svg {
+      height: 20px;
+      width: 20px;
+    }
   }
 }
 </style>

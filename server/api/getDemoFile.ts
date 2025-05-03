@@ -15,16 +15,30 @@ export default defineEventHandler(async (event) => {
   }
 
   const { userId } = event.context.auth;
-  const { number } = await readBody(event);
+  const { fileId } = await readBody(event);
 
-  if (!number) {
-    throw createGenericError('Missing number of demo on request', 422);
+  if (!fileId) {
+    throw createGenericError('Missing fileId of demo on request', 422);
+  }
+
+  const query = await databases.listDocuments<DemoModel>(databaseId, collections.demos, [
+    Query.equal('fileId', [fileId]),
+  ]);
+
+  if (!query || !query.documents || query.documents.length === 0) {
+    throw createGenericError(`Unable to find document related with fileId: ${fileId}`, 422);
+  }
+
+  const number = query.documents[0].number;
+
+  if (!query.documents.length) {
+    throw createGenericError(`Unable to find number or demo related with fileId: ${fileId}`, 422);
   }
 
   const { demosReady } = await getSettings();
 
   if (!demosReady.includes(number)) {
-    return null;
+    throw createGenericError(`Demo requested is not ready: ${number}`, 422);
   }
 
   const { availableDemos } = await getUser(userId);
@@ -39,15 +53,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const query = await databases.listDocuments<DemoModel>(databaseId, collections.demos, [
-      Query.equal('number', [number]),
-    ]);
-
-    if (!query || !query.documents || query.documents.length === 0) {
-      throw createGenericError(`Demo ${number} not found`);
-    }
-
-    return storage.getFileDownload(bucketId, query.documents[0].fileId).then(Buffer.from);
+    return storage.getFileDownload(bucketId, fileId).then(Buffer.from);
   } catch (err: any) {
     throw createGenericError(err.message);
   }

@@ -6,7 +6,7 @@
     />
     <div class="content">
       <div class="content__text">
-        <h2 class="lr-text--body-1 mb-2">{{ audio.name }}</h2>
+        <h2 class="lr-text--body-1 mb-2">{{ audio.title }}</h2>
       </div>
 
       <LRWavePlayer
@@ -31,7 +31,7 @@ const audioUrl = ref('');
 
 const { getCachedFile } = useCachedFile();
 
-getCachedFile({ fileId: audio.fileId }).then((blob) => {
+getCachedFile({ fileId: audio.fileId, method: 'post' }).then((blob) => {
   if (blob) {
     audioUrl.value = URL.createObjectURL(blob);
   }

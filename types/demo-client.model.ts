@@ -1,9 +1,5 @@
-export interface DemoClientModel {
-  id: string;
-  fileId: string;
-  imageUrl: any | null;
-  title: string;
-  description?: string;
-  number: number;
-  audioUrl: string | null;
+import type { AudioModel } from './audio.model';
+
+export interface DemoClientModel extends AudioModel {
+  votes: number;
 }

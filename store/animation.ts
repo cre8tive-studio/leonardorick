@@ -19,7 +19,6 @@ interface AnimationStoreModel {
   isCursorActivated: boolean;
   isMagneticHoverActivated: boolean;
   isHideOnScrollBlocked: boolean;
-  blockTogglingScroll: boolean;
 }
 
 interface PrivateAnimationStoreModel {
@@ -46,7 +45,6 @@ export const useAnimationStore = defineStore('animationStore', () => {
     isCursorActivated: false,
     isMagneticHoverActivated: false,
     isHideOnScrollBlocked: false,
-    blockTogglingScroll: false,
   });
 
   const privateState = reactive<PrivateAnimationStoreModel>({

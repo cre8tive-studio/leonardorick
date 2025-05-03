@@ -1,14 +1,14 @@
 <template>
-  <div class="flex flex-col gap-2">
+  <div
+    class="lr-wave-player flex flex-col"
+    :class="size"
+  >
     <div class="flex items-center w-full gap-2">
       <div
         ref="waveContainerEl"
         class="wave-container"
       >
-        <div
-          class="wave-placeholder"
-          :class="size"
-        />
+        <div class="wave-placeholder" />
         <div
           ref="waveformEl"
           class="waveform flex-1"
@@ -17,6 +17,7 @@
 
       <LRPlayButton
         :wave="wave"
+        :size="size"
         @play="playPause"
       />
     </div>
@@ -32,16 +33,15 @@ import WaveSurfer from 'wavesurfer.js';
 import { gsap } from 'gsap';
 import { useAudioStore } from '~/store/audio';
 import { COLORS } from '~/utils/constants/colors';
+import type { AudioCardSizeOptions } from '~/types/audio-card-size.options';
 
-type SizeOptions = 'sm' | 'md';
-
-type Sizes = Record<SizeOptions, (number | undefined)[]>;
+type Sizes = Record<AudioCardSizeOptions, (number | undefined)[]>;
 
 type SizeMap = { height: Sizes; width: Sizes };
 
 interface Props {
   audioUrl: string;
-  size?: SizeOptions;
+  size?: AudioCardSizeOptions;
 }
 
 interface Emits {
@@ -235,6 +235,11 @@ function formatSongTime(time?: number) {
 </script>
 
 <style scoped lang="scss">
+.lr-wave-player {
+  &.md {
+    gap: 0.5rem;
+  }
+}
 .wave-container {
   --wave-container-height: 0;
   --wave-container-width: 100%;
@@ -271,8 +276,10 @@ function formatSongTime(time?: number) {
   animation: wave-loader-animation 17s linear infinite;
   border-radius: 6px;
   mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+}
 
-  &.sm {
+.sm {
+  .wave-placeholder {
     min-width: 180px;
   }
 }

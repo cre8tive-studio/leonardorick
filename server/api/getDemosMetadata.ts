@@ -32,14 +32,13 @@ export default defineEventHandler(async (event) => {
     ]);
     return query.documents.map((demo) => ({
       id: demo.$id,
-      // todo in the future return the image cover of the demo if it exists
-      imageUrl: null,
+      imageUrl: demo.imageUrl,
       title: demo.title,
+      name: demo.name,
       description: demo.description,
       number: demo.number,
       votes: demo.votes,
       fileId: demo.fileId,
-      audioUrl: null,
     })) as DemoClientModel[];
   } catch (err: any) {
     throw createGenericError(err.message);

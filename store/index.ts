@@ -37,7 +37,7 @@ export const useAppStore = defineStore('store', () => {
   });
 
   const loaded = computed(() => state.isContentLoaded && animationsStore.isLRModelLoaded);
-
+  const userId = computed(() => state.session?.userId || '');
   const experienceYears = computed(
     () =>
       new Date().getFullYear() -
@@ -84,8 +84,9 @@ export const useAppStore = defineStore('store', () => {
 
   return {
     ...toRefs(state),
-    experienceYears,
     loaded,
+    userId,
+    experienceYears,
     localeRoute,
   };
 });

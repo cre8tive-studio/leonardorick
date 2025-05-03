@@ -1,9 +1,9 @@
 import { localforageGetItem } from '../utils/js-utilities';
-interface Props {
+type Options = Parameters<typeof $fetch>[1] & {
   fileId: string;
   authenticated?: boolean;
   url?: string;
-}
+};
 // This composable has two levels of composables:
 // 1. IndexedDB with localForage that caches data on users browswer
 // 2. Local cache inside use-request Map
@@ -13,21 +13,21 @@ interface Props {
 const useCachedFile = () => {
   const { request } = useRequest();
 
-  async function getCachedFile({ fileId, authenticated = false, url }: Props) {
+  async function getCachedFile({ fileId, authenticated = false, url = '/api/getFile', ...options }: Options) {
     const file = await localforageGetItem<Blob>(fileId);
     if (file) {
       return new Promise<Blob>((resolve) => resolve(file));
     }
 
-    if (url) {
-      return request<Blob>(url, { cacheKey: fileId, method: 'get' }).then((blob) => localforageSetItem(fileId, blob));
-    }
-
-    return request<Blob>('/api/getFile', {
-      method: 'post',
-      body: {
-        fileId,
-      },
+    return request<Blob>(url, {
+      ...options,
+      ...(options.method === 'post'
+        ? {
+            body: {
+              fileId,
+            },
+          }
+        : {}),
       responseType: 'blob',
       authenticated,
       cacheKey: fileId,

@@ -25,7 +25,6 @@ const useRequest = () => {
 
     const data = $fetch<T>(url, {
       ...options,
-      method: options.method || 'post',
       ...(authenticated
         ? {
             headers: {
