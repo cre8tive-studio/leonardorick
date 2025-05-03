@@ -1,9 +1,9 @@
 <template>
-  <div
-    ref="musicPageEl"
-    class="music-page lr-section-page-paddings"
-  >
-    <ClientOnly>
+  <ClientOnly>
+    <div
+      ref="musicPageEl"
+      class="music-page lr-section-page-paddings"
+    >
       <h1 class="lr-text--body-3 mt-12 mb-12 mx-auto">{{ $t('song_page_featured_title') }}</h1>
       <LRAudioCardFeatured
         class="featured"
@@ -45,12 +45,13 @@
         v-else
         @join-supporters-clicked="shouldShowModal = true"
       />
-    </ClientOnly>
-    <LRHowItWorksModal
-      :should-show-modal="shouldShowModal"
-      @close="shouldShowModal = false"
-    />
-  </div>
+
+      <LRHowItWorksModal
+        :should-show-modal="shouldShowModal"
+        @close="shouldShowModal = false"
+      />
+    </div>
+  </ClientOnly>
 </template>
 <script lang="ts" setup>
 import type { DemoClientModel } from '../types/demo-client.model';

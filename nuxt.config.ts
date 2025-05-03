@@ -29,7 +29,7 @@ export default defineNuxtConfig({
     appwrite: {
       apiKey: process.env.APPWRITE_SECRET_KEY,
       allowedEmailsCollection: process.env.APPWRITE_ALLOWED_EMAILS_COLLECTION,
-      demosCollection: process.env.APPWRITE_DEMOS_COLLECTION,
+      demosCollection: process.env.APPWRITE_PREVIEWS_COLLECTION,
       settingsDocument: process.env.VUE_APP_APPWRITE_SETTINGS_DOCUMENT,
       bucketId: process.env.APPWRITE_STORAGE,
     },

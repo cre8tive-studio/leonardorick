@@ -1,6 +1,6 @@
 <template>
   <div
-    class="lr-wave-player flex flex-col"
+    class="lr-wave-player flex flex-col gap-2"
     :class="size"
   >
     <div class="flex items-center w-full gap-2">
@@ -235,11 +235,6 @@ function formatSongTime(time?: number) {
 </script>
 
 <style scoped lang="scss">
-.lr-wave-player {
-  &.md {
-    gap: 0.5rem;
-  }
-}
 .wave-container {
   --wave-container-height: 0;
   --wave-container-width: 100%;
@@ -290,6 +285,12 @@ function formatSongTime(time?: number) {
   }
   100% {
     background-position: 100% 0%;
+  }
+}
+
+@media (max-width: $md-breakpoint) {
+  .lr-wave-player.sm {
+    gap: 0.25rem;
   }
 }
 </style>
