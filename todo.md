@@ -1,11 +1,11 @@
 # FEATURES I REALLY WANT
 
-finda way to deprecate indexeddb cached data using updatedAt and saving it in the key of the cached value
-implement manual cache as suggested by chatGPT ||| Programming |||
-show all demos but disable the ones that should be disabled and add a tooltip saying that next month a new demo will be unlocked
+if for some reason I disable the preview, I need to remove the upvotes from the this preview
+
+show all previews but disable the ones that should be disabled and add a tooltip saying that next month a new preview will be unlocked
 
 find a way to add some padding in the top of the scrollable area of the modal so it do not touch the border when scrollingL
-add emails on the modal
+
 add showing sidebar somehow inside the modal
 // add party emoji if the value was reached. And a tooltip saying (new release comming soon)
 fix transition on learn more button
@@ -17,7 +17,7 @@ fix transition on learn more button
   - finish profile page
 
 - remove email from allowed emails if users ends subscription
-- block access to demos if user stops paying
+- block access to previews if user stops paying
 - Allow file download
 
 - create modal
@@ -33,9 +33,13 @@ fix transition on learn more button
 
 Add google login
 
-- Single payment of 1000 to unlock all demos and free access forever
+- Single payment of 1000 to unlock all previews and free access forever
 
 Create a single file centralizing the configurations in staging 1 Password
+
+automate the process of blocking a ip that is making too much requests
+
+setup colormode (https://color-mode.nuxtjs.org/)
 
 set language based on browsers preference
 |-- https://stackoverflow.com/questions/77430938/nuxt-3-i18n-browser-detection-not-working

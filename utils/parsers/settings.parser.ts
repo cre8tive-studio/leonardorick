@@ -1,8 +1,8 @@
 import type { SettingsClientModel, SettingsModel } from '~/types/settings.model';
 
 export function parseSettings({
-  demosReady,
-  startDemosCount,
+  previewsReady,
+  startPreviewsCount,
   upvotesMultiplier,
   moneyTarget,
   savedAmount,
@@ -10,8 +10,8 @@ export function parseSettings({
   globalUpdatedAt,
 }: SettingsModel): SettingsClientModel {
   return {
-    demosReady,
-    startDemosCount,
+    previewsReady,
+    startPreviewsCount,
     upvotesMultiplier,
     globalUpdatedAt: new Date(globalUpdatedAt),
     moneyTarget,

@@ -26,13 +26,13 @@
         class="logged-content"
       >
         <h2 class="lr-text--body-2 mb-6">{{ $t('song_page_previews_title') }}</h2>
-        <div v-if="demosMetadataLoaded">
+        <div v-if="previewsMetadataLoaded">
           <p>votes available: {{ upvotesAvailable }}</p>
           <div class="audio-list">
-            <LRAudioCardDemo
-              v-for="demo in demos"
-              :key="demo.id"
-              :demo="demo"
+            <LRAudioCardPreview
+              v-for="preview in previews"
+              :key="preview.id"
+              :preview="preview"
             />
           </div>
         </div>
@@ -54,7 +54,7 @@
   </ClientOnly>
 </template>
 <script lang="ts" setup>
-import type { DemoClientModel } from '../types/demo-client.model';
+import type { PreviewClientModel } from '../types/preview.model';
 import { useAppStore } from '../store/index';
 
 import type { AudioModel } from '~/types/audio.model';
@@ -70,8 +70,8 @@ const { request } = useRequest();
 
 // todo: remove
 const audioStore = useAudioStore();
-const { demos, upvotesAvailable, upvotes } = toRefs(audioStore);
-const { setDemos } = audioStore;
+const { previews, upvotesAvailable, upvotes } = toRefs(audioStore);
+const { setPreviews } = audioStore;
 
 const releases = ref<AudioModel[]>([]);
 const featuredRelease = ref<AudioModel>();
@@ -80,24 +80,24 @@ const shouldShowModal = ref(false);
 const remainingReleases = computed(() =>
   releases.value.filter((release) => !release.featured).sort((a, b) => b.number - a.number)
 );
-const demosMetadataLoaded = ref(false);
+const previewsMetadataLoaded = ref(false);
 
 const sessionEl = ref<HTMLDivElement>();
 const musicPageEl = ref<HTMLDivElement>();
-const scrollToDemosTimeout = ref<NodeJS.Timeout>();
+const scrollToPreviewsTimeout = ref<NodeJS.Timeout>();
 
 onMounted(async () => {
   loadReleases();
   await setLoggedInformation();
 
   // far from ideal solution but the only one I could find that works. On signup we observe the mutations on the screen until it's "stable"
-  // so we are able to scroll to the demos section and show the user what is there
+  // so we are able to scroll to the previews section and show the user what is there
   if (route.query.login !== 'signup' || !musicPageEl.value) return;
 
   const observer = new MutationObserver(() => {
     // there's a lot of mutations going on  in sequence, we wait until no mutatation happens for some time and scroll
-    if (scrollToDemosTimeout.value) clearTimeout(scrollToDemosTimeout.value);
-    scrollToDemosTimeout.value = setTimeout(() => {
+    if (scrollToPreviewsTimeout.value) clearTimeout(scrollToPreviewsTimeout.value);
+    scrollToPreviewsTimeout.value = setTimeout(() => {
       if (!sessionEl.value) return;
       // You might want to debounce this or only run once
       sessionEl.value.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
@@ -128,13 +128,13 @@ async function setLoggedInformation() {
 
   upvotes.value = await getUpvotes();
 
-  request<DemoClientModel[]>('/api/getDemosMetadata', { authenticated: true }).then(async (data) => {
+  request<PreviewClientModel[]>('/api/getPreviewsMetadata', { authenticated: true }).then(async (data) => {
     if (!data) {
-      demosMetadataLoaded.value = true;
+      previewsMetadataLoaded.value = true;
       return;
     }
-    setDemos(data);
-    demosMetadataLoaded.value = true;
+    setPreviews(data);
+    previewsMetadataLoaded.value = true;
   });
 }
 </script>

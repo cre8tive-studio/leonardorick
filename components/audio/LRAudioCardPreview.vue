@@ -1,10 +1,10 @@
 <template>
-  <div class="lr-audio-card-demo">
-    <LRAudioCover :audio="demo" />
+  <div class="lr-audio-card-preview">
+    <LRAudioCover :audio="preview" />
 
     <div class="content">
-      <h2 class="lr-text--body-1 mb-2">{{ demo.title }}</h2>
-      <p>votes: {{ upvotes[demo.number]?.length }}</p>
+      <h2 class="lr-text--body-1 mb-2">{{ preview.title }}</h2>
+      <p>votes: {{ upvotes[preview.number]?.length }}</p>
       <LRWavePlayer
         :audio-url="audioUrl"
         size="sm"
@@ -14,7 +14,7 @@
         <button
           :disabled="upvotesAvailable < 1"
           class="bg-neutral-400 [&:not(:disabled)]:hover:bg-neutral-500 p-2 disabled:cursor-not-allowed"
-          @click="addVote(demo.number)"
+          @click="addVote(preview.number)"
         >
           vote
         </button>
@@ -22,7 +22,7 @@
         <button
           :disabled="isRemoveVoteDisabled"
           class="bg-neutral-400 [&:not(:disabled)]:hover:bg-neutral-500 p-2 disabled:cursor-not-allowed"
-          @click="removeVote(demo.number)"
+          @click="removeVote(preview.number)"
         >
           remove vote
         </button>
@@ -34,31 +34,33 @@
 <script setup lang="ts">
 import { useAppStore } from '~/store';
 import { useAudioStore } from '~/store/audio';
-import type { DemoClientModel } from '~/types/demo-client.model';
+import type { PreviewClientModel } from '~/types/preview.model';
 
 const { userId } = toRefs(useAppStore());
 const store = useAudioStore();
-const { upvotes, upvotesAvailable, demosMaxVotes } = toRefs(store);
+const { upvotes, upvotesAvailable, previewsMaxVotes } = toRefs(store);
 const { addVote, removeVote } = store;
 
 const isRemoveVoteDisabled = computed(
-  () => upvotesAvailable === demosMaxVotes || !upvotes.value[demo.number]?.includes(userId.value)
+  () => upvotesAvailable === previewsMaxVotes || !upvotes.value[preview.number]?.includes(userId.value)
 );
 
 interface Props {
-  demo: DemoClientModel;
+  preview: PreviewClientModel;
 }
-const { demo } = defineProps<Props>();
+const { preview } = defineProps<Props>();
 const { getCachedFile } = useCachedFile();
 const audioUrl = ref('');
 
-getCachedFile({ fileId: demo.fileId, url: '/api/getDemoFile', authenticated: true, method: 'post' }).then((data) => {
-  audioUrl.value = URL.createObjectURL(data);
-});
+getCachedFile({ fileId: preview.fileId, url: '/api/getPreviewFile', authenticated: true, method: 'post' }).then(
+  (data) => {
+    audioUrl.value = URL.createObjectURL(data);
+  }
+);
 </script>
 
 <style scoped lang="scss">
-.lr-audio-card-demo {
+.lr-audio-card-preview {
   height: 250px;
   padding-inline: 24px;
   background-color: $main-dark-bg;

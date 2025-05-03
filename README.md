@@ -70,3 +70,18 @@ For reidrect rules to work, your endpoints must be with proxy enabled
 7. Copy the body of the payload and paste on postman
 8. Tweak your server to answer what you want and to develop the webhook
 
+### Appwrite configuration
+
+#### indexes
+
+- users collection:
+  - index_email: to find if user already exists before creating again
+- allowed-emails:
+  - index_email: to check if user is on allowed-emails on both login and signup
+- previews:
+  - index_fileid: to query all documents on the list of the user available previews
+
+#### types
+
+- There's no array type so you select the type you wwant and them select if you want this to be an array.
+- If you create an array there's no functionalitty on making it required because the default is always an empty array: https://discord.com/channels/564160730845151244/1090006380301275187

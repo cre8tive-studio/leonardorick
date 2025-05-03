@@ -4,7 +4,7 @@ import { ID } from 'node-appwrite';
 import type { StripeInvoceObjectModel } from '../types/stripe-invoice-object.model';
 import useServerAppwrite from '~/composables/use-server-appwrite';
 import useStripe from '~/composables/use-stripe';
-import { incrementAvailableDemos } from '~/utils/music';
+import { incrementAvailablePreviews } from '~/utils/music';
 
 const { databases, databaseId, collections, queryAllowedEmail, getUserWithEmail, getSettings, getUser } =
   useServerAppwrite();
@@ -76,19 +76,19 @@ export default defineEventHandler(async (nuxtEvent) => {
         name: customerName,
         stripeId: customer,
         subscriptionId: subscription,
-        availableDemos: await getAvailableDemos(subscription, true),
+        availablePreviews: await getavailablePreviews(subscription, true),
       });
     }
 
     // is allowed email already exists it means that i'ts a recurrent payment
-    // and we need to update the user with the new number of available demos
+    // and we need to update the user with the new number of available previews
     const { $id } = (await getUserWithEmail(customerEmail)) || {};
 
     if ($id) {
       return databases.updateDocument(databaseId, collections.users, $id, {
         stripeId: customer,
         subscriptionId: subscription,
-        availableDemos: await getAvailableDemos(subscription, false, $id),
+        availablePreviews: await getavailablePreviews(subscription, false, $id),
       });
     }
   } catch (err: any) {
@@ -99,13 +99,13 @@ export default defineEventHandler(async (nuxtEvent) => {
   }
 });
 
-const getAvailableDemos = async (subscription: string, creating: boolean, userId?: string) => {
-  const { startDemosCount, demosReady } = await getSettings();
+const getavailablePreviews = async (subscription: string, creating: boolean, userId?: string) => {
+  const { startPreviewsCount, previewsReady } = await getSettings();
   let previous: number[] = [];
   let paidInvoicesCount = 0;
   if (!creating && userId) {
     paidInvoicesCount += (await stripe.invoices.list({ status: 'paid', subscription })).data.length;
-    ({ availableDemos: previous } = await getUser(userId));
+    ({ availablePreviews: previous } = await getUser(userId));
   }
-  return incrementAvailableDemos({ previous, paidInvoicesCount, startDemosCount, demosReady });
+  return incrementAvailablePreviews({ previous, paidInvoicesCount, startPreviewsCount, previewsReady });
 };

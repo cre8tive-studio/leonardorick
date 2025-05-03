@@ -85,8 +85,8 @@ const useAppwrite = () => {
     return databases.listDocuments<ReleaseModel>(databaseId, releasesCollection).then(parseReleases);
   };
 
-  const updateVotes = async (demoNumber: number, votes: string[]) => {
-    return databases.updateDocument(databaseId, upvotesCollection, demoNumber.toString(), {
+  const updateVotes = async (previewNumber: number, votes: string[]) => {
+    return databases.updateDocument(databaseId, upvotesCollection, previewNumber.toString(), {
       votes,
     });
   };

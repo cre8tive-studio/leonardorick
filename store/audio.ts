@@ -2,7 +2,7 @@ import { useLocalStorage } from '@vueuse/core';
 import type WaveSurfer from 'wavesurfer.js';
 import { useAppStore } from '.';
 import type { UpvotesClientModel } from '~/types/upvotes.model';
-import type { DemoClientModel } from '~/types/demo-client.model';
+import type { PreviewClientModel } from '~/types/preview.model';
 
 interface AudioStoreModel {
   waves: WaveSurfer[];
@@ -12,7 +12,7 @@ interface AudioStoreModel {
 }
 
 interface PrivateAudioStoreModel {
-  demos: DemoClientModel[];
+  previews: PreviewClientModel[];
 }
 
 export const useAudioStore = defineStore('audioStore', () => {
@@ -24,17 +24,17 @@ export const useAudioStore = defineStore('audioStore', () => {
   });
 
   const privateState = reactive<PrivateAudioStoreModel>({
-    demos: [],
+    previews: [],
   });
 
   const { getUpvotes, updateVotes } = useAppwrite();
   const { userId, settings } = toRefs(useAppStore());
 
-  const demosMaxVotes = computed(() =>
-    settings.value ? Math.round(privateState.demos.length * settings.value.upvotesMultiplier) : 0
+  const previewsMaxVotes = computed(() =>
+    settings.value ? Math.round(privateState.previews.length * settings.value.upvotesMultiplier) : 0
   );
 
-  const demos = computed(() => privateState.demos);
+  const previews = computed(() => privateState.previews);
 
   onMounted(() => {
     if (import.meta.client) {
@@ -42,8 +42,8 @@ export const useAudioStore = defineStore('audioStore', () => {
     }
   });
 
-  function setDemos(newDemos: DemoClientModel[]) {
-    privateState.demos = newDemos;
+  function setPreviews(newPreviews: PreviewClientModel[]) {
+    privateState.previews = newPreviews;
     updateVotesCallback();
   }
 
@@ -51,23 +51,23 @@ export const useAudioStore = defineStore('audioStore', () => {
     state.waves.push(wave);
   }
 
-  function removeVote(demoNumber: number) {
-    const votes = demoVotes(demoNumber);
+  function removeVote(previewNumber: number) {
+    const votes = previewVotes(previewNumber);
     const index = votes.findIndex((voteId) => voteId === userId.value);
     votes.splice(index, 1);
     setUpvotesAvailable();
-    updateVotes(demoNumber, votes).then(updateVotesCallback);
+    updateVotes(previewNumber, votes).then(updateVotesCallback);
   }
 
-  function addVote(demoNumber: number) {
-    const votes = demoVotes(demoNumber);
+  function addVote(previewNumber: number) {
+    const votes = previewVotes(previewNumber);
     votes.push(userId.value);
     setUpvotesAvailable();
-    updateVotes(demoNumber, votes).then(updateVotesCallback);
+    updateVotes(previewNumber, votes).then(updateVotesCallback);
   }
 
-  function demoVotes(demoNumber: number): string[] {
-    return state.upvotes[demoNumber.toString()] || [];
+  function previewVotes(previewNumber: number): string[] {
+    return state.upvotes[previewNumber.toString()] || [];
   }
 
   async function updateVotesCallback() {
@@ -76,9 +76,9 @@ export const useAudioStore = defineStore('audioStore', () => {
   }
 
   function setUpvotesAvailable() {
-    state.upvotesAvailable = demosMaxVotes.value;
-    privateState.demos.forEach((demo) => {
-      demoVotes(demo.number).forEach((voteId) => {
+    state.upvotesAvailable = previewsMaxVotes.value;
+    privateState.previews.forEach((preview) => {
+      previewVotes(preview.number).forEach((voteId) => {
         if (voteId === userId.value && state.upvotesAvailable > 0) {
           state.upvotesAvailable -= 1;
         }
@@ -88,10 +88,10 @@ export const useAudioStore = defineStore('audioStore', () => {
 
   return {
     ...toRefs(state),
-    demos,
-    demosMaxVotes,
+    previews,
+    previewsMaxVotes,
 
-    setDemos,
+    setPreviews,
     addWaveOnList,
     addVote,
     removeVote,
