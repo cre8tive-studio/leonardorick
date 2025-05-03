@@ -38,7 +38,6 @@
 </template>
 
 <script setup lang="ts">
-import localforage from 'localforage';
 import type { AudioModel } from '~/types/audio.model';
 
 interface Props {
@@ -48,11 +47,13 @@ interface Props {
 
 const { audio, size = 'md' } = defineProps<Props>();
 
-const shouldShowMediaOverlay = computed(() => size === 'sm' && (audio?.appleMusic || audio?.spotify));
+const { getCachedFile } = useCachedFile();
 
 const imageUrl = ref('/images/empty-cover.jpg');
-
 const loaded = ref(false);
+
+const shouldShowMediaOverlay = computed(() => size === 'sm' && (audio?.appleMusic || audio?.spotify));
+
 useWhenReady(
   () => audio,
   async () => {
@@ -61,16 +62,7 @@ useWhenReady(
       return;
     }
 
-    const dbId = `${audio.id}-image`;
-    const blob = await localforage.getItem<Blob>(dbId);
-
-    if (!blob) {
-      const newBlob = await $fetch<Blob>(audio.imageUrl);
-      localforage.setItem(dbId, newBlob);
-      imageUrl.value = URL.createObjectURL(newBlob);
-    } else {
-      imageUrl.value = URL.createObjectURL(blob);
-    }
+    imageUrl.value = URL.createObjectURL(await getCachedFile({ fileId: `${audio.id}-image`, url: audio.imageUrl }));
     loaded.value = true;
   }
 );

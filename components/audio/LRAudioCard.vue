@@ -29,9 +29,11 @@ const { audio } = defineProps<Props>();
 
 const audioUrl = ref('');
 
-useCachedFile({ fileId: audio.fileId }).then(({ data: audioFile }) => {
-  if (audioFile.value) {
-    audioUrl.value = URL.createObjectURL(audioFile.value.blob);
+const { getCachedFile } = useCachedFile();
+
+getCachedFile({ fileId: audio.fileId }).then((blob) => {
+  if (blob) {
+    audioUrl.value = URL.createObjectURL(blob);
   }
 });
 

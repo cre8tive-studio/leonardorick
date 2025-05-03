@@ -152,6 +152,8 @@ onMounted(async () => {
       // You might want to debounce this or only run once
       sessionEl.value.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
       observer.disconnect(); // Clean up after scrolling
+      const { login: _, ...rest } = route.query;
+      route.query = rest;
     }, 500);
   });
 
@@ -215,7 +217,7 @@ async function setLoggedInformation() {
     userId.value = session.value.userId;
     upvotes.value = await getUpvotes();
 
-    request<DemoClientModel[]>('/api/getDemosMetadata', { authenticated: true, cached: true }).then(async (data) => {
+    request<DemoClientModel[]>('/api/getDemosMetadata', { authenticated: true }).then(async (data) => {
       if (!data) {
         demosMetadataLoaded.value = true;
         return;
@@ -340,10 +342,6 @@ h1 {
       cursor: none;
     }
   }
-}
-
-.logged-content {
-  scroll-margin: -1000px;
 }
 
 @media (min-width: $sm-breakpoint) {

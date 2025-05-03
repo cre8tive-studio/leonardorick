@@ -8,6 +8,8 @@ export interface SettingsClientModel {
   // how many upvotes should be available to the user based on the number of
   // available demos. If its 2 and there are 10 demos, the user will have 20 votes
   upvotesMultiplier: number;
+  // last date assets were updated. This should be used to refresh and clean cache on users machines
+  globalUpdatedAt: Date;
   // how much I need to release the next song
   moneyTarget: number;
   // how much I have til the money target
@@ -16,4 +18,6 @@ export interface SettingsClientModel {
   currency: 'EUR' | 'BRL';
 }
 
-export interface SettingsModel extends Models.Document, SettingsClientModel {}
+export interface SettingsModel extends Models.Document, Omit<SettingsClientModel, 'globalUpdatedAt'> {
+  globalUpdatedAt: string;
+}

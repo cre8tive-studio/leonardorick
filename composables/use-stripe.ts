@@ -5,11 +5,15 @@ let stripe: Stripe;
 
 const useStripe = () => {
   const runtime = useRuntimeConfig();
+  let stripeSecretKey;
 
-  const { stripeSecretKey } = runtime;
+  if (import.meta.server) {
+    ({ stripeSecretKey } = runtime);
+  }
+
   const { stripePaymentLink } = runtime.public;
 
-  if (!stripe && import.meta.server && stripeSecretKey) {
+  if (!stripe && stripeSecretKey) {
     stripe = new Stripe(stripeSecretKey, { apiVersion: '2023-08-16' });
   }
 

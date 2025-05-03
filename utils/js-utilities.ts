@@ -1,4 +1,6 @@
 import { isStringTrue } from '@leonardorick/utils';
+import localforage from 'localforage';
+
 export function bypass() {}
 
 export function getRandomInt(max: number, startNumber = 0) {
@@ -99,12 +101,6 @@ export function isAttrActivatedOnElement(element: HTMLElement, attribute: string
   return attr === '' || isStringTrue(attr);
 }
 
-export function localStorageClientSetItem(key: string, value: string) {
-  if (import.meta.client) {
-    localStorage.setItem(key, value);
-  }
-}
-
 export function formatTimeHmm(time?: number) {
   if (!time || time <= 0) return '0:00';
   const minutes = Math.floor(time / 1000 / 60);
@@ -118,4 +114,24 @@ export function validateEmail(email: string) {
     .match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
+}
+
+export function localStorageClientSetItem(key: string, value: string) {
+  if (import.meta.client) {
+    localStorage.setItem(key, value);
+  }
+}
+
+export function localforageSetItem<T>(...params: Parameters<typeof localforage.setItem<T>>) {
+  if (import.meta.client) {
+    return localforage.setItem<T>(...params);
+  }
+  return Promise.resolve(params[1]);
+}
+
+export function localforageGetItem<T>(...params: Parameters<typeof localforage.getItem<T>>) {
+  if (import.meta.client) {
+    return localforage.getItem<T>(...params);
+  }
+  return Promise.resolve(undefined);
 }

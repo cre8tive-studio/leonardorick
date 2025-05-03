@@ -73,7 +73,7 @@
         "title_empty_page": "Essa pagina ainda não está pronta",
         "title_home": "Não foi possível carregar as informações da Home :(",
         "user_not_found": "Email não cadastrado.",
-        "user_invalid_credentials": "Credenciais inválidas. Por favo, confirme o email e a senha."
+        "user_invalid_credentials": "Credenciais inválidas. Por favor, confirme o email e a senha."
     },
     "modal": {
         "how_it_works": {

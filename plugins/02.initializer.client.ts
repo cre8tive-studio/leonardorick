@@ -10,6 +10,7 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
 
   printConsoleIntroduction(environment, baseUrl, clientVersion, personalInfo.value?.links.linkedin);
 
+  const { refreshCacheBasedOnGlobalUpdateAt } = useCleanCache();
   const { getCurrentSession, initSettings } = useAppwrite();
   let initializerClientError = null;
   try {
@@ -20,7 +21,8 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
 
     // appwritee
     await getCurrentSession(true);
-    await initSettings();
+    const settings = await initSettings();
+    await refreshCacheBasedOnGlobalUpdateAt(settings);
   } catch (error) {
     initializerClientError = error;
   }

@@ -1,30 +1,31 @@
 const cache = new Map<string, { expire: number; data: any }>();
 
-interface Options {
-  body?: Object;
-  cached?: boolean | string;
+type Options = Parameters<typeof $fetch>[1] & {
+  cacheKey?: string;
   authenticated?: boolean;
-}
+  expireInMinutes?: number;
+};
 
-function getCacheKey(cached: Options['cached'], url: string) {
-  return typeof cached === 'string' ? cached : url;
-}
 const useRequest = () => {
   const { getJWT } = useAppwrite();
-  const request = async <T>(url: string, { body = {}, cached = false, authenticated = false }: Options = {}) => {
-    if (cached) {
-      const cachedData = cache.get(getCacheKey(cached, url));
-      if (cachedData) {
-        const { expire, data } = cachedData;
+  const request = async <T>(
+    url: string,
+    { cacheKey, authenticated = false, expireInMinutes = 15, ...options }: Options = {}
+  ) => {
+    if (cacheKey) {
+      const cached = cache.get(cacheKey);
+      if (cached) {
+        const { expire, data } = cached;
         if (isNotExpired(expire)) {
-          return data;
+          return data as T;
         }
         // We don't need to clean up because if we reach the below condition, the key is going to be updated anyway
       }
     }
+
     const data = $fetch<T>(url, {
-      method: 'post',
-      body,
+      ...options,
+      method: options.method || 'post',
       ...(authenticated
         ? {
             headers: {
@@ -34,8 +35,8 @@ const useRequest = () => {
         : {}),
     });
 
-    if (cached) {
-      cache.set(getCacheKey(cached, url), { expire: getExpireTime(), data });
+    if (cacheKey) {
+      cache.set(cacheKey, { expire: getExpireTime(expireInMinutes), data });
     }
 
     return data;

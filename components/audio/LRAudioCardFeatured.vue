@@ -45,6 +45,8 @@ interface Props {
 
 const { audio } = defineProps<Props>();
 
+const { getCachedFile } = useCachedFile();
+
 const audioUrl = ref('');
 
 const selfEl = ref<HTMLDivElement>();
@@ -57,9 +59,9 @@ useWhenReady(
   () => audio,
   () => {
     if (!audio) return;
-    useCachedFile({ fileId: audio.fileId }).then(({ data: audioFile }) => {
-      if (audioFile.value) {
-        audioUrl.value = URL.createObjectURL(audioFile.value.blob);
+    getCachedFile({ fileId: audio.fileId }).then((blob) => {
+      if (blob) {
+        audioUrl.value = URL.createObjectURL(blob);
       }
     });
   }

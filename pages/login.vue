@@ -215,7 +215,7 @@ async function validateCheckout() {
       toast.success({ text: $t('success.payment_succeeded_start') });
     } catch {
       toast.error({ text: $t('error.generic_payment') });
-      const { stripe_checkout_id: _s, ...rest } = route.query;
+      const { stripe_checkout_id: _, ...rest } = route.query;
       router.replace({ query: rest });
     }
   }
@@ -267,7 +267,7 @@ async function handleSubmit() {
     return;
   }
   storedSession.value = session;
-  router.replace(localeRoute('music', { query: { login: loginType.value } }));
+  router.replace(localeRoute('music', loginType.value === 'signup' ? { query: { login: loginType.value } } : {}));
 }
 
 async function getSession() {

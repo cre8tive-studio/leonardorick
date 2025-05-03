@@ -1,6 +1,6 @@
 import { Account, Client, Databases } from 'appwrite';
 import { useAppStore } from '~/store';
-import type { SettingsModel } from '~/types/settings.model';
+import type { SettingsClientModel, SettingsModel } from '~/types/settings.model';
 import type { UserModel } from '~/types/user.model';
 import type { UpvotesModel, UpvotesClientModel } from '~/types/upvotes.model';
 import { parseUpvotes } from '~/utils/parsers/upvotes.parser';
@@ -54,16 +54,18 @@ const useAppwrite = () => {
       .catch(bypass);
   };
 
-  const initSettings = async (st?: SettingsModel) => {
+  const initSettings = async (st?: SettingsModel): Promise<SettingsClientModel> => {
     if (!settings.value) {
       if (st) {
-        settings.value = st;
-        return;
+        settings.value = parseSettings(st);
+        return settings.value;
       }
+
       settings.value = await databases
         .getDocument<SettingsModel>(databaseId, settingsCollection, settingsDocument)
         .then(parseSettings);
     }
+    return settings.value as SettingsClientModel;
   };
 
   const getUser = async () => {

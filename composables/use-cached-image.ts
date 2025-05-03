@@ -1,4 +1,3 @@
-import { useImagesStore } from '~/store/images';
 import svg from '~/assets/icons/leonardorick.svg?raw';
 import { COLORS } from '~/utils/constants/colors';
 
@@ -7,28 +6,16 @@ import { COLORS } from '~/utils/constants/colors';
  * @returns
  */
 const useCachedImage = () => {
-  const { cacheImage, getCachedImage: getCachedImageFromStore } = useImagesStore();
+  const { getCachedFile } = useCachedFile();
 
-  async function getCachedImage(id: string, url: string | undefined) {
-    const localUrl = getCachedImageFromStore(id);
-    if (localUrl) {
-      return localUrl;
+  async function getCachedImage(fileId: string, url: string | undefined) {
+    try {
+      const blob = await getCachedFile({ fileId, url });
+      return URL.createObjectURL(blob);
+    } catch (e) {
+      console.error(e);
+      return placeHolderImage();
     }
-
-    if (url) {
-      try {
-        const blob = await $fetch<Blob>(url);
-        const data = URL.createObjectURL(blob);
-        cacheImage(id, data);
-
-        return data;
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error(e);
-        return placeHolderImage();
-      }
-    }
-    return placeHolderImage();
   }
 
   function placeHolderImage() {
