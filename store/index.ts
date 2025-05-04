@@ -8,6 +8,8 @@ export const useAppStore = defineStore('store', () => {
   const state = reactive<StoreModel>({
     lang: 'en',
     session: null,
+    subscription: null,
+    user: null,
     settings: null,
     recommendations: [],
     quotes: [],
@@ -64,7 +66,7 @@ export const useAppStore = defineStore('store', () => {
     }: { clean?: boolean; includeBase?: boolean; query?: LocationQuery } = {}
   ) {
     const locale = state.lang === 'en' ? undefined : state.lang;
-    const q = clean ? { locale } : { ...route.query, ...query, locale };
+    const q = clean ? { ...query, locale } : { ...route.query, ...query, locale };
 
     return {
       name: r,

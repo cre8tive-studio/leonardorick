@@ -5,7 +5,7 @@ import type { SettingsClientModel } from '~/types/settings.model';
 const useCleanCache = () => {
   const localUpdatedAt = useLocalStorage('local-updated-at', new Date());
 
-  const refreshCacheBasedOnGlobalUpdateAt = async (settings: SettingsClientModel) => {
+  async function refreshCacheBasedOnGlobalUpdateAt(settings: SettingsClientModel) {
     // theres a globalUpdatedAt setting that is a date we use to remove everything
     // from indexedDB. It's important when we need to reset cache. Keep in mind that you
     // never should put this value too far from today as it would not allow the cache reset
@@ -14,7 +14,7 @@ const useCleanCache = () => {
       localUpdatedAt.value = settings.globalUpdatedAt;
       await localforage.clear();
     }
-  };
+  }
 
   return { refreshCacheBasedOnGlobalUpdateAt };
 };

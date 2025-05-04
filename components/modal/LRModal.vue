@@ -39,13 +39,13 @@ interface Emits {
 }
 interface Props {
   shouldShowModal: boolean;
-  maxWidth: string;
+  maxWidth?: string;
   height?: string;
 }
 
 const attrs = useAttrs();
 const $emit = defineEmits<Emits>();
-const { shouldShowModal, maxWidth, height = '75vh' } = defineProps<Props>();
+const { shouldShowModal, maxWidth = '80%', height = '75vh' } = defineProps<Props>();
 
 const { enableScroll, disableScroll } = useAnimationStore();
 
@@ -155,6 +155,8 @@ function close() {
     width: var(--max-width);
     overflow: auto;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 
     border-radius: 25px;
     background-color: $main-dark-bg;

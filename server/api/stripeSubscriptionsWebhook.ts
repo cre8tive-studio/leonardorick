@@ -80,6 +80,14 @@ export default defineEventHandler(async (nuxtEvent) => {
       });
     }
 
+    // if subscription id is different in allowed-email it might mean that the user canceled the subscription
+    // and re-subscribed. To keep consistency we always confirm it and update it
+    if (allowedEmail.subscriptionId !== subscription) {
+      databases.updateDocument(databaseId, collections.allowedEmails, allowedEmail.$id, {
+        subscriptionId: subscription,
+      });
+    }
+
     // is allowed email already exists it means that i'ts a recurrent payment
     // and we need to update the user with the new number of available previews
     const { $id } = (await getUserWithEmail(customerEmail)) || {};

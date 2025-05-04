@@ -142,7 +142,7 @@
 .lr-section-bottom,
 .lr-section-page,
 .lr-section-page-paddings {
-  width: 100svw; // ? keep in mind that this will bring problems if you show the scrollbar: https://polypane.app/blog/strategies-for-dealing-with-horizontal-overflows/
+  width: 100svw; // ? keep in mind that this will bring problems if we show the scrollbar that we are hidding: https://polypane.app/blog/strategies-for-dealing-with-horizontal-overflows/
   max-width: 3450px;
 }
 

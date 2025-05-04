@@ -148,7 +148,7 @@ const route = useRoute();
 const store = useAppStore();
 const { t: $t } = useI18n();
 
-const { auth, initSettings } = useAppwrite();
+const { auth, createEmailPasswordSession, initSettings } = useAppwrite();
 const { localeRoute } = store;
 const { session: storedSession } = toRefs(store);
 const toast = useToasterStore();
@@ -268,32 +268,29 @@ function changeLoginType() {
 }
 
 async function handleSubmit() {
-  const session = await getSession();
-  if (!session) {
-    toast.error({ text: $t('error.generic') });
-    return;
-  }
-  storedSession.value = session;
-  router.replace(localeRoute('music', loginType.value === 'signup' ? { query: { login: loginType.value } } : {}));
-  toast.success({ text: $t('login_success') });
-}
-
-async function getSession() {
   try {
-    const data = await $fetch<SettingsModel>(`/api/${loginType.value}`, {
-      method: 'POST',
-      body: {
-        email: email.value.trim(),
-        password: password.value,
-        name: name.value.trim(),
-      },
-    });
-
-    initSettings(data);
-    return await auth.createEmailPasswordSession(email.value, password.value);
+    await initSession();
+    router.replace(
+      localeRoute('music', loginType.value === 'signup' ? { clean: true, query: { login: loginType.value } } : {})
+    );
+    toast.success({ text: $t('login_success') });
   } catch (e) {
     handleError(e);
   }
+}
+
+async function initSession() {
+  const settings = await $fetch<SettingsModel>(`/api/${loginType.value}`, {
+    method: 'POST',
+    body: {
+      email: email.value.trim(),
+      password: password.value,
+      name: name.value.trim(),
+    },
+  });
+
+  initSettings(settings);
+  return createEmailPasswordSession(email.value, password.value);
 }
 </script>
 

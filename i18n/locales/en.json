@@ -5,6 +5,7 @@
     "are_you_sure_logout": "Are you sure you want to logout?",
     "being_nerd_for": "Being a nerd for",
     "back": "Back",
+    "cancel_at": "Cancel at {date}",
     "confirm_email": "Confirm email",
     "confirm_password": "Confirm password",
     "continue": "continue",
@@ -47,7 +48,9 @@
     "preview": "Preview",
     "profile": "Profile",
     "recruiters": "Recruiters",
+    "reenable_subscription_regain_access": "Re-enable your subscription to regain full access to exclusive content.",
     "remove_vote": "Remove vote",
+    "renew_subscription": "Renew subscrption",
     "scroll_down": "Scroll Down",
     "second": "Second | Seconds",
     "signup": "Signup",
@@ -84,6 +87,7 @@
         "subtitle_music": "Once done, you'll see more information related to my songs and how to get to listen them before everyone.",
         "title_empty_page": "This page is still under development",
         "title_home": "It was not possible to load Home information :(",
+        "subscription_already_exists": "Subscription is already active. Theres no need to renew the subscription",
         "user_not_found": "Email not registered.",
         "user_invalid_credentials": "Invalid credentials. Please check the email and password."
     },
@@ -99,11 +103,26 @@
                 "item_4": "You are able to vote on the songs you've liked. 👍",
                 "item_5": "The most voted song is the one I'm going to produce next. 💽"
             }
+        },
+        "renew_subscription": {
+            "title": "Renew Subscription",
+            "description": {
+                "item_1": "You'll regain access to the previews and covers again. ✅",
+                "item_2": "You'll be billed again monthly starting today. 💳",
+                "item_3": "Your payment method and invoice history remain unchanged. 📂",
+                "item_4": "You will be able to update the payment method and access your subscription details in the customer portal. 🚪"
+            }
         }
+    },
+    "subscription": {
+        "active": "Subscription Active",
+        "past_due": "Subscription Expired",
+        "canceled": "Subscription Canceled"
     },
     "success": {
         "recover_password": "We've sent a recovery link to your email. Please change your password by clicking on it.",
         "payment_succeeded_start": "Payment succeeded! Now you are able to create your account with your registered email.",
-        "password_updated": "Password reseted successfully"
+        "password_updated": "Password reseted successfully",
+        "subscription_renewed": "Subscription renewed successfully! It might take some seconds for the content to be released."
     }
 }

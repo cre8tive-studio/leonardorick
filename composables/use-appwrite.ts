@@ -1,4 +1,4 @@
-import { Account, AppwriteException, Client, Databases } from 'appwrite';
+import { Account, AppwriteException, Client, Databases, type Models } from 'appwrite';
 import { useAppStore } from '~/store';
 import type { SettingsClientModel, SettingsModel } from '~/types/settings.model';
 import type { UserModel } from '~/types/user.model';
@@ -9,6 +9,7 @@ import { parseReleases } from '~/utils/parsers/releases.parser';
 import { isNotExpired, getExpireTime } from '~/utils/js-utilities';
 import type { ReleaseModel } from '~/types/release.model';
 import type { AudioModel } from '~/types/audio.model';
+import type { SubscriptionModel } from '~/types/subscription.model';
 export { ID } from 'appwrite';
 
 let account: Account;
@@ -28,7 +29,9 @@ const useAppwrite = () => {
     settingsDocument,
   } = appwrite;
 
-  const { session: storedSession, settings, lastJWT } = toRefs(useAppStore());
+  const { session: storedSession, settings, lastJWT, subscription, user } = toRefs(useAppStore());
+
+  const { request } = useRequest();
 
   if (!account) {
     client.setEndpoint(endpoint).setProject(project);
@@ -45,14 +48,41 @@ const useAppwrite = () => {
       return storedSession.value;
     }
 
-    return account
-      .getSession('current')
-      .then((session) => {
-        storedSession.value = session;
-        return session;
-      })
-      .catch(bypass);
+    let session: Models.Session;
+
+    try {
+      session = await account.getSession('current');
+    } catch (e) {
+      if (e instanceof AppwriteException && [404, 401].includes(e.code)) {
+        // we bypass this error because theres no way to avoid the error from happening. This is the way
+        // stripe checks if the user is logged in or not and it returns a 404 if the user is not present
+        return null;
+      }
+      throw e;
+    }
+
+    if (session) {
+      storedSession.value = session;
+      await updateUserAndSubscription(session);
+    }
+    return null;
   };
+
+  async function createEmailPasswordSession(...params: Parameters<typeof account.createEmailPasswordSession>) {
+    const session = await account.createEmailPasswordSession(...params);
+    storedSession.value = session;
+    await updateUserAndSubscription(session);
+    return session;
+  }
+
+  async function updateUserAndSubscription(session: Models.Session) {
+    user.value = await databases.getDocument<UserModel>(databaseId, usersCollection, session.userId);
+    subscription.value = await request<SubscriptionModel>('/api/getSubscription', {
+      method: 'post',
+      body: { subscriptionId: user.value.subscriptionId },
+      getJWT,
+    });
+  }
 
   const initSettings = async (st?: SettingsModel): Promise<SettingsClientModel> => {
     if (!settings.value) {
@@ -66,15 +96,6 @@ const useAppwrite = () => {
         .then(parseSettings);
     }
     return settings.value as SettingsClientModel;
-  };
-
-  const getUser = async () => {
-    const session = await getCurrentSession();
-    if (session) {
-      const uid = session.userId;
-      return databases.getDocument<UserModel>(databaseId, usersCollection, uid);
-    }
-    return null;
   };
 
   const getUpvotes = async (): Promise<UpvotesClientModel> => {
@@ -109,7 +130,7 @@ const useAppwrite = () => {
     storedSession.value = null;
   };
 
-  const getJWT = async () => {
+  async function getJWT() {
     const session = await getCurrentSession();
     if (session) {
       if (lastJWT.value.jwt && isNotExpired(lastJWT.value.expire)) {
@@ -124,14 +145,14 @@ const useAppwrite = () => {
       });
     }
     return '';
-  };
+  }
 
   return {
     auth: account,
     settings,
     getCurrentSession,
+    createEmailPasswordSession,
     getJWT,
-    getUser,
     getUpvotes,
     getReleasesMetadata,
 

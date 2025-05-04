@@ -20,28 +20,39 @@
         />
       </div>
       <div class="divider height-1" />
+
+      <div class="flex gap-3 items-center mb-6">
+        <h2 class="lr-text--body-2">{{ $t('song_page_previews_title') }}</h2>
+        <LRSubscriptionBadge v-if="subscription" />
+      </div>
       <div
-        v-if="session"
+        v-if="session && subscription"
         ref="sessionEl"
         class="logged-content"
       >
-        <h2 class="lr-text--body-2 mb-2">{{ $t('song_page_previews_title') }}</h2>
-        <div v-if="previewsMetadataLoaded">
-          <p class="lr-text--body-0-half mb-6">{{ $t('votes_available') }}: {{ upvotesAvailable }}</p>
-          <div class="audio-list">
-            <LRAudioCardPreview
-              v-for="preview in previews"
-              :key="preview.id"
-              :preview="preview"
-            />
-          </div>
-        </div>
         <div
-          v-else
-          class="loading-previews"
-        />
+          v-if="subscription.status === 'active'"
+          class="active-content"
+        >
+          <div v-if="previewsMetadataLoaded">
+            <p class="lr-text--body-0-half mb-6">{{ $t('votes_available') }}: {{ upvotesAvailable }}</p>
+            <div class="audio-list">
+              <LRAudioCardPreview
+                v-for="preview in previews"
+                :key="preview.id"
+                :preview="preview"
+              />
+            </div>
+          </div>
+          <div
+            v-else
+            class="loading-previews"
+          />
+        </div>
+
+        <LRPreviewsBlocked v-else />
       </div>
-      <LRPreviewsBlocked
+      <LRPreviewsPaywall
         v-else
         @join-supporters-clicked="shouldShowModal = true"
       />
@@ -60,11 +71,12 @@ import { useAppStore } from '../store/index';
 import type { AudioModel } from '~/types/audio.model';
 import LRHowItWorksModal from '~/components/modal/LRHowItWorksModal.vue';
 import { useAudioStore } from '~/store/audio';
+import LRPreviewsBlocked from '~/components/audio/LRPreviewsBlocked.vue';
 
 const router = useRouter();
 const route = useRoute();
 
-const { session } = toRefs(useAppStore());
+const { session, subscription } = toRefs(useAppStore());
 const { getUpvotes, getReleasesMetadata } = useAppwrite();
 const { request } = useRequest();
 
@@ -124,7 +136,7 @@ async function loadReleases() {
 }
 
 async function setLoggedInformation() {
-  if (!session.value) return;
+  if (!session.value || !subscription.value || subscription.value.status !== 'active') return;
 
   upvotes.value = await getUpvotes();
 

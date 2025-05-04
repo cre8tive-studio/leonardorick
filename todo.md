@@ -1,10 +1,5 @@
 # FEATURES I REALLY WANT
 
-- finish profile page
-- remove email from allowed emails if users ends subscription
-- block access to previews if user stops paying
-  - maybe add a property to the user (paymentDelayed)
-
 upload some previews
 
 Add disabled state for previews
@@ -24,16 +19,14 @@ find a way to add some padding in the top of the scrollable area of the modal so
 // add party emoji if the value was reached. And a tooltip saying (new release comming soon)
 fix transition on learn more button
 
-create confirmation modal for logout
-
-- logout
-
 - create full local mocked envrionment for development!!!!!
 -
 - multple language emails?
 - Setup staging and production environments on appwrite
 - Add Qonto experience
 - Add google login
+
+Add some sort of donate button in the profile
 
 ===============================================
 

@@ -54,6 +54,12 @@ const useServerAppwrite = () => {
     return databases.getDocument<UserModel>(databaseId, usersCollection, uid);
   };
 
+  const updateUser = async (uid: string, subscriptionId: string) => {
+    return databases.updateDocument(databaseId, usersCollection, uid, {
+      subscriptionId,
+    });
+  };
+
   const getSettings = async () => {
     return databases.getDocument<SettingsModel>(databaseId, settingsCollection, settingsDocument).then(parseSettings);
   };
@@ -84,6 +90,7 @@ const useServerAppwrite = () => {
     getSettings,
     getAuthUserWithEmail,
     getUser,
+    updateUser,
   };
 };
 

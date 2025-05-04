@@ -60,7 +60,7 @@
     <LRModal
       :should-show-modal="shouldShowModal"
       max-width="500px"
-      height="fit-content"
+      height="300px"
       @close="shouldShowModal = false"
     >
       <div class="flex flex-col items-center justify-center h-full gap-8">

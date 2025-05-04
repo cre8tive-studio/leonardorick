@@ -2,11 +2,23 @@
   <div class="previews-blocked">
     <div class="content">
       <SvgoLock />
-      <div class="text-center">
-        <h3 class="lr-text--body-1">{{ $t('exclusive_access_for_supporters') }}</h3>
-        <p class="description">{{ $t('reenable_subscription_regain_access') }}</p>
+      <h3 class="lr-text--body-1">{{ $t('exclusive_access_for_supporters') }}</h3>
+      <div class="flex gap-6">
+        <button
+          lr-cursor
+          class="lr-button"
+          @click="$emit('join-supporters-clicked')"
+        >
+          {{ $t('join_supporters') }}
+        </button>
+        <NuxtLink
+          lr-cursor
+          class="lr-button lr-button-secondary"
+          :to="localeRoute('login')"
+        >
+          {{ $t('login') }}
+        </NuxtLink>
       </div>
-      <LRManageSubscriptionButton />
     </div>
   </div>
 </template>
@@ -18,8 +30,7 @@ interface Emits {
 }
 defineEmits<Emits>();
 
-const { user, lang } = toRefs(useAppStore());
-const { goToStripeClientPortal } = useStripe();
+const { localeRoute } = useAppStore();
 </script>
 
 <style scoped lang="scss">
@@ -45,10 +56,6 @@ const { goToStripeClientPortal } = useStripe();
     button {
       cursor: none;
     }
-  }
-
-  .description {
-    color: $secondary-dark-text;
   }
 }
 

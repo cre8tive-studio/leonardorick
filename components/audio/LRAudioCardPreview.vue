@@ -73,18 +73,21 @@ const { preview } = defineProps<Props>();
 const { getCachedFile } = useCachedFile();
 const audioUrl = ref('');
 
-getCachedFile({ fileId: preview.fileId, url: '/api/getPreviewFile', authenticated: true, method: 'post' }).then(
-  (data) => {
-    audioUrl.value = URL.createObjectURL(data);
-  }
-);
+getCachedFile({
+  fileId: preview.fileId,
+  url: `/api/getPreviewFile/${preview.number}`,
+  authenticated: true,
+  method: 'post',
+}).then((data) => {
+  audioUrl.value = URL.createObjectURL(data);
+});
 </script>
 
 <style scoped lang="scss">
 .lr-audio-card-preview {
   height: 320px;
   padding-inline: 24px;
-  background-color: $dark-text-5;
+  background-color: $dark-text-6;
 
   display: flex;
   gap: 24px;

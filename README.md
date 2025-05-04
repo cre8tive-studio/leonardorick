@@ -56,9 +56,28 @@ For reidrect rules to work, your endpoints must be with proxy enabled
 - If you run the app in a small screen theres a hydration missmatch warning in the console because the generated pages uses the desktop header that don't appear in small screens. I guess it's not a bug but it's worth mentioning that it's normal to happen.
 -
 
-### Test stripe webhook
+### Stripe
 
-1. [Connect on cli](https://docs.stripe.com/stripe-cli)
+#### Configuration
+
+- Configure client portal: Settings -> Billing -> Customer Portal
+
+  - On Business Information: add redirect link to `http://localhost:3000/profile` in test and to `https://leonardorick.com/profile` in production
+  - On Subscriptions: Enable "Customers can swith plan"
+  - To test customer portal: `stripe billing_portal sessions create --customer cus_123456789`
+
+- Configure payment link: Payments -> Payment Links -> Edit/Create -> After payment
+
+  - Select Don't show confirmation page
+  - Fill the input with `http://localhost:3000/login?stripe_checkout_id={CHECKOUT_SESSION_ID}`
+
+- Configure subscriptions webhook: Developers -> Webhooks:
+  - Endpoint URL: `https://staging.leonardorick.com/api/stripeSubscriptionsWebhook`
+  - Events to send: `invoice.payment_succeeded`
+
+#### Test stripe webhook
+
+1. [Setup stripe cli](https://docs.stripe.com/stripe-cli)
 2. [Create local listener](https://dashboard.stripe.com/test/webhooks/create?endpoint_location=local)
    1. `stripe login`
    2. `stripe listen --forward-to localhost:3000/api/stripeSubscriptionsWebhook`
@@ -70,6 +89,8 @@ For reidrect rules to work, your endpoints must be with proxy enabled
 7. Copy the body of the payload and paste on postman
 8. Tweak your server to answer what you want and to develop the webhook
 
+#### Test stripe customer portal
+
 ### Appwrite configuration
 
 #### indexes
@@ -80,6 +101,13 @@ For reidrect rules to work, your endpoints must be with proxy enabled
   - index_email: to check if user is on allowed-emails on both login and signup
 - previews:
   - index_fileid: to query all documents on the list of the user available previews
+
+#### Deleting a user
+
+1. Delete from stripe
+2. Delete from users Auth
+3. Delete from users collection
+4. Delete from allowed-email collection
 
 #### types
 

@@ -5,6 +5,8 @@ import type { SettingsClientModel } from './settings.model';
 import type { GeneralsModel } from './generals.model';
 import type { PersonalInfoModel } from './personal-info.model';
 import type { ExperienceModel } from './experience.model';
+import type { SubscriptionModel } from './subscription.model';
+import type { UserModel } from './user.model';
 import type { LanguageOptions } from '~/utils/constants/languages';
 
 interface CacheModel {
@@ -22,6 +24,8 @@ export interface StoreModel {
   lang: LanguageOptions;
   settings: SettingsClientModel | null;
   session: Models.Session | null;
+  subscription: SubscriptionModel | null;
+  user: UserModel | null;
   personalInfo: PersonalInfoModel | null;
   lastJWT: {
     jwt: string;

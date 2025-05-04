@@ -93,19 +93,19 @@ const { toasts } = toRefs(useToasterStore());
     }
 
     &.success {
-      --color: #00b74c; // Bright green
+      --color: var(--success); // Bright green
       --background: rgba(0, 164, 27, 0.22);
       --border-color: rgba(1, 164, 28, 0.48);
     }
 
     &.warning {
-      --color: #ff9100; // Orange
+      --color: var(--warning); // Orange
       --background: rgba(164, 127, 0, 0.13);
       --border-color: rgba(164, 127, 0, 0.48);
     }
 
     &.error {
-      --color: #ff5252; // Bright red
+      --color: var(--error); // Bright red
       --background: rgba(164, 0, 0, 0.19);
       --border-color: rgba(154, 0, 0, 0.48);
     }

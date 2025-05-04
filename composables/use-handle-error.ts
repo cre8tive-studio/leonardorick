@@ -27,7 +27,7 @@ const useHandleError = () => {
     }
     return false;
   }
-  function handleError(e: unknown) {
+  function handleError(e: any) {
     // eslint-disable-next-line no-console
     console.error(e);
     captureSentry(e);
@@ -39,6 +39,11 @@ const useHandleError = () => {
 
       const key = `error.${e.type}`;
       toast.error({ text: $te(key) ? $t(key) : $t('error.generic') });
+      return;
+    }
+
+    if (e.data?.data?.code) {
+      toast.error({ text: $t(`error.${e.data.data.code}`) });
       return;
     }
 

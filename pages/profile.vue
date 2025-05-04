@@ -1,42 +1,37 @@
 <template>
-  <div class="lr-form-container lr-section-page">
-    <h1 class="lr-text--body-2 mb-6">{{ $t('profile') }}</h1>
+  <ClientOnly>
     <div
-      v-if="user"
-      class="container flex flex-col items-center gap-4"
+      v-if="user && subscription"
+      class="lr-profile lr-form-container lr-section-page"
     >
-      <div>
+      <h1 class="lr-text--body-2 mb-6">{{ $t('profile') }}</h1>
+      <div class="container flex flex-col items-center gap-4">
+        <LRSubscriptionBadge class="mb-2" />
         <div
-          class="lr-text-input disabled"
+          class="lr-text-input disabled !w-fit"
           type="text"
         >
           {{ user.email }}
         </div>
+
+        <LRManageSubscriptionButton />
       </div>
-      <button
-        lr-cursor
-        class="lr-button"
-        @click="goToStripeClientPortal({ prefilled_email: user.email, locale: lang })"
-      >
-        {{ $t('manage_subscription') }}
-      </button>
     </div>
-  </div>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
 import { useAppStore } from '~/store';
-import type { UserModel } from '~/types/user.model';
 
-const { lang } = toRefs(useAppStore());
-const { goToStripeClientPortal } = useStripe();
-const { getUser } = useAppwrite();
+const router = useRouter();
+const store = useAppStore();
 
-const user = ref<UserModel | null>();
+const { user, subscription } = toRefs(store);
+const { localeRoute } = store;
 
-onMounted(async () => {
-  user.value = await getUser();
-});
+if (!user.value) {
+  router.replace(localeRoute('index'));
+}
 </script>
 
-<style scoped></style>
+<style scoped lang="scss"></style>
