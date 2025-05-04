@@ -43,7 +43,7 @@ export const useAudioStore = defineStore('audioStore', () => {
   });
 
   function setPreviews(newPreviews: PreviewClientModel[]) {
-    privateState.previews = newPreviews;
+    privateState.previews = newPreviews.sort((a, b) => a.number - b.number);
     updateVotesCallback();
   }
 

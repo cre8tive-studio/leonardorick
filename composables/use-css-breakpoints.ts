@@ -17,7 +17,7 @@ const useCssBreakpoints = () => {
       { point: 768, ref: isMd, name: 'md' },
       { point: 1024, ref: isLg, name: 'lg' },
       { point: 1280, ref: isXl, name: 'xl' },
-      { point: 1536, ref: isXxxl, name: 'xxl' },
+      { point: 1536, ref: isXxl, name: 'xxl' },
       { point: 1800, ref: isXxxl, name: 'xxxl' },
     ];
     const queries = breakpoints.map(({ point, ref, name }, index) => {
@@ -25,10 +25,11 @@ const useCssBreakpoints = () => {
 
       const handler = (e: MediaQueryListEvent) => {
         ref.value = e.matches;
-        if (ref.value) {
+
+        if (ref.value || name === 'sm') {
           current.value = name as BreakpointOptions;
         } else {
-          current.value = breakpoints[index > 1 ? index - 1 : index]?.name as BreakpointOptions;
+          current.value = breakpoints[index > 0 ? index - 1 : index]?.name as BreakpointOptions;
         }
       };
 
@@ -40,6 +41,10 @@ const useCssBreakpoints = () => {
 
       return { handler, match };
     });
+
+    if (!current.value) {
+      current.value = 'sm';
+    }
 
     onUnmounted(() => {
       queries.forEach(({ handler, match }) => match.removeEventListener('change', handler));

@@ -2,7 +2,7 @@
   <div class="audio">
     <LRAudioCover
       :audio="audio"
-      size="sm"
+      size="md"
     />
     <div class="content">
       <div class="content__text">
@@ -11,7 +11,7 @@
 
       <LRWavePlayer
         :audio-url="audioUrl"
-        size="sm"
+        size="md"
       />
     </div>
   </div>
@@ -59,6 +59,7 @@ onUnmounted(() => {
   transition: opacity 0.3s $default-ease;
 
   .content {
+    flex: 1;
     display: flex;
     flex-direction: column;
 
@@ -71,12 +72,17 @@ onUnmounted(() => {
   .audio {
     height: 450px;
     flex-direction: column;
+
+    .content {
+      flex: inherit;
+      width: 100%;
+    }
   }
 }
 
 @media (max-width: $sm-breakpoint) {
   .audio {
-    height: 340px;
+    height: 370px;
   }
 }
 </style>

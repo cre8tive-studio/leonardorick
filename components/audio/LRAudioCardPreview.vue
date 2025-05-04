@@ -1,30 +1,49 @@
 <template>
   <div class="lr-audio-card-preview">
-    <LRAudioCover :audio="preview" />
+    <div>
+      <LRAudioCover
+        class="mb-4"
+        place-holder-image-url="/images/previews-disco.png"
+        size="sm"
+        :audio="preview"
+      />
+      <p
+        v-if="isDefined(voteCount)"
+        class="votes-count lr-text--body-0-half text-center w-full"
+        :class="{ 'has-vote': voteCount }"
+      >
+        {{ voteCount }} {{ $t('votes', { count: voteCount }) }}
+      </p>
+    </div>
 
     <div class="content">
+      <span class="preview-number lr-text--body-0-half mb-0 mb-2 md:mb-0">
+        {{ $t('preview') }} {{ preview.number }}
+      </span>
       <h2 class="lr-text--body-1 mb-2">{{ preview.title }}</h2>
-      <p>votes: {{ upvotes[preview.number]?.length }}</p>
+
       <LRWavePlayer
+        class="mb-4"
         :audio-url="audioUrl"
-        size="sm"
+        size="md"
       />
 
       <div class="flex gap-4">
         <button
-          :disabled="upvotesAvailable < 1"
-          class="bg-neutral-400 [&:not(:disabled)]:hover:bg-neutral-500 p-2 disabled:cursor-not-allowed"
-          @click="addVote(preview.number)"
-        >
-          vote
-        </button>
-
-        <button
+          lr-cursor
           :disabled="isRemoveVoteDisabled"
-          class="bg-neutral-400 [&:not(:disabled)]:hover:bg-neutral-500 p-2 disabled:cursor-not-allowed"
+          class="lr-button"
           @click="removeVote(preview.number)"
         >
-          remove vote
+          {{ $t('remove_vote') }}
+        </button>
+        <button
+          lr-cursor
+          :disabled="upvotesAvailable < 1"
+          class="lr-button lr-button-secondary"
+          @click="addVote(preview.number)"
+        >
+          {{ $t('vote') }}
         </button>
       </div>
     </div>
@@ -32,6 +51,7 @@
 </template>
 
 <script setup lang="ts">
+import { isDefined } from '@leonardorick/utils';
 import { useAppStore } from '~/store';
 import { useAudioStore } from '~/store/audio';
 import type { PreviewClientModel } from '~/types/preview.model';
@@ -41,6 +61,7 @@ const store = useAudioStore();
 const { upvotes, upvotesAvailable, previewsMaxVotes } = toRefs(store);
 const { addVote, removeVote } = store;
 
+const voteCount = computed(() => upvotes.value[preview.number]?.length || 0);
 const isRemoveVoteDisabled = computed(
   () => upvotesAvailable === previewsMaxVotes || !upvotes.value[preview.number]?.includes(userId.value)
 );
@@ -61,13 +82,12 @@ getCachedFile({ fileId: preview.fileId, url: '/api/getPreviewFile', authenticate
 
 <style scoped lang="scss">
 .lr-audio-card-preview {
-  height: 250px;
+  height: 320px;
   padding-inline: 24px;
-  background-color: $main-dark-bg;
+  background-color: $dark-text-5;
 
   display: flex;
   gap: 24px;
-
   align-items: center;
   justify-content: center;
 
@@ -75,7 +95,17 @@ getCachedFile({ fileId: preview.fileId, url: '/api/getPreviewFile', authenticate
   border-radius: 7px;
   transition: opacity 0.3s $default-ease;
 
+  .votes-count:not(.has-vote) {
+    color: $secondary-dark-text;
+  }
+
+  .preview-number {
+    text-transform: uppercase;
+    color: $secondary-dark-text;
+  }
+
   .content {
+    flex: 1;
     display: flex;
     flex-direction: column;
 
@@ -86,15 +116,21 @@ getCachedFile({ fileId: preview.fileId, url: '/api/getPreviewFile', authenticate
 }
 
 @media (max-width: $lg-breakpoint) {
-  .audio {
-    height: 450px;
+  .lr-audio-card-preview {
+    height: 460px;
     flex-direction: column;
+    gap: 12px;
+
+    .content {
+      flex: inherit;
+      width: 100%;
+    }
   }
 }
 
 @media (max-width: $sm-breakpoint) {
-  .audio {
-    height: 340px;
+  .lr-audio-card-preview {
+    height: 420px;
   }
 }
 </style>

@@ -97,6 +97,7 @@ onUnmounted(() => {
     display: flex;
     flex-direction: column;
     gap: 24px;
+    min-width: 260px;
 
     h2 {
       text-align: left;
@@ -108,21 +109,16 @@ onUnmounted(() => {
     content: '';
     background: url(/images/disco_bg_2.png);
     position: absolute;
-    width: 164%;
+    width: 172%;
     z-index: -1;
     aspect-ratio: 1 / 1;
-    left: -57%;
-    background-size: 111% auto; /* Scale only the width */
+    left: -62%;
+    background-size: 99% auto; /* Scale only the width */
 
     background-position: center;
     transform-origin: center;
     transform: rotate(var(--background-rotation, 0));
     pointer-events: none;
-  }
-
-  :deep(.media) {
-    position: relative;
-    left: -8px;
   }
 }
 
@@ -130,6 +126,11 @@ onUnmounted(() => {
   .audio {
     min-height: 75vh;
     flex-direction: row;
+
+    :deep(.media) {
+      position: relative;
+      left: -8px;
+    }
   }
 }
 
@@ -154,9 +155,9 @@ onUnmounted(() => {
     &::before {
       left: -60%;
       background-size: 122% auto;
-      width: 261%;
-      left: -81%;
-      top: -40%;
+      width: 271%;
+      left: -84%;
+      top: -33%;
     }
   }
 }

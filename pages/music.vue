@@ -10,7 +10,7 @@
         :audio="featuredRelease"
       />
 
-      <h2 class="lr-text--body-2 m-6 mt-12 mb-6">{{ $t('song_page_original_songs_title') }}</h2>
+      <h2 class="lr-text--body-2 mt-12 mb-6">{{ $t('song_page_original_songs_title') }}</h2>
 
       <div class="audio-list mb-24">
         <LRAudioCard
@@ -25,9 +25,9 @@
         ref="sessionEl"
         class="logged-content"
       >
-        <h2 class="lr-text--body-2 mb-6">{{ $t('song_page_previews_title') }}</h2>
+        <h2 class="lr-text--body-2 mb-2">{{ $t('song_page_previews_title') }}</h2>
         <div v-if="previewsMetadataLoaded">
-          <p>votes available: {{ upvotesAvailable }}</p>
+          <p class="lr-text--body-0-half mb-6">{{ $t('votes_available') }}: {{ upvotesAvailable }}</p>
           <div class="audio-list">
             <LRAudioCardPreview
               v-for="preview in previews"
@@ -161,7 +161,6 @@ h1 {
   grid-template-columns: min-content;
   justify-content: center;
   gap: 16px;
-  margin-inline: 16px;
 }
 
 .divider {
@@ -188,7 +187,7 @@ h1 {
   }
 }
 
-@media (min-width: $md-breakpoint) {
+@media (min-width: $sm-breakpoint) {
   .audio-list {
     grid-template-columns: 1fr 1fr;
   }

@@ -7,6 +7,7 @@
       <div
         ref="waveContainerEl"
         class="wave-container"
+        :class="size"
       >
         <div class="wave-placeholder" />
         <div
@@ -35,20 +36,16 @@ import { useAudioStore } from '~/store/audio';
 import { COLORS } from '~/utils/constants/colors';
 import type { AudioCardSizeOptions } from '~/types/audio-card-size.options';
 
-type Sizes = Record<AudioCardSizeOptions, (number | undefined)[]>;
-
-type SizeMap = { height: Sizes; width: Sizes };
-
 interface Props {
   audioUrl: string;
-  size?: AudioCardSizeOptions;
+  size?: Exclude<AudioCardSizeOptions, 'sm'>;
 }
 
 interface Emits {
   (event: 'audioprocess', currentTime: number): void;
 }
 
-const { audioUrl, size = 'md' } = defineProps<Props>();
+const { audioUrl, size = 'lg' } = defineProps<Props>();
 
 const $emit = defineEmits<Emits>();
 
@@ -65,84 +62,25 @@ const wave = ref<WaveSurfer>();
 const duration = ref('0:00');
 const currentTime = ref('0:00');
 
-const sizes: SizeMap = {
-  height: {
-    sm: [40, 40, 40, 40, 70, 90],
-    md: [90, 90, 90, 160, 190, 190],
-  },
-  // width behaves like min-width
-  width: {
-    sm: [180, 180, 180, 180, 180, 180],
-    md: [undefined, undefined, undefined, 300, 300, 300],
-  },
-};
-const bpIndex = computed(() => BREAKPOINT_OPTIONS.indexOf(breakpoints.current.value || 'lg'));
-
 onMounted(() => {
-  const height = sizes.height[size][bpIndex.value];
-  const width = sizes.width[size][bpIndex.value];
-
-  setStyleVar('height', height);
-  updateWaveMinWidth(width);
-
   useWhenReady(
     () => audioUrl,
-    () => createWaveSurfer(height, width)
+    () => createWaveSurfer()
   );
 });
 
 watch(breakpoints.current, () => {
-  if (!waveContainerEl.value || !breakpoints.current.value) return;
-
-  const height = sizes.height[size][bpIndex.value];
-  const width = sizes.width[size][bpIndex.value];
-
   if (wave.value) {
-    wave.value.setOptions({ height });
+    wave.value.setOptions({ height: getComputedHeight() });
   }
-
-  setStyleVar('height', height);
-  updateWaveMinWidth(width);
 });
 
-function updateWaveMinWidth(width?: number) {
-  if (!wave.value) {
-    if (!waveContainerEl.value) return;
-    if (!width || getComputedWidth() >= width) {
-      setStyleVar('width', undefined); // if computed is higher than width we set it to 100%
-    } else {
-      setStyleVar('width', width);
-    }
-
-    return;
-  }
-
-  const computed = getComputedWidth();
-  const w = width && width > computed ? width : computed;
-  if (wave.value.getWidth() < w) {
-    wave.value.setOptions({ width: w });
-    if (width) {
-      setStyleVar('width', width);
-    }
-  }
-}
-
-function getComputedWidth() {
+function getComputedHeight() {
   if (!waveContainerEl.value) return 0;
-  return parseInt(getComputedStyle(waveContainerEl.value).width.replace('px', ''));
+  return parseInt(getComputedStyle(waveContainerEl.value).height.replace('px', ''));
 }
 
-function setStyleVar(orientation: 'width' | 'height', value?: number) {
-  if (!waveContainerEl.value) return;
-
-  if (value) {
-    waveContainerEl.value.style.setProperty(`--wave-container-${orientation}`, `${value}px`);
-  } else {
-    waveContainerEl.value.style.setProperty(`--wave-container-${orientation}`, '100%');
-  }
-}
-
-function createWaveSurfer(height?: number, width?: number) {
+function createWaveSurfer() {
   const ctx = document.createElement('canvas').getContext('2d');
   if (!ctx) {
     throw new Error('Failed to get 2D context');
@@ -156,7 +94,7 @@ function createWaveSurfer(height?: number, width?: number) {
   if (!waveformEl.value) throw new Error('Waveform container not defined on wave creation');
 
   const wavesurfer = WaveSurfer.create({
-    height,
+    height: 'auto',
     cursorWidth: 5,
     barWidth: 2,
     barHeight: 0.7,
@@ -188,7 +126,6 @@ function createWaveSurfer(height?: number, width?: number) {
         if (!waveContainerEl.value || !waveformEl.value || !placeholder) return;
         placeholder.style.display = 'none';
         waveformEl.value.style.display = 'block';
-        updateWaveMinWidth(width);
       },
     });
 
@@ -236,18 +173,28 @@ function formatSongTime(time?: number) {
 
 <style scoped lang="scss">
 .wave-container {
-  --wave-container-height: 0;
+  --wave-container-height: 60px;
   --wave-container-width: 100%;
   height: var(--wave-container-height);
   flex: 1;
   display: flex;
   align-items: center;
   cursor: none;
+  min-width: 180px;
+
+  &.md {
+    --wave-container-height: 60px;
+  }
+
+  &.lg {
+    --wave-container-height: 150px;
+  }
 }
 
 .waveform {
   display: none;
   opacity: 0; // updated with gsap
+  height: 100%;
 }
 
 .wave-timers {
@@ -273,7 +220,7 @@ function formatSongTime(time?: number) {
   mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
 }
 
-.sm {
+.md {
   .wave-placeholder {
     min-width: 180px;
   }
@@ -288,9 +235,20 @@ function formatSongTime(time?: number) {
   }
 }
 
-@media (max-width: $md-breakpoint) {
-  .lr-wave-player.sm {
-    gap: 0.25rem;
+@media (min-width: $md-breakpoint) {
+  .lr-wave-player {
+    .wave-container {
+      --wave-container-height: 100px;
+
+      &.md {
+        --wave-container-height: 100px;
+      }
+
+      &.lg {
+        gap: 0.25rem;
+        --wave-container-height: 200px;
+      }
+    }
   }
 }
 </style>

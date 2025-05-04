@@ -39,6 +39,7 @@
         <button
           lr-cursor
           class="lr-button"
+          :disabled="true"
         >
           {{ $t('donate') }}
         </button>

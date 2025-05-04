@@ -44,16 +44,17 @@ import type { AudioModel } from '~/types/audio.model';
 interface Props {
   audio?: AudioModel;
   size?: AudioCardSizeOptions;
+  placeHolderImageUrl?: string;
 }
 
-const { audio, size = 'md' } = defineProps<Props>();
+const { audio, placeHolderImageUrl, size = 'lg' } = defineProps<Props>();
 
 const { getCachedFile } = useCachedFile();
 
-const imageUrl = ref('/images/empty-cover.jpg');
+const imageUrl = ref(placeHolderImageUrl || '/images/empty-cover.jpg');
 const loaded = ref(false);
 
-const shouldShowMediaOverlay = computed(() => size === 'sm' && (audio?.appleMusic || audio?.spotify));
+const shouldShowMediaOverlay = computed(() => size !== 'lg' && (audio?.appleMusic || audio?.spotify));
 
 useWhenReady(
   () => audio,
@@ -93,6 +94,20 @@ useWhenReady(
   align-items: center;
   justify-content: center;
   aspect-ratio: 1 / 1;
+
+  &.sm {
+    max-width: 120px;
+    width: 120px;
+    min-width: auto;
+    overflow: hidden;
+    border-radius: 50%;
+    height: fit-content;
+    border: 4px solid $dark-text-4;
+    img {
+      min-width: none;
+      transform: scale(1.3);
+    }
+  }
 
   img {
     max-width: 100%;
@@ -147,7 +162,7 @@ useWhenReady(
 
 @media (max-width: $xl-breakpoint) {
   .image-container {
-    &.md {
+    &.lg {
       width: 80%;
       margin-bottom: 12px;
     }
@@ -155,13 +170,13 @@ useWhenReady(
 }
 
 @media (max-width: $lg-breakpoint) {
-  .image-container.sm {
+  .image-container.md {
     height: 45%;
   }
 }
 
 @media (max-width: $sm-breakpoint) {
-  .image-container.md {
+  .image-container.lg {
     width: 260px;
     height: 260px;
 
@@ -171,7 +186,7 @@ useWhenReady(
       max-width: unset;
     }
   }
-  .image-container.sm {
+  .image-container.md {
     width: 160px;
     height: 160px;
   }

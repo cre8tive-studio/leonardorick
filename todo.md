@@ -1,5 +1,13 @@
 # FEATURES I REALLY WANT
 
+Add disabled state for previews
+
+Allow users downloads previews and instructions to add to spotify
+
+Add tooltip indicating that more votes and demos will be available next month
+
+add user property "lastReleasedPreview" so I can add some badge and border for the user to see it
+
 if for some reason I disable the preview, I need to remove the upvotes from the this preview
 
 show all previews but disable the ones that should be disabled and add a tooltip saying that next month a new preview will be unlocked

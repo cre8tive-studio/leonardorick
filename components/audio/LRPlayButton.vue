@@ -63,7 +63,7 @@ useWhenReady(
   height: 70px;
   width: 70px;
 
-  &.sm {
+  &.md {
     height: 45px;
     width: 45px;
     svg {
@@ -108,7 +108,7 @@ useWhenReady(
 }
 
 @media (max-width: $md-breakpoint) {
-  .play-audio-buttons.sm {
+  .play-audio-buttons.md {
     height: 45px;
     width: 45px;
     svg {

@@ -20,21 +20,26 @@
             class="lr-text-input"
             type="text"
             placeholder="Email"
+            autocapitalize="none"
+            enterkeyhint="next"
             autocomplete="username"
+            @keyup.enter="passwordInputEl?.focus()"
           />
           <div class="flex flex-col items-end">
             <div class="w-full relative password-wrapper mb-4">
               <input
+                ref="passwordInputEl"
                 v-model="password"
                 lr-cursor
                 class="lr-text-input"
                 :type="passowrdType"
                 :placeholder="$t('password')"
                 autocomplete="current-password"
+                enterkeyhint="done"
               />
               <div
                 lr-cursor
-                class="icon-wrapper"
+                class="eye-icon-wrapper"
                 @click="showPassword"
               >
                 <fa :icon="showPasswordIcon" />
@@ -94,30 +99,29 @@
             v-if="!checkoutId"
             class="stripe"
           >
-            <i18n-t
-              tag="p"
-              keypath="make_sure_already_subscribed_signup"
-            >
-              <template #subscribedLink>
-                <a
-                  class="lr-anchor"
-                  lr-cursor
-                  @click="shouldShowModal = true"
-                >
-                  {{ $t('subscribed') }}
-                </a>
-              </template>
-            </i18n-t>
-            <div
-              class="info"
-              lr-cursor
-              @click="shouldShowModal = true"
-            >
+            <p class="text-center relative">
+              <i18n-t
+                tag="span"
+                keypath="make_sure_already_subscribed_signup"
+              >
+                <template #subscribedLink>
+                  <a
+                    class="lr-anchor"
+                    lr-cursor
+                    @click="shouldShowModal = true"
+                  >
+                    {{ $t('subscribed') }}
+                  </a>
+                </template>
+              </i18n-t>
+
               <fa
+                class="info"
                 lr-cursor
                 icon="circle-info"
+                @click="shouldShowModal = true"
               />
-            </div>
+            </p>
           </div>
         </div>
       </div>
@@ -158,6 +162,8 @@ const timer = computed(() => {
   const diff = forgotPasswordExpiresAt.value - now.value;
   return diff > 0 ? formatTimeHmm(diff) : '0:00';
 });
+
+const passwordInputEl = ref<HTMLInputElement>();
 
 const formDisabled = computed(
   () => (loginType.value === 'signup' && !name.value.trim()) || !email.value.trim() || !password.value.trim()
@@ -292,7 +298,7 @@ async function getSession() {
 <style scoped lang="scss">
 .login {
   .password-wrapper {
-    .icon-wrapper {
+    .eye-icon-wrapper {
       height: 28px;
       width: 28px;
       position: absolute;
@@ -350,20 +356,22 @@ async function getSession() {
     display: flex;
     align-items: center;
     gap: 4px;
+
+    p {
+      text-align: center;
+      padding-right: 28px;
+    }
   }
 
-  .info {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  svg.info {
+    position: absolute;
+    display: inline;
+    padding: 12px;
     cursor: none;
+    transform: translateY(-20%);
     border-radius: 50%;
-
-    svg {
+    > * {
       pointer-events: none;
-      border-radius: 50%;
     }
   }
 }

@@ -1,1 +1,1 @@
-export type AudioCardSizeOptions = 'sm' | 'md';
+export type AudioCardSizeOptions = 'sm' | 'md' | 'lg';

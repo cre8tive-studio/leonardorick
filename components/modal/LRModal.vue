@@ -94,17 +94,17 @@ function close() {
 <style scoped lang="scss">
 .modal {
   color: $main-dark-text;
-  position: fixed;
-  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: auto;
+  min-height: 100vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  transform: translate(-50%, -50%);
-  top: 50%;
-  left: 50%;
+  overflow: hidden;
 
   background-color: rgba($main-dark-bg, 0.22);
   backdrop-filter: blur(6px);
@@ -115,7 +115,6 @@ function close() {
   .header {
     width: 100%;
     margin-right: 5%;
-    margin-bottom: 55px;
     display: flex;
     justify-content: flex-end;
     margin-bottom: 16px;
@@ -147,7 +146,7 @@ function close() {
 
   .inner {
     --max-width: 80%;
-    height: 80vh;
+    height: 75vh;
     width: var(--max-width);
     overflow: auto;
     box-sizing: border-box;
@@ -182,11 +181,14 @@ function close() {
 
 @media (max-width: $sm-breakpoint) {
   .modal {
+    padding-bottom: 2rem;
     .header {
       justify-content: flex-start;
+      margin-bottom: 0;
     }
     .inner {
       width: 100%;
+      height: 70vh;
     }
   }
 }
