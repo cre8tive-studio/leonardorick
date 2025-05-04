@@ -1,46 +1,57 @@
 # FEATURES I REALLY WANT
 
+- finish profile page
+- remove email from allowed emails if users ends subscription
+- block access to previews if user stops paying
+  - maybe add a property to the user (paymentDelayed)
+
+upload some previews
+
 Add disabled state for previews
 
-Allow users downloads previews and instructions to add to spotify
+Allow file downloads previews and instructions to add to spotify
 
 Add tooltip indicating that more votes and demos will be available next month
 
 add user property "lastReleasedPreview" so I can add some badge and border for the user to see it
 
-if for some reason I disable the preview, I need to remove the upvotes from the this preview
-
 show all previews but disable the ones that should be disabled and add a tooltip saying that next month a new preview will be unlocked
+
+if for some reason I disable the preview, I need to remove the upvotes from the this preview
 
 find a way to add some padding in the top of the scrollable area of the modal so it do not touch the border when scrollingL
 
-add showing sidebar somehow inside the modal
 // add party emoji if the value was reached. And a tooltip saying (new release comming soon)
 fix transition on learn more button
 
-- check if theres a way to add an email verification on the stripe payment page
+create confirmation modal for logout
 
-  - Finish how it works modal with two email inputs and send the prefilled_email to checkout page
-    sound
-  - finish profile page
-
-- remove email from allowed emails if users ends subscription
-- block access to previews if user stops paying
-- Allow file download
-
-- create modal
-  -info icon
-
-  - logout
+- logout
 
 - create full local mocked envrionment for development!!!!!
 -
 - multple language emails?
 - Setup staging and production environments on appwrite
 - Add Qonto experience
+- Add google login
 
-Add google login
+===============================================
 
+### Migrate playwrite db
+
+Since playwrite has a lower bandwidth on the free plan, this project uses multiple replicated projects in different accounts.
+
+The migration script contains the required info for them to work properly
+
+to run it you need to have playwrite installed globally:
+
+`pnpm install -g appwrite-cli`
+
+=============================================
+
+Add donate button functionality
+
+- drag and drop the bar to reach the 4000 target and open stripe
 - Single payment of 1000 to unlock all previews and free access forever
 
 Create a single file centralizing the configurations in staging 1 Password

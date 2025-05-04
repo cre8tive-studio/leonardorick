@@ -270,10 +270,12 @@ function changeLoginType() {
 async function handleSubmit() {
   const session = await getSession();
   if (!session) {
+    toast.error({ text: $t('error.generic') });
     return;
   }
   storedSession.value = session;
   router.replace(localeRoute('music', loginType.value === 'signup' ? { query: { login: loginType.value } } : {}));
+  toast.success({ text: $t('login_success') });
 }
 
 async function getSession() {

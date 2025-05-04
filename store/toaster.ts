@@ -15,7 +15,7 @@ const createToast = (text: string, status: TToastStatus): IToast => ({
 });
 
 export const useToasterStore = defineStore('toaster-store', () => {
-  const defaultTimeout = 5000;
+  const defaultTimeout = 3000;
 
   const state = reactive<{ toasts: IToast[] }>({
     toasts: [],

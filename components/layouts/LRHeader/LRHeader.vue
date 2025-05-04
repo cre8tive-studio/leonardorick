@@ -12,13 +12,14 @@
     </NuxtLink>
     <div>
       <template v-if="isLg">
-        <LRHeaderNav class="text-right" />
+        <LRHeaderNav />
       </template>
       <div
         v-else
         class="small-header"
       >
         <button
+          lr-cursor
           class="circle-button burger-button"
           @click="toggleMobileMenu"
         >
@@ -30,7 +31,7 @@
           ref="mobileMenu"
           class="mobile-menu w-full h-full flex flex-col gap-4"
         >
-          <LRHeaderNav @route-selected="toggleMobileMenu" />
+          <LRHeaderNav @toggle-mobile-menu="toggleMobileMenu" />
         </div>
       </div>
     </div>
@@ -117,6 +118,7 @@ function toggleMobileMenu() {
       border: 1px solid $main-dark-bg;
       width: 40%;
       background-color: $main-dark-bg;
+      pointer-events: none; // for lr-cursor
     }
   }
   .close-button {

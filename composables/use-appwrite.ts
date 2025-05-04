@@ -1,4 +1,4 @@
-import { Account, Client, Databases } from 'appwrite';
+import { Account, AppwriteException, Client, Databases } from 'appwrite';
 import { useAppStore } from '~/store';
 import type { SettingsClientModel, SettingsModel } from '~/types/settings.model';
 import type { UserModel } from '~/types/user.model';
@@ -94,7 +94,17 @@ const useAppwrite = () => {
   const logout = async () => {
     const session = await getCurrentSession();
     if (session) {
-      await account.deleteSession(session.$id);
+      try {
+        await account.deleteSession(session.$id);
+      } catch (e) {
+        if (e instanceof AppwriteException) {
+          // if Unauthorized we just bypass because it means
+          // the user already logged out on another tab
+          if (e.code !== 401) {
+            throw e;
+          }
+        }
+      }
     }
     storedSession.value = null;
   };

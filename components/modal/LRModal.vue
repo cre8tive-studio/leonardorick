@@ -40,11 +40,12 @@ interface Emits {
 interface Props {
   shouldShowModal: boolean;
   maxWidth: string;
+  height?: string;
 }
 
 const attrs = useAttrs();
 const $emit = defineEmits<Emits>();
-const { shouldShowModal, maxWidth } = defineProps<Props>();
+const { shouldShowModal, maxWidth, height = '75vh' } = defineProps<Props>();
 
 const { enableScroll, disableScroll } = useAnimationStore();
 
@@ -52,7 +53,9 @@ const modalEl = ref<HTMLDivElement>();
 const innerEl = ref<HTMLDivElement>();
 const modalLenis = ref<Lenis>();
 // on mounted here is only the first time the modal opens, that's why
-// we need this logic around shouldSHowModal
+// we need this logic around watching shouldShowModal. This solution
+// consider a modal that migiht be opened right on the first screen
+// and that's why we need {immediate: true}
 onMounted(() => {
   watch(
     () => shouldShowModal,
@@ -62,8 +65,9 @@ onMounted(() => {
 
       if (isOpen) {
         // acts like onMounted
-        if (!innerEl.value) return;
-        innerEl.value.style.setProperty('--max-width', maxWidth);
+        if (!modalEl.value) return;
+        modalEl.value.style.setProperty('--max-width', maxWidth);
+        modalEl.value.style.setProperty('--height', height);
         disableScroll({ blockTogglingScroll: true });
 
         modalLenis.value = new Lenis({
@@ -93,8 +97,10 @@ function close() {
 
 <style scoped lang="scss">
 .modal {
+  --max-width: 80%;
+  --height: 75vh;
   color: $main-dark-text;
-  position: absolute;
+  position: fixed; // if you someday try to change this approach, please test opening the modal after scrolling
   top: 0;
   left: 0;
   height: auto;
@@ -105,6 +111,7 @@ function close() {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  padding-bottom: 6rem;
 
   background-color: rgba($main-dark-bg, 0.22);
   backdrop-filter: blur(6px);
@@ -113,8 +120,7 @@ function close() {
   transition: color 0.3s $default-ease;
 
   .header {
-    width: 100%;
-    margin-right: 5%;
+    width: var(--max-width);
     display: flex;
     justify-content: flex-end;
     margin-bottom: 16px;
@@ -145,8 +151,7 @@ function close() {
   }
 
   .inner {
-    --max-width: 80%;
-    height: 75vh;
+    height: var(--height);
     width: var(--max-width);
     overflow: auto;
     box-sizing: border-box;
@@ -174,15 +179,14 @@ function close() {
     padding-inline: 16px;
     .inner {
       padding-inline: 32px;
-      width: 100%;
     }
   }
 }
 
 @media (max-width: $sm-breakpoint) {
   .modal {
-    padding-bottom: 2rem;
     .header {
+      width: 100%;
       justify-content: flex-start;
       margin-bottom: 0;
     }

@@ -2,6 +2,8 @@
     "about_me": "Sobre mim",
     "all_rights_reserved": "Todos os Direitos Reservaods por Leonardo Rick. Feito com 💙 em Lisboa, Portugal",
     "already_have_an_account": "Já tem uma conta?",
+    "are_you_sure_logout": "Tem certeza que quer sair?",
+    "back": "Voltar",
     "being_nerd_for": "Sendo um nerd por",
     "confirm_email": "Confirm email",
     "confirm_password": "Confirme a senha",
@@ -26,8 +28,11 @@
     "join_supporters": "Se torne um apoiador",
     "learn_more": "Saiba mais",
     "link_expired": "O link expirou, por favor, tente novamente",
+    "logged_out_successfully": "Logout realizado com sucesso.",
     "login": "Login",
+    "login_success": "Login realizado com sucesso.",
     "logout": "Sair",
+    "manage_subscription": "Atualize sua subscrição",
     "make_sure_already_subscribed_signup": "Certifique-se de já estar {subscribedLink} para habilitar o cadastro",
     "minute": "Minuto | Minutos",
     "month": "Mês | Meses",
@@ -60,6 +65,7 @@
     "welcome": "Bem vindo",
     "work_more_information": "Para mais detalhes sobre cada trabalho veja meu linkedIn",
     "year": "Ano | Anos",
+    "you_are_already_logged_in": "Você já está logado.",
     "alt": {
         "cover_image": "Imagem da capa da música: {songName}"
     },

@@ -5,7 +5,7 @@
         <NuxtLink
           lr-cursor
           :to="localeRoute('index')"
-          @click="$emit('routeSelected')"
+          @click="$emit('toggleMobileMenu')"
         >
           <span>Home</span>
           <span>Home</span>
@@ -15,7 +15,7 @@
         <NuxtLink
           lr-cursor
           :to="localeRoute('music')"
-          @click="$emit('routeSelected')"
+          @click="$emit('toggleMobileMenu')"
         >
           <span>{{ $t('music') }}</span>
           <span>{{ $t('music') }}</span>
@@ -23,21 +23,20 @@
       </li>
       <ClientOnly>
         <li v-if="!session">
-          <NuxtLink
+          <button
             lr-cursor
-            :to="localeRoute('login')"
-            @click="$emit('routeSelected')"
+            @click="handleLogin"
           >
             <span>{{ $t('login') }}</span>
             <span>{{ $t('login') }}</span>
-          </NuxtLink>
+          </button>
         </li>
         <template v-else>
           <li>
             <NuxtLink
               lr-cursor
               :to="localeRoute('profile')"
-              @click="$emit('routeSelected')"
+              @click="$emit('toggleMobileMenu')"
             >
               <span>{{ $t('profile') }}</span>
               <span>{{ $t('profile') }}</span>
@@ -46,7 +45,7 @@
           <li>
             <button
               lr-cursor
-              @click="handleLogout"
+              @click="shouldShowModal = true"
             >
               <span>{{ $t('logout') }}</span>
               <span>{{ $t('logout') }}</span>
@@ -58,21 +57,67 @@
     <div class="p-2 test">
       <LRLanguageToggle />
     </div>
+    <LRModal
+      :should-show-modal="shouldShowModal"
+      max-width="500px"
+      height="fit-content"
+      @close="shouldShowModal = false"
+    >
+      <div class="flex flex-col items-center justify-center h-full gap-8">
+        <h2 class="lr-text--body-1-half text-center whitespace-nowrap">{{ $t('are_you_sure_logout') }}</h2>
+        <div class="flex gap-4">
+          <button
+            lr-cursor
+            class="lr-button"
+            @click="shouldShowModal = false"
+          >
+            {{ $t('back') }}
+          </button>
+          <button
+            lr-cursor
+            class="lr-button lr-button-secondary"
+            @click="handleLogout"
+          >
+            {{ $t('logout') }}
+          </button>
+        </div>
+      </div>
+    </LRModal>
   </nav>
 </template>
 
 <script setup lang="ts">
 import { useAppStore } from '~/store';
+import { useToasterStore } from '~/store/toaster';
 
-defineEmits(['routeSelected']);
+const $emit = defineEmits(['toggleMobileMenu']);
 
-const { logout } = useAppwrite();
-const { localeRoute, session } = toRefs(useAppStore());
+const store = useAppStore();
+const router = useRouter();
+const { t: $t } = useI18n();
 
-const handleLogout = async () => {
-  if (confirm('Are you sure you want to logout?')) {
-    await logout();
+const { logout, getCurrentSession } = useAppwrite();
+const toast = useToasterStore();
+const { session } = toRefs(store);
+const { localeRoute } = store;
+
+const shouldShowModal = ref(false);
+
+const handleLogin = async () => {
+  if (await getCurrentSession(true)) {
+    router.push(localeRoute('music'));
+    toast.success({ text: $t('you_are_already_logged_in') });
+  } else {
+    router.push(localeRoute('login'));
   }
+  $emit('toggleMobileMenu');
+};
+const handleLogout = async () => {
+  await logout();
+  router.replace(localeRoute('index'));
+  shouldShowModal.value = false;
+  toast.success({ text: $t('logged_out_successfully') });
+  $emit('toggleMobileMenu');
 };
 </script>
 

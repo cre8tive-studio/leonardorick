@@ -37,7 +37,7 @@ export default defineNuxtConfig({
     public: {
       environment: process.env.VUE_APP_ENVIRONMENT,
       stripePaymentLink: process.env.VUE_APP_STRIPE_PAYMENT_LINK,
-      sripeClientPortalLink: process.env.VUE_APP_STRIPE_CLIENT_PORTAL_LINK,
+      stripeClientPortalLink: process.env.VUE_APP_STRIPE_CLIENT_PORTAL_LINK,
       appwrite: {
         endpoint: process.env.VUE_APP_APPWRITE_ENDPOINT,
         project: process.env.VUE_APP_APPWRITE_PROJECT,

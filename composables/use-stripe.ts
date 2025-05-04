@@ -11,7 +11,7 @@ const useStripe = () => {
     ({ stripeSecretKey } = runtime);
   }
 
-  const { stripePaymentLink } = runtime.public;
+  const { stripePaymentLink, stripeClientPortalLink } = runtime.public;
 
   if (!stripe && stripeSecretKey) {
     stripe = new Stripe(stripeSecretKey, { apiVersion: '2023-08-16' });
@@ -41,6 +41,18 @@ const useStripe = () => {
     window.open(`${stripePaymentLink}${params ? '?' + params : ''}`, '_blank');
   }
 
-  return { stripe, getSubscription, getCheckout, clientGetCheckoutValid, goToStripeSubscriptionPage };
+  function goToStripeClientPortal(urlParams: { prefilled_email?: string; locale?: LanguageOptions } = {}) {
+    const params = new URLSearchParams(urlParams);
+    window.open(`${stripeClientPortalLink}${params ? '?' + params : ''}`, '_blank');
+  }
+
+  return {
+    stripe,
+    getSubscription,
+    getCheckout,
+    clientGetCheckoutValid,
+    goToStripeSubscriptionPage,
+    goToStripeClientPortal,
+  };
 };
 export default useStripe;
