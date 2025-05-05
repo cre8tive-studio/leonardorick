@@ -114,13 +114,7 @@
                   </a>
                 </template>
               </i18n-t>
-
-              <fa
-                class="info"
-                lr-cursor
-                icon="circle-info"
-                @click="shouldShowModal = true"
-              />
+              <LRInfoIcon @click="shouldShowModal = true" />
             </p>
           </div>
         </div>
@@ -359,18 +353,6 @@ async function initSession() {
     p {
       text-align: center;
       padding-right: 28px;
-    }
-  }
-
-  svg.info {
-    position: absolute;
-    display: inline;
-    padding: 12px;
-    cursor: none;
-    transform: translateY(-20%);
-    border-radius: 50%;
-    > * {
-      pointer-events: none;
     }
   }
 }

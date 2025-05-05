@@ -35,7 +35,12 @@
           class="active-content"
         >
           <div v-if="previewsMetadataLoaded">
-            <p class="lr-text--body-0-half mb-6">{{ $t('votes_available') }}: {{ upvotesAvailable }}</p>
+            <div class="mb-6 flex">
+              <p class="lr-text--body-0-half relative items-center">
+                <span>{{ $t('votes_available') }}: {{ upvotesAvailable }}</span>
+                <LRInfoIcon v-tooltip="$t('more_votes_previews_available_next_month')" />
+              </p>
+            </div>
             <div class="audio-list">
               <LRAudioCardPreview
                 v-for="preview in previews"

@@ -9,6 +9,19 @@
 }
 
 /**
+* tooltip
+*/
+
+.v-popper--theme-tooltip {
+  z-index: 999 !important;
+  .v-popper__inner {
+    background-color: rgba($dark-text-4, 1) !important;
+    // box-shadow: $box-shadow-elevation-2;
+    padding: 10px 12px 8px !important;
+  }
+}
+
+/**
 * scrollbar
 */
 .hide-scrollbar {
@@ -69,7 +82,6 @@
 /**
 * forms
 */
-
 .lr-form-container {
   color: $main-dark-text;
   display: flex;
@@ -129,8 +141,7 @@
 
 /**
   * layouts
-  */
-
+*/
 .lr-safe-pointer-events-none {
   pointer-events: none;
   > * {

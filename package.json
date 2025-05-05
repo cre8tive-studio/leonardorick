@@ -2,7 +2,7 @@
   "name": "nuxt-app",
   "private": true,
   "type": "module",
-  "version": "1.0.47",
+  "version": "1.0.48",
   "scripts": {
     "build": "nuxt build",
     "clean-build": "rm -rf .nuxt dist .output .netlify server/dist && npm run build",
@@ -54,6 +54,7 @@
     "@sentry/nuxt": "^8.31.0",
     "@vueuse/core": "^10.11.1",
     "appwrite": "^17.0.2",
+    "floating-vue": "^5.2.2",
     "graphql-request": "^6.1.0",
     "gsap": "^3.12.5",
     "lenis": "^1.1.13",

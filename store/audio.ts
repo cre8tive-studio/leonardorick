@@ -51,7 +51,9 @@ export const useAudioStore = defineStore('audioStore', () => {
       }
     }
 
-    privateState.previews = newPreviews.sort((a, b) => a.number - b.number);
+    privateState.previews = newPreviews
+      .sort((a, b) => b.number - a.number)
+      .sort((a, b) => Number(b.enabled) - Number(a.enabled));
     updateVotesCallback();
   }
 

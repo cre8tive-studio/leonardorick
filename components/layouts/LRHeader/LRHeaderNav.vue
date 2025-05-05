@@ -104,7 +104,8 @@ const { localeRoute } = store;
 const shouldShowModal = ref(false);
 
 const handleLogin = async () => {
-  if (await getCurrentSession(true)) {
+  const { session: s } = await getCurrentSession(true);
+  if (s) {
     router.push(localeRoute('music'));
     toast.success({ text: $t('you_are_already_logged_in') });
   } else {
