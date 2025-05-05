@@ -55,7 +55,7 @@ const useStripe = () => {
   };
 
   /**
-   * client methods
+   * * client methods
    */
 
   async function clientRenewSubscription() {
@@ -73,7 +73,7 @@ const useStripe = () => {
 
   function goToStripeClientPortal(urlParams: { prefilled_email?: string; locale?: LanguageOptions } = {}) {
     const params = new URLSearchParams(urlParams);
-    window.open(`${stripeClientPortalLink}${params ? '?' + params : ''}`, '_blank');
+    window.open(`${stripeClientPortalLink}${params ? '?' + params : ''}`);
   }
 
   return {

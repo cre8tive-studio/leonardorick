@@ -35,17 +35,21 @@ import { gsap } from 'gsap';
 import { useAudioStore } from '~/store/audio';
 import { COLORS } from '~/utils/constants/colors';
 import type { AudioCardSizeOptions } from '~/types/audio-card-size.options';
+import peaks from '~/public/jsons/audio-peaks.json';
+import type { PlayOptions } from '~/types/play.options';
 
 interface Props {
   audioUrl: string;
+  enabled?: boolean;
   size?: Exclude<AudioCardSizeOptions, 'sm'>;
 }
 
 interface Emits {
   (event: 'audioprocess', currentTime: number): void;
+  (e: 'play', value: PlayOptions): void;
 }
 
-const { audioUrl, size = 'lg' } = defineProps<Props>();
+const { enabled = true, audioUrl, size = 'lg' } = defineProps<Props>();
 
 const $emit = defineEmits<Emits>();
 
@@ -67,6 +71,10 @@ onMounted(() => {
     () => audioUrl,
     () => createWaveSurfer()
   );
+
+  if (!enabled && waveformEl.value) {
+    createMockWaveSurfer();
+  }
 });
 
 watch(breakpoints.current, () => {
@@ -81,6 +89,8 @@ function getComputedHeight() {
 }
 
 function createWaveSurfer() {
+  if (!waveformEl.value) throw new Error('Waveform container not defined on wave creation');
+
   const ctx = document.createElement('canvas').getContext('2d');
   if (!ctx) {
     throw new Error('Failed to get 2D context');
@@ -90,8 +100,6 @@ function createWaveSurfer() {
   gradient.addColorStop(0, '#ffffff'); // Pure white at the top
   gradient.addColorStop(0.5, '#d9d9d9'); // Light gray in the middle
   gradient.addColorStop(1, '#a6a6a6'); // Soft gray at the bottom
-
-  if (!waveformEl.value) throw new Error('Waveform container not defined on wave creation');
 
   const wavesurfer = WaveSurfer.create({
     height: 'auto',
@@ -109,11 +117,46 @@ function createWaveSurfer() {
   });
 
   wave.value = wavesurfer;
+  setOnReady(wavesurfer);
 
   wavesurfer.on('interaction', () => play());
 
+  wavesurfer.on('audioprocess', () => {
+    wavesurfer.setVolume(volume.value);
+    const current = wavesurfer.getCurrentTime();
+    currentTime.value = formatSongTime(current);
+    $emit('audioprocess', current);
+  });
+  addWaveOnList(wavesurfer);
+}
+
+async function createMockWaveSurfer() {
+  if (!waveformEl.value) throw new Error('Waveform container not defined on wave creation');
+
+  const wavesurfer = WaveSurfer.create({
+    height: 'auto',
+    cursorWidth: 5,
+    barWidth: 2,
+    barHeight: 0.7,
+    barGap: 3,
+    barRadius: 10,
+    container: waveformEl.value,
+    waveColor: COLORS.darkText3,
+    cursorColor: COLORS.darkText4,
+    normalize: false,
+  });
+
+  wavesurfer.load(
+    'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU2LjM2LjEwMAAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV6urq6urq6urq6urq6urq6urq6urq6urq6v////////////////////////////////8AAAAATGF2YzU2LjQxAAAAAAAAAAAAAAAAJAAAAAAAAAAAASDs90hvAAAAAAAAAAAAAAAAAAAA//MUZAAAAAGkAAAAAAAAA0gAAAAATEFN//MUZAMAAAGkAAAAAAAAA0gAAAAARTMu//MUZAYAAAGkAAAAAAAAA0gAAAAAOTku//MUZAkAAAGkAAAAAAAAA0gAAAAANVVV',
+    [peaks.data]
+  );
+
+  setOnReady(wavesurfer);
+}
+
+function setOnReady(wavesurfer: WaveSurfer) {
   wavesurfer.on('ready', () => {
-    if (!waveContainerEl.value || !waveformEl.value || !wave.value) return;
+    if (!waveContainerEl.value || !waveformEl.value) return;
 
     const placeholder = waveContainerEl.value.querySelector<HTMLElement>('.wave-placeholder');
     if (!placeholder) return;
@@ -134,17 +177,10 @@ function createWaveSurfer() {
       delay: 0.1, // 100ms delay
     });
   });
-
-  wavesurfer.on('audioprocess', () => {
-    wavesurfer.setVolume(volume.value);
-    const current = wavesurfer.getCurrentTime();
-    currentTime.value = formatSongTime(current);
-    $emit('audioprocess', current);
-  });
-  addWaveOnList(wavesurfer);
 }
 
-function playPause() {
+function playPause($event: PlayOptions) {
+  $emit('play', $event);
   if (!wave.value) return;
   if (wave.value.isPlaying()) {
     wave.value.pause();

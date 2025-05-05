@@ -12,14 +12,10 @@
 </template>
 
 <script setup lang="ts">
-import { useAppStore } from '~/store';
 interface Emits {
   (e: 'join-supporters-clicked'): void;
 }
 defineEmits<Emits>();
-
-const { user, lang } = toRefs(useAppStore());
-const { goToStripeClientPortal } = useStripe();
 </script>
 
 <style scoped lang="scss">

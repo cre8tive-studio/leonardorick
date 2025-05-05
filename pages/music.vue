@@ -125,6 +125,14 @@ onMounted(async () => {
   });
 });
 
+watch(subscription, (newSubscription, oldSubscription) => {
+  if (oldSubscription && newSubscription && newSubscription.status !== oldSubscription.status) {
+    if (newSubscription.status === 'active') {
+      setLoggedInformation();
+    }
+  }
+});
+
 async function loadReleases() {
   getReleasesMetadata().then(async (data) => {
     releases.value = data;

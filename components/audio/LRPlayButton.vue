@@ -4,7 +4,7 @@
     class="play-audio-button"
     :class="size"
     :disabled="disabled"
-    @click="$emit('play')"
+    @click="$emit('play', isPlaying ? 'pause' : 'play')"
   >
     <fa
       v-if="isPlaying"
@@ -20,13 +20,14 @@
 <script setup lang="ts">
 import type WaveSurfer from 'wavesurfer.js';
 import type { AudioCardSizeOptions } from '~/types/audio-card-size.options';
+import type { PlayOptions } from '~/types/play.options';
 
 interface Props {
   wave: WaveSurfer | undefined;
   size: AudioCardSizeOptions;
 }
 interface Emits {
-  (e: 'play'): void;
+  (e: 'play', value: PlayOptions): void;
 }
 const { wave } = defineProps<Props>();
 defineEmits<Emits>();

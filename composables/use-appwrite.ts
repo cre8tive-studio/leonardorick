@@ -1,7 +1,7 @@
 import { Account, AppwriteException, Client, Databases, type Models } from 'appwrite';
 import { useAppStore } from '~/store';
 import type { SettingsClientModel, SettingsModel } from '~/types/settings.model';
-import type { UserModel } from '~/types/user.model';
+import type { AppwriteUserModel, UserModel } from '~/types/user.model';
 import type { UpvotesModel, UpvotesClientModel } from '~/types/upvotes.model';
 import { parseUpvotes } from '~/utils/parsers/upvotes.parser';
 import { parseSettings } from '~/utils/parsers/settings.parser';
@@ -40,12 +40,13 @@ const useAppwrite = () => {
   }
 
   const getCurrentSession = async (fresh = false) => {
+    const empty = { session: null, user: null, subscription: null };
     if (!storedSession.value && !fresh) {
-      return null;
+      return empty;
     }
 
     if (!fresh && storedSession.value && isNotExpired(getExpireTime(0, storedSession.value.expire))) {
-      return storedSession.value;
+      return { session: storedSession.value, user: user.value, subscription: subscription.value };
     }
 
     let session: Models.Session;
@@ -56,16 +57,17 @@ const useAppwrite = () => {
       if (e instanceof AppwriteException && [404, 401].includes(e.code)) {
         // we bypass this error because theres no way to avoid the error from happening. This is the way
         // stripe checks if the user is logged in or not and it returns a 404 if the user is not present
-        return null;
+        return empty;
       }
       throw e;
     }
 
     if (session) {
       storedSession.value = session;
-      await updateUserAndSubscription(session);
+      const { user: u, subscription: s } = await updateUserAndSubscription(session);
+      return { session, user: u, subscription: s };
     }
-    return null;
+    return empty;
   };
 
   async function createEmailPasswordSession(...params: Parameters<typeof account.createEmailPasswordSession>) {
@@ -76,12 +78,14 @@ const useAppwrite = () => {
   }
 
   async function updateUserAndSubscription(session: Models.Session) {
-    user.value = await databases.getDocument<UserModel>(databaseId, usersCollection, session.userId);
+    user.value = await databases.getDocument<AppwriteUserModel>(databaseId, usersCollection, session.userId);
     subscription.value = await request<SubscriptionModel>('/api/getSubscription', {
       method: 'post',
       body: { subscriptionId: user.value.subscriptionId },
       getJWT,
     });
+
+    return { user: user.value, subscription: subscription.value };
   }
 
   const initSettings = async (st?: SettingsModel): Promise<SettingsClientModel> => {
@@ -112,8 +116,17 @@ const useAppwrite = () => {
     });
   };
 
+  const removefeaturedPreview = async (previews: number[], previewNumber: number) => {
+    const featuredPreviews = previews.filter((n) => n !== previewNumber);
+    return request<void>('/api/updateUser', {
+      authenticated: true,
+      method: 'post',
+      body: { featuredPreviews },
+    });
+  };
+
   const logout = async () => {
-    const session = await getCurrentSession();
+    const { session } = await getCurrentSession();
     if (session) {
       try {
         await account.deleteSession(session.$id);
@@ -131,7 +144,7 @@ const useAppwrite = () => {
   };
 
   async function getJWT() {
-    const session = await getCurrentSession();
+    const { session } = await getCurrentSession();
     if (session) {
       if (lastJWT.value.jwt && isNotExpired(lastJWT.value.expire)) {
         return lastJWT.value.jwt;
@@ -155,6 +168,7 @@ const useAppwrite = () => {
     getJWT,
     getUpvotes,
     getReleasesMetadata,
+    removefeaturedPreview,
 
     initSettings,
     updateVotes,

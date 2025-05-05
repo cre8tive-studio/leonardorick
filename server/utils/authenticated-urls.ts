@@ -4,6 +4,7 @@ const _AUTHENTICATED_URLS: Array<Parameters<typeof useFetch>[0]> = [
   '/api/getPreviewsMetadata',
   '/api/getPreviewFile',
   '/api/renewSubscription',
+  '/api/updateUser',
 ];
 
 // in some urls we might need authentication even without a active subscription and this logic is for hanlding that

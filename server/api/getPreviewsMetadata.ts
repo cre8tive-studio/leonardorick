@@ -37,7 +37,8 @@ export default defineEventHandler(async (event) => {
       description: preview.description,
       number: preview.number,
       votes: preview.votes,
-      fileId: preview.fileId,
+      fileId: preview.enabled ? preview.fileId : '',
+      enabled: preview.enabled,
     })) as PreviewClientModel[];
   } catch (err: any) {
     throw createGenericError(err.message);

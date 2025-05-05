@@ -28,7 +28,7 @@ export const useAudioStore = defineStore('audioStore', () => {
   });
 
   const { getUpvotes, updateVotes } = useAppwrite();
-  const { userId, settings } = toRefs(useAppStore());
+  const { userId, settings, user } = toRefs(useAppStore());
 
   const previewsMaxVotes = computed(() =>
     settings.value ? Math.round(privateState.previews.length * settings.value.upvotesMultiplier) : 0
@@ -43,6 +43,14 @@ export const useAudioStore = defineStore('audioStore', () => {
   });
 
   function setPreviews(newPreviews: PreviewClientModel[]) {
+    if (user.value?.featuredPreviews) {
+      for (const preview of newPreviews) {
+        if (user.value.featuredPreviews.includes(preview.number)) {
+          preview.featured = true;
+        }
+      }
+    }
+
     privateState.previews = newPreviews.sort((a, b) => a.number - b.number);
     updateVotesCallback();
   }

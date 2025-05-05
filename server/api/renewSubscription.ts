@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
   try {
     const newSub = await renewSubscription(user.stripeId);
     // we need to update the user straight away so this endpoint can't be called twice
-    await updateUser(userId, newSub.id);
+    await updateUser(userId, { subscriptionId: newSub.id });
     return newSub;
   } catch (e: any) {
     throw createError({

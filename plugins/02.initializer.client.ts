@@ -10,7 +10,7 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
 
   printConsoleIntroduction(environment, baseUrl, clientVersion, personalInfo.value?.links.linkedin);
 
-  const { refreshCacheBasedOnGlobalUpdateAt } = useCleanCache();
+  const { refreshCacheBasedOnGlobalUpdateAt, refreshCacheBasedOnSubscription } = useCleanCache();
   const { getCurrentSession, initSettings } = useAppwrite();
   let initializerClientError = null;
   try {
@@ -20,9 +20,13 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
     localforage.setDriver(localforage.INDEXEDDB);
 
     // appwritee
-    await getCurrentSession(true);
     const settings = await initSettings();
     await refreshCacheBasedOnGlobalUpdateAt(settings);
+
+    const { subscription } = await getCurrentSession(true);
+    if (subscription) {
+      await refreshCacheBasedOnSubscription(subscription);
+    }
   } catch (error) {
     initializerClientError = error;
   }

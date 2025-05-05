@@ -1,6 +1,7 @@
 import { useLocalStorage } from '@vueuse/core';
 import localforage from 'localforage';
 import type { SettingsClientModel } from '~/types/settings.model';
+import type { SubscriptionModel } from '~/types/subscription.model';
 
 const useCleanCache = () => {
   const localUpdatedAt = useLocalStorage('local-updated-at', new Date());
@@ -16,7 +17,17 @@ const useCleanCache = () => {
     }
   }
 
-  return { refreshCacheBasedOnGlobalUpdateAt };
+  async function refreshCacheBasedOnSubscription(subscription: SubscriptionModel) {
+    if (subscription.status === 'canceled') {
+      localforage.iterate((_, key) => {
+        if (key.includes('auth-')) {
+          localforage.removeItem(key);
+        }
+      });
+    }
+  }
+
+  return { refreshCacheBasedOnGlobalUpdateAt, refreshCacheBasedOnSubscription };
 };
 
 export default useCleanCache;

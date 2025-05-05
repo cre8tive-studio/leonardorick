@@ -7,7 +7,7 @@ import { createGenericError } from '../utils/errors';
 import type { Auth } from '~/types/auth.model';
 import useServerAppwrite from '~/composables/use-server-appwrite';
 import useStripe from '~/composables/use-stripe';
-import { SubscriptionModel } from '~/types/subscription.model';
+import type { SubscriptionModel } from '~/types/subscription.model';
 
 const { getLimitedAccount } = useServerAppwrite();
 const { getSubscription } = useStripe();
@@ -54,9 +54,9 @@ export default defineEventHandler(async (event) => {
           throw createGenericError('User unauthenticated');
         });
     }
+    event.context.auth = auth;
+    event.context.subscription = subscription;
   }
-  event.context.auth = auth;
-  event.context.subscription = subscription;
 });
 
 function urlShouldBeAuthenticated(url: string) {

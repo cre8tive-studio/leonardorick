@@ -5,6 +5,7 @@ import type { StripeInvoceObjectModel } from '../types/stripe-invoice-object.mod
 import useServerAppwrite from '~/composables/use-server-appwrite';
 import useStripe from '~/composables/use-stripe';
 import { incrementAvailablePreviews } from '~/utils/music';
+import type { AppwriteUserModel } from '~/types/user.model';
 
 const { databases, databaseId, collections, queryAllowedEmail, getUserWithEmail, getSettings, getUser } =
   useServerAppwrite();
@@ -80,9 +81,8 @@ export default defineEventHandler(async (nuxtEvent) => {
       });
     }
 
-    // if subscription id is different in allowed-email it might mean that the user canceled the subscription
-    // and re-subscribed. To keep consistency we always confirm it and update it
-    if (allowedEmail.subscriptionId !== subscription) {
+    const isReSubscription = allowedEmail.subscriptionId !== subscription;
+    if (isReSubscription) {
       databases.updateDocument(databaseId, collections.allowedEmails, allowedEmail.$id, {
         subscriptionId: subscription,
       });
@@ -90,13 +90,14 @@ export default defineEventHandler(async (nuxtEvent) => {
 
     // is allowed email already exists it means that i'ts a recurrent payment
     // and we need to update the user with the new number of available previews
-    const { $id } = (await getUserWithEmail(customerEmail)) || {};
-
+    const { $id, availablePreviews } = (await getUserWithEmail(customerEmail)) || {};
+    const newAvailablePreviews = await getavailablePreviews(subscription, false, $id);
     if ($id) {
-      return databases.updateDocument(databaseId, collections.users, $id, {
+      return databases.updateDocument<AppwriteUserModel>(databaseId, collections.users, $id, {
         stripeId: customer,
         subscriptionId: subscription,
-        availablePreviews: await getavailablePreviews(subscription, false, $id),
+        availablePreviews: newAvailablePreviews,
+        featuredPreviews: getfeaturedPreviews(availablePreviews, newAvailablePreviews),
       });
     }
   } catch (err: any) {
@@ -106,6 +107,11 @@ export default defineEventHandler(async (nuxtEvent) => {
     });
   }
 });
+
+// used so we can add the featured banner
+const getfeaturedPreviews = (previousList: number[], currentList: number[]) => {
+  return currentList.filter((item) => !previousList.includes(item)) || [];
+};
 
 const getavailablePreviews = async (subscription: string, creating: boolean, userId?: string) => {
   const { startPreviewsCount, previewsReady } = await getSettings();

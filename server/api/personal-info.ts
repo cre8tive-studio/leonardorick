@@ -1,6 +1,6 @@
 import { request, gql } from 'graphql-request';
 import { getFormattedLocale } from '../utils/get-formatted-locale';
-import { PersonalInfoResponse } from '../../types/graphql-queries/personal-info-response';
+import type { PersonalInfoResponse } from '../../types/graphql-queries/personal-info-response';
 
 export default defineEventHandler(async (event) => {
   const { locale } = getQuery(event);

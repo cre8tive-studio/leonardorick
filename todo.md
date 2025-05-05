@@ -1,16 +1,20 @@
 # FEATURES I REALLY WANT
 
-upload some previews
-
 Add disabled state for previews
 
-Allow file downloads previews and instructions to add to spotify
+- add corner lace
 
-Add tooltip indicating that more votes and demos will be available next month
+show all previews but disable the ones that should be disabled and add a tooltip saying that next month a new preview will be unlocked
 
 add user property "lastReleasedPreview" so I can add some badge and border for the user to see it
 
-show all previews but disable the ones that should be disabled and add a tooltip saying that next month a new preview will be unlocked
+Add tooltip indicating that more votes and demos will be available next month
+
+Allow file downloads previews and instructions to add to spotify
+
+setup covers
+
+upload some previews
 
 if for some reason I disable the preview, I need to remove the upvotes from the this preview
 

@@ -2,7 +2,7 @@ import { Databases, Users, Client as ServerClient, Account as ServerAccount, Que
 
 import type { AllowedEmailModel } from '~/server/types/allowed-email.model';
 import type { SettingsModel } from '~/types/settings.model';
-import type { UserModel } from '~/types/user.model';
+import type { AppwriteUserModel, UpdatableUserModel } from '~/types/user.model';
 import { parseSettings } from '~/utils/parsers/settings.parser';
 
 let serverClient: ServerClient;
@@ -46,18 +46,16 @@ const useServerAppwrite = () => {
 
   const getUserWithEmail = async (email: string) => {
     return databases
-      .listDocuments<UserModel>(databaseId, usersCollection, [Query.equal('email', [email])])
+      .listDocuments<AppwriteUserModel>(databaseId, usersCollection, [Query.equal('email', [email])])
       .then((res) => res.documents[0]);
   };
 
   const getUser = async (uid: string) => {
-    return databases.getDocument<UserModel>(databaseId, usersCollection, uid);
+    return databases.getDocument<AppwriteUserModel>(databaseId, usersCollection, uid);
   };
 
-  const updateUser = async (uid: string, subscriptionId: string) => {
-    return databases.updateDocument(databaseId, usersCollection, uid, {
-      subscriptionId,
-    });
+  const updateUser = async (uid: string, user: Partial<UpdatableUserModel>) => {
+    return databases.updateDocument(databaseId, usersCollection, uid, user);
   };
 
   const getSettings = async () => {

@@ -102,7 +102,7 @@ For reidrect rules to work, your endpoints must be with proxy enabled
 - previews:
   - index_fileid: to query all documents on the list of the user available previews
 
-#### Deleting a user
+#### Deleting a user manually
 
 1. Delete from stripe
 2. Delete from users Auth
@@ -113,3 +113,7 @@ For reidrect rules to work, your endpoints must be with proxy enabled
 
 - There's no array type so you select the type you wwant and them select if you want this to be an array.
 - If you create an array there's no functionalitty on making it required because the default is always an empty array: https://discord.com/channels/564160730845151244/1090006380301275187
+
+#### Upading database
+
+In appwrite we can't block single properties in a collection to be updated so we just block all updates to the user database to avoid allowing the user to update itself wrongly. In this collection and in many others you should use the relative nuxt endpoint (created by us) that deals with updating the collection.

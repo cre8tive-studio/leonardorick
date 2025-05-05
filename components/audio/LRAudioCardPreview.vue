@@ -1,5 +1,8 @@
 <template>
-  <div class="lr-audio-card-preview">
+  <div
+    class="lr-audio-card-preview"
+    :class="{ enabled: preview.enabled }"
+  >
     <div>
       <LRAudioCover
         class="mb-4"
@@ -12,7 +15,7 @@
         class="votes-count lr-text--body-0-half text-center w-full"
         :class="{ 'has-vote': voteCount }"
       >
-        {{ voteCount }} {{ $t('votes', { count: voteCount }) }}
+        {{ $t('votes', { count: voteCount }) }}
       </p>
     </div>
 
@@ -24,8 +27,10 @@
 
       <LRWavePlayer
         class="mb-4"
+        :enabled="preview.enabled"
         :audio-url="audioUrl"
         size="md"
+        @play="handlePlay"
       />
 
       <div class="flex gap-4">
@@ -47,6 +52,12 @@
         </button>
       </div>
     </div>
+
+    <LRRibbon
+      v-if="preview.featured && preview.enabled"
+      :text="$t('new')"
+      type="featured"
+    />
   </div>
 </template>
 
@@ -54,18 +65,20 @@
 import { isDefined } from '@leonardorick/utils';
 import { useAppStore } from '~/store';
 import { useAudioStore } from '~/store/audio';
+import type { PlayOptions } from '~/types/play.options';
 import type { PreviewClientModel } from '~/types/preview.model';
 
-const { userId } = toRefs(useAppStore());
+const { t: $t } = useI18n();
+const { userId, user } = toRefs(useAppStore());
 const store = useAudioStore();
 const { upvotes, upvotesAvailable, previewsMaxVotes } = toRefs(store);
 const { addVote, removeVote } = store;
+const { removefeaturedPreview } = useAppwrite();
 
 const voteCount = computed(() => upvotes.value[preview.number]?.length || 0);
 const isRemoveVoteDisabled = computed(
   () => upvotesAvailable === previewsMaxVotes || !upvotes.value[preview.number]?.includes(userId.value)
 );
-
 interface Props {
   preview: PreviewClientModel;
 }
@@ -73,14 +86,22 @@ const { preview } = defineProps<Props>();
 const { getCachedFile } = useCachedFile();
 const audioUrl = ref('');
 
-getCachedFile({
-  fileId: preview.fileId,
-  url: `/api/getPreviewFile/${preview.number}`,
-  authenticated: true,
-  method: 'post',
-}).then((data) => {
-  audioUrl.value = URL.createObjectURL(data);
-});
+if (preview.fileId) {
+  getCachedFile({
+    fileId: preview.fileId,
+    url: `/api/getPreviewFile/${preview.number}`,
+    authenticated: true,
+    method: 'post',
+  }).then((data) => {
+    audioUrl.value = URL.createObjectURL(data);
+  });
+}
+
+function handlePlay($event: PlayOptions) {
+  if ($event === 'play' && user.value?.featuredPreviews?.includes(preview.number)) {
+    removefeaturedPreview(user.value.featuredPreviews, preview.number);
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -88,6 +109,7 @@ getCachedFile({
   height: 320px;
   padding-inline: 24px;
   background-color: $dark-text-6;
+  position: relative;
 
   display: flex;
   gap: 24px;
@@ -115,6 +137,11 @@ getCachedFile({
     h2 {
       text-align: left;
     }
+  }
+
+  &:not(.enabled) {
+    opacity: 0.7;
+    background: repeating-linear-gradient(45deg, $dark-text-5, $dark-text-5 10px, $dark-text-6 10px, $dark-text-6 20px);
   }
 }
 

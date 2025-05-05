@@ -11,6 +11,7 @@
     "continue": "continue",
     "day": "Day | Days",
     "designers": "Designers",
+    "disabled": "Disabled",
     "donate": "Donate",
     "dont_have_account_sign_up": "Don't have an account?",
     "engineers": "Engineers",
@@ -40,6 +41,7 @@
     "music": "Music",
     "music_page": "Music Page",
     "name": "Name",
+    "new": "New",
     "password": "Password",
     "password_mismatch": "Password confirmation and password do not match",
     "password_recovery": "Password recovery",
@@ -62,7 +64,7 @@
     "subscribed": "subscribed",
     "update": "Update",
     "vote": "Vote",
-    "votes": "Votos| Vote | {count} Votes",
+    "votes": "{count} Votos | {count} Vote | {count} Votes",
     "votes_available": "Votes available",
     "what_they_said": "What they said",
     "welcome": "Welcome",
@@ -123,6 +125,6 @@
         "recover_password": "We've sent a recovery link to your email. Please change your password by clicking on it.",
         "payment_succeeded_start": "Payment succeeded! Now you are able to create your account with your registered email.",
         "password_updated": "Password reseted successfully",
-        "subscription_renewed": "Subscription renewed successfully! It might take some seconds for the content to be released."
+        "subscription_renewed": "Subscription renewed successfully! It might take some seconds for the content to be available."
     }
 }

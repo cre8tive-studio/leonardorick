@@ -88,6 +88,7 @@ onMounted(() => {
 onUnmounted(() => {
   if (!modalLenis.value) return;
   modalLenis.value.destroy();
+  enableScroll({ blockTogglingScroll: false });
 });
 
 function close() {
