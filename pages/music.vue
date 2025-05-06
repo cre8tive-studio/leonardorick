@@ -34,7 +34,10 @@
           v-if="subscription.status === 'active'"
           class="active-content"
         >
-          <div v-if="previewsMetadataLoaded">
+          <div
+            v-if="previewsMetadataLoaded"
+            class="mb-12"
+          >
             <div class="mb-6 flex">
               <p class="lr-text--body-0-half relative items-center">
                 <span>{{ $t('votes_available') }}: {{ upvotesAvailable }}</span>
@@ -42,22 +45,39 @@
               </p>
             </div>
             <div class="audio-list">
-              <LRAudioCardPreview
+              <LRAudioCardPremium
                 v-for="preview in previews"
                 :key="preview.id"
-                :preview="preview"
+                :premium-audio="preview"
               />
             </div>
           </div>
           <div
             v-else
-            class="loading-previews"
+            class="loading-exclusive"
+          />
+
+          <h2 class="lr-text--body-2 relative items-center mb-6">
+            {{ $t('song_page_covers_title') }}
+          </h2>
+          <div v-if="coversMetadataLoaded">
+            <div class="audio-list">
+              <LRAudioCardPremium
+                v-for="cover in covers"
+                :key="cover.id"
+                :premium-audio="cover"
+              />
+            </div>
+          </div>
+          <div
+            v-else
+            class="loading-exclusive"
           />
         </div>
 
-        <LRPreviewsBlocked v-else />
+        <LRPremiumBlocked v-else />
       </div>
-      <LRPreviewsPaywall
+      <LRPremiumPaywall
         v-else
         @join-supporters-clicked="shouldShowModal = true"
       />
@@ -70,13 +90,12 @@
   </ClientOnly>
 </template>
 <script lang="ts" setup>
-import type { PreviewClientModel } from '../types/preview.model';
+import type { PremiumAudioModel } from '../types/premium-audio.model';
 import { useAppStore } from '../store/index';
 
 import type { AudioModel } from '~/types/audio.model';
 import LRHowItWorksModal from '~/components/modal/LRHowItWorksModal.vue';
 import { useAudioStore } from '~/store/audio';
-import LRPreviewsBlocked from '~/components/audio/LRPreviewsBlocked.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -87,7 +106,7 @@ const { request } = useRequest();
 
 // todo: remove
 const audioStore = useAudioStore();
-const { previews, upvotesAvailable, upvotes } = toRefs(audioStore);
+const { previews, covers, upvotesAvailable, upvotes } = toRefs(audioStore);
 const { setPreviews } = audioStore;
 
 const releases = ref<AudioModel[]>([]);
@@ -98,6 +117,7 @@ const remainingReleases = computed(() =>
   releases.value.filter((release) => !release.featured).sort((a, b) => b.number - a.number)
 );
 const previewsMetadataLoaded = ref(false);
+const coversMetadataLoaded = ref(false);
 
 const sessionEl = ref<HTMLDivElement>();
 const musicPageEl = ref<HTMLDivElement>();
@@ -107,11 +127,11 @@ onMounted(async () => {
   loadReleases();
   await setLoggedInformation();
 
-  // far from ideal solution but the only one I could find that works. On signup we observe the mutations on the screen until it's "stable"
+  // On signup we observe the mutations on the screen until it's "stable"
   // so we are able to scroll to the previews section and show the user what is there
   if (route.query.login !== 'signup' || !musicPageEl.value) return;
 
-  const observer = new MutationObserver(() => {
+  const observer = new ResizeObserver(() => {
     // there's a lot of mutations going on  in sequence, we wait until no mutatation happens for some time and scroll
     if (scrollToPreviewsTimeout.value) clearTimeout(scrollToPreviewsTimeout.value);
     scrollToPreviewsTimeout.value = setTimeout(() => {
@@ -124,10 +144,7 @@ onMounted(async () => {
     }, 500);
   });
 
-  observer.observe(musicPageEl.value, {
-    childList: true,
-    subtree: true,
-  });
+  observer.observe(musicPageEl.value);
 });
 
 watch(subscription, (newSubscription, oldSubscription) => {
@@ -149,17 +166,28 @@ async function loadReleases() {
 }
 
 async function setLoggedInformation() {
-  if (!session.value || !subscription.value || subscription.value.status !== 'active') return;
+  if (!session.value || !subscription.value || subscription.value.status !== 'active') {
+    return;
+  }
 
   upvotes.value = await getUpvotes();
 
-  request<PreviewClientModel[]>('/api/getPreviewsMetadata', { authenticated: true }).then(async (data) => {
+  request<PremiumAudioModel[]>('/api/getPreviewsMetadata', { authenticated: true }).then(async (data) => {
     if (!data) {
       previewsMetadataLoaded.value = true;
       return;
     }
     setPreviews(data);
     previewsMetadataLoaded.value = true;
+  });
+
+  request<PremiumAudioModel[]>('/api/getCoversMetadata', { authenticated: true }).then(async (data) => {
+    if (!data) {
+      coversMetadataLoaded.value = true;
+      return;
+    }
+    covers.value = data;
+    coversMetadataLoaded.value = true;
   });
 }
 </script>
@@ -196,10 +224,11 @@ h1 {
   box-shadow: $box-shadow-elevation-1;
 }
 
-.loading-previews {
+.loading-exclusive {
   @extend .base-loader;
   height: 150px;
   border-radius: 16px;
+  margin-bottom: 4rem;
 }
 
 @media (min-width: $sm-breakpoint) {

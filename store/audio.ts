@@ -2,17 +2,18 @@ import { useLocalStorage } from '@vueuse/core';
 import type WaveSurfer from 'wavesurfer.js';
 import { useAppStore } from '.';
 import type { UpvotesClientModel } from '~/types/upvotes.model';
-import type { PreviewClientModel } from '~/types/preview.model';
+import type { PremiumAudioModel } from '~/types/premium-audio.model';
 
 interface AudioStoreModel {
   waves: WaveSurfer[];
   volume: number;
   upvotes: UpvotesClientModel;
   upvotesAvailable: number;
+  covers: PremiumAudioModel[];
 }
 
 interface PrivateAudioStoreModel {
-  previews: PreviewClientModel[];
+  previews: PremiumAudioModel[];
 }
 
 export const useAudioStore = defineStore('audioStore', () => {
@@ -20,6 +21,7 @@ export const useAudioStore = defineStore('audioStore', () => {
     waves: [],
     volume: -1, // ignored as hydrate runs and onMounted overwrite
     upvotes: {},
+    covers: [],
     upvotesAvailable: 0,
   });
 
@@ -42,7 +44,7 @@ export const useAudioStore = defineStore('audioStore', () => {
     }
   });
 
-  function setPreviews(newPreviews: PreviewClientModel[]) {
+  function setPreviews(newPreviews: PremiumAudioModel[]) {
     if (user.value?.featuredPreviews) {
       for (const preview of newPreviews) {
         if (user.value.featuredPreviews.includes(preview.number)) {

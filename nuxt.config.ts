@@ -30,6 +30,7 @@ export default defineNuxtConfig({
       apiKey: process.env.APPWRITE_SECRET_KEY,
       allowedEmailsCollection: process.env.APPWRITE_ALLOWED_EMAILS_COLLECTION,
       previewsCollection: process.env.APPWRITE_PREVIEWS_COLLECTION,
+      coversCollection: process.env.APPWRITE_COVERS_COLLECTION,
       settingsDocument: process.env.VUE_APP_APPWRITE_SETTINGS_DOCUMENT,
       bucketId: process.env.APPWRITE_STORAGE,
     },
@@ -126,6 +127,9 @@ export default defineNuxtConfig({
           additionalData: "@use '@/assets/css/_imports' as *;",
         },
       },
+    },
+    server: {
+      allowedHosts: ['ecd3-2001-818-d8a3-6900-5da8-7255-f736-dfe0.ngrok-free.app'],
     },
     // todo: try to remove console.log from production deployment
     // esbuild: {

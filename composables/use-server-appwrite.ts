@@ -12,7 +12,7 @@ let storage: Storage;
 
 const useServerAppwrite = () => {
   const { appwrite, public: publicConfig } = useRuntimeConfig();
-  const { allowedEmailsCollection, previewsCollection, bucketId } = appwrite;
+  const { allowedEmailsCollection, previewsCollection, coversCollection, bucketId } = appwrite;
   const { appwrite: publicAppwrite } = publicConfig;
   const { endpoint, project, databaseId, usersCollection, settingsCollection, releasesCollection, settingsDocument } =
     publicAppwrite;
@@ -77,6 +77,7 @@ const useServerAppwrite = () => {
       users: usersCollection,
       allowedEmails: allowedEmailsCollection,
       previews: previewsCollection,
+      covers: coversCollection,
       releases: releasesCollection,
     },
 

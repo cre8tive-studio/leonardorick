@@ -1,20 +1,27 @@
 # FEATURES I REALLY WANT
 
-Add disabled state for previews
+fix wavesurfer holding lr-cursor when dragging (maybe its running stop propagation which is sad )
+update settings lastUpdateAt to a integer that I just incrment to clean the storage
 
-- add corner lace
+fix tooltip on mobile
+
+fix modal not scrolling on windows
+
+fix release fetured not right width during loading.
 
 show all previews but disable the ones that should be disabled and add a tooltip saying that next month a new preview will be unlocked
 
-add user property "lastReleasedPreview" so I can add some badge and border for the user to see it
-
-Add tooltip indicating that more votes and demos will be available next month
-
 Allow file downloads previews and instructions to add to spotify
 
-setup covers
+setup covers Rename LRCardPreview to LRCardPremium
 
-upload some previews
+- think about the implemenation before doing it, what will be the differences and if it's not worth just creating another component for covers
+  - Both are going to have the disabled state...
+  - Differences:
+    - Votes
+    - Cover image
+
+Upload some previews
 
 if for some reason I disable the preview, I need to remove the upvotes from the this preview
 

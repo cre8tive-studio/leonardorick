@@ -20,7 +20,7 @@ export const useAppStore = defineStore('store', () => {
       jwt: '',
       expire: 0,
     },
-    isContentLoaded: false,
+    isContentLoaded: false, // don't rely too much on this as it's only related with the main page content
     isContentErrored: false,
     cache: {
       en: {

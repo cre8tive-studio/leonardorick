@@ -3,7 +3,7 @@ import { createGenericError } from '../utils/errors';
 import useServerAppwrite from '~/composables/use-server-appwrite';
 import type { PreviewModel } from '~/types/preview.model';
 
-const { databases, databaseId, collections, storage, bucketId, getUser, getSettings } = useServerAppwrite();
+const { databases, databaseId, collections, storage, bucketId } = useServerAppwrite();
 
 // dynamic url are good for the purpose of separating the caches. If we keep the same path
 // for all songs, when we try to cache this call with nuxt mechanisms, all requests will be cahed as the same and it will
@@ -14,33 +14,15 @@ export default defineEventHandler(async (event) => {
     throw createGenericError('User not allowed');
   }
 
-  const { userId } = event.context.auth;
   const { number } = await readBody(event);
 
-  const { previewsReady } = await getSettings();
-
-  if (!previewsReady.includes(number)) {
-    throw createGenericError(`Preview requested is not ready: ${number}`, 422);
-  }
-
-  const { availablePreviews } = await getUser(userId);
-
-  if (
-    !availablePreviews ||
-    availablePreviews.length === 0 ||
-    !previewsReady.includes(number) ||
-    !availablePreviews.includes(number)
-  ) {
-    throw createGenericError(`User not allowed to listen to requested preview ${number}`);
-  }
-
   try {
-    const query = await databases.listDocuments<PreviewModel>(databaseId, collections.previews, [
+    const query = await databases.listDocuments<PreviewModel>(databaseId, collections.covers, [
       Query.equal('number', [number]),
     ]);
 
     if (!query || !query.documents || query.documents.length === 0) {
-      throw createGenericError(`Preview ${number} not found`);
+      throw createGenericError(`Cover ${number} not found`);
     }
 
     return storage.getFileDownload(bucketId, query.documents[0].fileId).then(Buffer.from);

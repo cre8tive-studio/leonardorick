@@ -100,7 +100,9 @@ For reidrect rules to work, your endpoints must be with proxy enabled
 - allowed-emails:
   - index_email: to check if user is on allowed-emails on both login and signup
 - previews:
-  - index_fileid: to query all documents on the list of the user available previews
+  - index_number: to query previews based on number instead of fileId
+- covers:
+  - index_number: to query covers based on the number instead of fileId
 
 #### Deleting a user manually
 

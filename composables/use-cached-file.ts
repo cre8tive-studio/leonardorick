@@ -24,7 +24,6 @@ const useCachedFile = () => {
     }
 
     return request<Blob>(url, {
-      ...options,
       ...(options.method === 'post'
         ? {
             body: {
@@ -36,6 +35,7 @@ const useCachedFile = () => {
       authenticated,
       cacheKey: fileId,
       expireInMinutes: 60,
+      ...options,
     }).then((blob) => localforageSetItem(key, blob));
   }
 

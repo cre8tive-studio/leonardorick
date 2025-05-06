@@ -2,6 +2,7 @@
   <fa
     class="info"
     lr-cursor
+    aria-hidden="false"
     icon="circle-info"
     @click="$emit('click')"
   />

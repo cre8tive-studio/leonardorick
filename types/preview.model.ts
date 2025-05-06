@@ -6,9 +6,3 @@ export interface PreviewModel extends Models.Document, AudioModel {
   enabled: boolean;
   featured?: boolean;
 }
-
-export interface PreviewClientModel extends AudioModel {
-  votes: number;
-  enabled: boolean;
-  featured?: boolean;
-}

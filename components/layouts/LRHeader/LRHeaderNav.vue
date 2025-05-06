@@ -64,7 +64,7 @@
       @close="shouldShowModal = false"
     >
       <div class="flex flex-col items-center justify-center h-full gap-8">
-        <h2 class="lr-text--body-1-half text-center whitespace-nowrap">{{ $t('are_you_sure_logout') }}</h2>
+        <h2 class="lr-text--body-1-half text-center">{{ $t('are_you_sure_logout') }}</h2>
         <div class="flex gap-4">
           <button
             lr-cursor
@@ -87,6 +87,7 @@
 </template>
 
 <script setup lang="ts">
+import type { Models } from 'appwrite';
 import { useAppStore } from '~/store';
 import { useToasterStore } from '~/store/toaster';
 
@@ -104,7 +105,11 @@ const { localeRoute } = store;
 const shouldShowModal = ref(false);
 
 const handleLogin = async () => {
-  const { session: s } = await getCurrentSession(true);
+  let s: Models.Session | null = null;
+  try {
+    ({ session: s } = await getCurrentSession(true));
+  } catch {}
+
   if (s) {
     router.push(localeRoute('music'));
     toast.success({ text: $t('you_are_already_logged_in') });
@@ -124,7 +129,7 @@ const handleLogout = async () => {
 
 <style scoped lang="scss">
 .c-LRHeaderNav {
-  --gap: clamp(0.25rem, 0.8vw, 0.5rem);
+  --gap: 0.7rem;
   display: flex;
   flex-direction: column;
   gap: var(--gap);

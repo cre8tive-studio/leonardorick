@@ -29,7 +29,7 @@
 
         <div
           ref="mobileMenu"
-          class="mobile-menu w-full h-full flex flex-col gap-4"
+          class="mobile-menu"
         >
           <LRHeaderNav @toggle-mobile-menu="toggleMobileMenu" />
         </div>
@@ -47,7 +47,10 @@ import useHideOnScroll from '~/composables/animations/use-hide-on-scroll';
 import { useAnimationStore } from '~/store/animation';
 import { useAppStore } from '~/store';
 
-const { isHideOnScrollBlocked } = toRefs(useAnimationStore());
+const animationStore = useAnimationStore();
+const { enableScroll, disableScroll } = animationStore;
+const { isHideOnScrollBlocked } = toRefs(animationStore);
+
 const { localeRoute } = toRefs(useAppStore());
 const { isLg } = useCssBreakpoints();
 
@@ -72,7 +75,14 @@ watch(isLg, () => {
 
 function toggleMobileMenu() {
   isMobileMenuVisible.value = !isMobileMenuVisible.value;
-  isMobileMenuVisible.value ? timeline(openSequence) : timeline(closeSequence);
+  if (isMobileMenuVisible.value) {
+    timeline(openSequence);
+    disableScroll();
+  } else {
+    timeline(closeSequence);
+    enableScroll();
+  }
+
   isHideOnScrollBlocked.value = isMobileMenuVisible.value;
 }
 </script>
@@ -134,7 +144,7 @@ function toggleMobileMenu() {
 
     top: 0;
     left: 0;
-    height: 100svh;
+    height: 100dvh;
     width: 100%;
     padding: 1rem;
     z-index: 20;

@@ -284,7 +284,7 @@ async function initSession() {
   });
 
   initSettings(settings);
-  return createEmailPasswordSession(email.value, password.value);
+  return createEmailPasswordSession(email.value.trim(), password.value);
 }
 </script>
 

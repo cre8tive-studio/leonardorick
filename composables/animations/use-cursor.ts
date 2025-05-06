@@ -271,8 +271,8 @@ const useCursor = () => {
 
   function mousemoveHandler(e: MouseEvent) {
     handleLrCursorFocus(e);
-
     updateCursorPosition(e);
+
     // handle click and drag not triggering pointerup
     // https://stackoverflow.com/a/48970682/10526869
     if (e.buttons !== buttons) {

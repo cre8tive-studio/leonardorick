@@ -112,6 +112,7 @@ function createWaveSurfer() {
     waveColor: COLORS.secondaryDarkText,
     cursorColor: COLORS.highlight,
     progressColor: gradient,
+    dragToSeek: true,
     url: audioUrl,
     normalize: false,
   });

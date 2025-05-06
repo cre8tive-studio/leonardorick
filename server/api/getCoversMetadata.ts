@@ -1,4 +1,3 @@
-import { Query } from 'node-appwrite';
 import { createGenericError } from '../utils/errors';
 import useServerAppwrite from '~/composables/use-server-appwrite';
 import type { PreviewModel } from '~/types/preview.model';
@@ -27,21 +26,20 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const query = await databases.listDocuments<PreviewModel>(databaseId, collections.previews, [
-      Query.equal('number', availablePreviewsReady),
-    ]);
-    return query.documents.map(
-      (preview) =>
-        ({
-          type: 'preview',
-          id: preview.$id,
-          imageUrl: preview.imageUrl,
-          title: preview.title,
-          description: preview.description,
-          number: preview.number,
-          votes: preview.votes,
-          enabled: preview.enabled,
-        } satisfies PremiumAudioModel)
+    return databases.listDocuments<PreviewModel>(databaseId, collections.covers).then((list) =>
+      list.documents.map(
+        (cover) =>
+          ({
+            type: 'cover',
+            id: cover.$id,
+            imageUrl: cover.imageUrl,
+            title: cover.title,
+            description: cover.description,
+            number: cover.number,
+            votes: cover.votes,
+            enabled: cover.enabled,
+          } satisfies PremiumAudioModel)
+      )
     );
   } catch (err: any) {
     throw createGenericError(err.message);
