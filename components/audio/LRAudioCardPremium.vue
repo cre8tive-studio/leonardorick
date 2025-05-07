@@ -105,8 +105,6 @@ const typeMap: Record<PremiumAudioModel['type'], InfoPerType> = {
   },
 };
 
-console.log(premiumAudio.imageUrl);
-
 if (premiumAudio.enabled) {
   getCachedFile({
     fileId: `premium-${premiumAudio.type}-${premiumAudio.number}`,

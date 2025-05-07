@@ -117,6 +117,7 @@ useWhenReady(
     outline: 10px solid #1a1d21;
     overflow: hidden;
     box-shadow: var(--box-shadow03);
+    pointer-events: none;
   }
 
   .image {

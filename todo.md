@@ -1,7 +1,10 @@
 # FEATURES I REALLY WANT
 
-fix wavesurfer holding lr-cursor when dragging (maybe its running stop propagation which is sad )
-update settings lastUpdateAt to a integer that I just incrment to clean the storage
+think about what to do in 3g and when I have a lot of demos. I probably don't want to download all 34 mp3s at once and consume all the users internet so the best solution would be to hold the download until the user plays the demo and only then call the getCachedFile
+
+add at least two more links in the featured release (youtube and somewhere else)
+
+add tooltip on covers explaning what is the section
 
 fix tooltip on mobile
 
