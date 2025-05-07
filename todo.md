@@ -4,10 +4,6 @@ think about what to do in 3g and when I have a lot of demos. I probably don't wa
 
 add at least two more links in the featured release (youtube and somewhere else)
 
-add tooltip on covers explaning what is the section
-
-fix tooltip on mobile
-
 fix modal not scrolling on windows
 
 fix release fetured not right width during loading.
@@ -16,17 +12,7 @@ show all previews but disable the ones that should be disabled and add a tooltip
 
 Allow file downloads previews and instructions to add to spotify
 
-setup covers Rename LRCardPreview to LRCardPremium
-
-- think about the implemenation before doing it, what will be the differences and if it's not worth just creating another component for covers
-  - Both are going to have the disabled state...
-  - Differences:
-    - Votes
-    - Cover image
-
 Upload some previews
-
-if for some reason I disable the preview, I need to remove the upvotes from the this preview
 
 find a way to add some padding in the top of the scrollable area of the modal so it do not touch the border when scrollingL
 

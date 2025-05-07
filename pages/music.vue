@@ -41,7 +41,7 @@
             <div class="mb-6 flex">
               <p class="lr-text--body-0-half relative items-center">
                 <span>{{ $t('votes_available') }}: {{ upvotesAvailable }}</span>
-                <LRInfoIcon v-tooltip="$t('more_votes_previews_available_next_month')" />
+                <LRInfoIconTooltip :tooltip="$t('more_votes_previews_available_next_month')" />
               </p>
             </div>
             <div class="audio-list">
@@ -57,8 +57,9 @@
             class="loading-exclusive"
           />
 
-          <h2 class="lr-text--body-2 relative items-center mb-6">
+          <h2 class="covers-title lr-text--body-2 relative items-center mb-6">
             {{ $t('song_page_covers_title') }}
+            <LRInfoIconTooltip :tooltip="$t('covers_explanation')" />
           </h2>
           <div v-if="coversMetadataLoaded">
             <div class="audio-list">
@@ -229,6 +230,10 @@ h1 {
   height: 150px;
   border-radius: 16px;
   margin-bottom: 4rem;
+}
+
+.covers-title svg {
+  font-size: 16px;
 }
 
 @media (min-width: $sm-breakpoint) {

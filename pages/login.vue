@@ -68,7 +68,8 @@
             class="lr-button lr-button-secondary"
             type="submit"
           >
-            {{ $t(loginType) }}
+            <LRCubeLoader v-if="submitingForm" />
+            <template v-else> {{ $t(loginType) }}</template>
           </button>
         </form>
         <p
@@ -160,7 +161,11 @@ const timer = computed(() => {
 const passwordInputEl = ref<HTMLInputElement>();
 
 const formDisabled = computed(
-  () => (loginType.value === 'signup' && !name.value.trim()) || !email.value.trim() || !password.value.trim()
+  () =>
+    submitingForm.value ||
+    (loginType.value === 'signup' && !name.value.trim()) ||
+    !email.value.trim() ||
+    !password.value.trim()
 );
 
 const email = ref('');
@@ -172,6 +177,7 @@ const shouldShowModal = ref(false);
 const checkoutId = ref('');
 
 const emailDisabled = ref(false);
+const submitingForm = ref(false);
 const showPasswordIcon = ref<'eye' | 'eye-slash'>('eye-slash');
 const passowrdType = ref<'password' | 'text'>('password');
 
@@ -262,6 +268,7 @@ function changeLoginType() {
 }
 
 async function handleSubmit() {
+  submitingForm.value = true;
   try {
     await initSession();
     router.replace(
@@ -271,6 +278,7 @@ async function handleSubmit() {
   } catch (e) {
     handleError(e);
   }
+  submitingForm.value = false;
 }
 
 async function initSession() {
@@ -342,6 +350,11 @@ async function initSession() {
 
   .forgot-password-timer {
     font-size: 14px;
+  }
+
+  :deep(.lr-cube-loader) {
+    --cube-size: 22px;
+    --color: #{$dark-text-4};
   }
 
   .stripe {
