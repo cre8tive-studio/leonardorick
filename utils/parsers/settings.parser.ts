@@ -1,4 +1,4 @@
-import type { SettingsClientModel, SettingsModel } from '~/types/settings.model';
+import type { AppwriteSettingsModel, SettingsModel } from '~/types/settings.model';
 
 export function parseSettings({
   previewsReady,
@@ -7,13 +7,13 @@ export function parseSettings({
   moneyTarget,
   savedAmount,
   currency,
-  globalUpdatedAt,
-}: SettingsModel): SettingsClientModel {
+  storageVersion,
+}: AppwriteSettingsModel): SettingsModel {
   return {
     previewsReady,
     startPreviewsCount,
     upvotesMultiplier,
-    globalUpdatedAt: new Date(globalUpdatedAt),
+    storageVersion,
     moneyTarget,
     savedAmount,
     currency,

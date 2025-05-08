@@ -1,6 +1,6 @@
 import type { Models } from 'appwrite';
 
-export interface SettingsClientModel {
+export interface SettingsModel {
   // what are the previews that are ready to be shown to the user.
   previewsReady: number[];
   // how many previews should be available to the user when he starts his account
@@ -9,7 +9,7 @@ export interface SettingsClientModel {
   // available previews. If its 2 and there are 10 previews, the user will have 20 votes
   upvotesMultiplier: number;
   // last date assets were updated. This should be used to refresh and clean cache on users machines
-  globalUpdatedAt: Date;
+  storageVersion: number;
   // how much I need to release the next song
   moneyTarget: number;
   // how much I have til the money target
@@ -18,6 +18,4 @@ export interface SettingsClientModel {
   currency: 'EUR' | 'BRL';
 }
 
-export interface SettingsModel extends Models.Document, Omit<SettingsClientModel, 'globalUpdatedAt'> {
-  globalUpdatedAt: string;
-}
+export interface AppwriteSettingsModel extends Models.Document, SettingsModel {}

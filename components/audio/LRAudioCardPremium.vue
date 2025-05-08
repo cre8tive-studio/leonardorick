@@ -29,6 +29,7 @@
         class="mb-4"
         :enabled="premiumAudio.enabled"
         :audio-url="audioUrl"
+        :eager="eager"
         size="md"
         @play="handlePlay"
       />
@@ -76,7 +77,7 @@ const { userId, user } = toRefs(useAppStore());
 const store = useAudioStore();
 const { upvotes, upvotesAvailable, previewsMaxVotes } = toRefs(store);
 const { addVote, removeVote } = store;
-const { removefeaturedPreview } = useAppwrite();
+const { removeFeaturedPreview } = useAppwrite();
 
 const isPreview = computed(() => premiumAudio.type === 'preview');
 const votesCount = computed(() => (isPreview.value ? upvotes.value[premiumAudio.number]?.length || 0 : undefined));
@@ -91,8 +92,13 @@ interface InfoPerType {
   title: string;
 }
 const { premiumAudio } = defineProps<Props>();
-const { getCachedFile } = useCachedFile();
+const { getCachedFile, getCachedFileFromCache } = useCachedFile();
+
 const audioUrl = ref('');
+
+const fileId = `premium-${premiumAudio.type}-${premiumAudio.number}`;
+const loaded = ref(false);
+const eager = ref(false);
 
 const typeMap: Record<PremiumAudioModel['type'], InfoPerType> = {
   preview: {
@@ -105,9 +111,36 @@ const typeMap: Record<PremiumAudioModel['type'], InfoPerType> = {
   },
 };
 
-if (premiumAudio.enabled) {
+onMounted(async () => {
+  if (premiumAudio.enabled) {
+    const data = await getCachedFileFromCache(fileId, true);
+
+    if (data) {
+      loaded.value = true;
+      audioUrl.value = URL.createObjectURL(data);
+    }
+  }
+});
+
+onUnmounted(() => {
+  if (audioUrl.value) URL.revokeObjectURL(audioUrl.value);
+});
+
+function handlePlay($event: PlayOptions) {
+  if (isPreview && $event === 'play' && user.value?.featuredPreviews?.includes(premiumAudio.number)) {
+    removeFeaturedPreview(user.value.featuredPreviews, premiumAudio.number);
+  }
+
+  if ($event === 'play' && !loaded.value) {
+    loaded.value = true;
+    eager.value = true;
+    requestAudioFile();
+  }
+}
+
+function requestAudioFile() {
   getCachedFile({
-    fileId: `premium-${premiumAudio.type}-${premiumAudio.number}`,
+    fileId,
     url: `/api/${typeMap[premiumAudio.type].url}/${premiumAudio.number}`,
     authenticated: true,
     method: 'post',
@@ -117,12 +150,6 @@ if (premiumAudio.enabled) {
   }).then((data) => {
     audioUrl.value = URL.createObjectURL(data);
   });
-}
-
-function handlePlay($event: PlayOptions) {
-  if (isPreview && $event === 'play' && user.value?.featuredPreviews?.includes(premiumAudio.number)) {
-    removefeaturedPreview(user.value.featuredPreviews, premiumAudio.number);
-  }
 }
 </script>
 

@@ -1,7 +1,7 @@
 import { Account, AppwriteException, Client, Databases, type Models } from 'appwrite';
 import { useAppStore } from '~/store';
-import type { SettingsClientModel, SettingsModel } from '~/types/settings.model';
-import type { AppwriteUserModel, UserModel } from '~/types/user.model';
+import type { AppwriteSettingsModel, SettingsModel } from '~/types/settings.model';
+import type { AppwriteUserModel } from '~/types/user.model';
 import type { UpvotesModel, UpvotesClientModel } from '~/types/upvotes.model';
 import { parseUpvotes } from '~/utils/parsers/upvotes.parser';
 import { parseSettings } from '~/utils/parsers/settings.parser';
@@ -88,18 +88,18 @@ const useAppwrite = () => {
     return { user: user.value, subscription: subscription.value };
   }
 
-  const initSettings = async (st?: SettingsModel): Promise<SettingsClientModel> => {
+  const initSettings = async (st?: SettingsModel): Promise<SettingsModel> => {
     if (!settings.value) {
       if (st) {
-        settings.value = parseSettings(st);
+        settings.value = st;
         return settings.value;
       }
 
       settings.value = await databases
-        .getDocument<SettingsModel>(databaseId, settingsCollection, settingsDocument)
+        .getDocument<AppwriteSettingsModel>(databaseId, settingsCollection, settingsDocument)
         .then(parseSettings);
     }
-    return settings.value as SettingsClientModel;
+    return settings.value as SettingsModel;
   };
 
   const getUpvotes = async (): Promise<UpvotesClientModel> => {
@@ -116,7 +116,7 @@ const useAppwrite = () => {
     });
   };
 
-  const removefeaturedPreview = async (previews: number[], previewNumber: number) => {
+  const removeFeaturedPreview = async (previews: number[], previewNumber: number) => {
     const featuredPreviews = previews.filter((n) => n !== previewNumber);
     return request<void>('/api/updateUser', {
       authenticated: true,
@@ -168,7 +168,7 @@ const useAppwrite = () => {
     getJWT,
     getUpvotes,
     getReleasesMetadata,
-    removefeaturedPreview,
+    removeFeaturedPreview,
 
     initSettings,
     updateVotes,

@@ -127,6 +127,10 @@ onUnmounted(() => {
     min-height: 75vh;
     flex-direction: row;
 
+    .content {
+      min-width: 500px;
+    }
+
     :deep(.media) {
       position: relative;
       left: -8px;

@@ -6,14 +6,7 @@
     :disabled="disabled"
     @click="$emit('play', isPlaying ? 'pause' : 'play')"
   >
-    <fa
-      v-if="isPlaying"
-      icon="pause"
-    />
-    <fa
-      v-else
-      icon="play"
-    />
+    <fa :icon="isPlaying ? 'pause' : 'play'" />
   </button>
 </template>
 
@@ -25,16 +18,17 @@ import type { PlayOptions } from '~/types/play.options';
 interface Props {
   wave: WaveSurfer | undefined;
   size: AudioCardSizeOptions;
+  enabled?: boolean;
 }
 interface Emits {
   (e: 'play', value: PlayOptions): void;
 }
-const { wave } = defineProps<Props>();
+const { wave, enabled = true } = defineProps<Props>();
 defineEmits<Emits>();
 
 const isPlaying = ref(false);
 
-const disabled = computed(() => !wave);
+const disabled = computed(() => !enabled);
 
 useWhenReady(
   () => wave,

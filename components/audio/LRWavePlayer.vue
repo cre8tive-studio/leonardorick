@@ -9,16 +9,21 @@
         class="wave-container"
         :class="size"
       >
-        <div class="wave-placeholder" />
-        <div
-          ref="waveformEl"
-          class="waveform flex-1"
-        />
+        <template v-if="eager || audioUrl">
+          <div class="wave-loader" />
+          <div
+            ref="waveformEl"
+            class="waveform flex-1"
+          />
+        </template>
+
+        <LRWavePlaceholder v-else />
       </div>
 
       <LRPlayButton
         :wave="wave"
         :size="size"
+        :enabled="enabled"
         @play="playPause"
       />
     </div>
@@ -35,12 +40,12 @@ import { gsap } from 'gsap';
 import { useAudioStore } from '~/store/audio';
 import { COLORS } from '~/utils/constants/colors';
 import type { AudioCardSizeOptions } from '~/types/audio-card-size.options';
-import peaks from '~/public/jsons/audio-peaks.json';
 import type { PlayOptions } from '~/types/play.options';
 
 interface Props {
   audioUrl: string;
   enabled?: boolean;
+  eager?: boolean;
   size?: Exclude<AudioCardSizeOptions, 'sm'>;
 }
 
@@ -49,7 +54,7 @@ interface Emits {
   (e: 'play', value: PlayOptions): void;
 }
 
-const { enabled = true, audioUrl, size = 'lg' } = defineProps<Props>();
+const { enabled = true, eager = true, audioUrl, size = 'lg' } = defineProps<Props>();
 
 const $emit = defineEmits<Emits>();
 
@@ -71,13 +76,19 @@ const currentTime = ref('0:00');
 onMounted(() => {
   useWhenReady(
     () => audioUrl,
-    () => createWaveSurfer()
+    async () => {
+      await nextTick(); // ensure that template is already showing the waveformEl
+      createWaveSurfer();
+    }
   );
-
-  if (!enabled) {
-    createMockWaveSurfer();
-  }
 });
+
+if (!eager) {
+  useWhenReady(
+    () => eager,
+    () => useWhenReady(wave, () => play())
+  );
+}
 
 onUnmounted(() => {
   if (!canvas) return;
@@ -90,12 +101,8 @@ watch(breakpoints.current, () => {
   }
 });
 
-function getComputedHeight() {
-  if (!waveContainerEl.value) return 0;
-  return parseInt(getComputedStyle(waveContainerEl.value).height.replace('px', ''));
-}
-
 async function createWaveSurfer() {
+  if (!enabled) return;
   if (!waveformEl.value) throw new Error('Waveform container not defined on wave creation');
 
   const ctx = document.createElement('canvas').getContext('2d');
@@ -125,7 +132,7 @@ async function createWaveSurfer() {
   });
 
   wave.value = wavesurfer;
-  replaceWavePlaceholder(wavesurfer);
+  replaceWaveLoader(wavesurfer);
 
   // this logic is for being able to keep the LRCursor component following the cursor vent when
   // The user is pressing the cursor down inside the wavesurfer canvas. For some reason (probably
@@ -154,44 +161,20 @@ async function createWaveSurfer() {
   addWaveOnList(wavesurfer);
 }
 
-async function createMockWaveSurfer() {
-  if (!waveformEl.value) throw new Error('Waveform container not defined on wave creation');
-
-  const wavesurfer = WaveSurfer.create({
-    height: 'auto',
-    cursorWidth: 5,
-    barWidth: 2,
-    barHeight: 0.7,
-    barGap: 3,
-    barRadius: 10,
-    container: waveformEl.value,
-    waveColor: COLORS.darkText3,
-    cursorColor: COLORS.darkText4,
-    normalize: false,
-  });
-
-  wavesurfer.load(
-    'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU2LjM2LjEwMAAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV6urq6urq6urq6urq6urq6urq6urq6urq6v////////////////////////////////8AAAAATGF2YzU2LjQxAAAAAAAAAAAAAAAAJAAAAAAAAAAAASDs90hvAAAAAAAAAAAAAAAAAAAA//MUZAAAAAGkAAAAAAAAA0gAAAAATEFN//MUZAMAAAGkAAAAAAAAA0gAAAAARTMu//MUZAYAAAGkAAAAAAAAA0gAAAAAOTku//MUZAkAAAGkAAAAAAAAA0gAAAAANVVV',
-    [peaks.data]
-  );
-
-  replaceWavePlaceholder(wavesurfer);
-}
-
-function replaceWavePlaceholder(wavesurfer: WaveSurfer) {
+function replaceWaveLoader(wavesurfer: WaveSurfer) {
   wavesurfer.on('ready', () => {
     if (!waveContainerEl.value || !waveformEl.value) return;
 
-    const placeholder = waveContainerEl.value.querySelector<HTMLElement>('.wave-placeholder');
-    if (!placeholder) return;
+    const waveLoader = waveContainerEl.value.querySelector<HTMLElement>('.wave-loader');
+    if (!waveLoader) return;
     duration.value = formatSongTime(wavesurfer.getDuration());
     const tl = gsap.timeline();
 
-    tl.to(placeholder, {
+    tl.to(waveLoader, {
       opacity: 0,
       onComplete: () => {
-        if (!waveContainerEl.value || !waveformEl.value || !placeholder) return;
-        placeholder.style.display = 'none';
+        if (!waveContainerEl.value || !waveformEl.value || !waveLoader) return;
+        waveLoader.style.display = 'none';
         waveformEl.value.style.display = 'block';
       },
     });
@@ -249,6 +232,12 @@ function cleanupCanvasListeners() {
   canvas.removeEventListener('pointerup', canvasPointerupEventHandler);
   canvas.removeEventListener('pointermove', canvasPointermoveEventHandler);
 }
+
+function getComputedHeight() {
+  if (!waveContainerEl.value) return 0;
+  return parseInt(getComputedStyle(waveContainerEl.value).height.replace('px', ''));
+}
+
 function playPause($event: PlayOptions) {
   $emit('play', $event);
   if (!wave.value) return;
@@ -280,7 +269,6 @@ function formatSongTime(time?: number) {
 <style scoped lang="scss">
 .wave-container {
   --wave-container-height: 60px;
-  --wave-container-width: 100%;
   height: var(--wave-container-height);
   flex: 1;
   display: flex;
@@ -297,6 +285,12 @@ function formatSongTime(time?: number) {
   }
 }
 
+.md {
+  .wave-loader {
+    min-width: 180px;
+  }
+}
+
 .waveform {
   display: none;
   opacity: 0; // updated with gsap
@@ -309,9 +303,9 @@ function formatSongTime(time?: number) {
   margin-right: calc(70px + 0.5rem + 12px); // button width + gap + margin
 }
 
-.wave-placeholder {
+.wave-loader {
   height: calc(var(--wave-container-height) - 30px);
-  width: var(--wave-container-width);
+  width: 100%;
 
   display: flex;
   align-items: end;
@@ -324,12 +318,6 @@ function formatSongTime(time?: number) {
   animation: wave-loader-animation 17s linear infinite;
   border-radius: 6px;
   mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
-}
-
-.md {
-  .wave-placeholder {
-    min-width: 180px;
-  }
 }
 
 @keyframes wave-loader-animation {

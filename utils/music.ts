@@ -1,4 +1,7 @@
+import WaveSurfer from 'wavesurfer.js';
 import { getRandomInt } from './js-utilities';
+import { COLORS } from './constants/colors';
+import peaks from '~/public/jsons/audio-peaks.json';
 
 interface Params {
   paidInvoicesCount: number;
@@ -34,4 +37,25 @@ export function incrementAvailablePreviews({ previous, paidInvoicesCount, previe
     newList.push(...available.splice(index, 1));
   }
   return newList.sort();
+}
+
+export function createMockWaveSurfer(container: HTMLElement) {
+  const wavesurfer = WaveSurfer.create({
+    height: 'auto',
+    cursorWidth: 5,
+    barWidth: 2,
+    barHeight: 0.7,
+    barGap: 3,
+    barRadius: 10,
+    container,
+    waveColor: COLORS.darkText3,
+    cursorColor: COLORS.darkText4,
+    normalize: false,
+  });
+
+  wavesurfer.load(
+    'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU2LjM2LjEwMAAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV6urq6urq6urq6urq6urq6urq6urq6urq6v////////////////////////////////8AAAAATGF2YzU2LjQxAAAAAAAAAAAAAAAAJAAAAAAAAAAAASDs90hvAAAAAAAAAAAAAAAAAAAA//MUZAAAAAGkAAAAAAAAA0gAAAAATEFN//MUZAMAAAGkAAAAAAAAA0gAAAAARTMu//MUZAYAAAGkAAAAAAAAA0gAAAAAOTku//MUZAkAAAGkAAAAAAAAA0gAAAAANVVV',
+    [peaks.data]
+  );
+  return wavesurfer;
 }

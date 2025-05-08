@@ -25,6 +25,7 @@
         <h2 class="lr-text--body-2">{{ $t('song_page_previews_title') }}</h2>
         <LRSubscriptionBadge v-if="subscription" />
       </div>
+
       <div
         v-if="session && subscription"
         ref="sessionEl"
@@ -39,7 +40,7 @@
             class="mb-12"
           >
             <div class="mb-6 flex">
-              <p class="lr-text--body-0-half relative items-center">
+              <p class="lr-text--body-0-half relative">
                 <span>{{ $t('votes_available') }}: {{ upvotesAvailable }}</span>
                 <LRInfoIconTooltip :tooltip="$t('more_votes_previews_available_next_month')" />
               </p>
@@ -57,7 +58,7 @@
             class="loading-exclusive"
           />
 
-          <h2 class="covers-title lr-text--body-2 relative items-center mb-6">
+          <h2 class="covers-title lr-text--body-2 relative mb-6">
             {{ $t('song_page_covers_title') }}
             <LRInfoIconTooltip :tooltip="$t('covers_explanation')" />
           </h2>
@@ -233,7 +234,7 @@ h1 {
 }
 
 .covers-title svg {
-  font-size: 16px;
+  @extend .lr-text--body-0-half;
 }
 
 @media (min-width: $sm-breakpoint) {

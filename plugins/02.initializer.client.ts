@@ -10,7 +10,7 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
 
   printConsoleIntroduction(environment, baseUrl, clientVersion, personalInfo.value?.links.linkedin);
 
-  const { refreshCacheBasedOnGlobalUpdateAt, refreshCacheBasedOnSubscription } = useCleanCache();
+  const { refreshCacheBasedOnStorageVersion, refreshCacheBasedOnSubscription } = useCleanCache();
   const { getCurrentSession, initSettings } = useAppwrite();
   let initializerClientError = null;
   try {
@@ -21,7 +21,7 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
 
     // appwritee
     const settings = await initSettings();
-    await refreshCacheBasedOnGlobalUpdateAt(settings);
+    await refreshCacheBasedOnStorageVersion(settings);
 
     const { subscription } = await getCurrentSession(true);
     if (subscription) {

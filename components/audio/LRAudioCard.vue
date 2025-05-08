@@ -12,6 +12,8 @@
       <LRWavePlayer
         :audio-url="audioUrl"
         size="md"
+        :eager="eager"
+        @play="play"
       />
     </div>
   </div>
@@ -19,6 +21,7 @@
 
 <script setup lang="ts">
 import LRAudioCover from './LRAudioCover.vue';
+import type { PlayOptions } from '~/types/play.options';
 import type { AudioModel } from '~/types/audio.model';
 
 interface Props {
@@ -29,17 +32,37 @@ const { audio } = defineProps<Props>();
 
 const audioUrl = ref('');
 
-const { getCachedFile } = useCachedFile();
+const { getCachedFile, getCachedFileFromCache } = useCachedFile();
+const loaded = ref(false);
+const eager = ref(false);
 
-getCachedFile({ fileId: audio.fileId, method: 'post' }).then((blob) => {
-  if (blob) {
-    audioUrl.value = URL.createObjectURL(blob);
+onMounted(async () => {
+  const data = await getCachedFileFromCache(audio.fileId);
+  if (data) {
+    loaded.value = true;
+    audioUrl.value = URL.createObjectURL(data);
   }
 });
 
 onUnmounted(() => {
   if (audioUrl.value) URL.revokeObjectURL(audioUrl.value);
 });
+
+function play($event: PlayOptions) {
+  if ($event === 'play' && !loaded.value) {
+    loaded.value = true;
+    eager.value = true;
+    requestAudioFile();
+  }
+}
+
+function requestAudioFile() {
+  getCachedFile({ fileId: audio.fileId, method: 'post' }).then((blob) => {
+    if (blob) {
+      audioUrl.value = URL.createObjectURL(blob);
+    }
+  });
+}
 </script>
 
 <style scoped lang="scss">

@@ -1,7 +1,7 @@
 import type { Models } from 'appwrite';
 import type { QuoteModel } from './quote.model';
 import type { RecommendationModel } from './recommendation-model';
-import type { SettingsClientModel } from './settings.model';
+import type { SettingsModel } from './settings.model';
 import type { GeneralsModel } from './generals.model';
 import type { PersonalInfoModel } from './personal-info.model';
 import type { ExperienceModel } from './experience.model';
@@ -22,7 +22,7 @@ export interface StoreModel {
   experiences: ExperienceModel[];
   generals: GeneralsModel[];
   lang: LanguageOptions;
-  settings: SettingsClientModel | null;
+  settings: SettingsModel | null;
   session: Models.Session | null;
   subscription: SubscriptionModel | null;
   user: UserModel | null;

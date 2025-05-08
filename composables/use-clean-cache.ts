@@ -1,18 +1,18 @@
 import { useLocalStorage } from '@vueuse/core';
 import localforage from 'localforage';
-import type { SettingsClientModel } from '~/types/settings.model';
+import type { SettingsModel } from '~/types/settings.model';
 import type { SubscriptionModel } from '~/types/subscription.model';
 
 const useCleanCache = () => {
-  const localUpdatedAt = useLocalStorage('local-updated-at', new Date());
+  const localStorageVersion = useLocalStorage('storage-version', 0);
 
-  async function refreshCacheBasedOnGlobalUpdateAt(settings: SettingsClientModel) {
+  async function refreshCacheBasedOnStorageVersion(settings: SettingsModel) {
     // theres a globalUpdatedAt setting that is a date we use to remove everything
     // from indexedDB. It's important when we need to reset cache. Keep in mind that you
     // never should put this value too far from today as it would not allow the cache reset
     // to happen anymore
-    if (settings.globalUpdatedAt > localUpdatedAt.value) {
-      localUpdatedAt.value = settings.globalUpdatedAt;
+    if (settings.storageVersion > localStorageVersion.value) {
+      localStorageVersion.value = settings.storageVersion;
       await localforage.clear();
     }
   }
@@ -27,7 +27,7 @@ const useCleanCache = () => {
     }
   }
 
-  return { refreshCacheBasedOnGlobalUpdateAt, refreshCacheBasedOnSubscription };
+  return { refreshCacheBasedOnStorageVersion, refreshCacheBasedOnSubscription };
 };
 
 export default useCleanCache;

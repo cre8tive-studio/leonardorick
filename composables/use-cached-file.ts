@@ -16,11 +16,10 @@ const useCachedFile = () => {
   const { request } = useRequest();
 
   async function getCachedFile({ fileId, authenticated = false, url = '/api/getFile', ...options }: Options) {
-    const key = authenticated ? `${LOCALFORAGE_AUTH_PREFIX}${fileId}` : fileId;
-
-    const file = await localforageGetItem<Blob>(key);
+    const key = getKey(fileId, authenticated);
+    const file = await getCachedFileFromCache(fileId, authenticated);
     if (file) {
-      return new Promise<Blob>((resolve) => resolve(file));
+      return file;
     }
 
     return request<Blob>(url, {
@@ -39,7 +38,17 @@ const useCachedFile = () => {
     }).then((blob) => localforageSetItem(key, blob));
   }
 
-  return { getCachedFile };
+  async function getCachedFileFromCache(fileId: string, isAuthenticatedContent: boolean = false) {
+    const key = getKey(fileId, isAuthenticatedContent);
+    const file = (await localforageGetItem<Blob>(key)) || null;
+    return new Promise<Blob | null>((resolve) => resolve(file));
+  }
+
+  function getKey(key: string, isAuthenticatedContent: boolean) {
+    return isAuthenticatedContent ? `${LOCALFORAGE_AUTH_PREFIX}${key}` : key;
+  }
+
+  return { getCachedFile, getCachedFileFromCache };
 };
 
 export default useCachedFile;

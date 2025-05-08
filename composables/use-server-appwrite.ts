@@ -1,7 +1,7 @@
 import { Databases, Users, Client as ServerClient, Account as ServerAccount, Query, Storage } from 'node-appwrite';
 
 import type { AllowedEmailModel } from '~/server/types/allowed-email.model';
-import type { SettingsModel } from '~/types/settings.model';
+import type { AppwriteSettingsModel } from '~/types/settings.model';
 import type { AppwriteUserModel, UpdatableUserModel } from '~/types/user.model';
 import { parseSettings } from '~/utils/parsers/settings.parser';
 
@@ -59,7 +59,9 @@ const useServerAppwrite = () => {
   };
 
   const getSettings = async () => {
-    return databases.getDocument<SettingsModel>(databaseId, settingsCollection, settingsDocument).then(parseSettings);
+    return databases
+      .getDocument<AppwriteSettingsModel>(databaseId, settingsCollection, settingsDocument)
+      .then(parseSettings);
   };
 
   const getAuthUserWithEmail = async (email: string) => {
