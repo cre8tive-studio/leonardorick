@@ -304,7 +304,7 @@ function formatSongTime(time?: number) {
 }
 
 .wave-loader {
-  height: calc(var(--wave-container-height) - 30px);
+  height: calc(var(--wave-container-height) - 15px);
   width: 100%;
 
   display: flex;

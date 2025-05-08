@@ -61,7 +61,7 @@ onUnmounted(() => ro?.disconnect());
   position: relative;
   /* tie into your existing custom properties in the parent wave component */
   width: 100%;
-  height: calc(var(--wave-container-height) - 30px);
+  height: var(--wave-container-height);
 
   display: flex; /* centers the SVG */
   align-items: center;
@@ -71,15 +71,20 @@ onUnmounted(() => ro?.disconnect());
   //   overflow: hidden; /* rounds the bars too */
   opacity: 0.7;
 
-  fill: $dark-text-4;
   span {
     position: absolute;
-    height: 140%;
+    height: 100%;
     width: 4px;
     background-color: $dark-text-3;
     left: 0;
     top: 50%;
     transform: translateY(-50%);
+  }
+
+  svg {
+    fill: $dark-text-4;
+    width: 100%;
+    height: 100%;
   }
 }
 </style>
