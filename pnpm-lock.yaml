@@ -16,10 +16,10 @@ importers:
         version: 3.0.8(@fortawesome/fontawesome-svg-core@6.7.2)(vue@3.5.13(typescript@5.8.3))
       '@leonardorick/three':
         specifier: ^1.0.78
-        version: 1.0.78(@leonardorick/utils@0.0.31)(three@0.166.1)
+        version: 1.0.78(@leonardorick/utils@0.0.32)(three@0.166.1)
       '@leonardorick/utils':
-        specifier: ^0.0.31
-        version: 0.0.31
+        specifier: ^0.0.32
+        version: 0.0.32
       '@nuxt/image':
         specifier: ^1.10.0
         version: 1.10.0(@netlify/blobs@8.2.0)(db0@0.3.2)(ioredis@5.6.1)(magicast@0.3.5)
@@ -826,8 +826,8 @@ packages:
       '@leonardorick/utils': '>=0.0.27'
       three: '>=0.166.1'
 
-  '@leonardorick/utils@0.0.31':
-    resolution: {integrity: sha512-hORtWB6O1izQGnBRDw8FimmvBpcUoS6XGbT8qAKn5VQd3Zpa5fsp4xEZsZoF8LS/skj757N6idGB6v3RDZ4mvA==}
+  '@leonardorick/utils@0.0.32':
+    resolution: {integrity: sha512-yj7JnqW6EM9cctZ3gWxjy0dDngMPn8r4+/BJBT7Hp7e0co8mp6XRYTgq4/HqJ2Jn1QyRLCWzEnxQmv0W0PFiEA==}
 
   '@mapbox/node-pre-gyp@1.0.11':
     resolution: {integrity: sha512-Yhlar6v9WQgUp/He7BdgzOz8lqMQ8sU+jkCq7Wx8Myc5YFJLbEe7lgui/V7G1qB1DJykHSGwreceSaD60Y0PUQ==}
@@ -7722,12 +7722,12 @@ snapshots:
 
   '@kwsites/promise-deferred@1.1.1': {}
 
-  '@leonardorick/three@1.0.78(@leonardorick/utils@0.0.31)(three@0.166.1)':
+  '@leonardorick/three@1.0.78(@leonardorick/utils@0.0.32)(three@0.166.1)':
     dependencies:
-      '@leonardorick/utils': 0.0.31
+      '@leonardorick/utils': 0.0.32
       three: 0.166.1
 
-  '@leonardorick/utils@0.0.31': {}
+  '@leonardorick/utils@0.0.32': {}
 
   '@mapbox/node-pre-gyp@1.0.11':
     dependencies:

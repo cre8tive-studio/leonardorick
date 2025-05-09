@@ -228,7 +228,7 @@ h1 {
 
 .loading-exclusive {
   @extend .base-loader;
-  height: 150px;
+  height: 300px;
   border-radius: 16px;
   margin-bottom: 4rem;
 }
@@ -238,17 +238,8 @@ h1 {
 }
 
 @media (min-width: $sm-breakpoint) {
-  h1 {
-    text-align: center;
-  }
-
   .audio-list {
     gap: 32px;
-  }
-}
-
-@media (min-width: $sm-breakpoint) {
-  .audio-list {
     grid-template-columns: 1fr 1fr;
   }
 }

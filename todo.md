@@ -1,6 +1,7 @@
 # FEATURES I REALLY WANT
 
-think about what to do in 3g and when I have a lot of demos. I probably don't want to download all 34 mp3s at once and consume all the users internet so the best solution would be to hold the download until the user plays the demo and only then call the getCachedFile
+
+Allow file downloads previews and instructions to add to spotify
 
 add at least two more links in the featured release (youtube and somewhere else)
 
@@ -10,7 +11,7 @@ fix release fetured not right width during loading.
 
 show all previews but disable the ones that should be disabled and add a tooltip saying that next month a new preview will be unlocked
 
-Allow file downloads previews and instructions to add to spotify
+
 
 Upload some previews
 

@@ -6,6 +6,8 @@ export interface AudioModel {
   imageUrl?: string;
   appleMusic?: string;
   spotify?: string;
+  amazonMusic?: string;
+  youtube?: string;
   featured?: boolean;
   number: number;
 }

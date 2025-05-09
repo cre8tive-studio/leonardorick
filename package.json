@@ -47,7 +47,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@leonardorick/three": "^1.0.78",
-    "@leonardorick/utils": "^0.0.31",
+    "@leonardorick/utils": "^0.0.32",
     "@nuxt/image": "^1.10.0",
     "@nuxtjs/device": "^3.2.4",
     "@pinia/nuxt": "^0.4.11",

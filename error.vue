@@ -16,15 +16,15 @@
 import type { NuxtError } from 'nuxt/app';
 import { isProduction } from './utils/js-utilities';
 const env = useRuntimeConfig().public.environment;
-const { error } = definePropsRefs({
+const { error } = defineProps({
   error: {
     type: Object as PropType<NuxtError>,
     required: true,
   },
 });
-if (!isProduction(env) && error.value) {
+if (!isProduction(env) && error) {
   // eslint-disable-next-line no-console
-  console.error(JSON.parse(JSON.stringify(error.value)));
+  console.error(JSON.parse(JSON.stringify(error)));
 }
 
 const handleClearError = () => clearError({ redirect: '/' });

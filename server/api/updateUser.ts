@@ -1,4 +1,4 @@
-import { UPDATABLE_USER_KEYS, UserModel } from '../../types/user.model';
+import { UPDATABLE_USER_KEYS, type UserModel } from '../../types/user.model';
 import useServerAppwrite from '~/composables/use-server-appwrite';
 
 const { updateUser } = useServerAppwrite();

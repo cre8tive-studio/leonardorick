@@ -8,7 +8,7 @@
         class="mb-4"
         place-holder-image-url="/images/previews-disco.png"
         size="sm"
-        :audio="premiumAudio"
+        :audio="audio"
       />
       <p
         v-if="isDefined(votesCount)"
@@ -93,6 +93,8 @@ interface InfoPerType {
 }
 const { premiumAudio } = defineProps<Props>();
 const { getCachedFile, getCachedFileFromCache } = useCachedFile();
+
+const audio = computed(() => ({ ...premiumAudio, fileId: '' }));
 
 const audioUrl = ref('');
 

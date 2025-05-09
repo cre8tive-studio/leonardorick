@@ -10,6 +10,8 @@ export function parseReleases(res: Models.DocumentList<ReleaseModel>): AudioMode
     fileId: release.fileId,
     imageUrl: release.imageUrl,
     appleMusic: release.appleMusic,
+    youtube: release.youtube,
+    amazonMusic: release.amazonMusic,
     featured: release.featured,
     number: release.number,
   })) as AudioModel[];

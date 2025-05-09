@@ -129,7 +129,7 @@ export default defineNuxtConfig({
       },
     },
     server: {
-      allowedHosts: ['ecd3-2001-818-d8a3-6900-5da8-7255-f736-dfe0.ngrok-free.app'],
+      allowedHosts: ['4176-2001-818-d8a3-6900-d8dc-3afe-d8ca-5a32.ngrok-free.app'],
     },
     // todo: try to remove console.log from production deployment
     // esbuild: {
@@ -137,7 +137,10 @@ export default defineNuxtConfig({
     //   pure: ['console.log', 'console.error', 'console.warn', 'console.debug', 'console.trace'],
     // },
   },
-
+  typescript: {
+    strict: true,
+    typeCheck: true,
+  },
   // todo: try to generate multiple routes with same route but differnt query params
   // generate: {
   //   routes() {

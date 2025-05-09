@@ -40,10 +40,9 @@
 <script setup lang="ts">
 import type { AudioCardSizeOptions } from '~/types/audio-card-size.options';
 import type { AudioModel } from '~/types/audio.model';
-import type { PremiumAudioModel } from '~/types/premium-audio.model';
 
 interface Props {
-  audio?: AudioModel | PremiumAudioModel;
+  audio?: AudioModel;
   size?: AudioCardSizeOptions;
   placeHolderImageUrl?: string;
 }

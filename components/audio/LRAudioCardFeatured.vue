@@ -23,13 +23,14 @@
         <div class="skeleton subtitle mb-2"></div>
       </div>
 
-      <!-- keep v-if audio.title as it affects the wave placeholder width computation -->
       <LRWavePlayer
-        v-if="audio?.title"
         :audio-url="audioUrl"
         @audioprocess="rotateBackground"
       />
-      <LRMediaLinks :audio="audio" />
+      <LRMediaLinks
+        size="lg"
+        :audio="audio"
+      />
     </div>
   </div>
 </template>
@@ -128,7 +129,7 @@ onUnmounted(() => {
     flex-direction: row;
 
     .content {
-      min-width: 500px;
+      min-width: 550px;
     }
 
     :deep(.media) {

@@ -17,8 +17,12 @@
       v-else
       class="loading-container"
     >
-      <div><span class="base-loader" /></div>
-      <div><span class="base-loader" /></div>
+      <div
+        v-for="index of size === 'lg' ? 4 : 2"
+        :key="index"
+      >
+        <span class="base-loader" />
+      </div>
     </div>
   </div>
 </template>
@@ -28,9 +32,13 @@ import type { AudioModel } from '~/types/audio.model';
 
 import SvgoSpotify from '~/assets/icons/spotify.svg';
 import SvgoAppleMusic from '~/assets/icons/apple-music.svg';
+import SvgoYoutube from '~/assets/icons/youtube.svg';
+import SvgoAmazonMusic from '~/assets/icons/amazon-music.svg';
+import type { AudioCardSizeOptions } from '~/types/audio-card-size.options';
 
 interface Props {
   audio?: AudioModel;
+  size?: AudioCardSizeOptions;
 }
 
 interface MediaLink {
@@ -39,7 +47,7 @@ interface MediaLink {
   customClass?: string;
 }
 
-const { audio } = defineProps<Props>();
+const { audio, size = 'sm' } = defineProps<Props>();
 const loaded = ref(false);
 const links: MediaLink[] = [];
 
@@ -63,6 +71,23 @@ useWhenReady(
         link: audio.appleMusic,
         customClass: 'apple-music',
       });
+
+    if (size === 'lg') {
+      audio.amazonMusic &&
+        links.push({
+          svg: SvgoAmazonMusic,
+          link: audio.amazonMusic,
+          customClass: 'amazon-music',
+        });
+
+      audio.youtube &&
+        links.push({
+          svg: SvgoYoutube,
+          link: audio.youtube,
+          customClass: 'youtube',
+        });
+    }
+
     loaded.value = true;
   }
 );
@@ -83,7 +108,18 @@ useWhenReady(
     &.apple-music {
       border-radius: 25%;
     }
+    &.amazon-music {
+      border-radius: 25%;
 
+      svg {
+        height: 85%;
+        width: 85%;
+      }
+    }
+
+    &.youtube svg {
+      border-radius: 15%;
+    }
     svg {
       height: 70%;
       width: 70%;

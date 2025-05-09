@@ -2,7 +2,7 @@ import { Query } from 'node-appwrite';
 import { createGenericError } from '../utils/errors';
 import useServerAppwrite from '~/composables/use-server-appwrite';
 import type { PreviewModel } from '~/types/preview.model';
-import { PremiumAudioModel } from '~/types/premium-audio.model';
+import type { PremiumAudioModel } from '~/types/premium-audio.model';
 
 const { databases, databaseId, collections, getUser, getSettings } = useServerAppwrite();
 

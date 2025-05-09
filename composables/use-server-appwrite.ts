@@ -41,13 +41,13 @@ const useServerAppwrite = () => {
   const queryAllowedEmail = async (email: string) => {
     return databases
       .listDocuments<AllowedEmailModel>(databaseId, allowedEmailsCollection, [Query.equal('email', [email])])
-      .then((res) => res.documents[0]);
+      .then((res) => res.documents[0] as AllowedEmailModel);
   };
 
   const getUserWithEmail = async (email: string) => {
     return databases
       .listDocuments<AppwriteUserModel>(databaseId, usersCollection, [Query.equal('email', [email])])
-      .then((res) => res.documents[0]);
+      .then((res) => res.documents[0] as AppwriteUserModel);
   };
 
   const getUser = async (uid: string) => {

@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
       Query.equal('number', [number]),
     ]);
 
-    if (!query || !query.documents || query.documents.length === 0) {
+    if (!query || !query.documents || query.documents.length === 0 || !query.documents[0]) {
       throw createGenericError(`Cover ${number} not found`);
     }
 
