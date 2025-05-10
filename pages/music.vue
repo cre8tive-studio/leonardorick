@@ -103,7 +103,7 @@ const router = useRouter();
 const route = useRoute();
 
 const { session, subscription } = toRefs(useAppStore());
-const { getUpvotes, getReleasesMetadata } = useAppwrite();
+const { fetchUpvotes, getReleasesMetadata } = useAppwrite();
 const { request } = useRequest();
 
 // todo: remove
@@ -172,7 +172,7 @@ async function setLoggedInformation() {
     return;
   }
 
-  upvotes.value = await getUpvotes();
+  upvotes.value = await fetchUpvotes();
 
   request<PremiumAudioModel[]>('/api/getPreviewsMetadata', { authenticated: true }).then(async (data) => {
     if (!data) {

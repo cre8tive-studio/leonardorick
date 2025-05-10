@@ -1,7 +1,8 @@
 <template>
   <div
+    ref="self"
     class="image-container"
-    :class="size"
+    :class="[size, { rotate }]"
   >
     <transition
       name="image-fade"
@@ -26,18 +27,21 @@
       />
     </transition>
     <div
-      v-if="shouldShowMediaOverlay"
-      class="media-overlay"
+      v-if="shouldShowImageOverlay"
+      class="image-overlay"
     >
-      <LRMediaLinks
-        v-if="audio"
-        :audio="audio"
-      />
+      <slot name="image-overlay">
+        <LRMediaLinks
+          v-if="audio"
+          :audio="audio"
+        />
+      </slot>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { NuxtImg } from '#components';
 import type { AudioCardSizeOptions } from '~/types/audio-card-size.options';
 import type { AudioModel } from '~/types/audio.model';
 
@@ -45,16 +49,21 @@ interface Props {
   audio?: AudioModel;
   size?: AudioCardSizeOptions;
   placeHolderImageUrl?: string;
+  showImageOverlay?: boolean;
+  rotate?: number;
 }
 
-const { audio, placeHolderImageUrl, size = 'lg' } = defineProps<Props>();
+const { audio, placeHolderImageUrl, size = 'lg', showImageOverlay = false, rotate = 0 } = defineProps<Props>();
 
 const { getCachedFile } = useCachedFile();
 
 const imageUrl = ref(placeHolderImageUrl || '/images/empty-cover.jpg');
 const loaded = ref(false);
+const self = ref<HTMLDivElement>();
 
-const shouldShowMediaOverlay = computed(() => size !== 'lg' && (audio?.appleMusic || audio?.spotify));
+const shouldShowImageOverlay = computed(() => showImageOverlay);
+
+defineExpose({ self });
 
 useWhenReady(
   () => audio,
@@ -68,6 +77,17 @@ useWhenReady(
       await getCachedFile({ fileId: `${audio.id}-image`, url: audio.imageUrl, method: 'get' })
     );
     loaded.value = true;
+  }
+);
+
+watch(
+  () => rotate,
+  () => {
+    if (!self.value) return;
+
+    const img = self.value.querySelector('img');
+    if (!img) return;
+    img.style.setProperty('--background-rotation', `${rotate}deg`);
   }
 );
 </script>
@@ -102,12 +122,35 @@ useWhenReady(
     overflow: hidden;
     border-radius: 50%;
     height: fit-content;
-    border: 4px solid $dark-text-4;
+    outline: 4px solid $dark-text-4;
     img {
-      min-width: none;
-      transform: scale(1.3);
+      min-width: 122%;
+      min-height: 122%;
+      object-fit: cover;
+      background-position: center;
     }
   }
+
+  &.rotate {
+    img {
+      --background-rotation: 0;
+      transform: rotate(var(--background-rotation));
+    }
+  }
+
+  // &.sm {
+  //   max-width: 120px;
+  //   width: 120px;
+  //   min-width: auto;
+  //   overflow: hidden;
+  //   border-radius: 50%;
+  //   height: fit-content;
+  //   border: 4px solid $dark-text-4;
+  //   img {
+  //     min-width: none;
+  //     transform: scale(1.3);
+  //   }
+  // }
 
   img {
     max-width: 100%;
@@ -128,7 +171,7 @@ useWhenReady(
     }
   }
 
-  .media-overlay {
+  .image-overlay {
     border-radius: 50%;
     height: 100%;
     width: 100%;

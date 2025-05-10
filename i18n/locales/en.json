@@ -68,7 +68,7 @@
     "subscribed": "subscribed",
     "update": "Update",
     "vote": "Vote",
-    "votes": "{count} Votos | {count} Vote | {count} Votes",
+    "votes": "{count} Votes | {count} Vote | {count} Votes",
     "votes_available": "Votes available",
     "what_they_said": "What they said",
     "welcome": "Welcome",
@@ -79,6 +79,7 @@
         "cover_image": "Song cover image: {songName}"
     },
     "error": {
+        "add_vote": "It was not possible to add the vote.",
         "generic": "Something went wrong, please try again later",
         "generic_payment": "Something went wrong with your payment. Contact support or try again.",
         "general_argument_invalid": "Some field is invalid. Confirm it and try again.",
@@ -87,6 +88,7 @@
         "login": "Unable to login, please check your email and password and try again.",
         "please_fill_email": "Please fill your email.",
         "match_email": "Emails doesn't match",
+        "remove_vote": "It was not possible to remove the vote.",
         "signup": "Unable to signup. Make sure you are already subscribed and try again.",
         "subtitle_home": "You can navigate to the Music page or enjoy the mouse effect. Sorry about that.",
         "subtitle_login": "Once done, you'll be able to login and enjoy exclusive content related to my original songs.",

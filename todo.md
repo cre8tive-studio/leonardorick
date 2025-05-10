@@ -1,24 +1,19 @@
 # FEATURES I REALLY WANT
 
-
 Allow file downloads previews and instructions to add to spotify
 
-add at least two more links in the featured release (youtube and somewhere else)
-
-fix modal not scrolling on windows
-
-fix release fetured not right width during loading.
-
 show all previews but disable the ones that should be disabled and add a tooltip saying that next month a new preview will be unlocked
-
-
 
 Upload some previews
 
 find a way to add some padding in the top of the scrollable area of the modal so it do not touch the border when scrollingL
 
-// add party emoji if the value was reached. And a tooltip saying (new release comming soon)
-fix transition on learn more button
+create donate button
+= // add party emoji if the value was reached. And a tooltip saying (new release comming soon)
+= fix transition on learn more button
+
+- Add also on the profile page
+- update the bar with the payment suceeded webhook
 
 - create full local mocked envrionment for development!!!!!
 -
@@ -26,8 +21,6 @@ fix transition on learn more button
 - Setup staging and production environments on appwrite
 - Add Qonto experience
 - Add google login
-
-Add some sort of donate button in the profile
 
 ===============================================
 

@@ -111,6 +111,13 @@ For reidrect rules to work, your endpoints must be with proxy enabled
 3. Delete from users collection
 4. Delete from allowed-email collection
 
+### Add a new preview
+
+1. Upload the file in the storage
+2. Create the item in the previews collection
+3. Add the number in the settings collection (previewsReady)
+4. Create the document in the upvotes collection with the preview number
+
 #### types
 
 - There's no array type so you select the type you wwant and them select if you want this to be an array.

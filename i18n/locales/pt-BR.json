@@ -79,6 +79,7 @@
         "cover_image": "Imagem da capa da música: {songName}"
     },
     "error": {
+        "add_vote": "Não foi possível adicionar o voto.",
         "generic": "Algo deu errado, tente novamente mais tarde",
         "generic_payment": "Algo deu errado com seu pagamento. Entre em contato com o suporte ou tente novamente.",
         "general_argument_invalid": "Algum campo está inválido: Confirme os valores e tente novamente",
@@ -86,6 +87,7 @@
         "general_argument_invalid_password": "email inválido: O valor tem que ser um email no formato certo.",
         "please_fill_email": "Por favor, preencha seu email.",
         "match_email": "Os emails não são iguais",
+        "remove_vote": "Não fpo possível remover o voto.",
         "signup": "Não foi possível cadastrar o usuário. Certifique-se que você já está inscrito e tente novamente.",
         "subtitle_home": "Você pode visitar a página de Música ou curtir o efeito do mouse. Desculpa por isso.",
         "subtitle_login": "Quando estiver, você vai poder fazer login e aproveitar um conteúdo exclusivo das minhas músicas autorais.",

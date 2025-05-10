@@ -69,7 +69,7 @@
     "three": "^0.166.1",
     "tweakpane": "^4.0.4",
     "url": "^0.11.4",
-    "wavesurfer.js": "^7.9.4"
+    "wavesurfer.js": "^7.9.5"
   },
   "overrides": {
     "vue": "latest"

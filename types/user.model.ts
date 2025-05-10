@@ -8,7 +8,7 @@ export interface UserModel {
   uid: string;
   verified: boolean;
   availablePreviews: number[];
-  featuredPreviews?: number[];
+  featuredPreviews?: number[]; // list of previews in availablePreviews to show the ribbon at the top
 }
 
 export const UPDATABLE_USER_KEYS: Partial<UserModel> = {

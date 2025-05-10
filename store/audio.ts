@@ -1,5 +1,6 @@
 import { useLocalStorage } from '@vueuse/core';
 import type WaveSurfer from 'wavesurfer.js';
+import { useToasterStore } from './toaster';
 import { useAppStore } from '.';
 import type { UpvotesClientModel } from '~/types/upvotes.model';
 import type { PremiumAudioModel } from '~/types/premium-audio.model';
@@ -29,8 +30,10 @@ export const useAudioStore = defineStore('audioStore', () => {
     previews: [],
   });
 
-  const { getUpvotes, updateVotes } = useAppwrite();
+  const { t: $t } = useI18n();
+  const { fetchUpvotes, updateVotes } = useAppwrite();
   const { userId, settings, user } = toRefs(useAppStore());
+  const toast = useToasterStore();
 
   const previewsMaxVotes = computed(() =>
     settings.value ? Math.round(privateState.previews.length * settings.value.upvotesMultiplier) : 0
@@ -56,46 +59,73 @@ export const useAudioStore = defineStore('audioStore', () => {
     privateState.previews = newPreviews
       .sort((a, b) => b.number - a.number)
       .sort((a, b) => Number(b.enabled) - Number(a.enabled));
-    updateVotesCallback();
+
+    fetchUpvotesAvailable();
   }
 
   function addWaveOnList(wave: WaveSurfer) {
     state.waves.push(wave);
   }
 
-  function removeVote(previewNumber: number) {
-    const votes = previewVotes(previewNumber);
+  async function removeVote(previewNumber: number) {
+    await fetchUpvotesAvailable();
+    if (isRemoveVoteDisabled(previewNumber)) {
+      toast.warning({ text: $t('error.remove_vote') });
+      return;
+    }
+
+    const votes = getPreviewVotes(previewNumber);
     const index = votes.findIndex((voteId) => voteId === userId.value);
     votes.splice(index, 1);
-    setUpvotesAvailable();
-    updateVotes(previewNumber, votes).then(updateVotesCallback);
+
+    await updateLocalVotesRemotlyAndThenLocally(previewNumber, votes);
   }
 
-  function addVote(previewNumber: number) {
-    const votes = previewVotes(previewNumber);
+  async function addVote(previewNumber: number) {
+    await fetchUpvotesAvailable();
+
+    if (state.upvotesAvailable < 1) {
+      toast.warning({ text: $t('error.add_vote') });
+      return;
+    }
+    const votes = getPreviewVotes(previewNumber);
     votes.push(userId.value);
-    setUpvotesAvailable();
-    updateVotes(previewNumber, votes).then(updateVotesCallback);
+
+    await updateLocalVotesRemotlyAndThenLocally(previewNumber, votes);
   }
 
-  function previewVotes(previewNumber: number): string[] {
+  function setPreviewVotes(previewNumber: number, votes: string[]) {
+    state.upvotes[previewNumber.toString()] = votes;
+  }
+
+  function getPreviewVotes(previewNumber: number): string[] {
     return state.upvotes[previewNumber.toString()] || [];
   }
 
-  async function updateVotesCallback() {
-    state.upvotes = await getUpvotes();
+  async function updateLocalVotesRemotlyAndThenLocally(previewNumber: number, votes: string[]) {
+    await updateVotes(previewNumber, votes);
+    setPreviewVotes(previewNumber, votes);
+    setUpvotesAvailable();
+  }
+
+  async function fetchUpvotesAvailable() {
+    state.upvotes = await fetchUpvotes();
     setUpvotesAvailable();
   }
 
   function setUpvotesAvailable() {
     state.upvotesAvailable = previewsMaxVotes.value;
     privateState.previews.forEach((preview) => {
-      previewVotes(preview.number).forEach((voteId) => {
+      getPreviewVotes(preview.number).forEach((voteId) => {
         if (voteId === userId.value && state.upvotesAvailable > 0) {
           state.upvotesAvailable -= 1;
         }
       });
     });
+  }
+
+  function isRemoveVoteDisabled(number: number) {
+    return state.upvotesAvailable === previewsMaxVotes.value || !state.upvotes[number]?.includes(userId.value);
   }
 
   return {
@@ -108,5 +138,6 @@ export const useAudioStore = defineStore('audioStore', () => {
     addVote,
     removeVote,
     setUpvotesAvailable,
+    isRemoveVoteDisabled,
   };
 });

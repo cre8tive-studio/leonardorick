@@ -102,7 +102,7 @@ const useAppwrite = () => {
     return settings.value as SettingsModel;
   };
 
-  const getUpvotes = async (): Promise<UpvotesClientModel> => {
+  const fetchUpvotes = async (): Promise<UpvotesClientModel> => {
     return databases.listDocuments<UpvotesModel>(databaseId, upvotesCollection).then(parseUpvotes);
   };
 
@@ -166,7 +166,7 @@ const useAppwrite = () => {
     getCurrentSession,
     createEmailPasswordSession,
     getJWT,
-    getUpvotes,
+    fetchUpvotes,
     getReleasesMetadata,
     removeFeaturedPreview,
 

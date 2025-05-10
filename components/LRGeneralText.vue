@@ -16,8 +16,8 @@
       >
         <template v-if="paragraph.text.length > 1">
           <span
-            ref="text"
             v-for="(segment, sindex) in paragraph.text"
+            ref="text"
             :key="sindex"
             :class="{ bold: segment.bold }"
           >
@@ -34,9 +34,9 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import SplitType from 'split-type';
+import type { GeneralsModel } from '../types/generals.model';
 import { getGeneralsFullText } from '~/utils/parsers/generals.parser';
 import { SCROLL_TRIGGER_IDS } from '~/utils/constants/scroll-trigger-ids';
-import type { GeneralsModel } from '../types/generals.model';
 
 interface Props {
   info: GeneralsModel;

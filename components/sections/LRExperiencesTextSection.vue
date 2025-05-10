@@ -9,11 +9,11 @@
     />
     <div class="wrapper-default-generals-text lr-section-page-paddings pointer-events-none h-full">
       <LRGeneralText
-        @mousemove="mousemoveHandler"
-        ref="generalText"
         v-if="experienceContent"
+        ref="generalText"
         :key="refreshKey"
         :info="experienceContent"
+        @mousemove="mousemoveHandler"
       />
     </div>
   </div>

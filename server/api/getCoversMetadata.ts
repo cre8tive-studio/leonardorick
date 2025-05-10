@@ -36,7 +36,6 @@ export default defineEventHandler(async (event) => {
             title: cover.title,
             description: cover.description,
             number: cover.number,
-            votes: cover.votes,
             enabled: cover.enabled,
           } satisfies PremiumAudioModel)
       )

@@ -2,6 +2,7 @@
   <div class="audio">
     <LRAudioCover
       :audio="audio"
+      show-image-overlay
       size="md"
     />
     <div class="content">

@@ -5,14 +5,43 @@
   >
     <div>
       <LRAudioCover
-        class="mb-4"
+        ref="coverEl"
+        class="rotate"
         place-holder-image-url="/images/previews-disco.png"
         size="sm"
+        :show-image-overlay="isPreview"
         :audio="audio"
-      />
+        :rotate="coverRotation"
+      >
+        <template
+          v-if="isPreview"
+          #image-overlay
+        >
+          <div class="votes-overlay">
+            <button
+              lr-cursor
+              class="simple-action-button"
+              aria-label="Remove"
+              :disabled="isRemoveVoteDisabled(premiumAudio.number)"
+              @click="removeVote(premiumAudio.number)"
+            >
+              <fa icon="minus" />
+            </button>
+            <button
+              lr-cursor
+              class="simple-action-button"
+              aria-label="Add"
+              :disabled="upvotesAvailable < 1"
+              @click="addVote(premiumAudio.number)"
+            >
+              <fa icon="plus" />
+            </button>
+          </div>
+        </template>
+      </LRAudioCover>
       <p
         v-if="isDefined(votesCount)"
-        class="votes-count lr-text--body-0-half text-center w-full"
+        class="votes-count lr-text--body-0-half text-center w-full mt-4"
         :class="{ 'has-vote': votesCount }"
       >
         {{ $t('votes', { count: votesCount }) }}
@@ -31,30 +60,9 @@
         :audio-url="audioUrl"
         :eager="eager"
         size="md"
+        @audioprocess="(currentTime) => (coverRotation = currentTime * 40)"
         @play="handlePlay"
       />
-
-      <div
-        v-if="isPreview"
-        class="flex gap-4"
-      >
-        <button
-          lr-cursor
-          :disabled="isRemoveVoteDisabled"
-          class="lr-button"
-          @click="removeVote(premiumAudio.number)"
-        >
-          {{ $t('remove_vote') }}
-        </button>
-        <button
-          lr-cursor
-          :disabled="upvotesAvailable < 1"
-          class="lr-button lr-button-secondary"
-          @click="addVote(premiumAudio.number)"
-        >
-          {{ $t('vote') }}
-        </button>
-      </div>
     </div>
 
     <LRRibbon
@@ -67,23 +75,12 @@
 
 <script setup lang="ts">
 import { isDefined } from '@leonardorick/utils';
+import type LRAudioCover from './LRAudioCover.vue';
 import { useAppStore } from '~/store';
 import { useAudioStore } from '~/store/audio';
 import type { PlayOptions } from '~/types/play.options';
 import type { PremiumAudioModel } from '~/types/premium-audio.model';
 
-const { t: $t } = useI18n();
-const { userId, user } = toRefs(useAppStore());
-const store = useAudioStore();
-const { upvotes, upvotesAvailable, previewsMaxVotes } = toRefs(store);
-const { addVote, removeVote } = store;
-const { removeFeaturedPreview } = useAppwrite();
-
-const isPreview = computed(() => premiumAudio.type === 'preview');
-const votesCount = computed(() => (isPreview.value ? upvotes.value[premiumAudio.number]?.length || 0 : undefined));
-const isRemoveVoteDisabled = computed(
-  () => upvotesAvailable === previewsMaxVotes || !upvotes.value[premiumAudio.number]?.includes(userId.value)
-);
 interface Props {
   premiumAudio: PremiumAudioModel;
 }
@@ -91,16 +88,16 @@ interface InfoPerType {
   url: string;
   title: string;
 }
+
 const { premiumAudio } = defineProps<Props>();
+
+const { t: $t } = useI18n();
+const { user } = toRefs(useAppStore());
+const store = useAudioStore();
+const { upvotes, upvotesAvailable } = toRefs(store);
+const { addVote, removeVote, isRemoveVoteDisabled } = store;
+const { removeFeaturedPreview } = useAppwrite();
 const { getCachedFile, getCachedFileFromCache } = useCachedFile();
-
-const audio = computed(() => ({ ...premiumAudio, fileId: '' }));
-
-const audioUrl = ref('');
-
-const fileId = `premium-${premiumAudio.type}-${premiumAudio.number}`;
-const loaded = ref(false);
-const eager = ref(false);
 
 const typeMap: Record<PremiumAudioModel['type'], InfoPerType> = {
   preview: {
@@ -112,6 +109,19 @@ const typeMap: Record<PremiumAudioModel['type'], InfoPerType> = {
     title: $t('cover'),
   },
 };
+
+const coverEl = ref<InstanceType<typeof LRAudioCover>>();
+
+const audioUrl = ref('');
+
+const fileId = `premium-${premiumAudio.type}-${premiumAudio.number}`;
+const loaded = ref(false);
+const eager = ref(false);
+const coverRotation = ref(0);
+
+const audio = computed(() => ({ ...premiumAudio, fileId: '' }));
+const isPreview = computed(() => premiumAudio.type === 'preview');
+const votesCount = computed(() => (isPreview.value ? upvotes.value[premiumAudio.number]?.length || 0 : undefined));
 
 onMounted(async () => {
   if (premiumAudio.enabled) {
@@ -192,6 +202,32 @@ function requestAudioFile() {
   &:not(.enabled) {
     opacity: 0.7;
     background: repeating-linear-gradient(45deg, $dark-text-5, $dark-text-5 10px, $dark-text-6 10px, $dark-text-6 20px);
+  }
+
+  .votes-overlay {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 10%;
+    button {
+      flex: 1;
+      aspect-ratio: 1 / 1;
+      height: auto;
+      padding-inline: 10%;
+
+      display: flex; // makes the button a circle
+      align-items: center;
+      justify-content: center;
+
+      &:disabled {
+        color: $dark-text-5;
+      }
+
+      svg {
+        height: 100%;
+        width: 100%;
+      }
+    }
   }
 }
 
