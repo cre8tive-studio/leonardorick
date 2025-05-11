@@ -6,7 +6,7 @@
     <div class="flex flex-col justify-end h-full">
       <LRAudioCover
         class="audio-cover"
-        place-holder-image-url="/images/previews-disco.png"
+        place-holder-image-url="/images/premium-disco.png"
         size="sm"
         :show-image-overlay="isPreview"
         :audio="audio"
@@ -89,6 +89,7 @@
           <fa icon="download" />
         </button>
         <button
+          v-if="premiumAudio"
           class="simple-action-button colorful-actions"
           lr-cursor
           :disabled="!premiumAudio.enabled"
