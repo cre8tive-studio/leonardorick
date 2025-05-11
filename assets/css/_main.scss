@@ -205,6 +205,15 @@
 .lr-anchor {
   text-decoration: underline;
   cursor: none;
+  transition: color 0.3s $default-ease;
+
+  &:hover:not(.disabled) {
+    color: $highlight;
+  }
+
+  &:active:not(.disabled) {
+    color: $highlight-2;
+  }
 }
 
 @media (min-width: $lg-breakpoint) {

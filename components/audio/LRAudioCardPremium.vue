@@ -39,28 +39,29 @@
         </template>
       </LRAudioCover>
       <p
-        v-if="isDefined(votesCount)"
         ref="votesCountEl"
         class="votes-count"
         :class="{ 'has-vote': votesCount }"
       >
-        <fa icon="heart" />
+        <template v-if="isDefined(votesCount)">
+          <fa icon="heart" />
 
-        <span class="votes-label">
-          <i18n-t
-            keypath="votes"
-            :plural="votesCount"
-          >
-            <template #count>
-              <transition
-                name="transition-partial-fade"
-                mode="out-in"
-              >
-                <span :key="votesCount">{{ votesCount }}</span>
-              </transition>
-            </template>
-          </i18n-t>
-        </span>
+          <span class="votes-label">
+            <i18n-t
+              keypath="votes"
+              :plural="votesCount"
+            >
+              <template #count>
+                <transition
+                  name="transition-partial-fade"
+                  mode="out-in"
+                >
+                  <span :key="votesCount">{{ votesCount }}</span>
+                </transition>
+              </template>
+            </i18n-t>
+          </span>
+        </template>
       </p>
     </div>
 
@@ -89,10 +90,11 @@
           <fa icon="download" />
         </button>
         <button
-          v-if="premiumAudio"
+          v-if="audio.lyrics"
           class="simple-action-button colorful-actions"
           lr-cursor
           :disabled="!premiumAudio.enabled"
+          @click="shouldShowDetailsModal = true"
         >
           <fa icon="bars" />
         </button>
@@ -104,6 +106,14 @@
       :text="$t('new')"
       type="featured"
     />
+
+    <LRAudioDetailsModal
+      :should-show-modal="shouldShowDetailsModal"
+      :audio="audio"
+      @close="shouldShowDetailsModal = false"
+      @download="downloadFile"
+    >
+    </LRAudioDetailsModal>
   </div>
 </template>
 
@@ -153,6 +163,8 @@ const audioUrl = ref('');
 const fileId = `premium-${premiumAudio.type}-${premiumAudio.number}`;
 const loaded = ref(false);
 const eager = ref(false);
+const shouldShowDetailsModal = ref(false);
+
 const coverRotation = ref(0);
 
 const audio = computed(() => ({ ...premiumAudio, fileId: '' })); // only for type compliance with audio cover
@@ -344,6 +356,10 @@ function animateHeart() {
   .lr-audio-card-premium {
     flex-direction: column;
     gap: 12px;
+
+    .audio-cover {
+      margin-bottom: 0.5rem;
+    }
 
     .content {
       flex: inherit;

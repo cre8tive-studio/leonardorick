@@ -40,6 +40,7 @@ export default defineEventHandler(async (event) => {
           description: preview.description,
           number: preview.number,
           enabled: preview.enabled,
+          lyrics: preview.lyrics,
         } satisfies PremiumAudioModel)
     );
   } catch (err: any) {

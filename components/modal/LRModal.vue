@@ -41,17 +41,19 @@ interface Props {
   shouldShowModal: boolean;
   maxWidth?: string;
   height?: string;
+  enableModalScroll?: boolean;
 }
 
 const attrs = useAttrs();
 const $emit = defineEmits<Emits>();
-const { shouldShowModal, maxWidth = '80%', height = '75vh' } = defineProps<Props>();
+const { shouldShowModal, maxWidth = '80%', height = '75vh', enableModalScroll = true } = defineProps<Props>();
 
 const { enableScroll, disableScroll } = useAnimationStore();
 
 const modalEl = ref<HTMLDivElement>();
 const innerEl = ref<HTMLDivElement>();
 const modalLenis = ref<Lenis>();
+const mounted = ref(false);
 // on mounted here is only the first time the modal opens, that's why
 // we need this logic around watching shouldShowModal. This solution
 // consider a modal that migiht be opened right on the first screen
@@ -70,13 +72,16 @@ onMounted(() => {
         modalEl.value.style.setProperty('--height', height);
         disableScroll({ blockTogglingScroll: true });
 
-        modalLenis.value = new Lenis({
-          autoRaf: true,
-          duration: 1.4,
-          wrapper: innerEl.value,
-          content: innerEl.value,
-        });
-      } else {
+        if (enableModalScroll) {
+          modalLenis.value = new Lenis({
+            autoRaf: true,
+            duration: 1.4,
+            wrapper: innerEl.value,
+            content: innerEl.value,
+          });
+        }
+        mounted.value = true;
+      } else if (mounted.value) {
         // acts like onUnmounted
         enableScroll({ blockTogglingScroll: false });
       }
@@ -112,7 +117,7 @@ function close() {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding-bottom: 6rem;
+  padding-bottom: 8.4rem;
 
   background-color: rgba($main-dark-bg, 0.22);
   backdrop-filter: blur(6px);
@@ -123,7 +128,7 @@ function close() {
   .header {
     width: var(--max-width);
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     margin-bottom: 16px;
 
     .close {
@@ -180,6 +185,7 @@ function close() {
   .modal {
     padding-inline: 16px;
     .inner {
+      padding-top: 16px;
       padding-inline: 32px;
     }
   }
@@ -189,12 +195,13 @@ function close() {
   .modal {
     .header {
       width: 100%;
-      justify-content: flex-start;
       margin-bottom: 0;
     }
+
     .inner {
       width: 100%;
-      height: 70vh;
+      height: 80vh;
+      padding-inline: 16px;
     }
   }
 }

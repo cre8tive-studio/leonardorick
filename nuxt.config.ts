@@ -128,19 +128,16 @@ export default defineNuxtConfig({
         },
       },
     },
-    server: {
-      allowedHosts: ['4176-2001-818-d8a3-6900-d8dc-3afe-d8ca-5a32.ngrok-free.app'],
-    },
     // todo: try to remove console.log from production deployment
     // esbuild: {
     //   drop: ['console', 'debugger'],
     //   pure: ['console.log', 'console.error', 'console.warn', 'console.debug', 'console.trace'],
     // },
   },
-  typescript: {
-    strict: true,
-    typeCheck: true,
-  },
+  // typescript: {
+  //   strict: true,
+  //   typeCheck: true,
+  // },
   // todo: try to generate multiple routes with same route but differnt query params
   // generate: {
   //   routes() {
