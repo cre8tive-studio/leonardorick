@@ -1,4 +1,5 @@
 {
+    "add": "Add",
     "about_me": "About me",
     "all_rights_reserved": "All Rights Reserved by Leonardo Rick. Made with 💙 in Lisbon, Portugal",
     "already_have_an_account": "Already have an account?",
@@ -16,6 +17,7 @@
     "disabled": "Disabled",
     "donate": "Donate",
     "dont_have_account_sign_up": "Don't have an account?",
+    "download": "Download",
     "engineers": "Engineers",
     "english": "English‎ ‎ ",
     "exclusive_access_for_supporters": "Exclusive access for supporters",
@@ -52,6 +54,7 @@
     "product_managers": "Product Managers",
     "preview": "Preview",
     "profile": "Profile",
+    "remove": "Remove",
     "recruiters": "Recruiters",
     "reenable_subscription_regain_access": "Re-enable your subscription to regain full access to exclusive content.",
     "remove_vote": "Remove vote",

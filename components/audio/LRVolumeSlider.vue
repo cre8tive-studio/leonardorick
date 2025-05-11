@@ -12,7 +12,7 @@
         @mouseup="mouseup"
       >
         <transition
-          name="icon-fade"
+          name="transition-partial-fade"
           mode="out-in"
         >
           <fa
@@ -138,15 +138,5 @@ onUnmounted(() => {
       color: $highlight;
     }
   }
-}
-
-.icon-fade-enter-active,
-.icon-fade-leave-active {
-  transition: all 0.15s $default-ease;
-}
-
-.icon-fade-enter-from,
-.icon-fade-leave-to {
-  opacity: 0.1;
 }
 </style>

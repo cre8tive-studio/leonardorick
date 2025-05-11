@@ -1,7 +1,7 @@
 <template>
   <ClientOnly>
     <teleport to="body">
-      <transition name="modal">
+      <transition name="transition-fade">
         <div
           v-if="shouldShowModal"
           ref="modalEl"
@@ -166,15 +166,14 @@ function close() {
     padding: 32px 64px;
   }
 }
-
-/* Transitions */
-.modal-enter-from,
-.modal-leave-to {
+// for some reason this is not working from animations.scss so I'm copying here
+.transition-fade-enter-from,
+.transition-fade-leave-to {
   opacity: 0;
 }
-.modal-enter-active,
-.modal-leave-active {
-  transition: 0.3s ease all;
+.transition-fade-enter-active,
+.transition-fade-leave-active {
+  transition: all 0.3s $default-ease;
 }
 
 @media (max-width: $md-breakpoint) {

@@ -71,7 +71,7 @@ export const useAudioStore = defineStore('audioStore', () => {
     await fetchUpvotesAvailable();
     if (isRemoveVoteDisabled(previewNumber)) {
       toast.warning({ text: $t('error.remove_vote') });
-      return;
+      return false;
     }
 
     const votes = getPreviewVotes(previewNumber);
@@ -79,6 +79,7 @@ export const useAudioStore = defineStore('audioStore', () => {
     votes.splice(index, 1);
 
     await updateLocalVotesRemotlyAndThenLocally(previewNumber, votes);
+    return true;
   }
 
   async function addVote(previewNumber: number) {
@@ -86,12 +87,13 @@ export const useAudioStore = defineStore('audioStore', () => {
 
     if (state.upvotesAvailable < 1) {
       toast.warning({ text: $t('error.add_vote') });
-      return;
+      return false;
     }
     const votes = getPreviewVotes(previewNumber);
     votes.push(userId.value);
 
-    await updateLocalVotesRemotlyAndThenLocally(previewNumber, votes);
+    updateLocalVotesRemotlyAndThenLocally(previewNumber, votes); // not awaiting here so we can animate the heart in the template faster
+    return true;
   }
 
   function setPreviewVotes(previewNumber: number, votes: string[]) {
@@ -128,6 +130,16 @@ export const useAudioStore = defineStore('audioStore', () => {
     return state.upvotesAvailable === previewsMaxVotes.value || !state.upvotes[number]?.includes(userId.value);
   }
 
+  function download(url: string, name: string) {
+    const link = document.createElement('a');
+    link.target = '_blank';
+    link.download = name;
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   return {
     ...toRefs(state),
     previews,
@@ -139,5 +151,7 @@ export const useAudioStore = defineStore('audioStore', () => {
     removeVote,
     setUpvotesAvailable,
     isRemoveVoteDisabled,
+
+    download,
   };
 });

@@ -45,7 +45,7 @@ const useHideOnScroll = (classes: string[]) => {
   });
 
   function activate() {
-    gsap.to(classes, { autoAlpha: 0 });
+    gsap.to(classes, { autoAlpha: getScrollHeight() > 0 ? 0 : 1 });
     onScrollTrigger = ScrollTrigger.create({
       onUpdate: (self) => {
         if (self.direction !== direction) {
@@ -93,7 +93,7 @@ const useHideOnScroll = (classes: string[]) => {
     // basically we aalways show everything, and block the opacity 0 when we are reaching the end of the page.
     // The end of the page is the scrollheight minus the size of the viewport, which tries to aproximate that
     // we are reaching the end of the page.
-    const scrollHeight = document.body.offsetHeight - window.innerHeight;
+    const scrollHeight = getScrollHeight();
     toBlockHeight.value = scrollHeight - window.screen.height * 1.1;
 
     blocked.value = false;
@@ -108,6 +108,10 @@ const useHideOnScroll = (classes: string[]) => {
         blocked.value = false;
       },
     });
+  }
+
+  function getScrollHeight() {
+    return document.body.offsetHeight - window.innerHeight;
   }
 };
 

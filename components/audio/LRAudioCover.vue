@@ -5,7 +5,7 @@
     :class="[size, { rotate }]"
   >
     <transition
-      name="image-fade"
+      name="transition-partial-fade"
       mode="out-in"
     >
       <NuxtImg
@@ -18,7 +18,7 @@
       />
     </transition>
     <transition
-      name="image-fade"
+      name="transition-partial-fade"
       mode="out-in"
     >
       <div
@@ -93,16 +93,6 @@ watch(
 </script>
 
 <style scoped lang="scss">
-.image-fade-enter-active,
-.image-fade-leave-active {
-  transition: all 0.3s $default-ease;
-}
-
-.image-fade-enter-from,
-.image-fade-leave-to {
-  opacity: 0;
-}
-
 .image-container {
   --box-shadow03: 6px 6px 12px #151618, -6px -6px 12px #202024;
   position: relative;
@@ -137,20 +127,6 @@ watch(
       transform: rotate(var(--background-rotation));
     }
   }
-
-  // &.sm {
-  //   max-width: 120px;
-  //   width: 120px;
-  //   min-width: auto;
-  //   overflow: hidden;
-  //   border-radius: 50%;
-  //   height: fit-content;
-  //   border: 4px solid $dark-text-4;
-  //   img {
-  //     min-width: none;
-  //     transform: scale(1.3);
-  //   }
-  // }
 
   img {
     max-width: 100%;
@@ -188,7 +164,6 @@ watch(
     justify-content: center;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.8);
       opacity: 1;
     }
   }

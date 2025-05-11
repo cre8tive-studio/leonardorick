@@ -3,10 +3,9 @@
     class="lr-audio-card-premium"
     :class="{ enabled: premiumAudio.enabled }"
   >
-    <div>
+    <div class="flex flex-col justify-end h-full">
       <LRAudioCover
-        ref="coverEl"
-        class="rotate"
+        class="audio-cover"
         place-holder-image-url="/images/previews-disco.png"
         size="sm"
         :show-image-overlay="isPreview"
@@ -21,7 +20,7 @@
             <button
               lr-cursor
               class="simple-action-button"
-              aria-label="Remove"
+              :aria-label="$t('remove')"
               :disabled="isRemoveVoteDisabled(premiumAudio.number)"
               @click="removeVote(premiumAudio.number)"
             >
@@ -30,9 +29,9 @@
             <button
               lr-cursor
               class="simple-action-button"
-              aria-label="Add"
+              :aria-label="$t('add')"
               :disabled="upvotesAvailable < 1"
-              @click="addVote(premiumAudio.number)"
+              @click="addPreviewVote"
             >
               <fa icon="plus" />
             </button>
@@ -41,10 +40,27 @@
       </LRAudioCover>
       <p
         v-if="isDefined(votesCount)"
-        class="votes-count lr-text--body-0-half text-center w-full mt-4"
+        ref="votesCountEl"
+        class="votes-count"
         :class="{ 'has-vote': votesCount }"
       >
-        {{ $t('votes', { count: votesCount }) }}
+        <fa icon="heart" />
+
+        <span class="votes-label">
+          <i18n-t
+            keypath="votes"
+            :plural="votesCount"
+          >
+            <template #count>
+              <transition
+                name="transition-partial-fade"
+                mode="out-in"
+              >
+                <span :key="votesCount">{{ votesCount }}</span>
+              </transition>
+            </template>
+          </i18n-t>
+        </span>
       </p>
     </div>
 
@@ -55,7 +71,6 @@
       <h2 class="lr-text--body-1 mb-2">{{ premiumAudio.title }}</h2>
 
       <LRWavePlayer
-        class="mb-4"
         :enabled="premiumAudio.enabled"
         :audio-url="audioUrl"
         :eager="eager"
@@ -63,6 +78,24 @@
         @audioprocess="(currentTime) => (coverRotation = currentTime * 40)"
         @play="handlePlay"
       />
+      <div class="actions">
+        <button
+          class="simple-action-button colorful-actions"
+          lr-cursor
+          :disabled="!premiumAudio.enabled"
+          :aria-label="$t('download')"
+          @click="downloadFile"
+        >
+          <fa icon="download" />
+        </button>
+        <button
+          class="simple-action-button colorful-actions"
+          lr-cursor
+          :disabled="!premiumAudio.enabled"
+        >
+          <fa icon="bars" />
+        </button>
+      </div>
     </div>
 
     <LRRibbon
@@ -75,7 +108,9 @@
 
 <script setup lang="ts">
 import { isDefined } from '@leonardorick/utils';
+import { gsap } from 'gsap';
 import type LRAudioCover from './LRAudioCover.vue';
+import type LRWavePlayer from './LRWavePlayer.vue';
 import { useAppStore } from '~/store';
 import { useAudioStore } from '~/store/audio';
 import type { PlayOptions } from '~/types/play.options';
@@ -95,7 +130,7 @@ const { t: $t } = useI18n();
 const { user } = toRefs(useAppStore());
 const store = useAudioStore();
 const { upvotes, upvotesAvailable } = toRefs(store);
-const { addVote, removeVote, isRemoveVoteDisabled } = store;
+const { addVote, removeVote, isRemoveVoteDisabled, download } = store;
 const { removeFeaturedPreview } = useAppwrite();
 const { getCachedFile, getCachedFileFromCache } = useCachedFile();
 
@@ -110,7 +145,7 @@ const typeMap: Record<PremiumAudioModel['type'], InfoPerType> = {
   },
 };
 
-const coverEl = ref<InstanceType<typeof LRAudioCover>>();
+const votesCountEl = ref<HTMLDivElement>();
 
 const audioUrl = ref('');
 
@@ -119,7 +154,7 @@ const loaded = ref(false);
 const eager = ref(false);
 const coverRotation = ref(0);
 
-const audio = computed(() => ({ ...premiumAudio, fileId: '' }));
+const audio = computed(() => ({ ...premiumAudio, fileId: '' })); // only for type compliance with audio cover
 const isPreview = computed(() => premiumAudio.type === 'preview');
 const votesCount = computed(() => (isPreview.value ? upvotes.value[premiumAudio.number]?.length || 0 : undefined));
 
@@ -138,20 +173,20 @@ onUnmounted(() => {
   if (audioUrl.value) URL.revokeObjectURL(audioUrl.value);
 });
 
-function handlePlay($event: PlayOptions) {
+async function handlePlay($event: PlayOptions) {
   if (isPreview && $event === 'play' && user.value?.featuredPreviews?.includes(premiumAudio.number)) {
     removeFeaturedPreview(user.value.featuredPreviews, premiumAudio.number);
   }
 
   if ($event === 'play' && !loaded.value) {
-    loaded.value = true;
     eager.value = true;
-    requestAudioFile();
+    await requestAudioFile();
   }
 }
 
-function requestAudioFile() {
-  getCachedFile({
+async function requestAudioFile() {
+  loaded.value = true;
+  const blob = await getCachedFile({
     fileId,
     url: `/api/${typeMap[premiumAudio.type].url}/${premiumAudio.number}`,
     authenticated: true,
@@ -159,8 +194,39 @@ function requestAudioFile() {
     body: {
       number: premiumAudio.number,
     },
-  }).then((data) => {
-    audioUrl.value = URL.createObjectURL(data);
+  });
+  audioUrl.value = URL.createObjectURL(blob);
+}
+
+async function downloadFile() {
+  if (!audioUrl.value) {
+    await requestAudioFile();
+  }
+
+  download(audioUrl.value, `Leonardo Rick (${$t('preview')}) - ${premiumAudio.title}.mp3`);
+}
+
+async function addPreviewVote() {
+  const result = await addVote(premiumAudio.number);
+  if (result) {
+    animateHeart();
+  }
+}
+
+function animateHeart() {
+  if (!votesCountEl.value) return;
+  const svg = votesCountEl.value.querySelector('svg');
+  if (!svg) return;
+
+  gsap.to(svg, {
+    color: '#ff0000',
+    scale: 1.4,
+    duration: 0.2,
+    yoyo: true,
+    repeat: 1,
+    onComplete: () => {
+      gsap.set(svg, { clearProps: 'all' });
+    },
   });
 }
 </script>
@@ -180,6 +246,30 @@ function requestAudioFile() {
   border-radius: 7px;
   transition: opacity 0.3s $default-ease;
 
+  .audio-cover {
+    margin-bottom: 30%;
+  }
+
+  // show votes overlay when hovering the votes label
+  .audio-cover:has(~ .votes-count:hover) :deep(.image-overlay) {
+    opacity: 1;
+  }
+
+  .votes-count {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    justify-content: center;
+    width: 100%;
+    height: 48px;
+
+    .votes-label {
+      min-width: 7ch;
+      text-align: center;
+    }
+  }
+
   .votes-count:not(.has-vote) {
     color: $secondary-dark-text;
   }
@@ -193,6 +283,7 @@ function requestAudioFile() {
     flex: 1;
     display: flex;
     flex-direction: column;
+    height: 100%;
 
     h2 {
       text-align: left;
@@ -202,6 +293,23 @@ function requestAudioFile() {
   &:not(.enabled) {
     opacity: 0.7;
     background: repeating-linear-gradient(45deg, $dark-text-5, $dark-text-5 10px, $dark-text-6 10px, $dark-text-6 20px);
+  }
+
+  .actions {
+    position: relative;
+    left: -12px;
+    display: flex;
+    align-items: center;
+
+    button {
+      height: 45px;
+      width: 45px;
+
+      svg {
+        height: 20px;
+        width: 20px;
+      }
+    }
   }
 
   .votes-overlay {
@@ -231,7 +339,7 @@ function requestAudioFile() {
   }
 }
 
-@media (max-width: $lg-breakpoint) {
+@media (max-width: $md-breakpoint) {
   .lr-audio-card-premium {
     flex-direction: column;
     gap: 12px;

@@ -1,4 +1,5 @@
 {
+    "add": "Adicionar",
     "about_me": "Sobre mim",
     "all_rights_reserved": "Todos os Direitos Reservaods por Leonardo Rick. Feito com 💙 em Lisboa, Portugal",
     "already_have_an_account": "Já tem uma conta?",
@@ -16,6 +17,7 @@
     "disabled": "Desabilitado",
     "donate": "Contribua",
     "dont_have_account_sign_up": "Não tem uma conta?",
+    "download": "Download",
     "engineers": "Engenheiros",
     "english": "Inglês‎ ‎ ",
     "exclusive_access_for_supporters": "Acesso exclusivo para apoiadores",
@@ -52,6 +54,7 @@
     "product_managers": "Product Managers",
     "preview": "Prévia",
     "profile": "Perfil",
+    "remove": "Remover",
     "recruiters": "Recrutadores",
     "reenable_subscription_regain_access": "Ative sua subscrição para ganhar acesso novamente ao conteúdo exclusivo",
     "remove_vote": "Remover voto",

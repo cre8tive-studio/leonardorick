@@ -1,6 +1,8 @@
 # FEATURES I REALLY WANT
 
-Allow file downloads previews and instructions to add to spotify
+Improve translations to really consider routes such as /pt-BR/something
+
+instructions to add to spotify
 
 show all previews but disable the ones that should be disabled and add a tooltip saying that next month a new preview will be unlocked
 

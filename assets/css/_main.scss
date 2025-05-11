@@ -66,16 +66,33 @@
 
 .simple-action-button {
   border-radius: 50%;
-  transition: scale 0.3s $default-ease, color, 0.3s $default-ease;
-  cursor: none;
+  transition: scale 0.3s $default-ease, color 0.3s $default-ease;
   color: $main-dark-text-hsl-darker;
+
+  > * {
+    pointer-events: none; // for lr-cursor;
+  }
 
   &:hover:not(.disabled):not(:disabled) {
     color: $main-dark-text;
     scale: 1.2;
+    cursor: none;
   }
-  > * {
-    pointer-events: none; // for lr-cursor;
+
+  &:disabled {
+    color: $dark-text-4;
+  }
+
+  &.colorful-actions {
+    &:not(:disabled) {
+      &:hover {
+        color: $highlight;
+      }
+
+      &:active {
+        color: $highlight-2;
+      }
+    }
   }
 }
 

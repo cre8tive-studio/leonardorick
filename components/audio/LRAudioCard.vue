@@ -14,7 +14,7 @@
         :audio-url="audioUrl"
         size="md"
         :eager="eager"
-        @play="play"
+        @play="handlePlay"
       />
     </div>
   </div>
@@ -22,6 +22,7 @@
 
 <script setup lang="ts">
 import LRAudioCover from './LRAudioCover.vue';
+import type LRWavePlayer from './LRWavePlayer.vue';
 import type { PlayOptions } from '~/types/play.options';
 import type { AudioModel } from '~/types/audio.model';
 
@@ -49,20 +50,17 @@ onUnmounted(() => {
   if (audioUrl.value) URL.revokeObjectURL(audioUrl.value);
 });
 
-function play($event: PlayOptions) {
+async function handlePlay($event: PlayOptions) {
   if ($event === 'play' && !loaded.value) {
-    loaded.value = true;
     eager.value = true;
-    requestAudioFile();
+    await requestAudioFile();
   }
 }
 
-function requestAudioFile() {
-  getCachedFile({ fileId: audio.fileId, method: 'post' }).then((blob) => {
-    if (blob) {
-      audioUrl.value = URL.createObjectURL(blob);
-    }
-  });
+async function requestAudioFile() {
+  loaded.value = true;
+  const blob = await getCachedFile({ fileId: audio.fileId, method: 'post' });
+  audioUrl.value = URL.createObjectURL(blob);
 }
 </script>
 

@@ -105,6 +105,11 @@ useWhenReady(
     height: 50px;
     width: 50px;
 
+    svg {
+      height: 70%;
+      width: 70%;
+    }
+
     &.apple-music {
       border-radius: 25%;
     }
@@ -119,10 +124,6 @@ useWhenReady(
 
     &.youtube svg {
       border-radius: 15%;
-    }
-    svg {
-      height: 70%;
-      width: 70%;
     }
   }
 

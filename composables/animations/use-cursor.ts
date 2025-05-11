@@ -273,7 +273,7 @@ const useCursor = () => {
     handleLrCursorFocus(e);
     updateCursorPosition(e);
 
-    // handle click and drag not triggering pointerup
+    // handle click and drag outside the browser not triggering pointerup
     // https://stackoverflow.com/a/48970682/10526869
     if (e.buttons !== buttons) {
       buttons = e.buttons;
@@ -299,13 +299,17 @@ const useCursor = () => {
   }
 
   function handlePointerUp(_e?: PointerEvent) {
-    if (!cursorInner.value) return;
-    gsap.to(cursorInner.value, { scale: 1, duration: 0.2 });
+    if (!cursorInner.value || !cursorOuter.value) return;
+    const tl = gsap.timeline();
+    tl.to(cursorInner.value, { scale: 1, background: COLORS.highlight, duration: 0.2 });
+    tl.to(cursorOuter.value, { borderColor: COLORS.highlight, duration: 0.2 }, '<');
   }
 
   function handlePointerDown(_e: PointerEvent) {
-    if (!cursorInner.value) return;
-    gsap.to(cursorInner.value, { scale: 2.1, duration: 0.2 });
+    const tl = gsap.timeline();
+    if (!cursorInner.value || !cursorOuter.value) return;
+    tl.to(cursorInner.value, { scale: 2.1, background: COLORS.highlight2, duration: 0.2 });
+    tl.to(cursorOuter.value, { borderColor: COLORS.highlight2, duration: 0.2 }, '<');
   }
 
   function updateCursorPosition(e: MouseEvent) {
@@ -320,10 +324,10 @@ const useCursor = () => {
     lastTargetEl = targetEl;
     isStuck.value = true;
 
-    const enoughHeight = targetBox.height > 24;
+    const enoughHeight = targetBox.height > 23;
 
     // ANIMATION 2;
-    gsap.killTweensOf(cursorOuter.value);
+    gsap.killTweensOf(cursorOuter.value, 'x,y,width,height,top,left,opacity,borderWidth,borderRadius');
     gsap.to(cursorOuter.value, {
       duration: 0.2,
       x: targetBox.x + window.scrollX,
