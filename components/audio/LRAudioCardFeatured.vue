@@ -24,7 +24,7 @@
       </div>
 
       <LRWavePlayer
-        :audio-url="audioUrl"
+        :audio-blob="audioBlob"
         @audioprocess="rotateBackground"
       />
       <LRMediaLinks
@@ -48,7 +48,7 @@ const { audio } = defineProps<Props>();
 
 const { getCachedFile } = useCachedFile();
 
-const audioUrl = ref('');
+const audioBlob = ref<Blob>();
 
 const selfEl = ref<HTMLDivElement>();
 
@@ -62,15 +62,11 @@ useWhenReady(
     if (!audio) return;
     getCachedFile({ fileId: audio.fileId, method: 'post' }).then((blob) => {
       if (blob) {
-        audioUrl.value = URL.createObjectURL(blob);
+        audioBlob.value = blob;
       }
     });
   }
 );
-
-onUnmounted(() => {
-  if (audioUrl.value) URL.revokeObjectURL(audioUrl.value);
-});
 </script>
 
 <style scoped lang="scss">
@@ -85,7 +81,7 @@ onUnmounted(() => {
 
   display: flex;
   gap: 48px;
-  padding-inline: 48px;
+  padding-inline: 32px;
   align-items: center;
   justify-content: center;
 
@@ -120,6 +116,12 @@ onUnmounted(() => {
     transform-origin: center;
     transform: rotate(var(--background-rotation, 0));
     pointer-events: none;
+  }
+}
+
+@media (min-width: $xxxl-breakpoint) {
+  .audio {
+    padding-inline: 82px;
   }
 }
 

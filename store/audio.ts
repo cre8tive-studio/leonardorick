@@ -11,6 +11,11 @@ interface AudioStoreModel {
   upvotes: UpvotesClientModel;
   upvotesAvailable: number;
   covers: PremiumAudioModel[];
+  playLocked: boolean;
+
+  globalWaveformEl: HTMLElement | null;
+  globalWave: WaveSurfer | null;
+  lastPlayedWave: WaveSurfer | null;
 }
 
 interface PrivateAudioStoreModel {
@@ -24,6 +29,11 @@ export const useAudioStore = defineStore('audioStore', () => {
     upvotes: {},
     covers: [],
     upvotesAvailable: 0,
+    playLocked: false,
+
+    globalWaveformEl: null,
+    globalWave: null,
+    lastPlayedWave: null,
   });
 
   const privateState = reactive<PrivateAudioStoreModel>({
@@ -65,6 +75,13 @@ export const useAudioStore = defineStore('audioStore', () => {
 
   function addWaveOnList(wave: WaveSurfer) {
     state.waves.push(wave);
+  }
+
+  function removeWaveFromList(wave: WaveSurfer) {
+    const index = state.waves.indexOf(wave);
+    if (index !== -1) {
+      state.waves.splice(index, 1);
+    }
   }
 
   async function removeVote(previewNumber: number) {
@@ -147,6 +164,7 @@ export const useAudioStore = defineStore('audioStore', () => {
 
     setPreviews,
     addWaveOnList,
+    removeWaveFromList,
     addVote,
     removeVote,
     setUpvotesAvailable,

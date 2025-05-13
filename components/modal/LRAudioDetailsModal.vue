@@ -2,6 +2,7 @@
 <template>
   <LRModal
     :should-show-modal="shouldShowModal"
+    height="85vh"
     max-width="90%"
     @close="$emit('close')"
   >
@@ -40,6 +41,7 @@
           <i18n-t
             tag="p"
             keypath="how_to_add_spotify_description"
+            scope="global"
           >
             <template #icon>
               <button

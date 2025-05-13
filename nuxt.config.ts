@@ -5,7 +5,7 @@ import pkg from './package.json';
 const { NITRO_PRESET: preset, VUE_APP_BASE_URL: baseUrl } = process.env;
 
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   future: {
     // todo remove this after nuxt 4 release
     compatibilityVersion: 4,
@@ -134,10 +134,10 @@ export default defineNuxtConfig({
     //   pure: ['console.log', 'console.error', 'console.warn', 'console.debug', 'console.trace'],
     // },
   },
-  // typescript: {
-  //   strict: true,
-  //   typeCheck: true,
-  // },
+  typescript: {
+    strict: true,
+    typeCheck: true,
+  },
   // todo: try to generate multiple routes with same route but differnt query params
   // generate: {
   //   routes() {

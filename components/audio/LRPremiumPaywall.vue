@@ -2,7 +2,13 @@
   <div class="previews-blocked">
     <div class="content">
       <SvgoLock />
-      <h3 class="lr-text--body-1">{{ $t('exclusive_access_for_supporters') }}</h3>
+      <h3 class="lr-text--body-1 relative">
+        {{ $t('exclusive_access_for_supporters') }}
+        <LRInfoIcon
+          class="info-icon"
+          @click="$emit('join-supporters-clicked')"
+        />
+      </h3>
       <div class="flex gap-6">
         <button
           lr-cursor
@@ -47,6 +53,11 @@ const { localeRoute } = useAppStore();
     flex-direction: column;
     align-items: center;
     gap: 24px;
+
+    .info-icon {
+      height: 16px;
+      width: 16px;
+    }
 
     svg {
       width: 40px;

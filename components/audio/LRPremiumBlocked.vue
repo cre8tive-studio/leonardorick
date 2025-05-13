@@ -11,12 +11,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-interface Emits {
-  (e: 'join-supporters-clicked'): void;
-}
-defineEmits<Emits>();
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .previews-blocked {

@@ -104,6 +104,7 @@
               <i18n-t
                 tag="span"
                 keypath="make_sure_already_subscribed_signup"
+                scope="global"
               >
                 <template #subscribedLink>
                   <a

@@ -30,7 +30,7 @@ const isPlaying = ref(false);
 
 const disabled = computed(() => !enabled);
 
-useWhenReady(
+watch(
   () => wave,
   () => {
     if (!wave) return;
@@ -43,7 +43,8 @@ useWhenReady(
     wave.on('pause', () => {
       isPlaying.value = false;
     });
-  }
+  },
+  { immediate: true }
 );
 </script>
 

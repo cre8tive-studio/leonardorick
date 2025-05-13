@@ -10,17 +10,6 @@
         :audio="featuredRelease"
       />
 
-      <h2 class="lr-text--body-2 mt-12 mb-6">{{ $t('song_page_original_songs_title') }}</h2>
-
-      <div class="audio-list mb-24">
-        <LRAudioCard
-          v-for="release of remainingReleases"
-          :key="release.id"
-          :audio="release"
-        />
-      </div>
-      <div class="divider height-1" />
-
       <div class="flex gap-3 items-center mb-6">
         <h2 class="lr-text--body-2">{{ $t('song_page_previews_title') }}</h2>
         <LRSubscriptionBadge v-if="subscription" />
@@ -62,15 +51,18 @@
             {{ $t('song_page_covers_title') }}
             <LRInfoIconTooltip :tooltip="$t('covers_explanation')" />
           </h2>
-          <div v-if="coversMetadataLoaded">
-            <div class="audio-list">
-              <LRAudioCardPremium
-                v-for="cover in covers"
-                :key="cover.id"
-                :premium-audio="cover"
-              />
-            </div>
+
+          <div
+            v-if="coversMetadataLoaded"
+            class="audio-list mb-14"
+          >
+            <LRAudioCardPremium
+              v-for="cover in covers"
+              :key="cover.id"
+              :premium-audio="cover"
+            />
           </div>
+
           <div
             v-else
             class="loading-exclusive"
@@ -83,12 +75,24 @@
         v-else
         @join-supporters-clicked="shouldShowModal = true"
       />
+      <div class="divider height-1" />
+
+      <h2 class="lr-text--body-2 mt-12 mb-6">{{ $t('song_page_original_songs_title') }}</h2>
+
+      <div class="audio-list mb-24">
+        <LRAudioCard
+          v-for="release of remainingReleases"
+          :key="release.id"
+          :audio="release"
+        />
+      </div>
 
       <LRHowItWorksModal
         :should-show-modal="shouldShowModal"
         @close="shouldShowModal = false"
       />
     </div>
+    <LRGlobalAudio />
   </ClientOnly>
 </template>
 <script lang="ts" setup>

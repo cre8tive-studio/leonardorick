@@ -65,8 +65,8 @@ onMounted(() => {
       if (!import.meta.client) return;
       await nextTick();
 
+      // acts like onMounted
       if (isOpen) {
-        // acts like onMounted
         if (!modalEl.value) return;
         modalEl.value.style.setProperty('--max-width', maxWidth);
         modalEl.value.style.setProperty('--height', height);
@@ -81,8 +81,8 @@ onMounted(() => {
           });
         }
         mounted.value = true;
-      } else if (mounted.value) {
         // acts like onUnmounted
+      } else if (mounted.value) {
         enableScroll({ blockTogglingScroll: false });
       }
     },

@@ -50,6 +50,7 @@
             <i18n-t
               keypath="votes"
               :plural="votesCount"
+              scope="global"
             >
               <template #count>
                 <transition
@@ -73,10 +74,10 @@
 
       <LRWavePlayer
         :enabled="premiumAudio.enabled"
-        :audio-url="audioUrl"
+        :audio-blob="audioBlob"
         :eager="eager"
         size="md"
-        @audioprocess="(currentTime) => (coverRotation = currentTime * 40)"
+        @audioprocess="setCoverRotation"
         @play="handlePlay"
       />
       <div class="actions">
@@ -158,7 +159,7 @@ const typeMap: Record<PremiumAudioModel['type'], InfoPerType> = {
 
 const votesCountEl = ref<HTMLDivElement>();
 
-const audioUrl = ref('');
+const audioBlob = ref<Blob>();
 
 const fileId = `premium-${premiumAudio.type}-${premiumAudio.number}`;
 const loaded = ref(false);
@@ -173,17 +174,13 @@ const votesCount = computed(() => (isPreview.value ? upvotes.value[premiumAudio.
 
 onMounted(async () => {
   if (premiumAudio.enabled) {
-    const data = await getCachedFileFromCache(fileId, true);
+    const blob = await getCachedFileFromCache(fileId, true);
 
-    if (data) {
+    if (blob) {
       loaded.value = true;
-      audioUrl.value = URL.createObjectURL(data);
+      audioBlob.value = blob;
     }
   }
-});
-
-onUnmounted(() => {
-  if (audioUrl.value) URL.revokeObjectURL(audioUrl.value);
 });
 
 async function handlePlay($event: PlayOptions) {
@@ -194,6 +191,12 @@ async function handlePlay($event: PlayOptions) {
   if ($event === 'play' && !loaded.value) {
     eager.value = true;
     await requestAudioFile();
+  }
+}
+
+function setCoverRotation(currentTime: number) {
+  if (isPreview.value) {
+    coverRotation.value = currentTime * 40;
   }
 }
 
@@ -208,15 +211,15 @@ async function requestAudioFile() {
       number: premiumAudio.number,
     },
   });
-  audioUrl.value = URL.createObjectURL(blob);
+  audioBlob.value = blob;
 }
 
 async function downloadFile() {
-  if (!audioUrl.value) {
+  if (!audioBlob.value) {
     await requestAudioFile();
   }
 
-  download(audioUrl.value, `Leonardo Rick (${$t('preview')}) - ${premiumAudio.title}.mp3`);
+  download(URL.createObjectURL(audioBlob.value!), `Leonardo Rick (${$t('preview')}) - ${premiumAudio.title}.mp3`);
 }
 
 async function addPreviewVote() {

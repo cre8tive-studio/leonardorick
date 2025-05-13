@@ -26,6 +26,15 @@ svg.info {
   transform: translateY(-50%);
 
   border-radius: 50%;
+
+  transition: color 0.3s $default-ease;
+
+  &:hover {
+    color: $highlight;
+  }
+  &:active {
+    color: $highlight-2;
+  }
   > * {
     pointer-events: none;
   }

@@ -1,8 +1,8 @@
 # FEATURES I REALLY WANT
 
-Improve translations to really consider routes such as /pt-BR/something
+increase the height of the inputs
 
-instructions to add to spotify
+Improve translations to really consider routes such as /pt-BR/something
 
 show all previews but disable the ones that should be disabled and add a tooltip saying that next month a new preview will be unlocked
 
@@ -18,7 +18,10 @@ create donate button
 - update the bar with the payment suceeded webhook
 
 - create full local mocked envrionment for development!!!!!
--
+  |||
+
+  - add mock for payload content
+
 - multple language emails?
 - Setup staging and production environments on appwrite
 - Add Qonto experience

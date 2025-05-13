@@ -41,10 +41,16 @@ import { SCROLL_TRIGGER_IDS } from '~/utils/constants/scroll-trigger-ids';
 interface Props {
   info: GeneralsModel;
 }
+interface Emits {
+  (e: 'mousemove', $event: MouseEvent): void;
+}
+
 interface ComponentParagraphInfo {
   fullText: string;
   animation?: any;
 }
+
+defineEmits<Emits>();
 const { info } = defineProps<Props>();
 const tags = ref<HTMLElement[]>();
 const self = ref<HTMLDivElement>();

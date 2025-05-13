@@ -20,4 +20,6 @@ export const COLORS = {
   highlight3: '#7D0DC3',
   highlight4: '#B95CF4',
   highlight5: '#D397F8',
+
+  mainDarkTextHslDarker: 'hsl(43 100% 99% / 0.35)',
 };
