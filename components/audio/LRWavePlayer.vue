@@ -109,7 +109,6 @@ async function localCreateWavesurfer() {
 
 function replaceWaveLoader(wavesurfer: WaveSurfer) {
   wavesurfer.on('ready', () => {
-    console.log('ready!!!');
     if (!waveContainerEl.value || !waveformEl.value) return;
 
     const waveLoader = waveContainerEl.value.querySelector<HTMLElement>('.wave-loader');

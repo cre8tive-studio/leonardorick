@@ -1,16 +1,12 @@
 # FEATURES I REALLY WANT
 
-Create login with jwt token!!
+update bar with the value on webhook.
 
 increase the height of the inputs
 
 Improve translations to really consider routes such as /pt-BR/something
 
-show all previews but disable the ones that should be disabled and add a tooltip saying that next month a new preview will be unlocked
-
 Upload some previews
-
-find a way to add some padding in the top of the scrollable area of the modal so it do not touch the border when scrollingL
 
 create donate button
 = // add party emoji if the value was reached. And a tooltip saying (new release comming soon)
@@ -25,23 +21,14 @@ create donate button
   - add mock for payload content
 
 - multple language emails?
-- Setup staging and production environments on appwrite
 - Add Qonto experience
-- Add google login
 
 ===============================================
 
-### Migrate playwrite db
+Create login with jwt token!!
+find a way to add some padding in the top of the scrollable area of the modal so it do not touch the border when scrollingL
 
-Since playwrite has a lower bandwidth on the free plan, this project uses multiple replicated projects in different accounts.
-
-The migration script contains the required info for them to work properly
-
-to run it you need to have playwrite installed globally:
-
-`pnpm install -g appwrite-cli`
-
-=============================================
+- Add google login
 
 Add donate button functionality
 

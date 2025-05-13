@@ -1,0 +1,53 @@
+[
+    {
+        "id": "66d11249900220a9d6b85a3e",
+        "recommendation": "A precisão e a atenção dele aos detalhes são incomparáveis. Ele sempre se esforça pra simplificar a lógica, criando um código limpo e sustentável, fácil de entender. Além das habilidades técnicas, ele também tem um olhar apurado para o desenvolvimento do produto, sempre pensando vários passos à frente.",
+        "order": 1,
+        "author": {
+            "id": "66d113ee3d73d15f371ab7c9",
+            "name": "João Almeida",
+            "description": "Engenheiro Backend",
+            "linkedIn": "https://www.linkedin.com/in/joao-tiago-almeida/",
+            "image": {
+                "cloudinary": {
+                    "secure_url": "https://res.cloudinary.com/dnixqfayd/image/upload/v1725915722/leonardorick/1725915721570_Screenshot_2024-09-09_at_22.00.40_fifi3r.png"
+                }
+            }
+        },
+        "___MOCKED": true
+    },
+    {
+        "id": "6542ac2122eb5a1ca8d4c08a",
+        "recommendation": "Na faculdade existem 3 tipos de alunos: Os que não fazem nada e só colocam o nome, os que fazem somente o necessário, e os que são proativos, questionam e ajudam. Eu encaixo o Leonardo nessa última categoria.",
+        "order": 2,
+        "author": {
+            "id": "6542abeb22eb5a1ca8d4c049",
+            "name": "Daniel Dantas",
+            "description": "Colega de Faculdade",
+            "linkedIn": "https://www.linkedin.com/in/daniel-dantas/",
+            "image": {
+                "cloudinary": {
+                    "secure_url": "https://res.cloudinary.com/dnixqfayd/image/upload/v1688257738/leonardorick/1688257737876_daniel_l7mwer.jpg"
+                }
+            }
+        },
+        "___MOCKED": true
+    },
+    {
+        "id": "649cb05ed78fff5b972107b8",
+        "recommendation": "O Léo é um profissional super dedicado! Trabalhamos juntos no Itaú com grandes desafios e fizemos entregas relevantes para o Banco, Além de profissional, o Léo é uma pessoa super divertida e querido pelas pessoas do time!",
+        "order": 0,
+        "author": {
+            "id": "65428be3802fc1d8babd4ed9",
+            "name": "Rellen Matsumori",
+            "description": "Manager no Itaú Unibanco",
+            "linkedIn": "https://www.linkedin.com/in/rellen/",
+            "image": {
+                "cloudinary": {
+                    "secure_url": "https://res.cloudinary.com/dnixqfayd/image/upload/v1688257686/leonardorick/1688257685763_rellen_ghnplp.jpg"
+                }
+            }
+        },
+        "___MOCKED": true
+    }
+]

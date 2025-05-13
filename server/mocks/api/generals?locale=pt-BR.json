@@ -1,0 +1,323 @@
+[
+    {
+        "id": "66f0aaab404f97fcd71f7cbf",
+        "key": "about-me-product-managers",
+        "data": [
+            {
+                "id": "66f0aaad2ddd54f9b21a8d23",
+                "htmlTag": "p",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "No final das contas, o objetivo final de um engenheiro habilidoso é aumentar a "
+                    },
+                    {
+                        "text": "lucratividade.",
+                        "bold": true
+                    },
+                    {
+                        "text": " Vou trabalhar junto com você para maximizar nosso impacto e aumentar o "
+                    },
+                    {
+                        "text": "valor do nosso produto.",
+                        "bold": true
+                    }
+                ]
+            }
+        ],
+        "___MOCKED": true
+    },
+    {
+        "id": "66f0a3eb404f97fcd71f7ab8",
+        "key": "about-me-designers",
+        "data": [
+            {
+                "id": "66f0a3eb6584522716a639bd",
+                "htmlTag": "p",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "De processos a pixels, vou "
+                    },
+                    {
+                        "text": "colaborar com você,",
+                        "bold": true
+                    },
+                    {
+                        "text": " aprender com você e me dedicar a criar algo de que nós nos orgulhemos. Acredito que "
+                    },
+                    {
+                        "text": "um bom produto conte uma história",
+                        "bold": true
+                    },
+                    {
+                        "text": " e estou animado para começar a criar a nossa."
+                    }
+                ]
+            }
+        ],
+        "___MOCKED": true
+    },
+    {
+        "id": "66f099c1404f97fcd71f7837",
+        "key": "about-me-engineers",
+        "data": [
+            {
+                "id": "66f099c16584522716a639bc",
+                "htmlTag": "p",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "Adoro programar, tomar decisões, ensinar e aprender. Sou fluente em "
+                    },
+                    {
+                        "text": "JavaScript",
+                        "bold": true
+                    },
+                    {
+                        "text": " e "
+                    },
+                    {
+                        "text": "Python",
+                        "bold": true
+                    },
+                    {
+                        "text": " e consigo me comunicar em linguagens Orientadas a Objeto. Meu objetivo é que nossa "
+                    },
+                    {
+                        "text": "colaboração",
+                        "bold": true
+                    },
+                    {
+                        "text": " rode em O(1) e melhore a "
+                    },
+                    {
+                        "text": "qualidade do código",
+                        "bold": true
+                    },
+                    {
+                        "text": " exponencialmente."
+                    }
+                ]
+            }
+        ],
+        "___MOCKED": true
+    },
+    {
+        "id": "66f0498370a53dbd22b5b4c3",
+        "key": "about-me-recruiters",
+        "data": [
+            {
+                "id": "66f04983148ae3355b02b139",
+                "htmlTag": "p",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "Sou um engenheiro de software com "
+                    },
+                    {
+                        "text": "{years} anos de experiência",
+                        "bold": true
+                    },
+                    {
+                        "text": ". Sempre trabalhei com "
+                    },
+                    {
+                        "text": "agile, testes unitários, CI/CD",
+                        "bold": true
+                    },
+                    {
+                        "text": ", e todas essas coisas legais. Acredito que soft e hard skills trabalham juntas, e não estou ativamente procurando vagas."
+                    }
+                ]
+            }
+        ],
+        "___MOCKED": true
+    },
+    {
+        "id": "66cfb635900220a9d6b85711",
+        "key": "what-i-do",
+        "data": [
+            {
+                "id": "66d03deeeeb588ab537687d3",
+                "htmlTag": "h1",
+                "animationType": "none",
+                "text": [
+                    {
+                        "text": "O que eu faço"
+                    }
+                ]
+            },
+            {
+                "id": "66cfb6355c9aa80001037b15",
+                "htmlTag": "h2",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "Frontend"
+                    }
+                ]
+            },
+            {
+                "id": "66cfb6355c9aa80001037b16",
+                "htmlTag": "p",
+                "animationType": "none",
+                "text": [
+                    {
+                        "text": "Todo o Ciclo de Vida de Desenvolvimento de Software, desde a definição do produto até a entrega e monitoramento. Meu objetivo é sempre garantir experiências de usuário suaves, programas visualmente atraentes e código bem escrito."
+                    }
+                ]
+            },
+            {
+                "id": "66cfb6355c9aa80001037b17",
+                "htmlTag": "h2",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "Produto"
+                    }
+                ]
+            },
+            {
+                "id": "66cfb6355c9aa80001037b18",
+                "htmlTag": "p",
+                "animationType": "none",
+                "text": [
+                    {
+                        "text": "O objetivo é resolver problemas do mundo real. Minha experiência com Agile me ensinou a focar no que realmente importa, garantindo alta satisfação do usuário."
+                    }
+                ]
+            },
+            {
+                "id": "66cfb6355c9aa80001037b19",
+                "htmlTag": "h2",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "Fullstack"
+                    }
+                ]
+            },
+            {
+                "id": "66cfb6355c9aa80001037b1a",
+                "htmlTag": "p",
+                "animationType": "none",
+                "text": [
+                    {
+                        "text": "Me permitiu gerir projetos mais complexos de forma independente e entender como diferentes sistemas se integram."
+                    }
+                ]
+            },
+            {
+                "id": "66cfb6355c9aa80001037b1b",
+                "htmlTag": "h2",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "3D"
+                    }
+                ]
+            },
+            {
+                "id": "66cfb6355c9aa80001037b1c",
+                "htmlTag": "p",
+                "animationType": "none",
+                "text": [
+                    {
+                        "text": "Utilizando Three.js e técnicas de animação, eu crio experiências imersivas na web, aumentando a interação do usuário e colocando o produto final em um outro nível."
+                    }
+                ]
+            }
+        ],
+        "___MOCKED": true
+    },
+    {
+        "id": "66ccbc82174dc8c4aa186122",
+        "key": "environment",
+        "data": [
+            {
+                "id": "66ccbc8232b7d32a89c70620",
+                "htmlTag": "p",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "Tive a oportunidade de trabalhar em 3 indústrias não relacionadas: Bancária, de Transporte e de Tradução. Isso, combinado com os "
+                    },
+                    {
+                        "text": "ambientes multiculturais",
+                        "bold": true
+                    },
+                    {
+                        "text": " em que tive a oportunidade de estar, me proporciona uma mente muito aberta e um ritmo acelerado na entrega."
+                    }
+                ]
+            }
+        ],
+        "___MOCKED": true
+    },
+    {
+        "id": "66ccb85c174dc8c4aa186047",
+        "key": "experience",
+        "data": [
+            {
+                "id": "66ccb85c32b7d32a89c7061e",
+                "htmlTag": "h1",
+                "animationType": "none",
+                "text": [
+                    {
+                        "text": "Experiência"
+                    }
+                ]
+            },
+            {
+                "id": "66ccb85c32b7d32a89c7061f",
+                "htmlTag": "p",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "anos de experiência como"
+                    },
+                    {
+                        "bold": true,
+                        "text": " Engenheiro de Software"
+                    },
+                    {
+                        "text": " em indústrias e ambientes diversos, aplicando boas práticas de "
+                    },
+                    {
+                        "text": "qualidade de código",
+                        "bold": true
+                    },
+                    {
+                        "text": " para sempre entregar o melhor produto ao cliente."
+                    }
+                ]
+            }
+        ],
+        "___MOCKED": true
+    },
+    {
+        "id": "66c3e05d21ed146c2d36cb18",
+        "key": "about-me",
+        "data": [
+            {
+                "id": "66c3e05d4ebbdae1d8c1546c",
+                "htmlTag": "p",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "Olá! Sou Engenheiro de Software, apaixonado por proporcionar uma "
+                    },
+                    {
+                        "text": "experiência de usuário excepcional",
+                        "bold": true
+                    },
+                    {
+                        "text": " e criar soluções digitais impactantes."
+                    }
+                ]
+            }
+        ],
+        "___MOCKED": true
+    }
+]

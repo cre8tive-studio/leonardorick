@@ -1,0 +1,330 @@
+[
+    {
+        "id": "66f0aaab404f97fcd71f7cbf",
+        "key": "about-me-product-managers",
+        "data": [
+            {
+                "id": "66f0aaad2ddd54f9b21a8d23",
+                "htmlTag": "p",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "At the end of the day, the ultimate objective of a skilled engineer is to drive "
+                    },
+                    {
+                        "text": "profitability.",
+                        "bold": true
+                    },
+                    {
+                        "text": " I will work closely with you to maximize our impact and truly enhance the "
+                    },
+                    {
+                        "text": "value of our product.",
+                        "bold": true
+                    }
+                ]
+            }
+        ],
+        "___MOCKED": true
+    },
+    {
+        "id": "66f0a3eb404f97fcd71f7ab8",
+        "key": "about-me-designers",
+        "data": [
+            {
+                "id": "66f0a3eb6584522716a639bd",
+                "htmlTag": "p",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "From processes to pixels, I'll "
+                    },
+                    {
+                        "text": "collaborate with you,",
+                        "bold": true
+                    },
+                    {
+                        "text": " learn from you and dedicate myself to create something we are proud of. I believe "
+                    },
+                    {
+                        "text": "a",
+                        "bold": true
+                    },
+                    {
+                        "text": " "
+                    },
+                    {
+                        "bold": true,
+                        "text": "good product tells a story"
+                    },
+                    {
+                        "text": " and I'm excited to begin crafting ours."
+                    }
+                ]
+            }
+        ],
+        "___MOCKED": true
+    },
+    {
+        "id": "66f099c1404f97fcd71f7837",
+        "key": "about-me-engineers",
+        "data": [
+            {
+                "id": "66f099c16584522716a639bc",
+                "htmlTag": "p",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "I love coding, decision making, teaching and learning. I'm fluent in "
+                    },
+                    {
+                        "text": "JavaScript",
+                        "bold": true
+                    },
+                    {
+                        "text": " and "
+                    },
+                    {
+                        "text": "Python",
+                        "bold": true
+                    },
+                    {
+                        "text": " and can hold a conversation in any Object Oriented language. My goal is for our "
+                    },
+                    {
+                        "text": "collaboration",
+                        "bold": true
+                    },
+                    {
+                        "text": " to run in O(1) and boost "
+                    },
+                    {
+                        "text": "code quality",
+                        "bold": true
+                    },
+                    {
+                        "text": " exponentially."
+                    }
+                ]
+            }
+        ],
+        "___MOCKED": true
+    },
+    {
+        "id": "66f0498370a53dbd22b5b4c3",
+        "key": "about-me-recruiters",
+        "data": [
+            {
+                "id": "66f04983148ae3355b02b139",
+                "htmlTag": "p",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "I am a software engineer with "
+                    },
+                    {
+                        "text": "{years} years of experience",
+                        "bold": true
+                    },
+                    {
+                        "text": " for companies of all sizes. I've always worked with "
+                    },
+                    {
+                        "text": "agile, unit tests, CI/CD,",
+                        "bold": true
+                    },
+                    {
+                        "text": " and all this fancy stuff. I  believe soft and hard skills work together, and I am not actively seeking new roles."
+                    }
+                ]
+            }
+        ],
+        "___MOCKED": true
+    },
+    {
+        "id": "66cfb635900220a9d6b85711",
+        "key": "what-i-do",
+        "data": [
+            {
+                "id": "66d03deeeeb588ab537687d3",
+                "htmlTag": "h1",
+                "animationType": "none",
+                "text": [
+                    {
+                        "text": "What I do"
+                    }
+                ]
+            },
+            {
+                "id": "66cfb6355c9aa80001037b15",
+                "htmlTag": "h2",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "Frontend"
+                    }
+                ]
+            },
+            {
+                "id": "66cfb6355c9aa80001037b16",
+                "htmlTag": "p",
+                "animationType": "none",
+                "text": [
+                    {
+                        "text": "I oversee the entire SLDC, from defining the product to shipping and monitoring. My goal is always to ensure smooth user experiences, visually appealing programs, and well-written code."
+                    }
+                ]
+            },
+            {
+                "id": "66cfb6355c9aa80001037b17",
+                "htmlTag": "h2",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "Product"
+                    }
+                ]
+            },
+            {
+                "id": "66cfb6355c9aa80001037b18",
+                "htmlTag": "p",
+                "animationType": "none",
+                "text": [
+                    {
+                        "text": "The goal is to solve real-world problems. My experience with Agile has taught to focus on what really matters, ensuring high user satisfaction."
+                    }
+                ]
+            },
+            {
+                "id": "66cfb6355c9aa80001037b19",
+                "htmlTag": "h2",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "Fullstack"
+                    }
+                ]
+            },
+            {
+                "id": "66cfb6355c9aa80001037b1a",
+                "htmlTag": "p",
+                "animationType": "none",
+                "text": [
+                    {
+                        "text": "Has enabled me to tackle more complex projects independently and understand how different systems integrate."
+                    }
+                ]
+            },
+            {
+                "id": "66cfb6355c9aa80001037b1b",
+                "htmlTag": "h2",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "3D"
+                    }
+                ]
+            },
+            {
+                "id": "66cfb6355c9aa80001037b1c",
+                "htmlTag": "p",
+                "animationType": "none",
+                "text": [
+                    {
+                        "text": "Leveraging Three.js and motion techniques, I create immersive web experiences, enhancing user interaction and setting the product on a higher level."
+                    }
+                ]
+            }
+        ],
+        "___MOCKED": true
+    },
+    {
+        "id": "66ccbc82174dc8c4aa186122",
+        "key": "environment",
+        "data": [
+            {
+                "id": "66ccbc8232b7d32a89c70620",
+                "htmlTag": "p",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "I've been able to have worked in 3 non-related industries: Banking, Transportation and Translations. This, combined with the "
+                    },
+                    {
+                        "text": "multicultural environments",
+                        "bold": true
+                    },
+                    {
+                        "text": " I had the opportunity to be in, provides me a very open mind and fast pace on delivering."
+                    }
+                ]
+            }
+        ],
+        "___MOCKED": true
+    },
+    {
+        "id": "66ccb85c174dc8c4aa186047",
+        "key": "experience",
+        "data": [
+            {
+                "id": "66ccb85c32b7d32a89c7061e",
+                "htmlTag": "h1",
+                "animationType": "none",
+                "text": [
+                    {
+                        "text": "Experience"
+                    }
+                ]
+            },
+            {
+                "id": "66ccb85c32b7d32a89c7061f",
+                "htmlTag": "p",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "years of "
+                    },
+                    {
+                        "bold": true,
+                        "text": "Software Engineer"
+                    },
+                    {
+                        "text": " experience in very diverse industries and environments applying "
+                    },
+                    {
+                        "text": "coding quality",
+                        "bold": true
+                    },
+                    {
+                        "text": " best practices to always deliver the best product to the customer."
+                    }
+                ]
+            }
+        ],
+        "___MOCKED": true
+    },
+    {
+        "id": "66c3e05d21ed146c2d36cb18",
+        "key": "about-me",
+        "data": [
+            {
+                "id": "66c3e05d4ebbdae1d8c1546c",
+                "htmlTag": "p",
+                "animationType": "fadeOpacity",
+                "text": [
+                    {
+                        "text": "Hey there! I'm a Software Engineer, passionate about providing an "
+                    },
+                    {
+                        "text": "exceptional User Experience",
+                        "bold": true
+                    },
+                    {
+                        "text": " and creating impactful digital solutions."
+                    }
+                ]
+            }
+        ],
+        "___MOCKED": true
+    }
+]

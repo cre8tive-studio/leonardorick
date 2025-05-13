@@ -1,0 +1,107 @@
+[
+    {
+        "id": "66d77fa3bc4f2986257cac4e",
+        "quote": "The programmers of tomorrow are the wizards of the future",
+        "author": "Gabe Newell",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77ee4bc4f2986257cac41",
+        "quote": "The most important thing in programming is not to get the code working, but to get the code working right.",
+        "author": "Joel Spolsky",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77ec1bc4f2986257cac34",
+        "quote": "In programming, the hard part isn’t solving problems, but deciding what problems to solve.",
+        "author": "Paul Graham",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77ea4bc4f2986257cac27",
+        "quote": "Talk is cheap. Show me the code",
+        "author": "Linus Torvalds",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77e8fbc4f2986257cac1a",
+        "quote": "First learn Computer Science and all the theory. Next, develop a programming style. Then forget all that and just hack.",
+        "author": "George Carrette",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77e73bc4f2986257cac0d",
+        "quote": "Simplicity is the soul of efficiency.",
+        "author": "Austin Freeman",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77e55bc4f2986257cac00",
+        "quote": "Code is like humor. When you have to explain it, it’s bad.",
+        "author": "Cory House",
+        "label": "",
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77e39bc4f2986257cabf3",
+        "quote": "First, solve the problem. Then, write the code.",
+        "author": "John Johnson",
+        "label": "",
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77d43b6f551ddfd373297",
+        "quote": "Coding is like to live: There is always one more bug to fix.",
+        "author": "Ellen Ullman",
+        "label": "[modified]",
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77caeb6f551ddfd373275",
+        "quote": "You might not think that programmers are artists, but programming is an extremely creative profession. It’s logic-based creativity.",
+        "author": "John Romero",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77befb6f551ddfd37323e",
+        "quote": "Ever human being should know how to code, because it teaches you how to think",
+        "author": "Steve Jobs",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77766b6f551ddfd373224",
+        "quote": "Any fool can write code that a computer can understand. Good programmers write code that humans can understand",
+        "author": "Martin Fowler",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d776f6b6f551ddfd3731fe",
+        "quote": "Clean code always looks like it was written by someone who cares",
+        "author": "Robert C.Martin",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d776abb6f551ddfd3731e4",
+        "quote": "Coding is like poetry: should be short and concise",
+        "author": "Santosh Kalwar",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "6522e1ed0d8f29be7b8a21ef",
+        "quote": "Growth happens by doing things you are unqualified to do",
+        "author": "Steven Bartlett",
+        "label": null,
+        "___MOCKED": true
+    }
+]

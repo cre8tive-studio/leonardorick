@@ -5,6 +5,16 @@ import getPreviewsMetadata from '../../server/mocks/api/getPreviewsMetadata.json
 import getSubscription from '../../server/mocks/api/getSubscription.json';
 import getCoversMetadata from '../../server/mocks/api/getCoversMetadata.json';
 
+import personalInfo from '../../server/mocks/api/personal-info.json';
+import recommendationsEn from '../../server/mocks/api/recommendations?locale=en.json';
+import quotesEn from '../../server/mocks/api/quotes?locale=en.json';
+import generalsEn from '../../server/mocks/api/generals?locale=en.json';
+import experiencesEn from '../../server/mocks/api/experiences?locale=en.json';
+import recommendationsPtBr from '../../server/mocks/api/recommendations?locale=pt-BR.json';
+import quotesPtBr from '../../server/mocks/api/quotes?locale=pt-BR.json';
+import generalsPtBr from '../../server/mocks/api/generals?locale=pt-BR.json';
+import experiencesPtBr from '../../server/mocks/api/experiences?locale=pt-BR.json';
+
 export default defineEventHandler(async (event) => {
   if (isStringTrue(process.env.USE_MOCKS)) {
     const { url } = event.node.req;
@@ -41,4 +51,13 @@ const DATA: Record<string, unknown> = {
   '/api/getSubscription': getSubscription,
   '/api/getPreviewsMetadata': getPreviewsMetadata,
   '/api/getCoversMetadata': getCoversMetadata,
+  '/api/personal-info': personalInfo,
+  '/api/recommendations?locale=en': recommendationsEn,
+  '/api/quotes?locale=en': quotesEn,
+  '/api/generals?locale=en': generalsEn,
+  '/api/experiences?locale=en': experiencesEn,
+  '/api/recommendations?locale=pt-BR': recommendationsPtBr,
+  '/api/quotes?locale=pt-BR': quotesPtBr,
+  '/api/generals?locale=pt-BR': generalsPtBr,
+  '/api/experiences?locale=pt-BR': experiencesPtBr,
 };

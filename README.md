@@ -14,6 +14,12 @@ npm run dev
 
 Make sure to check .env.example to check the necessary variables needed to run the probject.
 
+To run with mocked data make sure to the the .env variable `USE_MOCKS=true`.
+
+Keep in mind that this will make `PAYLOAD_GRAPHQL_URL` be ignored and some other endpoints are fake.
+
+To setup more fake responses
+
 ### Note
 
 This project is my experimental playground where I try out different things, so the structure and coding may not be as organized as you would expect in a real project.

@@ -1,0 +1,107 @@
+[
+    {
+        "id": "66d77fa3bc4f2986257cac4e",
+        "quote": "Os programadores de amanhã são os mágicos do futuro.",
+        "author": "Gabe Newell",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77ee4bc4f2986257cac41",
+        "quote": " A coisa mais importante na programação não é fazer o código funcionar, mas fazer o código funcionar corretamente.",
+        "author": "Joel Spolsky",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77ec1bc4f2986257cac34",
+        "quote": "Em programação, a parte difícil não é resolver problemas, mas decidir quais problemas resolver.",
+        "author": "Paul Graham",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77ea4bc4f2986257cac27",
+        "quote": "Falar é fácil, me mostre o código.",
+        "author": "Linus Torvalds",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77e8fbc4f2986257cac1a",
+        "quote": "Primeiro aprenda Ciência da Computação e toda a teoria. Em seguida, desenvolva um estilo de programação. Então esqueça tudo isso e apenas hackeie.",
+        "author": "George Carrette",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77e73bc4f2986257cac0d",
+        "quote": "A simplicidade é a alma da eficiência.",
+        "author": "Austin Freeman",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77e55bc4f2986257cac00",
+        "quote": "Código é como humor. Quando você precisa explicar, é ruim.",
+        "author": "Cory House",
+        "label": "",
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77e39bc4f2986257cabf3",
+        "quote": "Primeiro, resolva o problema. Depois, escreva o código",
+        "author": "John Johnson",
+        "label": "",
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77d43b6f551ddfd373297",
+        "quote": "Programar é como viver: Há sempre mais um bug para corrigir.",
+        "author": "Ellen Ullman",
+        "label": "[modified]",
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77caeb6f551ddfd373275",
+        "quote": "Você pode não pensar que programadores são artistas, mas a programação é uma profissão extremamente criativa. É criatividade baseada em lógica.",
+        "author": "John Romero",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77befb6f551ddfd37323e",
+        "quote": "Todo ser humano deveria saber programar, porque isso te ensina a pensar",
+        "author": "Steve Jobs",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d77766b6f551ddfd373224",
+        "quote": "Qualquer tolo pode escrever código que um computador pode entender. Bons programadores escrevem código que humanos podem entender",
+        "author": "Martin Fowler",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d776f6b6f551ddfd3731fe",
+        "quote": "Clean code sempre parece ter sido escrito por alguém que se importa",
+        "author": "Robert C.Martin",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "66d776abb6f551ddfd3731e4",
+        "quote": "Programar é como a poesia: deve ser algo curto e conciso",
+        "author": "Santosh Kalwar",
+        "label": null,
+        "___MOCKED": true
+    },
+    {
+        "id": "6522e1ed0d8f29be7b8a21ef",
+        "quote": "O crescimento acontece ao fazer coisas para as quais você ainda não está qualificado",
+        "author": "Steven Bartlett",
+        "label": null,
+        "___MOCKED": true
+    }
+]

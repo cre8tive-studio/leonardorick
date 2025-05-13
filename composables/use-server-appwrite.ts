@@ -81,6 +81,11 @@ const useServerAppwrite = () => {
       previews: previewsCollection,
       covers: coversCollection,
       releases: releasesCollection,
+      settings: settingsCollection,
+    },
+
+    documents: {
+      settings: settingsDocument,
     },
 
     // functions

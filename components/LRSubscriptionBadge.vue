@@ -49,6 +49,12 @@ const current = computed<BadgeProps>(() => {
 function isHandledStatus(status: Stripe.Subscription.Status): status is SubscriptionBadgeStatus {
   return Object.prototype.hasOwnProperty.call(content, status);
 }
+
+// @ts-expect-error
+if (subscription.value.___MOCKED) {
+  // eslint-disable-next-line no-console
+  console.warn('LRSubscriptionBadge: Subscription status is mocked.');
+}
 </script>
 
 <style scoped lang="scss"></style>

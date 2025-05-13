@@ -1,0 +1,53 @@
+[
+    {
+        "id": "66d11249900220a9d6b85a3e",
+        "recommendation": "His precision and attention to detail are unparalleled. He consistently strives to simplify his logic, creating clean and maintainable code that is easy  to understand. Beyond technical, He also has a keen eye for product development, always thinking several steps ahead.",
+        "order": 1,
+        "author": {
+            "id": "66d113ee3d73d15f371ab7c9",
+            "name": "João Almeida",
+            "description": "Backend Engineer",
+            "linkedIn": "https://www.linkedin.com/in/joao-tiago-almeida/",
+            "image": {
+                "cloudinary": {
+                    "secure_url": "https://res.cloudinary.com/dnixqfayd/image/upload/v1725915722/leonardorick/1725915721570_Screenshot_2024-09-09_at_22.00.40_fifi3r.png"
+                }
+            }
+        },
+        "___MOCKED": true
+    },
+    {
+        "id": "6542ac2122eb5a1ca8d4c08a",
+        "recommendation": "In college there's 3 types of students: The ones that do nothing, the ones that do just what's asked and those who are proactive and help others. I fit Leonardo into that last category.",
+        "order": 2,
+        "author": {
+            "id": "6542abeb22eb5a1ca8d4c049",
+            "name": "Daniel Dantas",
+            "description": "College Friend",
+            "linkedIn": "https://www.linkedin.com/in/daniel-dantas/",
+            "image": {
+                "cloudinary": {
+                    "secure_url": "https://res.cloudinary.com/dnixqfayd/image/upload/v1688257738/leonardorick/1688257737876_daniel_l7mwer.jpg"
+                }
+            }
+        },
+        "___MOCKED": true
+    },
+    {
+        "id": "649cb05ed78fff5b972107b8",
+        "recommendation": "Leo is a super dedicated professional. We've worked together on Itaú with huge challenges and did relevant delivering of the product. Leo is a very fun person and well liked by teammates! ",
+        "order": 0,
+        "author": {
+            "id": "65428be3802fc1d8babd4ed9",
+            "name": "Rellen Matsumori",
+            "description": "Manager at Itaú Unibanco",
+            "linkedIn": "https://www.linkedin.com/in/rellen/",
+            "image": {
+                "cloudinary": {
+                    "secure_url": "https://res.cloudinary.com/dnixqfayd/image/upload/v1688257686/leonardorick/1688257685763_rellen_ghnplp.jpg"
+                }
+            }
+        },
+        "___MOCKED": true
+    }
+]

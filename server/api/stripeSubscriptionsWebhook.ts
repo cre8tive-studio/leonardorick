@@ -1,13 +1,13 @@
 import Stripe from 'stripe';
 import { ID } from 'node-appwrite';
 
-import type { StripeInvoceObjectModel } from '../types/stripe-invoice-object.model';
 import useServerAppwrite from '~/composables/use-server-appwrite';
 import useStripe from '~/composables/use-stripe';
 import { incrementAvailablePreviews } from '~/utils/music';
 import type { AppwriteUserModel } from '~/types/user.model';
+import type { AppwriteSettingsModel, SettingsModel } from '~/types/settings.model';
 
-const { databases, databaseId, collections, queryAllowedEmail, getUserWithEmail, getSettings, getUser } =
+const { databases, databaseId, collections, documents, queryAllowedEmail, getUserWithEmail, getSettings, getUser } =
   useServerAppwrite();
 
 const { stripe, getSubscription } = useStripe();
@@ -45,7 +45,7 @@ export default defineEventHandler(async (nuxtEvent) => {
     });
   }
 
-  const invoice = event.data.object as StripeInvoceObjectModel;
+  const invoice = event.data.object;
   const { customer_email: customerEmail, customer_name: customerName, customer, subscription } = invoice;
 
   // *********** check created variables exists *************
@@ -53,6 +53,13 @@ export default defineEventHandler(async (nuxtEvent) => {
     throw createError({
       statusCode: 400,
       statusMessage: 'Missing data: customer and Email',
+    });
+  }
+
+  if (!subscription || typeof subscription !== 'string') {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Missing data: subscription',
     });
   }
 
@@ -65,9 +72,21 @@ export default defineEventHandler(async (nuxtEvent) => {
     });
   }
 
-  // *********** create allowed-emails reference if doesn't exists yet *************
-
   try {
+    const settings = await getSettings();
+
+    // *************** update moeny count only in livemode (not test data) ***************
+    if (invoice.livemode) {
+      const { savedAmount, moneyTarget } = settings;
+
+      if (savedAmount < moneyTarget) {
+        databases.updateDocument<AppwriteSettingsModel>(databaseId, collections.settings, documents.settings, {
+          savedAmount: getTotalSavedAmount(savedAmount, invoice.amount_paid),
+        });
+      }
+    }
+
+    // *********** create allowed-emails reference if doesn't exists yet *************
     const allowedEmail = await queryAllowedEmail(customerEmail);
     // if allowed email don't exists we create this reference
     // so we can allow user to signup later
@@ -77,9 +96,11 @@ export default defineEventHandler(async (nuxtEvent) => {
         name: customerName,
         stripeId: customer,
         subscriptionId: subscription,
-        availablePreviews: await getavailablePreviews(subscription, true),
+        availablePreviews: await getavailablePreviews(subscription, settings),
       });
     }
+
+    // *********** from here to bottom it's not the first payment *************
 
     const isReSubscription = allowedEmail.subscriptionId !== subscription;
     if (isReSubscription) {
@@ -91,7 +112,7 @@ export default defineEventHandler(async (nuxtEvent) => {
     // is allowed email already exists it means that i'ts a recurrent payment
     // and we need to update the user with the new number of available previews
     const { $id, availablePreviews } = (await getUserWithEmail(customerEmail)) || {};
-    const newAvailablePreviews = await getavailablePreviews(subscription, false, $id);
+    const newAvailablePreviews = await getavailablePreviews(subscription, settings, $id);
     if ($id) {
       return databases.updateDocument<AppwriteUserModel>(databaseId, collections.users, $id, {
         stripeId: customer,
@@ -108,16 +129,24 @@ export default defineEventHandler(async (nuxtEvent) => {
   }
 });
 
+const getTotalSavedAmount = (previousSavedAmount: number, amountPaid: number) => {
+  const savedAmountInCents = Math.round(previousSavedAmount * 100);
+  const paidAmountInCents = amountPaid;
+  const totalInCents = savedAmountInCents + paidAmountInCents;
+  return totalInCents / 100;
+};
+
 // used so we can add the featured banner
 const getfeaturedPreviews = (previousList: number[], currentList: number[]) => {
   return currentList.filter((item) => !previousList.includes(item)) || [];
 };
 
-const getavailablePreviews = async (subscription: string, creating: boolean, userId?: string) => {
-  const { startPreviewsCount, previewsReady } = await getSettings();
+// ? don't send the user id on creation so we count paid invoices properly
+const getavailablePreviews = async (subscription: string, settings: SettingsModel, userId?: string) => {
+  const { startPreviewsCount, previewsReady } = settings;
   let previous: number[] = [];
   let paidInvoicesCount = 0;
-  if (!creating && userId) {
+  if (userId) {
     paidInvoicesCount += (await stripe.invoices.list({ status: 'paid', subscription })).data.length;
     ({ availablePreviews: previous } = await getUser(userId));
   }
