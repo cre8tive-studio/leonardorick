@@ -1,5 +1,7 @@
 # FEATURES I REALLY WANT
 
+Create login with jwt token!!
+
 increase the height of the inputs
 
 Improve translations to really consider routes such as /pt-BR/something

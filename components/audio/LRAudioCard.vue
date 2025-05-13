@@ -11,6 +11,7 @@
       </div>
 
       <LRWavePlayer
+        v-if="mounted"
         :audio-blob="audioBlob"
         size="md"
         :eager="eager"
@@ -34,26 +35,29 @@ const { audio } = defineProps<Props>();
 const audioBlob = ref<Blob>();
 
 const { getCachedFile, getCachedFileFromCache } = useCachedFile();
-const loaded = ref(false);
-const eager = ref(false);
+
+const eager = ref(true);
+const mounted = ref(false); // so we can pass the right eager value to wave player mounting it only after knowing it.
 
 onMounted(async () => {
   const blob = await getCachedFileFromCache(audio.fileId);
   if (blob) {
-    loaded.value = true;
+    eager.value = true;
     audioBlob.value = blob;
+  } else {
+    eager.value = false;
   }
+  mounted.value = true;
 });
 
 async function handlePlay($event: PlayOptions) {
-  if ($event === 'play' && !loaded.value) {
+  if ($event === 'play' && !audioBlob.value) {
     eager.value = true;
     await requestAudioFile();
   }
 }
 
 async function requestAudioFile() {
-  loaded.value = true;
   const blob = await getCachedFile({ fileId: audio.fileId, method: 'post' });
   audioBlob.value = blob;
 }

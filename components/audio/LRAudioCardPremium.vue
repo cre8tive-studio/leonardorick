@@ -73,6 +73,7 @@
       <h2 class="lr-text--body-1 mb-2">{{ premiumAudio.title }}</h2>
 
       <LRWavePlayer
+        v-if="mounted"
         :enabled="premiumAudio.enabled"
         :audio-blob="audioBlob"
         :eager="eager"
@@ -162,25 +163,29 @@ const votesCountEl = ref<HTMLDivElement>();
 const audioBlob = ref<Blob>();
 
 const fileId = `premium-${premiumAudio.type}-${premiumAudio.number}`;
-const loaded = ref(false);
-const eager = ref(false);
 const shouldShowDetailsModal = ref(false);
-
 const coverRotation = ref(0);
+
+const eager = ref(true);
+const mounted = ref(false); // so we can pass the right eager value to wave player mounting it only after knowing it.
 
 const audio = computed(() => ({ ...premiumAudio, fileId: '' })); // only for type compliance with audio cover
 const isPreview = computed(() => premiumAudio.type === 'preview');
 const votesCount = computed(() => (isPreview.value ? upvotes.value[premiumAudio.number]?.length || 0 : undefined));
 
 onMounted(async () => {
-  if (premiumAudio.enabled) {
-    const blob = await getCachedFileFromCache(fileId, true);
-
-    if (blob) {
-      loaded.value = true;
-      audioBlob.value = blob;
-    }
+  if (!premiumAudio.enabled) {
+    eager.value = false;
+    mounted.value = true;
+    return;
   }
+  const blob = await getCachedFileFromCache(fileId, true);
+  if (blob) {
+    audioBlob.value = blob;
+  } else {
+    eager.value = false;
+  }
+  mounted.value = true;
 });
 
 async function handlePlay($event: PlayOptions) {
@@ -188,7 +193,7 @@ async function handlePlay($event: PlayOptions) {
     removeFeaturedPreview(user.value.featuredPreviews, premiumAudio.number);
   }
 
-  if ($event === 'play' && !loaded.value) {
+  if ($event === 'play' && !audioBlob.value) {
     eager.value = true;
     await requestAudioFile();
   }
@@ -201,7 +206,6 @@ function setCoverRotation(currentTime: number) {
 }
 
 async function requestAudioFile() {
-  loaded.value = true;
   const blob = await getCachedFile({
     fileId,
     url: `/api/${typeMap[premiumAudio.type].url}/${premiumAudio.number}`,

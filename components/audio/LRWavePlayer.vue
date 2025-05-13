@@ -71,7 +71,10 @@ const waveformEl = ref<HTMLDivElement>();
 const duration = ref('0:00');
 const currentTime = ref('0:00');
 
+const waveMounted = ref(false);
+
 onMounted(() => {
+  waveMounted.value = eager;
   useWhenReady(
     () => audioBlob,
     async () => {
@@ -80,13 +83,6 @@ onMounted(() => {
     }
   );
 });
-
-if (!eager) {
-  useWhenReady(
-    () => eager,
-    () => useWhenReady(wave, () => play())
-  );
-}
 
 watch(breakpoints.current, () => {
   if (wave.value) {
@@ -113,6 +109,7 @@ async function localCreateWavesurfer() {
 
 function replaceWaveLoader(wavesurfer: WaveSurfer) {
   wavesurfer.on('ready', () => {
+    console.log('ready!!!');
     if (!waveContainerEl.value || !waveformEl.value) return;
 
     const waveLoader = waveContainerEl.value.querySelector<HTMLElement>('.wave-loader');
@@ -133,6 +130,11 @@ function replaceWaveLoader(wavesurfer: WaveSurfer) {
       opacity: 1,
       delay: 0.1, // 100ms delay
     });
+
+    if (!waveMounted.value) {
+      waveMounted.value = true;
+      play();
+    }
   });
 }
 
