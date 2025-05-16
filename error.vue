@@ -4,7 +4,7 @@
     <p class="mt-7 text-6x1">Ooops.</p>
     <p class="mt-7">{{ error.message }}</p>
     <button
-      class="lr-button my-7"
+      class="lr-button my-7 mx-auto"
       @click="handleClearError"
     >
       Go Home
