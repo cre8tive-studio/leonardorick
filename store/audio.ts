@@ -66,9 +66,24 @@ export const useAudioStore = defineStore('audioStore', () => {
       }
     }
 
-    privateState.previews = newPreviews
-      .sort((a, b) => b.number - a.number)
-      .sort((a, b) => Number(b.enabled) - Number(a.enabled));
+    // pretty and non-performatic way of sorting
+    // privateState.previews = newPreviews
+    //   .sort((a, b) => b.number - a.number)
+    //   .sort((a, b) => getPreviewVotes(b.number).length - getPreviewVotes(a.number).length)
+    //   .sort((a, b) => Number(b.enabled) - Number(a.enabled));
+
+    privateState.previews = newPreviews.sort((a, b) => {
+      // Sort by `enabled` first (true before false)
+      const enabledDiff = Number(b.enabled) - Number(a.enabled);
+      if (enabledDiff !== 0) return enabledDiff;
+
+      // Then by number of upvotes (more first)
+      const voteDiff = getPreviewVotes(b.number).length - getPreviewVotes(a.number).length;
+      if (voteDiff !== 0) return voteDiff;
+
+      // Then by number descending
+      return b.number - a.number;
+    });
 
     fetchUpvotesAvailable();
   }
@@ -157,6 +172,16 @@ export const useAudioStore = defineStore('audioStore', () => {
     document.body.removeChild(link);
   }
 
+  function increaseVolume() {
+    state.volume = Math.min(state.volume + 0.05, 1);
+    localStorageClientSetItem('volume', state.volume.toString());
+  }
+
+  function decreaseVolume() {
+    state.volume = Math.max(state.volume - 0.05, 0);
+    localStorageClientSetItem('volume', state.volume.toString());
+  }
+
   return {
     ...toRefs(state),
     previews,
@@ -171,5 +196,7 @@ export const useAudioStore = defineStore('audioStore', () => {
     isRemoveVoteDisabled,
 
     download,
+    increaseVolume,
+    decreaseVolume,
   };
 });

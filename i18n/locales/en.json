@@ -59,6 +59,7 @@
     "product_managers": "Product Managers",
     "preview": "Preview",
     "profile": "Profile",
+    "profile_money_target_title": "This is how much I need to produce the next song!",
     "remove": "Remove",
     "recruiters": "Recruiters",
     "reenable_subscription_regain_access": "Re-enable your subscription to regain full access to exclusive content.",
@@ -115,7 +116,7 @@
             "know_more": {
                 "item_1": "You subscribe as a supporter for a symbolic price. 💸",
                 "item_2": "You unlock 3 Previews, full songs voice & guitar. 🎸",
-                "item_3": "Each month subscribed you unlock one more Preview. 🎼",
+                "item_3": "Each month subscribed you unlock one more Preview (I have more than 30 already done!). 🎼",
                 "item_4": "You are able to vote on the songs you've liked. 👍",
                 "item_5": "The most voted song is the one I'm going to produce next. 💽"
             }

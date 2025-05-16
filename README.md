@@ -126,7 +126,8 @@ To add more mocked endpoints check the `01.mock.ts` server middleware and add ne
 1. Upload the file in the storage
 2. Create the item in the previews collection
 3. Add the number in the settings collection (previewsReady)
-4. Create the document in the upvotes collection with the preview number
+4. Create the document in the upvotes collection where the document ID is the preview number
+5. Optional: Update any user with the number in the availablePreviews if you want
 
 #### types
 

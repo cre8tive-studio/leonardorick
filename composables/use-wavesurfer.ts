@@ -64,6 +64,11 @@ const useWavesurfer = () => {
     activateCanvasMouseHandlerGlobal(globalWave.value as WaveSurfer, globalWaveformEl.value);
   }
 
+  // use this if you want to use a copy of the wave and play pause it but don't want to create a new instance
+  function setWaveSurfer(waveCopy: WaveSurfer) {
+    wave.value = waveCopy;
+  }
+
   function playPause() {
     if (!wave.value) return;
     if (wave.value.isPlaying()) {
@@ -150,9 +155,10 @@ const useWavesurfer = () => {
     createWavesurfer,
     createMockWavesurfer,
     createCopyWavesurfer,
-    wave,
+    setWaveSurfer,
     play,
     playPause,
+    wave,
   };
 };
 

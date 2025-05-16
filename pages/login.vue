@@ -48,7 +48,7 @@
             <div v-if="loginType === 'login'">
               <p
                 lr-cursor
-                class="forgot-password"
+                class="form-label forgot-password"
                 :class="{ disabled: forgotPasswordDisabled }"
                 @click="forgotPasswordStart"
               >
@@ -74,7 +74,7 @@
         </form>
         <p
           v-if="loginType === 'login'"
-          class="pb-12"
+          class="form-label pb-12"
         >
           {{ $t('dont_have_account_sign_up') }}
           <a
@@ -86,7 +86,7 @@
           </a>
         </p>
         <div v-else>
-          <p class="pb-12">
+          <p class="form-label pb-12">
             {{ $t('already_have_an_account') }}
             <a
               class="lr-anchor"
@@ -100,7 +100,7 @@
             v-if="!checkoutId"
             class="stripe"
           >
-            <p class="text-center relative">
+            <p class="form-label relative">
               <i18n-t
                 tag="span"
                 keypath="make_sure_already_subscribed_signup"

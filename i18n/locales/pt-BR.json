@@ -59,6 +59,7 @@
     "product_managers": "Product Managers",
     "preview": "Prévia",
     "profile": "Perfil",
+    "profile_money_target_title": "Isso é o quanto eu preciso para produzir minha próxima música!",
     "remove": "Remover",
     "recruiters": "Recrutadores",
     "reenable_subscription_regain_access": "Ative sua subscrição para ganhar acesso novamente ao conteúdo exclusivo",
@@ -114,7 +115,7 @@
             "know_more": {
                 "item_1": "Você se inscreve como um apoiador por um preço simbólico. 💸",
                 "item_2": "Você desbloqueia 3 Prévias, músicas completas minhas voz & violão 🎸",
-                "item_3": "A cada mês inscrito você desbloqueia mais uma Prévia. 🎼",
+                "item_3": "A cada mês inscrito você desbloqueia mais uma Prévia (Eu tenho mais de 30 já prontas!). 🎼",
                 "item_4": "Você pode votar nas músicas que mais gostar. 👍",
                 "item_5": "A música mais votada é a que eu vou produzir a seguir. 💽"
             }

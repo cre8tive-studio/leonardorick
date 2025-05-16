@@ -5,7 +5,7 @@
       class="lr-profile lr-form-container lr-section-page"
     >
       <h1 class="lr-text--body-2 mb-6">{{ $t('profile') }}</h1>
-      <div class="container flex flex-col items-center gap-4">
+      <div class="container flex flex-col items-center gap-4 mb-12">
         <LRSubscriptionBadge class="mb-2" />
         <div
           class="lr-text-input disabled !w-fit"
@@ -15,6 +15,10 @@
         </div>
 
         <LRManageSubscriptionButton />
+      </div>
+      <div class="money-target-container w-full flex flex-col items-center">
+        <h2 class="mb-8 lr-text--body-1">{{ $t('profile_money_target_title') }}</h2>
+        <LRMoneyTarget class="money-target" />
       </div>
     </div>
   </ClientOnly>
@@ -34,4 +38,9 @@ if (!user.value) {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.money-target-container {
+  max-width: 500px;
+  text-align: center;
+}
+</style>

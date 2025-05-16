@@ -134,6 +134,7 @@ function localPlayPause() {
   align-items: center;
   justify-content: center;
   box-shadow: $box-shadow-elevation-1;
+  cursor: none;
 
   position: fixed;
   bottom: calc((var(--height) * -1) - var(--dragger-height));

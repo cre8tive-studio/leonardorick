@@ -2,7 +2,7 @@
   <LRModal
     :should-show-modal="shouldShowModal"
     max-width="70%"
-    @close="close"
+    @close="$emit('close')"
   >
     <div class="how-it-works-modal">
       <h1 class="lr-text--body-2">{{ $t('modal.how_it_works.title') }}</h1>
@@ -139,10 +139,6 @@ function continueSubscription() {
 function cleanForm() {
   email.value = '';
   confirmEmail.value = '';
-}
-
-function close() {
-  $emit('close');
 }
 </script>
 

@@ -112,7 +112,7 @@ watch(
     overflow: hidden;
     border-radius: 50%;
     height: fit-content;
-    outline: 4px solid $dark-text-4;
+    outline: 4px solid $dark-text-5;
     img {
       min-width: 122%;
       min-height: 122%;
@@ -132,7 +132,7 @@ watch(
     max-width: 100%;
     max-height: 100%;
     border-radius: 50%;
-    outline: 10px solid #1a1d21;
+    outline: 8px solid $dark-text-4;
     overflow: hidden;
     box-shadow: var(--box-shadow03);
     pointer-events: none;

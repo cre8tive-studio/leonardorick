@@ -90,6 +90,8 @@ watch(breakpoints.current, () => {
   }
 });
 
+defineExpose({ wave });
+
 async function localCreateWavesurfer() {
   if (!enabled) return;
   if (!waveformEl.value) throw new Error('Waveform container not defined on wave creation');

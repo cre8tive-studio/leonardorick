@@ -37,7 +37,11 @@ export default defineEventHandler(async (event) => {
 
           return buffer; // Nitro will send raw bytes
         } catch {
-          throw createError({ statusCode: 404, statusMessage: `Mock MP3 ${id} not found` });
+          // ? request file if mock is not found. If a request needs to be done
+          // ? you need to comment '/api/getSubscription' so authenticated requests work
+          // eslint-disable-next-line no-console
+          console.warn(`Mock MP3 ${id} not found`);
+          // throw createError({ statusCode: 404, statusMessage: `Mock MP3 ${id} not found` });
         }
         // validate regular endpoints
       } else if (Object.prototype.hasOwnProperty.call(DATA, url)) {
@@ -48,7 +52,7 @@ export default defineEventHandler(async (event) => {
 });
 
 const DATA: Record<string, unknown> = {
-  '/api/getSubscription': getSubscription,
+  '/api/getSubscription': getSubscription, // ? always comment this one if you want authenticated requests to work
   '/api/getPreviewsMetadata': getPreviewsMetadata,
   '/api/getCoversMetadata': getCoversMetadata,
   '/api/personal-info': personalInfo,

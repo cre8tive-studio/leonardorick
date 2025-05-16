@@ -1,10 +1,6 @@
 # FEATURES I REALLY WANT
 
-update bar with the value on webhook.
-
-increase the height of the inputs
-
-Improve translations to really consider routes such as /pt-BR/something
+allow single payment to unlock all demos
 
 Upload some previews
 
@@ -12,16 +8,10 @@ create donate button
 = // add party emoji if the value was reached. And a tooltip saying (new release comming soon)
 = fix transition on learn more button
 
-- Add also on the profile page
-- update the bar with the payment suceeded webhook
-
-- create full local mocked envrionment for development!!!!!
-  |||
-
-  - add mock for payload content
-
 - multple language emails?
 - Add Qonto experience
+
+Improve translations to really consider routes such as /pt-BR/something
 
 ===============================================
 

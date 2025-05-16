@@ -48,11 +48,18 @@ const icon = computed(() => {
   return 'volume-low';
 });
 
+const internalUpdate = ref(false);
+
 onMounted(() => {
   if (!bodyEl.value || !headEl.value) return;
   bodyEl.value.style.setProperty('--body-height', `${BODY_HEIGHT}px`);
   headEl.value.style.setProperty('--head-height', `${HEAD_HEIGHT}px`);
   headEl.value.style.top = `${denormalize(volume.value, MAX, { inverted: true })}px`;
+
+  watch(volume, () => {
+    if (internalUpdate.value) return;
+    updateSliderHeadPosition();
+  });
 });
 
 function mousedown() {
@@ -68,8 +75,20 @@ function mousemove(e: MouseEvent) {
 
   const body = bodyRect.value || bodyEl.value.getBoundingClientRect();
   const top = Math.min(Math.max(e.clientY - body.top - HEAD_HEIGHT / 2, 0), MAX);
+
   const newVolume = normalize(top, MAX, { inverted: true });
+  internalUpdate.value = true;
   volume.value = newVolume;
+  nextTick(() => {
+    internalUpdate.value = false;
+  });
+
+  headEl.value.style.top = `${top}px`;
+}
+
+function updateSliderHeadPosition() {
+  if (!headEl.value || !bodyEl.value) return;
+  const top = normalize(volume.value, 1, { max: MAX, min: 0, inverted: true }); // get pixel position from volume
   headEl.value.style.top = `${top}px`;
 }
 

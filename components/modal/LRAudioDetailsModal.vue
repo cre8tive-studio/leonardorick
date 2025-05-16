@@ -4,21 +4,46 @@
     :should-show-modal="shouldShowModal"
     height="85vh"
     max-width="90%"
-    @close="$emit('close')"
+    @close="close"
   >
     <div
       data-lenis-prevent
       class="lr-audio-details-modal"
     >
       <div class="header-wrapper">
-        <div class="image-wrapper">
-          <NuxtImg
-            height="500"
-            width="500"
-            src="/images/premium-disco.png"
-            :alt="$t('alt.cover_image', { songName: audio?.title })"
-            preload
-          />
+        <div class="w-full flex gap-2 justify-center items-center">
+          <button
+            v-if="!isMobile"
+            lr-cursor
+            class="simple-action-button"
+            :disabled="volume === 0"
+            @click="decreaseVolume"
+          >
+            <fa icon="volume-low" />
+          </button>
+          <div class="image-wrapper">
+            <NuxtImg
+              height="500"
+              width="500"
+              src="/images/premium-disco.png"
+              :alt="$t('alt.cover_image', { songName: audio?.title })"
+              preload
+            />
+            <LRPlayButton
+              :wave="wave"
+              size="sm"
+              @play="localPlayPause"
+            />
+          </div>
+          <button
+            v-if="!isMobile"
+            lr-cursor
+            class="simple-action-button"
+            :disabled="volume === 1"
+            @click="increaseVolume"
+          >
+            <fa icon="volume-high" />
+          </button>
         </div>
         <h1 class="lr-text--body-1 font-bold">{{ audio.title }} &nbsp; 🎼</h1>
       </div>
@@ -72,18 +97,23 @@
 
 <script setup lang="ts">
 import DOMPurify from 'dompurify';
+import type WaveSurfer from 'wavesurfer.js';
 import { useAppStore } from '~/store';
+import { useAudioStore } from '~/store/audio';
 import type { AudioModel } from '~/types/audio.model';
+import type { PlayOptions } from '~/types/play.options';
 import type { PremiumAudioModel } from '~/types/premium-audio.model';
 import type { LanguageOptions } from '~/utils/constants/languages';
 
 interface Props {
   shouldShowModal: boolean;
   audio: AudioModel | PremiumAudioModel;
+  wave?: WaveSurfer;
 }
 
 interface Emits {
   (e: 'close'): void;
+  (e: 'play', value: PlayOptions): void;
   (e: 'download'): void;
 }
 
@@ -92,29 +122,108 @@ const spotifyLanguageUrl: Record<LanguageOptions, string> = {
   'pt-BR': 'br-pt',
 };
 
-const { audio, shouldShowModal } = defineProps<Props>();
-defineEmits<Emits>();
+const { isMobile } = useDevice();
+const { audio, shouldShowModal, wave } = defineProps<Props>();
+const $emit = defineEmits<Emits>();
+const mounted = ref(false);
 
 const { lang } = toRefs(useAppStore());
+const { increaseVolume, decreaseVolume, volume } = toRefs(useAudioStore());
+
+const { playPause, setWaveSurfer } = useWavesurfer();
+
 const sanitizedLyrics = computed(() => DOMPurify.sanitize(audio.lyrics || ''));
 const spotifyLocalFilesLink = computed(
   () => `https://support.spotify.com/${spotifyLanguageUrl[lang.value]}/article/local-files/`
 );
+
+onMounted(() => {
+  watch(
+    () => shouldShowModal,
+    async (isOpen) => {
+      if (!import.meta.client) return;
+      await nextTick();
+
+      // acts like onMounted
+      if (isOpen) {
+        if (!wave) return;
+        setWaveSurfer(wave);
+
+        mounted.value = true;
+        // acts like onUnmounted
+      } else if (mounted.value) {
+        //
+      }
+    },
+    { immediate: true }
+  );
+});
+
+function close() {
+  $emit('close');
+}
+
+async function localPlayPause($event: PlayOptions) {
+  $emit('play', $event);
+  playPause();
+}
 </script>
 
 <style scoped lang="scss">
 .lr-audio-details-modal {
   margin-bottom: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
+.header-wrapper {
+  button {
+    height: 48px;
+    width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    position: relative;
+    bottom: 4px;
+    color: $dark-text-3;
+
+    &:hover:not(.disabled):not(:disabled) {
+      color: $highlight;
+    }
+  }
+}
 .image-wrapper {
   border-radius: 50%;
   overflow: hidden;
   width: 60px;
-  margin: 0 auto;
   margin-bottom: 1rem;
   box-shadow: $box-shadow-elevation-2;
   border: 2px solid $dark-text-4;
+  position: relative;
+
+  button {
+    position: absolute;
+    left: 60%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s $default-ease;
+    scale: 1.15 !important;
+  }
+
+  img {
+    transition: opacity 0.3s $default-ease;
+  }
+
+  &:hover {
+    img {
+      opacity: 0;
+    }
+    button {
+      opacity: 1;
+    }
+  }
 }
 
 h1 {
@@ -141,7 +250,6 @@ h2 {
   overscroll-behavior: contain;
   letter-spacing: 0.06em;
   line-height: 1.6rem;
-  margin-bottom: 32px;
 
   > * {
     margin-bottom: 24px;
@@ -163,7 +271,8 @@ h2 {
 }
 
 .content-box {
-  margin-bottom: 2rem;
+  padding-bottom: 3rem;
+  margin-bottom: 3rem;
 }
 
 @media (min-width: $lg-breakpoint) {
@@ -187,19 +296,21 @@ h2 {
     }
 
     .content-wrapper {
+      flex: 1;
       display: grid;
       grid-template-columns: var(--minor-column-width) 1fr;
       gap: 2rem;
     }
 
     .lyrics {
-      height: 410px;
+      height: 550px;
     }
 
     .content-box {
       margin-bottom: 0;
       box-shadow: $box-shadow-elevation-2;
-      padding: 24px;
+      padding: 2rem;
+      padding-bottom: 3rem;
       border-radius: 12px;
     }
   }

@@ -50,5 +50,14 @@
         "ignoreRestSiblings": true
       }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.html"],
+      "rules": {
+        // disable this specific rule for html files since it was giving a false positive
+        "vue/comment-directive": "off"
+      }
+    }
+  ]
 }

@@ -91,8 +91,8 @@
         :should-show-modal="shouldShowModal"
         @close="shouldShowModal = false"
       />
+      <LRGlobalAudio />
     </div>
-    <LRGlobalAudio />
   </ClientOnly>
 </template>
 <script lang="ts" setup>
