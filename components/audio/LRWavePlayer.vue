@@ -79,10 +79,8 @@ onMounted(() => {
   waveMounted.value = eager;
   useWhenReady(
     () => audioBlob,
-    async () => {
-      await nextTick(); // ensure that template is already showing the waveformEl container
-      localCreateWavesurfer();
-    }
+    async () => localCreateWavesurfer(),
+    { isNextTick: true } // ensure that template is already showing the waveformEl container
   );
 });
 

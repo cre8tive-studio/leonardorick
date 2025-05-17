@@ -130,7 +130,7 @@ const mounted = ref(false);
 const { lang } = toRefs(useAppStore());
 const { increaseVolume, decreaseVolume, volume } = toRefs(useAudioStore());
 
-const { playPause, setWavesurfer } = useWavesurfer();
+const { playPause, setExternalWavesurfer } = useWavesurfer(true);
 
 const sanitizedLyrics = computed(() => DOMPurify.sanitize(audio.lyrics || ''));
 const spotifyLocalFilesLink = computed(
@@ -147,7 +147,7 @@ onMounted(() => {
       // acts like onMounted
       if (isOpen) {
         if (!wave) return;
-        setWavesurfer(wave);
+        setExternalWavesurfer(wave);
 
         mounted.value = true;
         // acts like onUnmounted

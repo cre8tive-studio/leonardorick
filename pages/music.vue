@@ -139,7 +139,6 @@ const scrollToPreviewsTimeout = ref<NodeJS.Timeout>();
 onMounted(async () => {
   loadReleases();
   await setLoggedInformation();
-
   // On signup we observe the mutations on the screen until it's "stable"
   // so we are able to scroll to the previews section and show the user what is there
   if (route.query.login !== 'signup' || !musicPageEl.value) return;

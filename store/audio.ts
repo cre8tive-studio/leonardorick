@@ -17,6 +17,8 @@ interface AudioStoreModel {
   globalWaveformEl: HTMLElement | null;
   globalWave: WaveSurfer | null;
   lastPlayedWave: WaveSurfer | null;
+  playNextInterval: NodeJS.Timeout | undefined;
+  continuousPlayingIndexList: number[];
 }
 
 interface PrivateAudioStoreModel {
@@ -35,6 +37,8 @@ export const useAudioStore = defineStore('audioStore', () => {
     globalWaveformEl: null,
     globalWave: null,
     lastPlayedWave: null,
+    playNextInterval: undefined,
+    continuousPlayingIndexList: [],
   });
 
   const privateState = reactive<PrivateAudioStoreModel>({
@@ -95,7 +99,10 @@ export const useAudioStore = defineStore('audioStore', () => {
   }
 
   function addWaveOnList(wave: WaveSurfer) {
-    state.waves.push(wave);
+    const index = state.waves.indexOf(wave);
+    if (index === -1) {
+      state.waves.push(wave);
+    }
   }
 
   function removeWaveFromList(wave: WaveSurfer) {

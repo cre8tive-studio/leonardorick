@@ -54,7 +54,7 @@ import SvgoForward15Seconds from '~/assets/icons/forward-15-seconds.svg';
 import useWavesurfer from '~/composables/use-wavesurfer';
 
 const { globalWaveformEl, globalWave } = toRefs(useAudioStore());
-const { setWavesurfer, changeSeconds } = useWavesurfer();
+const { setExternalWavesurfer, changeSeconds } = useWavesurfer(true);
 
 const waveformEl = ref<HTMLDivElement | null>(null);
 const selfEl = ref<HTMLDivElement>();
@@ -81,7 +81,7 @@ onMounted(async () => {
 
   watch(globalWave, () => {
     if (!globalWave.value) return;
-    setWavesurfer(globalWave.value as WaveSurfer);
+    setExternalWavesurfer(globalWave.value as WaveSurfer);
   });
 });
 
