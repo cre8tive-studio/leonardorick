@@ -1,11 +1,13 @@
 import WaveSurfer from 'wavesurfer.js';
-import { isDefined } from '@leonardorick/utils';
+import { v4 as uuidv4 } from 'uuid';
 import { COLORS } from '~/utils/constants/colors';
 import mockPeaks from '~/public/jsons/audio-peaks.json';
 import { useAudioStore } from '~/store/audio';
+import type { AudioModel } from '~/types/audio.model';
+import type { WaveSurferWithIdModel } from '~/types/wavesurfer-with-id.model';
 
-const useWavesurfer = (shouldBeCopy: boolean = false) => {
-  const wave = ref<WaveSurfer>();
+const useWavesurfer = ({ shouldBeCopy = false }: { shouldBeCopy?: boolean } = {}) => {
+  const wave = ref<WaveSurferWithIdModel>();
   const isCopy = ref(shouldBeCopy);
   const container = ref<HTMLElement | null>();
 
@@ -17,8 +19,8 @@ const useWavesurfer = (shouldBeCopy: boolean = false) => {
     globalWave,
     playLocked,
     waves,
-    playNextInterval,
-    continuousPlayingIndexList,
+    continuousAndControlsPlayInterval,
+    wavesAudioMap,
   } = toRefs(audioStore);
 
   const { activate: activateCanvasMouseHandler } = useWavesurferCanvasMouseHandler();
@@ -31,7 +33,7 @@ const useWavesurfer = (shouldBeCopy: boolean = false) => {
     wave.value.destroy();
   });
 
-  async function createWavesurfer(newContainer: HTMLElement, audioBlob: Blob) {
+  async function createWavesurfer(newContainer: HTMLElement, audioBlob: Blob, audio: AudioModel) {
     container.value = newContainer;
 
     if (wave.value) {
@@ -53,11 +55,13 @@ const useWavesurfer = (shouldBeCopy: boolean = false) => {
       dragToSeek: true,
       url: URL.createObjectURL(audioBlob),
       normalize: false,
-    });
+    }) as WaveSurferWithIdModel;
 
+    (wavesurfer as WaveSurferWithIdModel).id = uuidv4();
     wave.value = wavesurfer;
     removeWaveFromList(wavesurfer);
     addWaveOnList(wavesurfer);
+    wavesAudioMap.value[wave.value.id] = audio;
 
     wavesurfer.on('finish', () => {
       playNext();
@@ -68,7 +72,7 @@ const useWavesurfer = (shouldBeCopy: boolean = false) => {
     return wavesurfer;
   }
 
-  function updateGlobalWavesurfer(newWave?: WaveSurfer) {
+  function updateGlobalWavesurfer(newWave?: WaveSurferWithIdModel) {
     const w = newWave || wave.value;
     if (!globalWaveformEl.value) throw new Error('Attempt to update global wavesurfer but container is not defined');
     if (!w) throw new Error('Attempt to update global wavesurfer but current wave is not defined');
@@ -81,11 +85,11 @@ const useWavesurfer = (shouldBeCopy: boolean = false) => {
 
     lastPlayedWave.value = w;
     globalWave.value = createCopyWavesurfer(globalWaveformEl.value, w.getMediaElement());
-    activateCanvasMouseHandlerGlobal(globalWave.value as WaveSurfer, globalWaveformEl.value);
+    activateCanvasMouseHandlerGlobal(globalWave.value as WaveSurferWithIdModel, globalWaveformEl.value);
   }
 
   // use this if you want to use a copy of the wave and play pause it but don't want to create a new instance
-  function setExternalWavesurfer(waveCopy: WaveSurfer) {
+  function setExternalWavesurfer(waveCopy: WaveSurferWithIdModel) {
     isCopy.value = true;
     wave.value = waveCopy;
   }
@@ -99,57 +103,81 @@ const useWavesurfer = (shouldBeCopy: boolean = false) => {
     }
   }
 
-  async function play() {
-    if (!wave.value || playLocked.value) return;
+  async function play(newWave?: WaveSurferWithIdModel) {
+    const w = newWave || wave.value;
+    if (!w || playLocked.value) return;
     playLocked.value = true;
 
-    updateGlobalWavesurfer(); // always create the copie before playing or much after the current wave is already playing for some time
+    updateGlobalWavesurfer(w); // always create the copie before playing or much after the current wave is already playing for some time
 
-    for (const w of waves.value.values()) {
-      if (w.isPlaying()) {
-        w.pause();
+    for (const wi of waves.value.values()) {
+      if (wi.isPlaying()) {
+        wi.pause();
       }
     }
 
-    wave.value.play();
+    w.play();
+
+    if ('mediaSession' in navigator) {
+      const audio = wavesAudioMap.value[w.id];
+      if (!audio) return;
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: audio.title,
+        artist: 'Leonardo Rick',
+        artwork: [{ src: audio.imageUrl || '/images/premium-disco.png', sizes: '512x512', type: 'image' }],
+      });
+      navigator.mediaSession.setActionHandler('nexttrack', () => playNext());
+      navigator.mediaSession.setActionHandler('previoustrack', () => playPrevious());
+    }
+
     playLocked.value = false;
   }
 
   function playNext() {
-    clearTimeout(playNextInterval.value);
-    playNextInterval.value = setTimeout(() => {
-      if (!wave.value || waves.value.length < 2) return;
+    clearTimeout(continuousAndControlsPlayInterval.value);
+    continuousAndControlsPlayInterval.value = setTimeout(() => {
+      if (!lastPlayedWave.value || waves.value.length < 2) return;
 
-      const index = waves.value.indexOf(wave.value);
+      const index = waves.value.indexOf(lastPlayedWave.value);
 
-      if (!continuousPlayingIndexList.value.length) {
-        continuousPlayingIndexList.value = waves.value.map((_, i) => i).filter((i) => i !== index);
-      }
-
-      // attemp to play the next song in the waves list, if not, just play the first one in the list
-      let newWavesIndex: number | undefined;
-      const nextIndex = index + 1;
-      const nextIndexPosition = continuousPlayingIndexList.value.findIndex((indexValue) => indexValue === nextIndex);
-
-      if (nextIndexPosition !== -1) {
-        newWavesIndex = nextIndex;
-        continuousPlayingIndexList.value.splice(nextIndexPosition, 1);
+      let w;
+      if (waves.value[index + 1]) {
+        w = waves.value[index + 1];
       } else {
-        newWavesIndex = continuousPlayingIndexList.value.shift();
+        w = waves.value[0];
+      }
+      if (w) {
+        w.setTime(0);
+        lastPlayedWave.value.setTime(0);
+        play(w as WaveSurferWithIdModel);
+      }
+    }, 200);
+  }
+
+  function playPrevious() {
+    clearTimeout(continuousAndControlsPlayInterval.value);
+    continuousAndControlsPlayInterval.value = setTimeout(() => {
+      if (!lastPlayedWave.value || waves.value.length < 2) return;
+
+      if (lastPlayedWave.value.getCurrentTime() > 5) {
+        lastPlayedWave.value.setTime(0);
+        return;
       }
 
-      if (!isDefined(newWavesIndex)) return;
+      const index = waves.value.indexOf(lastPlayedWave.value);
 
-      const anyPlaying = waves.value.find((w) => w.isPlaying());
-      if (!anyPlaying) {
-        const w = waves.value[newWavesIndex];
-        if (w) {
-          updateGlobalWavesurfer(w as WaveSurfer); // always create the copie before playing or much after the current wave is already playing for some time
-          w.setTime(0);
-          w.play();
-        }
+      let w;
+      if (waves.value[index - 1]) {
+        w = waves.value[index - 1];
+      } else {
+        w = waves.value[waves.value.length - 1];
       }
-    }, 500);
+      if (w) {
+        w.setTime(0);
+        lastPlayedWave.value.setTime(0);
+        play(w as WaveSurferWithIdModel);
+      }
+    }, 200);
   }
 
   function changeSeconds(seconds: number) {
@@ -158,7 +186,7 @@ const useWavesurfer = (shouldBeCopy: boolean = false) => {
   }
 
   function createCopyWavesurfer(newContainer: HTMLElement, mediaElement: HTMLMediaElement, peaks?: number[][]) {
-    return WaveSurfer.create({
+    const wavesurfer = WaveSurfer.create({
       height: 'auto',
       cursorWidth: 5,
       barWidth: 2,
@@ -175,6 +203,8 @@ const useWavesurfer = (shouldBeCopy: boolean = false) => {
       media: mediaElement,
       ...(peaks ? { peaks } : {}),
     });
+    (wavesurfer as WaveSurferWithIdModel).id = uuidv4();
+    return wavesurfer as WaveSurferWithIdModel;
   }
 
   function createMockWavesurfer(newContainer: HTMLElement) {
@@ -190,12 +220,13 @@ const useWavesurfer = (shouldBeCopy: boolean = false) => {
       cursorColor: COLORS.darkText4,
       normalize: false,
     });
+    (wavesurfer as WaveSurferWithIdModel).id = uuidv4();
 
     wavesurfer.load(
       'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU2LjM2LjEwMAAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV6urq6urq6urq6urq6urq6urq6urq6urq6v////////////////////////////////8AAAAATGF2YzU2LjQxAAAAAAAAAAAAAAAAJAAAAAAAAAAAASDs90hvAAAAAAAAAAAAAAAAAAAA//MUZAAAAAGkAAAAAAAAA0gAAAAATEFN//MUZAMAAAGkAAAAAAAAA0gAAAAARTMu//MUZAYAAAGkAAAAAAAAA0gAAAAAOTku//MUZAkAAAGkAAAAAAAAA0gAAAAANVVV',
       [mockPeaks.data]
     );
-    return wavesurfer;
+    return wavesurfer as WaveSurferWithIdModel;
   }
 
   function getProgressGradient() {

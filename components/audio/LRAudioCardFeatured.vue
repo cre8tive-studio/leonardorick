@@ -25,6 +25,7 @@
 
       <LRWavePlayer
         :audio-blob="audioBlob"
+        :audio="audio"
         @audioprocess="rotateBackground"
       />
       <LRMediaLinks

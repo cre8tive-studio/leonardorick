@@ -13,6 +13,7 @@
       <LRWavePlayer
         v-if="mounted"
         :audio-blob="audioBlob"
+        :audio="audio"
         size="md"
         :eager="eager"
         @play="handlePlay"

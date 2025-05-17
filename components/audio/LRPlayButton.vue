@@ -11,12 +11,12 @@
 </template>
 
 <script setup lang="ts">
-import type WaveSurfer from 'wavesurfer.js';
 import type { AudioCardSizeOptions } from '~/types/audio-card-size.options';
 import type { PlayOptions } from '~/types/play.options';
+import type { WaveSurferWithIdModel } from '~/types/wavesurfer-with-id.model';
 
 interface Props {
-  wave: WaveSurfer | undefined;
+  wave: WaveSurferWithIdModel | undefined;
   size: AudioCardSizeOptions;
   enabled?: boolean;
 }

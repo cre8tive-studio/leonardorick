@@ -112,7 +112,7 @@ watch(
     overflow: hidden;
     border-radius: 50%;
     height: fit-content;
-    outline: 4px solid $dark-text-5;
+    outline: 5px solid $dark-text-5;
     img {
       min-width: 122%;
       min-height: 122%;

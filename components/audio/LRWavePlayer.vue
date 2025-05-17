@@ -35,16 +35,18 @@
 </template>
 
 <script setup lang="ts">
-import WaveSurfer from 'wavesurfer.js';
 import { gsap } from 'gsap';
 import { useAudioStore } from '~/store/audio';
 import type { AudioCardSizeOptions } from '~/types/audio-card-size.options';
 import type { PlayOptions } from '~/types/play.options';
 import useWavesurfer from '~/composables/use-wavesurfer';
 import { useInjectCssBreakpoints } from '~/plugins/providers';
+import type { AudioModel } from '~/types/audio.model';
+import type { WaveSurferWithIdModel } from '~/types/wavesurfer-with-id.model';
 
 interface Props {
   audioBlob: Blob | undefined;
+  audio: AudioModel | undefined;
   enabled?: boolean;
   eager?: boolean;
   size?: Exclude<AudioCardSizeOptions, 'sm'>;
@@ -55,7 +57,7 @@ interface Emits {
   (e: 'play', value: PlayOptions): void;
 }
 
-const { enabled = true, eager = true, audioBlob, size = 'lg' } = defineProps<Props>();
+const { enabled = true, eager = true, audioBlob, size = 'lg', audio } = defineProps<Props>();
 
 const $emit = defineEmits<Emits>();
 
@@ -96,8 +98,9 @@ async function localCreateWavesurfer() {
   if (!enabled) return;
   if (!waveformEl.value) throw new Error('Waveform container not defined on wave creation');
   if (!audioBlob) throw new Error('Attempt to create wavesurfer without blob');
+  if (!audio) throw new Error('missing audio reference for creating wave');
 
-  const wavesurfer = await createWavesurfer(waveformEl.value, audioBlob);
+  const wavesurfer = await createWavesurfer(waveformEl.value, audioBlob, audio);
 
   wavesurfer.on('audioprocess', () => {
     wavesurfer.setVolume(volume.value);
@@ -109,7 +112,7 @@ async function localCreateWavesurfer() {
   replaceWaveLoader(wavesurfer);
 }
 
-function replaceWaveLoader(wavesurfer: WaveSurfer) {
+function replaceWaveLoader(wavesurfer: WaveSurferWithIdModel) {
   wavesurfer.on('ready', () => {
     if (!waveContainerEl.value || !waveformEl.value) return;
 

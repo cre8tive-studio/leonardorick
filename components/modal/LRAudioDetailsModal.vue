@@ -97,18 +97,18 @@
 
 <script setup lang="ts">
 import DOMPurify from 'dompurify';
-import type WaveSurfer from 'wavesurfer.js';
 import { useAppStore } from '~/store';
 import { useAudioStore } from '~/store/audio';
 import type { AudioModel } from '~/types/audio.model';
 import type { PlayOptions } from '~/types/play.options';
 import type { PremiumAudioModel } from '~/types/premium-audio.model';
+import type { WaveSurferWithIdModel } from '~/types/wavesurfer-with-id.model';
 import type { LanguageOptions } from '~/utils/constants/languages';
 
 interface Props {
   shouldShowModal: boolean;
   audio: AudioModel | PremiumAudioModel;
-  wave?: WaveSurfer;
+  wave?: WaveSurferWithIdModel;
 }
 
 interface Emits {
@@ -130,7 +130,7 @@ const mounted = ref(false);
 const { lang } = toRefs(useAppStore());
 const { increaseVolume, decreaseVolume, volume } = toRefs(useAudioStore());
 
-const { playPause, setExternalWavesurfer } = useWavesurfer(true);
+const { playPause, setExternalWavesurfer } = useWavesurfer({ shouldBeCopy: true });
 
 const sanitizedLyrics = computed(() => DOMPurify.sanitize(audio.lyrics || ''));
 const spotifyLocalFilesLink = computed(

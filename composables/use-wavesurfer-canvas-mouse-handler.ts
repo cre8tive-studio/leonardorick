@@ -1,16 +1,18 @@
-import WaveSurfer from 'wavesurfer.js';
 // this logic is for being able to keep the LRCursor component following the cursor vent when
 // The user is pressing the cursor down inside the wavesurfer canvas. For some reason (probably
 // because wavesurfer is inside a shadow-root or because the library do a stopPropagation) the mouse
 // 'mousemove' was not reaching the document for us to listen so here we do some tricks and emit a
+
+import type { WaveSurferWithIdModel } from '~/types/wavesurfer-with-id.model';
+
 // synthetic event
 const useWavesurferCanvasMouseHandler = () => {
   const canvas = ref<HTMLCanvasElement | null>();
 
-  let wave: WaveSurfer;
+  let wave: WaveSurferWithIdModel;
   let container: HTMLElement;
 
-  function activate(newWave: WaveSurfer, newContainer: HTMLElement) {
+  function activate(newWave: WaveSurferWithIdModel, newContainer: HTMLElement) {
     // if activating again, cleanup previous listeners
     if (wave) {
       cleanupCanvasListeners();

@@ -88,6 +88,7 @@
         ref="wavePlayer"
         :enabled="premiumAudio.enabled"
         :audio-blob="audioBlob"
+        :audio="audio"
         :eager="eager"
         size="md"
         @audioprocess="setCoverRotation"
@@ -279,6 +280,7 @@ function animateHeart() {
   justify-content: center;
 
   box-shadow: $box-shadow-elevation-1;
+  border: 1px solid $dark-text-4;
   border-radius: 7px;
   transition: opacity 0.3s $default-ease;
 

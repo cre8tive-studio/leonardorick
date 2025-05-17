@@ -28,7 +28,7 @@
         <SvgoBackward15Seconds />
       </button>
       <LRPlayButton
-        :wave="(globalWave as WaveSurfer)"
+        :wave="(globalWave as WaveSurferWithIdModel)"
         :size="'md'"
         @play="localPlayPause"
       />
@@ -44,7 +44,6 @@
 </template>
 
 <script setup lang="ts">
-import type WaveSurfer from 'wavesurfer.js';
 import { gsap } from 'gsap';
 import type { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAudioStore } from '~/store/audio';
@@ -52,9 +51,10 @@ import { COLORS } from '~/utils/constants/colors';
 import SvgoBackward15Seconds from '~/assets/icons/backward-15-seconds.svg';
 import SvgoForward15Seconds from '~/assets/icons/forward-15-seconds.svg';
 import useWavesurfer from '~/composables/use-wavesurfer';
+import type { WaveSurferWithIdModel } from '~/types/wavesurfer-with-id.model';
 
 const { globalWaveformEl, globalWave } = toRefs(useAudioStore());
-const { setExternalWavesurfer, changeSeconds } = useWavesurfer(true);
+const { setExternalWavesurfer, changeSeconds } = useWavesurfer({ shouldBeCopy: true });
 
 const waveformEl = ref<HTMLDivElement | null>(null);
 const selfEl = ref<HTMLDivElement>();
@@ -81,7 +81,7 @@ onMounted(async () => {
 
   watch(globalWave, () => {
     if (!globalWave.value) return;
-    setExternalWavesurfer(globalWave.value as WaveSurfer);
+    setExternalWavesurfer(globalWave.value as WaveSurferWithIdModel);
   });
 });
 

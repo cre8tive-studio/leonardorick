@@ -1,13 +1,14 @@
 import { useLocalStorage } from '@vueuse/core';
-import type WaveSurfer from 'wavesurfer.js';
 import { useToasterStore } from './toaster';
 import { useAppStore } from '.';
 import type { UpvotesClientModel } from '~/types/upvotes.model';
 import type { PremiumAudioModel } from '~/types/premium-audio.model';
 import { useInjectCssBreakpoints } from '~/plugins/providers';
+import type { AudioModel } from '~/types/audio.model';
+import type { WaveSurferWithIdModel } from '~/types/wavesurfer-with-id.model';
 
 interface AudioStoreModel {
-  waves: WaveSurfer[];
+  waves: WaveSurferWithIdModel[];
   volume: number;
   upvotes: UpvotesClientModel;
   upvotesAvailable: number;
@@ -15,10 +16,10 @@ interface AudioStoreModel {
   playLocked: boolean;
 
   globalWaveformEl: HTMLElement | null;
-  globalWave: WaveSurfer | null;
-  lastPlayedWave: WaveSurfer | null;
-  playNextInterval: NodeJS.Timeout | undefined;
-  continuousPlayingIndexList: number[];
+  globalWave: WaveSurferWithIdModel | null;
+  lastPlayedWave: WaveSurferWithIdModel | null;
+  continuousAndControlsPlayInterval: NodeJS.Timeout | undefined;
+  wavesAudioMap: Record<string, AudioModel>;
 }
 
 interface PrivateAudioStoreModel {
@@ -37,8 +38,8 @@ export const useAudioStore = defineStore('audioStore', () => {
     globalWaveformEl: null,
     globalWave: null,
     lastPlayedWave: null,
-    playNextInterval: undefined,
-    continuousPlayingIndexList: [],
+    continuousAndControlsPlayInterval: undefined,
+    wavesAudioMap: {},
   });
 
   const privateState = reactive<PrivateAudioStoreModel>({
@@ -98,14 +99,15 @@ export const useAudioStore = defineStore('audioStore', () => {
     fetchUpvotesAvailable();
   }
 
-  function addWaveOnList(wave: WaveSurfer) {
+  function addWaveOnList(wave: WaveSurferWithIdModel) {
     const index = state.waves.indexOf(wave);
     if (index === -1) {
       state.waves.push(wave);
     }
   }
 
-  function removeWaveFromList(wave: WaveSurfer) {
+  function removeWaveFromList(wave: WaveSurferWithIdModel) {
+    delete state.wavesAudioMap[wave.id];
     const index = state.waves.indexOf(wave);
     if (index !== -1) {
       state.waves.splice(index, 1);
