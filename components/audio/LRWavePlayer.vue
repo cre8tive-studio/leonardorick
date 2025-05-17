@@ -81,7 +81,6 @@ onMounted(() => {
     () => audioBlob,
     async () => {
       await nextTick(); // ensure that template is already showing the waveformEl container
-      console.log('created!! waveformEl.value', waveformEl.value);
       localCreateWavesurfer();
     }
   );

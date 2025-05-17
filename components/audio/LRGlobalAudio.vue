@@ -1,32 +1,46 @@
 <template>
-  <teleport to="body">
-    <div
-      ref="selfEl"
-      class="lr-float-audio"
-      :class="{ visible }"
+  <div
+    ref="selfEl"
+    class="lr-float-audio"
+    :class="{ visible }"
+  >
+    <button
+      lr-cursor
+      class="dragger simple-action-button"
+      @click="showHide"
     >
+      <fa
+        ref="iconEl"
+        :icon="currentIcon"
+      />
+    </button>
+
+    <div
+      ref="waveformEl"
+      class="waveform"
+    />
+    <div class="player flex items-center gap-2">
       <button
         lr-cursor
-        class="dragger simple-action-button"
-        @click="showHide"
+        class="change-time-button ml-4"
+        @click="changeSeconds(-15)"
       >
-        <fa
-          ref="iconEl"
-          :icon="currentIcon"
-        />
+        <SvgoBackward15Seconds />
       </button>
-
-      <div
-        ref="waveformEl"
-        class="waveform"
-      />
       <LRPlayButton
         :wave="(globalWave as WaveSurfer)"
         :size="'md'"
         @play="localPlayPause"
       />
+      <button
+        lr-cursor
+        class="change-time-button"
+        @click="changeSeconds(15)"
+      >
+        <SvgoForward15Seconds lr-cursor />
+      </button>
     </div>
-  </teleport>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -35,8 +49,12 @@ import { gsap } from 'gsap';
 import type { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAudioStore } from '~/store/audio';
 import { COLORS } from '~/utils/constants/colors';
+import SvgoBackward15Seconds from '~/assets/icons/backward-15-seconds.svg';
+import SvgoForward15Seconds from '~/assets/icons/forward-15-seconds.svg';
+import useWavesurfer from '~/composables/use-wavesurfer';
 
 const { globalWaveformEl, globalWave } = toRefs(useAudioStore());
+const { setWavesurfer, changeSeconds } = useWavesurfer();
 
 const waveformEl = ref<HTMLDivElement | null>(null);
 const selfEl = ref<HTMLDivElement>();
@@ -59,6 +77,11 @@ onMounted(async () => {
   useWhenReady(globalWave, () => {
     if (!selfEl.value) return;
     gsap.to(selfEl.value, { y: -DRAGGER_HEIGHT, duration: 0.2 });
+  });
+
+  watch(globalWave, () => {
+    if (!globalWave.value) return;
+    setWavesurfer(globalWave.value as WaveSurfer);
   });
 });
 
@@ -129,7 +152,7 @@ function localPlayPause() {
   border: 2px solid $dark-text-4;
   border-radius: 25px;
   height: var(--height);
-  width: 500px;
+  width: 600px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -171,9 +194,33 @@ function localPlayPause() {
     color: $dark-text-3;
   }
 }
+.player {
+  .change-time-button {
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: none;
+
+    &:hover {
+      svg {
+        color: $highlight-3;
+      }
+    }
+    svg {
+      transition: color 0.3s $default-ease;
+      color: $secondary-dark-text;
+      font-size: 24px;
+      pointer-events: none;
+    }
+  }
+}
 @media (max-width: $sm-breakpoint) {
   .lr-float-audio {
-    width: 300px;
+    width: 80%;
+    min-width: 350px;
   }
 }
 </style>

@@ -65,7 +65,7 @@ const useWavesurfer = () => {
   }
 
   // use this if you want to use a copy of the wave and play pause it but don't want to create a new instance
-  function setWaveSurfer(waveCopy: WaveSurfer) {
+  function setWavesurfer(waveCopy: WaveSurfer) {
     wave.value = waveCopy;
   }
 
@@ -95,6 +95,11 @@ const useWavesurfer = () => {
 
     wave.value.play();
     playLocked.value = false;
+  }
+
+  function changeSeconds(seconds: number) {
+    if (!wave.value) return;
+    return wave.value.setTime(wave.value.getCurrentTime() + seconds);
   }
 
   function createCopyWavesurfer(newContainer: HTMLElement, mediaElement: HTMLMediaElement, peaks?: number[][]) {
@@ -155,9 +160,10 @@ const useWavesurfer = () => {
     createWavesurfer,
     createMockWavesurfer,
     createCopyWavesurfer,
-    setWaveSurfer,
+    setWavesurfer,
     play,
     playPause,
+    changeSeconds,
     wave,
   };
 };

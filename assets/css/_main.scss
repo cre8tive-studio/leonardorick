@@ -58,6 +58,7 @@
 * buttons
 */
 .main-hover-button {
+  cursor: none;
   transition: color 0.3s $default-ease;
   &:hover {
     color: $highlight-3;
