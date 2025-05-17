@@ -4,6 +4,7 @@ import { useToasterStore } from './toaster';
 import { useAppStore } from '.';
 import type { UpvotesClientModel } from '~/types/upvotes.model';
 import type { PremiumAudioModel } from '~/types/premium-audio.model';
+import { useInjectCssBreakpoints } from '~/plugins/providers';
 
 interface AudioStoreModel {
   waves: WaveSurfer[];
@@ -40,6 +41,7 @@ export const useAudioStore = defineStore('audioStore', () => {
     previews: [],
   });
 
+  const { isLg } = useInjectCssBreakpoints();
   const { t: $t } = useI18n();
   const { fetchUpvotes, updateVotes } = useAppwrite();
   const { userId, settings, user } = toRefs(useAppStore());
@@ -54,6 +56,10 @@ export const useAudioStore = defineStore('audioStore', () => {
   onMounted(() => {
     if (import.meta.client) {
       state.volume = useLocalStorage('volume', 0.5).value;
+    }
+
+    if (!isLg.value) {
+      state.volume = 1;
     }
   });
 

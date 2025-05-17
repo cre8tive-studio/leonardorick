@@ -14,11 +14,25 @@ npm run dev
 
 Make sure to check .env.example to check the necessary variables needed to run the probject.
 
+## Mock
+
 To run with mocked data make sure to the the .env variable `USE_MOCKS=true`.
 
-Keep in mind that this will make `PAYLOAD_GRAPHQL_URL` be ignored and some other endpoints are fake.
+Keep in mind that this will make `PAYLOAD_GRAPHQL_URL` to be ignored and some other endpoints are fake.
 
-To setup more fake responses
+To setup more fake responses:
+
+1. If the request is for nuxt backend, handle it in `01.mock.ts`
+2. If it's an external API call, mock it in `mocks/handlers/index.ts`
+
+To disable only the external mock, comment this part in `02.initializer.client`
+
+```ts
+if (isStringTrue(useMocks)) {
+  const { worker } = useSetupMSWWorker();
+  worker.start({ onUnhandledRequest: 'bypass' });
+}
+```
 
 ### Note
 
@@ -33,12 +47,6 @@ The main focus here is on three things:
 3. concentrating on what truly matters (perfectionism isn't always necessary).
 
 If you're interested in checking out some well-structured code, take a look at my github and the [js-libs](https://github.com/LeonardoRick/js-libs) project where I create helper functions for my projects.
-
-### Supported Browswers
-
-- Chrome
-- Firefox
-- Safari
 
 ### Language Logic
 

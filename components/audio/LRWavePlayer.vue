@@ -41,6 +41,7 @@ import { useAudioStore } from '~/store/audio';
 import type { AudioCardSizeOptions } from '~/types/audio-card-size.options';
 import type { PlayOptions } from '~/types/play.options';
 import useWavesurfer from '~/composables/use-wavesurfer';
+import { useInjectCssBreakpoints } from '~/plugins/providers';
 
 interface Props {
   audioBlob: Blob | undefined;
@@ -60,7 +61,8 @@ const $emit = defineEmits<Emits>();
 
 const { volume } = toRefs(useAudioStore());
 
-const breakpoints = useCssBreakpoints();
+const breakpoints = useInjectCssBreakpoints();
+
 const ws = useWavesurfer();
 const { createWavesurfer, playPause, play } = ws;
 const { wave } = ws;
@@ -79,6 +81,7 @@ onMounted(() => {
     () => audioBlob,
     async () => {
       await nextTick(); // ensure that template is already showing the waveformEl container
+      console.log('created!! waveformEl.value', waveformEl.value);
       localCreateWavesurfer();
     }
   );

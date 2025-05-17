@@ -1,11 +1,19 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import localforage from 'localforage';
+import { isStringTrue } from '@leonardorick/utils';
 import { useAppStore } from '~/store';
 import { COLORS } from '~/utils/constants/colors';
+import useSetupMSWWorker from '~/server/mocks/browser';
 
 export default defineNuxtPlugin(async (_nuxtApp) => {
-  const { environment, baseUrl, clientVersion } = useRuntimeConfig().public;
+  const { environment, baseUrl, clientVersion, useMocks } = useRuntimeConfig().public;
+
+  if (isStringTrue(useMocks)) {
+    const { worker } = useSetupMSWWorker();
+    worker.start({ onUnhandledRequest: 'bypass' });
+  }
+
   const { personalInfo } = toRefs(useAppStore());
 
   printConsoleIntroduction(environment, baseUrl, clientVersion, personalInfo.value?.links.linkedin);

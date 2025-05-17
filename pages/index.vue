@@ -24,10 +24,11 @@
 </template>
 
 <script setup lang="ts">
+import { useInjectCssBreakpoints } from '~/plugins/providers';
 import { useAppStore } from '~/store';
 
 const { loaded, isContentLoaded, isContentErrored } = toRefs(useAppStore());
-const { isLg } = useCssBreakpoints();
+const { isLg } = useInjectCssBreakpoints();
 const refreshKey = ref(0);
 const scrollTriggerRefresh = ref(0);
 

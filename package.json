@@ -2,7 +2,7 @@
   "name": "nuxt-app",
   "private": true,
   "type": "module",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "scripts": {
     "build": "nuxt build",
     "clean-build": "rm -rf .nuxt dist .output .netlify server/dist && npm run build",
@@ -11,7 +11,7 @@
     "dev-host": "nuxt dev --host 0.0.0.0",
     "serve": "nuxt dev",
     "ngrok": "ngrok http 3000",
-    "tl": " lt --port 3000 --subdomain leonardorick",
+    "localtunnel": " lt --port 3000 --subdomain leonardorick",
     "generate": "nuxt generate",
     "lint": "eslint --ext .ts,.js.vue --ignore-path .gitignore .",
     "preview": "nuxt preview",
@@ -35,6 +35,7 @@
     "@vue-macros/nuxt": "^1.13.5",
     "eslint-plugin-no-autofix": "^2.1.0",
     "eslint-plugin-vitest": "^0.3.26",
+    "msw": "^2.8.2",
     "nuxt": "^3.17.3",
     "nuxt-svgo": "^4.1.2",
     "prettier": "^2.8.8",
@@ -76,5 +77,10 @@
   "overrides": {
     "vue": "latest"
   },
-  "packageManager": "pnpm@9.15.6+sha256.5bf88eca1e818b973b9359a16e57405177c7a9b8177b9125d587577311786e64"
+  "packageManager": "pnpm@9.15.6+sha256.5bf88eca1e818b973b9359a16e57405177c7a9b8177b9125d587577311786e64",
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
 }

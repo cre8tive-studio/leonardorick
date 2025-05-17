@@ -41,18 +41,18 @@
 <script setup lang="ts">
 import { timeline } from 'motion';
 import type { TimelineDefinition } from 'motion';
-import useCssBreakpoints from '~/composables/use-css-breakpoints';
 
 import useHideOnScroll from '~/composables/animations/use-hide-on-scroll';
 import { useAnimationStore } from '~/store/animation';
 import { useAppStore } from '~/store';
+import { useInjectCssBreakpoints } from '~/plugins/providers';
 
 const animationStore = useAnimationStore();
 const { enableScroll, disableScroll } = animationStore;
 const { isHideOnScrollBlocked } = toRefs(animationStore);
 
 const { localeRoute } = toRefs(useAppStore());
-const { isLg } = useCssBreakpoints();
+const { isLg } = useInjectCssBreakpoints();
 
 const mobileMenu = ref<HTMLDivElement>();
 const isMobileMenuVisible = ref(false);
@@ -70,6 +70,7 @@ const closeSequence: TimelineDefinition = [
 useHideOnScroll(['.c-LRHeader']);
 
 watch(isLg, () => {
+  // always hide the mobile menu if in the process of changing screen width
   isMobileMenuVisible.value = false;
 });
 

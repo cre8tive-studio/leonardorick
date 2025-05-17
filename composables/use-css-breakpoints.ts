@@ -46,9 +46,12 @@ const useCssBreakpoints = () => {
       current.value = 'sm';
     }
 
-    onUnmounted(() => {
-      queries.forEach(({ handler, match }) => match.removeEventListener('change', handler));
-    });
+    // runs only if build inside a component and not as a provider
+    if (getCurrentInstance()) {
+      onUnmounted(() => {
+        queries.forEach(({ handler, match }) => match.removeEventListener('change', handler));
+      });
+    }
   }
   return {
     isSm,

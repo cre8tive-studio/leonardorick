@@ -30,10 +30,17 @@
           >
             <div class="mb-6 flex">
               <p class="lr-text--body-0-half relative">
-                <span>{{ $t('votes_available') }}: {{ upvotesAvailable }}</span>
-                <LRInfoIconTooltip :tooltip="$t('more_votes_previews_available_next_month')" />
+                <span>
+                  <span>{{ $t('votes_available') }}:</span>
+                  <span class="votes-count">{{ upvotesAvailable }}</span>
+                </span>
+                <LRInfoIconTooltip
+                  class="lr-text--body-1"
+                  :tooltip="$t('more_votes_previews_available_next_month')"
+                />
               </p>
             </div>
+            <p class="lr-text--body-half-0 mb-8">{{ $t('find_potential_like_preview') }}</p>
             <div class="audio-list">
               <LRAudioCardPremium
                 v-for="preview in previews"
@@ -235,6 +242,16 @@ h1 {
   height: 300px;
   border-radius: 16px;
   margin-bottom: 4rem;
+}
+
+.votes-count {
+  padding: 4px 12px;
+  border-radius: 6px;
+  background-color: $dark-text-5;
+  border: 1px solid $dark-text-3;
+  margin-left: 12px;
+  text-align: center;
+  @extend .lr-text--body-1;
 }
 
 .covers-title svg {

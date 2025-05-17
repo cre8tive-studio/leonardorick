@@ -79,7 +79,7 @@
 
     <div class="content">
       <span class="preview-number lr-text--body-0-half mb-0 mb-2 md:mb-0">
-        {{ typeMap[premiumAudio.type].title }} {{ premiumAudio.number }}
+        {{ $t(typeMap[premiumAudio.type].title) }} {{ premiumAudio.number }}
       </span>
       <h2 class="lr-text--body-1 mb-2">{{ premiumAudio.title }}</h2>
 
@@ -162,11 +162,11 @@ const { getCachedFile, getCachedFileFromCache } = useCachedFile();
 const typeMap: Record<PremiumAudioModel['type'], InfoPerType> = {
   preview: {
     url: 'getPreviewFile',
-    title: $t('preview'),
+    title: 'preview',
   },
   cover: {
     url: 'getCoverFile',
-    title: $t('cover'),
+    title: 'cover',
   },
 };
 

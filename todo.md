@@ -1,5 +1,12 @@
 # FEATURES I REALLY WANT
 
+document new mock setup
+
+Make sure to unlog all users when passowrd changes!!
+
+Track this bug and remove the caching rule once it's working: https://www.reddit.com/r/CloudFlare/comments/1k7mvw9/fix_for_cloudflare_pages_site_not_loading_on_ios/
+
+reduce intensity of the eleveation box shadows so it doesn't look weird in mobile
 allow single payment to unlock all demos
 
 Upload some previews
