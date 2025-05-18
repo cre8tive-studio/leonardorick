@@ -9,6 +9,7 @@ import useSetupMSWWorker from '~/server/mocks/browser';
 export default defineNuxtPlugin(async (_nuxtApp) => {
   const { environment, baseUrl, clientVersion, useMocks } = useRuntimeConfig().public;
 
+  // ? msw mock initializer
   if (isStringTrue(useMocks)) {
     const { worker } = useSetupMSWWorker();
     worker.start({ onUnhandledRequest: 'bypass' });
