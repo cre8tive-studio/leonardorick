@@ -96,6 +96,7 @@
       />
       <div class="actions">
         <button
+          v-if="audioBlob"
           class="simple-action-button colorful-actions"
           lr-cursor
           :disabled="!premiumAudio.enabled"

@@ -90,8 +90,11 @@ To add more mocked endpoints check the `01.mock.ts` server middleware and add ne
   - Fill the input with `http://localhost:3000/login?stripe_checkout_id={CHECKOUT_SESSION_ID}`
 
 - Configure subscriptions webhook: Developers -> Webhooks:
+
   - Endpoint URL: `https://staging.leonardorick.com/api/stripeSubscriptionsWebhook`
   - Events to send: `invoice.payment_succeeded`
+
+- In Staging the Stripe variables are not set so we don't allow the user to create Stripe subscriptions in staging.
 
 #### Test stripe webhook
 
@@ -125,9 +128,10 @@ To add more mocked endpoints check the `01.mock.ts` server middleware and add ne
 #### Deleting a user manually
 
 1. Delete from stripe
-2. Delete from users Auth
-3. Delete from users collection
-4. Delete from allowed-email collection
+2. Delete all users sessions in Auth -> User -> Sessions
+3. Delete from users Auth
+4. Delete from users Collection
+5. Delete from allowed-email collection
 
 ### Add a new preview
 

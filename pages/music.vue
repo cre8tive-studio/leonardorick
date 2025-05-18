@@ -184,7 +184,9 @@ async function setLoggedInformation() {
 
   upvotes.value = await fetchUpvotes();
 
-  request<PremiumAudioModel[]>('/api/getPreviewsMetadata', { authenticated: true }).then(async (data) => {
+  // awaiting here ensure that the previews are added before in the waves list than the covers. Which allows a
+  // slightly better and more intuitive playNext/playPrevious behaviour
+  await request<PremiumAudioModel[]>('/api/getPreviewsMetadata', { authenticated: true }).then(async (data) => {
     if (!data) {
       previewsMetadataLoaded.value = true;
       return;

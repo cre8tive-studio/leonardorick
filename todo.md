@@ -1,15 +1,11 @@
 # FEATURES I REALLY WANT
 
-document new mock setup
-
-Make sure to unlog all users when passowrd changes!!
+fix bug wave player being recreated mutliple times on hot reload
+fix bug downloading on mobile (chrome ios)
 
 Track this bug and remove the caching rule once it's working: https://www.reddit.com/r/CloudFlare/comments/1k7mvw9/fix_for_cloudflare_pages_site_not_loading_on_ios/
 
-reduce intensity of the eleveation box shadows so it doesn't look weird in mobile
 allow single payment to unlock all demos
-
-Upload some previews
 
 create donate button
 = // add party emoji if the value was reached. And a tooltip saying (new release comming soon)
@@ -23,6 +19,7 @@ Improve translations to really consider routes such as /pt-BR/something
 ===============================================
 
 Create login with jwt token!!
+
 find a way to add some padding in the top of the scrollable area of the modal so it do not touch the border when scrollingL
 
 - Add google login

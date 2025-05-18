@@ -19,7 +19,7 @@ interface AudioStoreModel {
   globalWave: WaveSurferWithIdModel | null;
   lastPlayedWave: WaveSurferWithIdModel | null;
   continuousAndControlsPlayInterval: NodeJS.Timeout | undefined;
-  wavesAudioMap: Record<string, AudioModel>;
+  waveAudioMap: Record<string, AudioModel>;
 }
 
 interface PrivateAudioStoreModel {
@@ -39,7 +39,7 @@ export const useAudioStore = defineStore('audioStore', () => {
     globalWave: null,
     lastPlayedWave: null,
     continuousAndControlsPlayInterval: undefined,
-    wavesAudioMap: {},
+    waveAudioMap: {},
   });
 
   const privateState = reactive<PrivateAudioStoreModel>({
@@ -99,7 +99,9 @@ export const useAudioStore = defineStore('audioStore', () => {
     fetchUpvotesAvailable();
   }
 
-  function addWaveOnList(wave: WaveSurferWithIdModel) {
+  function addWaveOnList(wave: WaveSurferWithIdModel, audio: AudioModel) {
+    state.waveAudioMap[wave.id] = audio;
+
     const index = state.waves.indexOf(wave);
     if (index === -1) {
       state.waves.push(wave);
@@ -107,7 +109,8 @@ export const useAudioStore = defineStore('audioStore', () => {
   }
 
   function removeWaveFromList(wave: WaveSurferWithIdModel) {
-    delete state.wavesAudioMap[wave.id];
+    delete state.waveAudioMap[wave.id];
+
     const index = state.waves.indexOf(wave);
     if (index !== -1) {
       state.waves.splice(index, 1);
