@@ -2,7 +2,7 @@
   "name": "nuxt-app",
   "private": true,
   "type": "module",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "scripts": {
     "build": "nuxt build",
     "clean-build": "rm -rf .nuxt dist .output .netlify server/dist && npm run build",
@@ -72,12 +72,13 @@
     "three": "^0.166.1",
     "tweakpane": "^4.0.5",
     "url": "^0.11.4",
+    "uuid": "^11.1.0",
     "wavesurfer.js": "^7.9.5"
   },
   "overrides": {
     "vue": "latest"
   },
-  "packageManager": "pnpm@9.15.6+sha256.5bf88eca1e818b973b9359a16e57405177c7a9b8177b9125d587577311786e64",
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977",
   "msw": {
     "workerDirectory": [
       "public"

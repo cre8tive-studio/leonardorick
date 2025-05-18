@@ -69,6 +69,8 @@ For reidrect rules to work, your endpoints must be with proxy enabled
 
 - If you run the app in a small screen theres a hydration missmatch warning in the console because the generated pages uses the desktop header that don't appear in small screens. I guess it's not a bug but it's worth mentioning that it's normal to happen.
 
+- Pinia do not support Hot Reload out of the box and for adding it I would need to update the sintax of the stores and some of the logic to the "Options API" style, which I don't think is worth the effort. For further investigation, checks: https://pinia.vuejs.org/cookbook/hot-module-replacement.html#hmr-hot-module-replacement
+
 ### Mocks
 
 If you want to work with mocks enable the environment variable `USE_MOCKS=true`.

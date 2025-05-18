@@ -47,7 +47,11 @@ export const useAudioStore = defineStore('audioStore', () => {
   });
 
   const { isLg } = useInjectCssBreakpoints();
-  const { t: $t } = useI18n();
+
+  // use i18n like this inside stores
+  const { $i18n } = useNuxtApp();
+  const $t = $i18n.t;
+
   const { fetchUpvotes, updateVotes } = useAppwrite();
   const { userId, settings, user } = toRefs(useAppStore());
   const toast = useToasterStore();
