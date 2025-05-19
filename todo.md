@@ -1,15 +1,31 @@
 # FEATURES I REALLY WANT
 
-fix bug wave player being recreated mutliple times on hot reload
-fix bug downloading on mobile (chrome ios)
+finish previews
 
-Track this bug and remove the caching rule once it's working: https://www.reddit.com/r/CloudFlare/comments/1k7mvw9/fix_for_cloudflare_pages_site_not_loading_on_ios/
+- Até o fim do mundo
+- Quarentena acústica
+- Lua
+- Só mais uma música
+- Passa em Portugal
+- É o beijo dela
+- Cético sonhador
+- Esse é seu último aviso
+- Não é falado
+
+- Não vale de nada (?)
 
 allow single payment to unlock all demos
+
+- Setup webhook to somehow check if the user already paid this amount and do not accidentaly reduce the number of available previews
 
 create donate button
 = // add party emoji if the value was reached. And a tooltip saying (new release comming soon)
 = fix transition on learn more button
+
+fix bug wave player being recreated mutliple times on hot reload
+fix bug downloading on mobile (chrome ios)
+
+Track this bug and remove the caching rule once it's working: https://www.reddit.com/r/CloudFlare/comments/1k7mvw9/fix_for_cloudflare_pages_site_not_loading_on_ios/
 
 - multple language emails?
 - Add Qonto experience

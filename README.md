@@ -34,6 +34,8 @@ if (isStringTrue(useMocks)) {
 }
 ```
 
+The songs audio files are not mocked but they are cached on indexedDB through localforage so if you need a new song to be added, update the metadata mocks and run once without the mocked data. Once the audio is loaded once you can add the mocks back.
+
 ### Note
 
 This project is my experimental playground where I try out different things, so the structure and coding may not be as organized as you would expect in a real project.

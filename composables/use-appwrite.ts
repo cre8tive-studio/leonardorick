@@ -140,6 +140,10 @@ const useAppwrite = () => {
         }
       }
     }
+    lastJWT.value = {
+      jwt: '',
+      expire: 0,
+    };
     storedSession.value = null;
   };
 

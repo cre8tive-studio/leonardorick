@@ -134,6 +134,10 @@ const useWavesurfer = ({ shouldBeCopy = false }: { shouldBeCopy?: boolean } = {}
       });
       navigator.mediaSession.setActionHandler('nexttrack', () => playNext(w));
       navigator.mediaSession.setActionHandler('previoustrack', () => playPrevious(w));
+      navigator.mediaSession.setActionHandler('seekto', (details) => {
+        if (!wave.value || !details.seekTime) return;
+        wave.value.setTime(details.seekTime);
+      });
     }
 
     if (!playLockedFromOutside) {

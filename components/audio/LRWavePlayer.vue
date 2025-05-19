@@ -76,6 +76,7 @@ const duration = ref('0:00');
 const currentTime = ref('0:00');
 
 const waveMounted = ref(false);
+let audioProcessTimeout: NodeJS.Timeout | null = null;
 
 onMounted(() => {
   waveMounted.value = eager;
@@ -84,6 +85,11 @@ onMounted(() => {
     async () => localCreateWavesurfer(),
     { isNextTick: true } // ensure that template is already showing the waveformEl container
   );
+});
+
+onUnmounted(() => {
+  if (!wave.value) return;
+  wave.value.un('audioprocess', handleAudioProcess);
 });
 
 watch(breakpoints.current, () => {
@@ -102,14 +108,22 @@ async function localCreateWavesurfer() {
 
   const wavesurfer = await createWavesurfer(waveformEl.value, audioBlob, audio);
 
-  wavesurfer.on('audioprocess', () => {
-    wavesurfer.setVolume(volume.value);
-    const current = wavesurfer.getCurrentTime();
+  wavesurfer.on('audioprocess', handleAudioProcess);
+  replaceWaveLoader(wavesurfer);
+}
+
+function handleAudioProcess() {
+  if (!wave.value || audioProcessTimeout) return;
+  audioProcessTimeout = setTimeout(() => {
+    if (!wave.value) return;
+
+    audioProcessTimeout = null;
+
+    wave.value.setVolume(volume.value);
+    const current = wave.value.getCurrentTime();
     currentTime.value = formatSongTime(current);
     $emit('audioprocess', current);
-  });
-
-  replaceWaveLoader(wavesurfer);
+  }, 300);
 }
 
 function replaceWaveLoader(wavesurfer: WaveSurferWithIdModel) {
