@@ -113,16 +113,19 @@ async function localCreateWavesurfer() {
 }
 
 function handleAudioProcess() {
-  if (!wave.value || audioProcessTimeout) return;
+  if (!wave.value) return;
+
+  const current = wave.value.getCurrentTime();
+  $emit('audioprocess', current);
+  if (audioProcessTimeout) return;
   audioProcessTimeout = setTimeout(() => {
     if (!wave.value) return;
 
     audioProcessTimeout = null;
 
     wave.value.setVolume(volume.value);
-    const current = wave.value.getCurrentTime();
+
     currentTime.value = formatSongTime(current);
-    $emit('audioprocess', current);
   }, 300);
 }
 
