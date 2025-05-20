@@ -92,6 +92,9 @@ To add more mocked endpoints check the `01.mock.ts` server middleware and add ne
 
   - Select Don't show confirmation page
   - Fill the input with `http://localhost:3000/login?stripe_checkout_id={CHECKOUT_SESSION_ID}`
+  - Now under Settings -> Payments -> Checkouts and Payment Links
+    - On the Subscriptions section enable "Limit customers to 1 subscription"
+  - Obs: Currently I couldn't find a way to allow the user to select the currency so we leave it to stripe to get his location and offer the better currency out of the box.
 
 - Configure subscriptions webhook: Developers -> Webhooks:
 
