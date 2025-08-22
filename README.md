@@ -101,7 +101,7 @@ To add more mocked endpoints check the `01.mock.ts` server middleware and add ne
   - Endpoint URL: `https://staging.leonardorick.com/api/stripeSubscriptionsWebhook`
   - Events to send: `invoice.payment_succeeded`
 
-- In Staging the Stripe variables are not set so we don't allow the user to create Stripe subscriptions in staging.
+- In Staging the Stripe Customer Portal and Payment links environment variables are not set/disabled so we don't allow the user to create Stripe subscriptions in staging.
 
 #### Test stripe webhook
 

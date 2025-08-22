@@ -11,4 +11,5 @@ export interface AudioModel {
   youtube?: string;
   featured?: boolean;
   lyrics?: string;
+  releaseDate?: Date;
 }

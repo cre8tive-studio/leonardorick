@@ -71,6 +71,7 @@
     "signup": "Signup",
     "song_page_covers_title": "Covers",
     "song_page_featured_description": "New song out now",
+    "song_page_featured_pre_save_description": "New song available on {date}",
     "song_page_featured_title": "My featured release",
     "song_page_original_songs_title": "Original songs",
     "song_page_previews_title": "Previews",

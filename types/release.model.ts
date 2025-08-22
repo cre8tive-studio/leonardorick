@@ -8,4 +8,5 @@ export interface ReleaseModel extends Models.Document {
   appleMusic: string;
   featured?: boolean;
   number: number;
+  releaseDate?: string;
 }

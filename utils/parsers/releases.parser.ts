@@ -14,5 +14,6 @@ export function parseReleases(res: Models.DocumentList<ReleaseModel>): AudioMode
     amazonMusic: release.amazonMusic,
     featured: release.featured,
     number: release.number,
+    releaseDate: release.releaseDate ? new Date(release.releaseDate) : null,
   })) as AudioModel[];
 }

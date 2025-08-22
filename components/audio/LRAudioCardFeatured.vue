@@ -12,7 +12,7 @@
       >
         <h2 class="">{{ audio.title }}</h2>
         <h3 class="lr-text--body-1 mb-2">
-          {{ $t('song_page_featured_description') }}
+          {{ subtitle }}
         </h3>
       </div>
       <div
@@ -45,6 +45,8 @@ interface Props {
   audio: AudioModel | undefined;
 }
 
+const { t: $t } = useI18n();
+
 const { audio } = defineProps<Props>();
 
 const { getCachedFile } = useCachedFile();
@@ -52,6 +54,16 @@ const { getCachedFile } = useCachedFile();
 const audioBlob = ref<Blob>();
 
 const selfEl = ref<HTMLDivElement>();
+
+const subtitle = computed(() => {
+  if (!audio?.releaseDate || audio.releaseDate < new Date()) {
+    return $t('song_page_featured_description');
+  }
+
+  return $t('song_page_featured_pre_save_description', {
+    date: Intl.DateTimeFormat('en-GB', { day: '2-digit', month: '2-digit' }).format(audio.releaseDate),
+  });
+});
 
 function rotateBackground(currentTime: number) {
   selfEl.value?.style.setProperty('--background-rotation', `${30 + currentTime * 10}deg`);

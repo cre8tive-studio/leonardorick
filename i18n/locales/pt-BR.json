@@ -71,6 +71,7 @@
     "signup": "Cadastre-se",
     "song_page_covers_title": "Covers",
     "song_page_featured_description": "Nova música disponível agora",
+    "song_page_featured_pre_save_description": "Nova música disponível dia {date}",
     "song_page_featured_title": "Meu lançamento em destaque",
     "song_page_original_songs_title": "Músicas autorais",
     "song_page_previews_title": "Prévias",
