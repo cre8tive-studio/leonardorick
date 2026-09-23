@@ -25,8 +25,8 @@ const useAnimations = () => {
     isLRModelLoaded,
     isLRModelTimedout,
   } = toRefs(store);
-
   const { enableScroll, disableScroll } = store;
+  let modelTimeout: ReturnType<typeof setTimeout> | undefined;
 
   const lenis = useLenis();
   const fluid = useFluid();
@@ -37,22 +37,33 @@ const useAnimations = () => {
   const isDocumentVisible = ref(true);
 
   async function activate() {
-    const LRModelTimeout = setLRModelTimeout();
-
+    modelTimeout = setLRModelTimeout();
     useWhenReady(isLRModelLoaded, () => {
-      clearTimeout(LRModelTimeout);
+      clearTimeout(modelTimeout);
       hideOverlay();
     });
 
     if (!isWebglSupported()) {
-      hideOverlay();
+      isLRModelTimedout.value = true;
+      isLRModelLoaded.value = true;
+      // eslint-disable-next-line no-console
       console.warn('WebGL not supported so most animations will be disabled');
       return;
     }
 
     setupListeners();
     lenis.activate();
-    await leonardorick.activate(isDebug);
+    try {
+      await leonardorick.activate(isDebug);
+    } catch (error) {
+      isLRModelTimedout.value = true;
+      cleanup();
+      isLRModelLoaded.value = true;
+      // eslint-disable-next-line no-console
+      console.error('3D model could not initialize', error);
+      return;
+    }
+    if (isLRModelTimedout.value) return;
 
     if (!isMobile) {
       cursor.activate();
@@ -129,6 +140,7 @@ const useAnimations = () => {
   }
 
   function cleanup() {
+    clearTimeout(modelTimeout);
     document.removeEventListener('visibilitychange', visibilityChangeHandler);
     document.removeEventListener('mousemove', mousemoveHandler);
     document.removeEventListener('pointerup', pointerupHandler);
@@ -170,8 +182,14 @@ const useAnimations = () => {
           // we only activate the fluid when the overlay is gone
           // so we can see the first color as the first colour is
           // possible to specify to be the same
-          fluid.activate();
-          enableScroll();
+          try {
+            if (!isLRModelTimedout.value) fluid.activate();
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error('Fluid background could not initialize', error);
+          } finally {
+            enableScroll();
+          }
         },
         onComplete: () => {
           if (overlayRef.value) {
@@ -186,6 +204,7 @@ const useAnimations = () => {
   function setLRModelTimeout() {
     return setTimeout(() => {
       isLRModelTimedout.value = true;
+      cleanup();
       // this will trigger the watch and handle hiding the overlay. if in the
       // future we need a different approach when timing out, might change the logic
       isLRModelLoaded.value = true;

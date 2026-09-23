@@ -42,14 +42,16 @@
               lr-cursor
               @click="openExternalLink(recommendation.author.linkedIn)"
             >
-              <ClientOnly>
-                <NuxtImg
-                  v-if="recommendation.authorImage"
-                  :width="100"
-                  :height="100"
-                  :src="recommendation.authorImage"
-                />
-              </ClientOnly>
+              <NuxtImg
+                v-if="recommendation.authorImage"
+                provider="cloudinary"
+                width="100"
+                height="100"
+                :src="recommendation.authorImage"
+                :alt="recommendation.author.name"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
             <div
               ref="arrow"

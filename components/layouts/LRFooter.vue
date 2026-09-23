@@ -3,9 +3,11 @@
     activated="false"
     class="c-LRFooter lr-section-bottom w-full fixed bottom-0 hidden lg:flex flex-col items-center"
   >
-    <transition name="transition-fade">
-      <LRVolumeSlider v-if="shouldShowVolumeSlider" />
-    </transition>
+    <ClientOnly>
+      <transition name="transition-fade">
+        <LRVolumeSlider v-if="shouldShowVolumeSlider" />
+      </transition>
+    </ClientOnly>
     <div class="separator" />
     <div class="flex w-full">
       <div class="flex-1 flex flex-row">

@@ -24,6 +24,7 @@ logs
 
 
 # deployment services
+.vercel
 .netlify
 .wrangler
 .data

@@ -45,7 +45,7 @@ const useHideOnScroll = (classes: string[]) => {
   });
 
   function activate() {
-    gsap.to(classes, { autoAlpha: getScrollHeight() > 0 ? 0 : 1 });
+    gsap.to(classes, { autoAlpha: window.scrollY > 0 ? 0 : 1 });
     onScrollTrigger = ScrollTrigger.create({
       onUpdate: (self) => {
         if (self.direction !== direction) {

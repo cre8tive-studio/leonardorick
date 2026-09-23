@@ -9,20 +9,17 @@ import type { RecommendationModel } from '~/types/recommendation-model';
 import { type LanguageOptions } from '~/utils/constants/languages';
 
 export default defineNuxtPlugin(async (nuxtApp) => {
+  // Error pages and unmatched URLs do not need the portfolio's CMS queries.
+  if (useError().value || !useRoute().matched.length) return {};
+
   const fetchInitialData = async () => {
-    // we can't use lang from store the first time this function is called
-    // because there the client plugin hasn't run yet on server. Which means
-    // that the lang will always be 'en'. So the first time we check the route
-    // lang, and the next times we use the store lang.
     const store = useAppStore();
     const { lang } = toRefs(store);
     return await _fetchInitialData(lang.value, $fetch);
   };
 
-  const { query } = useRoute();
-  const locale = (query?.locale as LanguageOptions) || 'en';
-
   useLang(nuxtApp.$i18n as i18nModel);
+  const locale = useAppStore().lang;
 
   const {
     $recommendations: recommendations,

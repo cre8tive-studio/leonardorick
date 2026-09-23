@@ -30,6 +30,11 @@ body {
   scroll-behavior: smooth;
 }
 
+#__nuxt {
+  // Keep negative-z-index canvases above the body when themes add an HTML background.
+  isolation: isolate;
+}
+
 /**
 * LENIS
 */

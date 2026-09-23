@@ -56,20 +56,44 @@ Using only i18n route logic to control the language was a little bit bad for exp
 
 The URL might end up very weird as /pt-BR (being translated to english) or /?locale=pt-BR being translate but I prefered that beacuse I could take the benefits of both approaches. Using the path route I'm able to generate the SSR version of the website for all routes and using the query parameter I can refresh the page without scrolling top.
 
-### Cloudlfare
+### Hosting and deployment
 
-For reidrect rules to work, your endpoints must be with proxy enabled
+The portfolio is prerendered, while `/api/*` still needs the Nuxt server for content, accounts, and subscriptions. Use `nuxt build`, not a static-only `nuxt generate` deployment. The project uses Node 24 and the pnpm version declared in `package.json`.
 
-- https://community.cloudflare.com/t/301-redirect-page-rule-not-working/591595/10
+#### Vercel
 
-#### Test Prouction Deploy
+Build the Vercel output locally with the required environment variables from `.env.example`:
 
-1. Make sure to add `NITRO_PRESET=cloudflare_pages` on .env
-2. run `npx nuxt build && npx wrangler pages dev dist`
+```bash
+NITRO_PRESET=vercel pnpm build
+```
+
+The output is `.vercel/output`, including static pages and a Node.js server function. `USE_MOCKS=true` is available for local build checks; never promote a mocked build to production. Vercel normally detects the preset automatically. Remove any `NITRO_PRESET=cloudflare_pages` override from Vercel's environment before deploying there.
+
+Before moving the main domain:
+
+1. Deploy the intended Git commit to Vercel and verify the portfolio, both languages, navigation, login, and music on the candidate deployment. Keep secrets in the hosting provider's environment settings.
+2. Check Appwrite's allowed web origins and guest access to the public settings document. An Appwrite 403 is a separate configuration issue; changing hosts does not resolve it.
+3. After approval, change the root and `www` DNS records to the targets Vercel specifies. Domain verification in Vercel alone does not change DNS. Leave email-related DNS records untouched.
+4. Verify TLS, redirects, content, and server routes through the actual root domain. Keep the previous Cloudflare Pages deployment available for rollback until the cutover is verified.
+5. Disable duplicate deployments or remove Pages custom domains only after explicit approval. Cloudflare DNS and email routing can remain in use without Pages.
+
+#### Cloudflare Pages
+
+For proxied Cloudflare redirect rules, the relevant DNS records must have proxying enabled. See [Cloudflare redirect troubleshooting](https://community.cloudflare.com/t/301-redirect-page-rule-not-working/591595/10).
+
+To test the existing Pages target:
+
+```bash
+NITRO_PRESET=cloudflare_pages pnpm build
+pnpm exec wrangler pages dev dist
+```
+
+#### Portfolio loading and performance
+
+Keep the original progress bar, cube loader, model-readiness wait, and animated reveal. Performance work must preserve that sequence and the 3D R. The existing 10-second timeout remains a failure fallback, not the normal reveal path; graphics failures must not leave scrolling locked. Company and recommendation images use Nuxt Image's Cloudinary provider, so Cloudinary transformations and normal browser/CDN caching apply without manual downloads, blob URLs, or IPX. Error and unmatched routes skip the portfolio's CMS initialization.
 
 ### Known Bugs
-
-- If you run the app in a small screen theres a hydration missmatch warning in the console because the generated pages uses the desktop header that don't appear in small screens. I guess it's not a bug but it's worth mentioning that it's normal to happen.
 
 - Pinia do not support Hot Reload out of the box and for adding it I would need to update the sintax of the stores and some of the logic to the "Options API" style, which I don't think is worth the effort. For further investigation, checks: https://pinia.vuejs.org/cookbook/hot-module-replacement.html#hmr-hot-module-replacement
 

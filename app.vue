@@ -32,8 +32,6 @@ const {
 const { isContentLoaded, isContentErrored, lang, recommendations, experiences, quotes, generals, personalInfo, cache } =
   toRefs(useAppStore());
 
-const { getCachedImage } = useCachedImage();
-
 if ($initializerClientError) {
   // todo setup modal error
   // eslint-disable-next-line no-console
@@ -66,15 +64,10 @@ if (!$personalInfo.value || !$recommendations.value || !$quotes.value || !$exper
   isContentErrored.value = true;
 } else {
   personalInfo.value = $personalInfo.value;
-  await setHomeView($recommendations.value, $quotes.value, $experiences.value, $generals.value);
+  setHomeView($recommendations.value, $quotes.value, $experiences.value, $generals.value);
 }
 
-async function setHomeView(
-  rcs: RecommendationModel[],
-  qts: QuoteModel[],
-  exps: ExperienceModel[],
-  gnrs: GeneralsModel[]
-) {
+function setHomeView(rcs: RecommendationModel[], qts: QuoteModel[], exps: ExperienceModel[], gnrs: GeneralsModel[]) {
   recommendations.value = rcs;
   quotes.value = qts;
   generals.value = gnrs;
@@ -88,14 +81,14 @@ async function setHomeView(
   };
 
   for (const rc of recommendations.value) {
-    rc.authorImage = await getCachedImage(rc.author.id, rc.author.image.cloudinary?.secure_url);
+    rc.authorImage = rc.author.image.cloudinary?.secure_url;
   }
 
   for (const xp of experiences.value) {
-    xp.companyImage = await getCachedImage(xp.company.id, xp.company.image.cloudinary?.secure_url);
+    xp.companyImage = xp.company.image.cloudinary?.secure_url;
   }
 
-  recommendations.value.sort((r1, r2) => r1.order || 0 - (r2.order || 0));
+  recommendations.value.sort((r1, r2) => (r1.order || 0) - (r2.order || 0));
   isContentLoaded.value = true;
 }
 </script>

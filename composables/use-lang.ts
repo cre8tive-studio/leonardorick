@@ -12,9 +12,14 @@ const useLang = (i18n?: i18nModel) => {
   const { lang } = toRefs(store);
 
   const queryLang = route.query.locale as LanguageOptions;
-  if (queryLang) {
+  if (import.meta.server && queryLang) {
     lang.value = queryLang;
-    locale.value = lang.value;
+  }
+  locale.value = lang.value;
+  if (import.meta.client && queryLang) {
+    onNuxtReady(() => {
+      lang.value = queryLang;
+    });
   }
   // be careful when calling this composable more than once because usually
   // we just want this watch to be settle one time.

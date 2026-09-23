@@ -29,7 +29,7 @@ interface PrivateAudioStoreModel {
 export const useAudioStore = defineStore('audioStore', () => {
   const state = reactive<AudioStoreModel>({
     waves: [],
-    volume: -1, // ignored as hydrate runs and onMounted overwrite
+    volume: -1, // client initialization overwrites this value after hydration
     upvotes: {},
     covers: [],
     upvotesAvailable: 0,
@@ -57,12 +57,14 @@ export const useAudioStore = defineStore('audioStore', () => {
   const toast = useToasterStore();
 
   const previewsMaxVotes = computed(() =>
-    settings.value ? Math.round(privateState.previews.length * settings.value.upvotesMultiplier) : 0
+    settings.value
+      ? Math.round(privateState.previews.length * settings.value.upvotesMultiplier)
+      : 0,
   );
 
   const previews = computed(() => privateState.previews);
 
-  onMounted(() => {
+  onNuxtReady(() => {
     if (import.meta.client) {
       state.volume = useLocalStorage('volume', 0.5).value;
     }
@@ -181,7 +183,10 @@ export const useAudioStore = defineStore('audioStore', () => {
   }
 
   function isRemoveVoteDisabled(number: number) {
-    return state.upvotesAvailable === previewsMaxVotes.value || !state.upvotes[number]?.includes(userId.value);
+    return (
+      state.upvotesAvailable === previewsMaxVotes.value ||
+      !state.upvotes[number]?.includes(userId.value)
+    );
   }
 
   function download(url: string, name: string) {

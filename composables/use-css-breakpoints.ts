@@ -19,37 +19,29 @@ const useCssBreakpoints = () => {
       { point: 1280, ref: isXl, name: 'xl' },
       { point: 1536, ref: isXxl, name: 'xxl' },
       { point: 1800, ref: isXxxl, name: 'xxxl' },
-    ];
-    const queries = breakpoints.map(({ point, ref, name }, index) => {
-      const match = window.matchMedia(`screen and (min-width: ${point}px)`);
+    ] as const;
+    const queries = breakpoints.map(({ point, ref, name }) => ({
+      match: window.matchMedia(`screen and (min-width: ${point}px)`),
+      ref,
+      name,
+    }));
 
-      const handler = (e: MediaQueryListEvent) => {
-        ref.value = e.matches;
-
-        if (ref.value || name === 'sm') {
-          current.value = name as BreakpointOptions;
-        } else {
-          current.value = breakpoints[index > 0 ? index - 1 : index]?.name as BreakpointOptions;
-        }
-      };
-
-      ref.value = match.matches;
-      if (ref.value) {
-        current.value = name as BreakpointOptions;
-      }
-      match.addEventListener('change', handler);
-
-      return { handler, match };
-    });
-
-    if (!current.value) {
+    const updateMatches = () => {
       current.value = 'sm';
-    }
+      for (const { ref, match, name } of queries) {
+        ref.value = match.matches;
+        if (match.matches) current.value = name;
+      }
+    };
+    onNuxtReady(() => {
+      updateMatches();
+      queries.forEach(({ match }) => match.addEventListener('change', updateMatches));
+    });
 
     // runs only if build inside a component and not as a provider
     if (getCurrentInstance()) {
       onUnmounted(() => {
-        queries.forEach(({ handler, match }) => match.removeEventListener('change', handler));
+        queries.forEach(({ match }) => match.removeEventListener('change', updateMatches));
       });
     }
   }

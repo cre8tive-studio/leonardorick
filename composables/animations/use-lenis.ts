@@ -36,6 +36,8 @@ const useLenis = () => {
   function cleanup() {
     if (!activated.value || !lenis) return;
     lenis.off('scroll', scrollCallback);
+    lenis.destroy();
+    activated.value = false;
   }
 
   function rafCallback(time: number) {

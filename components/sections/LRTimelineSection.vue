@@ -25,19 +25,20 @@
           </div>
 
           <div class="company">
-            <ClientOnly>
-              <NuxtLink
-                lr-cursor
-                :to="experience.company.site"
-                target="_blank"
-              >
-                <NuxtImg
-                  v-if="experience.companyImage"
-                  :src="experience.companyImage"
-                  :alt="`${experience.company.name} company image`"
-                />
-              </NuxtLink>
-            </ClientOnly>
+            <NuxtLink
+              lr-cursor
+              :to="experience.company.site"
+              target="_blank"
+            >
+              <NuxtImg
+                v-if="experience.companyImage"
+                provider="cloudinary"
+                :src="experience.companyImage"
+                :alt="`${experience.company.name} company image`"
+                loading="lazy"
+                decoding="async"
+              />
+            </NuxtLink>
             <h4>{{ experience.company.name }}</h4>
           </div>
         </div>

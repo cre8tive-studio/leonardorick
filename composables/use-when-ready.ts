@@ -14,7 +14,11 @@ type Source = globalThis.Ref | (() => any);
 
 const useWhenready = (source: Source, callback: () => void, { isNextTick = false } = {}) => {
   if (isDefined(source)) {
-    callback();
+    if (isNextTick) {
+      nextTick(callback);
+    } else {
+      callback();
+    }
   } else {
     const unwatch = watch(source, () => {
       if (isDefined(source)) {
