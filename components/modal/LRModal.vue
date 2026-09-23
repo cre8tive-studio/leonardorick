@@ -109,15 +109,14 @@ function close() {
   position: fixed; // if you someday try to change this approach, please test opening the modal after scrolling
   top: 0;
   left: 0;
-  height: auto;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
   width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  padding-bottom: 8.4rem;
+  padding-block: 16px 8.4rem;
 
   background-color: rgba($main-dark-bg, 0.22);
   backdrop-filter: blur(6px);
@@ -126,6 +125,7 @@ function close() {
   transition: color 0.3s $default-ease;
 
   .header {
+    flex-shrink: 0;
     width: var(--max-width);
     display: flex;
     justify-content: flex-start;
@@ -157,6 +157,7 @@ function close() {
   }
 
   .inner {
+    min-height: 0;
     height: var(--height);
     width: var(--max-width);
     overflow: auto;

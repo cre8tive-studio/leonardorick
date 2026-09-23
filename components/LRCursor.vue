@@ -1,5 +1,8 @@
 <template>
-  <template v-if="isDesktop">
+  <Teleport
+    v-if="isDesktop"
+    to="body"
+  >
     <div
       ref="cursorOuterRef"
       class="cursor cursor--large"
@@ -8,7 +11,7 @@
       ref="cursorInnerRef"
       class="cursor cursor--small"
     />
-  </template>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
