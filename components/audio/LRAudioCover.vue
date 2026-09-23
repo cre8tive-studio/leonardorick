@@ -10,11 +10,14 @@
     >
       <NuxtImg
         :key="imageUrl"
+        class="image"
+        :class="{ loaded }"
         height="500"
         width="500"
         :src="imageUrl"
         :alt="$t('alt.cover_image', { songName: audio?.title })"
         preload
+        @load="handleImageLoad"
       />
     </transition>
     <transition
@@ -58,6 +61,7 @@ const { audio, placeHolderImageUrl, size = 'lg', showImageOverlay = false, rotat
 const { getCachedFile } = useCachedFile();
 
 const imageUrl = ref(placeHolderImageUrl || '/images/empty-cover.jpg');
+const imageSourceReady = ref(false);
 const loaded = ref(false);
 const self = ref<HTMLDivElement>();
 
@@ -65,18 +69,38 @@ const shouldShowImageOverlay = computed(() => showImageOverlay);
 
 defineExpose({ self });
 
+function handleImageLoad(event: Event) {
+  const image = event.target;
+  if (!imageSourceReady.value || !(image instanceof HTMLImageElement)) return;
+  if (audio?.imageUrl && image.currentSrc !== imageUrl.value) return;
+
+  loaded.value = true;
+}
+
+async function prepareImageForReveal() {
+  await nextTick();
+  imageSourceReady.value = true;
+
+  const img = self.value?.querySelector('img');
+  loaded.value = Boolean(img?.complete && img.naturalWidth);
+}
+
 useWhenReady(
   () => audio,
   async () => {
-    if (!audio?.imageUrl) {
-      loaded.value = true;
-      return;
-    }
+    imageSourceReady.value = false;
+    loaded.value = false;
 
-    imageUrl.value = URL.createObjectURL(
-      await getCachedFile({ fileId: `${audio.id}-image`, url: audio.imageUrl, method: 'get' })
-    );
-    loaded.value = true;
+    try {
+      if (audio?.imageUrl) {
+        imageUrl.value = URL.createObjectURL(
+          await getCachedFile({ fileId: `${audio.id}-image`, url: audio.imageUrl, method: 'get' })
+        );
+        imageSourceReady.value = true;
+        return;
+      }
+      await prepareImageForReveal();
+    } catch {}
   }
 );
 
@@ -139,7 +163,7 @@ watch(
   }
 
   .image {
-    opacity: 0.5;
+    opacity: 0;
     transition: opacity 0.4s ease-in-out;
 
     &.loaded {

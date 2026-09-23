@@ -87,6 +87,7 @@ useWhenReady(
   --background-rotation: 0;
 
   width: fit-content;
+  max-width: 100%;
   overflow-x: hidden; //because of ::before background it exceeds the page width
 
   position: relative;
